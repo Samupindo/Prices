@@ -87,9 +87,8 @@ public class ProductController {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("That field does not exist");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-
+    //Arreglar nextId
         ProductDTO newProduct = new ProductDTO();
-        newProduct.setProductId(ProductDTO.getNextId());
         newProduct.setName(productNameDTO.getName()); //hay que poner límite al name
         products.add(newProduct);
 

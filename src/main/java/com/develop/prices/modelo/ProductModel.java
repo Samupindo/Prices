@@ -1,21 +1,31 @@
 package com.develop.prices.modelo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.GenerationType;
+
+import  java.io.Serializable;
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "products")
 public class ProductModel {
-    private static Integer  contador = 1;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // deja que la base de datos lo autogenere
     private Integer productId;
+
     private String name;
 
     public ProductModel() {
     }
 
-    public ProductModel( String name) {
-        this.productId = contador++;
+    public ProductModel(String name) {
         this.name = name;
     }
 
-    public static Integer getNextId(){
-        return contador++;
-    }
     public Integer getProductId() {
         return productId;
     }
