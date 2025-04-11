@@ -26,7 +26,13 @@ public class ShopController {
 
     public ShopController() {
 
+        shopLocationDTOS.add(new ShopLocationDTO("España", "A Coruña", "Los Mallos, 10"));
+        shopLocationDTOS.add(new ShopLocationDTO("Argentina", "Buenos Aires", "Dirección inventada"));
+        shopLocationDTOS.add(new ShopLocationDTO("España", "Santiago", "Av. Toledo"));
 
+        productPriceDTOS.add(new ProductPriceDTO(1,1, new BigDecimal("25.50")));
+        productPriceDTOS.add(new ProductPriceDTO(2,2, new BigDecimal("25.50")));
+        productPriceDTOS.add(new ProductPriceDTO(3,3, new BigDecimal("15.00")));
     }
 
     @GetMapping("/shops")
@@ -97,7 +103,6 @@ public class ShopController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         }
-
         newShopLocation.setCountry(newShopDTO.getCountry());
         newShopLocation.setCity(newShopDTO.getCity());
         newShopLocation.setAddress(newShopDTO.getAddress());
