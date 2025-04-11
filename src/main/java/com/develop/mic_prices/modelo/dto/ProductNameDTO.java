@@ -1,4 +1,4 @@
-package com.example.projectProducts.modelo.dto;
+package com.develop.mic_prices.modelo.dto;
 
 public class ProductNameDTO {
     private String name;

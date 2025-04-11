@@ -1,4 +1,4 @@
-package com.example.projectProducts.modelo;
+package com.develop.mic_prices.modelo;
 
 import java.util.List;
 

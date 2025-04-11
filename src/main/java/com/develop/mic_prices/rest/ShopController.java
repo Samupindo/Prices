@@ -1,7 +1,7 @@
 package com.develop.mic_prices.rest;
 
 
-import com.example.projectProducts.modelo.dto.*;
+import com.develop.mic_prices.modelo.dto.*;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

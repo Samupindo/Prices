@@ -1,9 +1,9 @@
 package com.develop.mic_prices.rest;
 
-import com.example.projectProducts.modelo.dto.ProductDTO;
-import com.example.projectProducts.modelo.dto.ProductNameDTO;
-import com.example.projectProducts.modelo.dto.ProductWithShopsDTO;
-import com.example.projectProducts.modelo.dto.ShopInfoDTO;
+import com.develop.mic_prices.modelo.dto.ProductDTO;
+import com.develop.mic_prices.modelo.dto.ProductNameDTO;
+import com.develop.mic_prices.modelo.dto.ProductWithShopsDTO;
+import com.develop.mic_prices.modelo.dto.ShopInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

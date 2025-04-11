@@ -1,4 +1,4 @@
-package com.example.projectProducts.modelo.dto;
+package com.develop.mic_prices.modelo.dto;
 
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopDTO {
