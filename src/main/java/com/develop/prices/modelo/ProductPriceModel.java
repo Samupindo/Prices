@@ -1,10 +1,17 @@
 package com.develop.prices.modelo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import  java.io.Serializable;
 import java.math.BigDecimal;
 
+@Entity
+@Table(name="product_prices")
 public class ProductPriceModel implements  Serializable {
 
+    @Id
     private  Integer  productId;
     private BigDecimal price;
 

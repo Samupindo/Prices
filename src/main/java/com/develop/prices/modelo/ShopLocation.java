@@ -1,26 +1,30 @@
 package com.develop.prices.modelo;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "shop_locations")
 public class ShopLocation {
-    private static Integer contador= 1;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
     private Integer shopId;
+
     private String country;
     private String city;
     private String address;
 
+    // Constructor vacío y con parámetros
     public ShopLocation() {
     }
 
     public ShopLocation(String country, String city, String address) {
-        this.shopId = contador++;
         this.country = country;
         this.city = city;
         this.address = address;
     }
 
-    public static Integer getNextId(){
-        return contador++;
-    }
-
+    // Getters y Setters
     public Integer getShopId() {
         return shopId;
     }
@@ -52,5 +56,4 @@ public class ShopLocation {
     public void setAddress(String address) {
         this.address = address;
     }
-
 }
