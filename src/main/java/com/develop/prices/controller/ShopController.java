@@ -1,4 +1,4 @@
-package com.develop.prices.rest;
+package com.develop.prices.controller;
 
 
 import com.develop.prices.modelo.dto.*;
