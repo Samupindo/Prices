@@ -1,10 +1,14 @@
 package com.develop.prices.modelo;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 
 @Entity
-@Table(name = "shop_locations")
+@Table(name = "shopLocations")
 public class ShopLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
