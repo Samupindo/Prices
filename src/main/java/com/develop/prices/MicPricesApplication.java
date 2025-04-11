@@ -1,4 +1,4 @@
-package com.develop.mic_prices;
+package com.develop.prices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,17 +1,26 @@
-package com.develop.mic_prices.modelo;
+package com.develop.prices.modelo.dto;
 
-public class ShopLocation {
+
+public class ShopLocationDTO {
+
     private static Integer contador= 1;
     private Integer shopId;
     private String country;
     private String city;
     private String address;
 
-    public ShopLocation() {
+    public ShopLocationDTO() {
     }
 
-    public ShopLocation(String country, String city, String address) {
+    public ShopLocationDTO(String country, String city, String address) {
         this.shopId = contador++;
+        this.country = country;
+        this.city = city;
+        this.address = address;
+    }
+
+    public ShopLocationDTO(Integer shopId, String country, String city, String address) {
+        this.shopId = shopId;
         this.country = country;
         this.city = city;
         this.address = address;
@@ -52,5 +61,4 @@ public class ShopLocation {
     public void setAddress(String address) {
         this.address = address;
     }
-
 }

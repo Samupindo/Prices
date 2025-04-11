@@ -1,4 +1,4 @@
-package com.develop.mic_prices;
+package com.develop.prices;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

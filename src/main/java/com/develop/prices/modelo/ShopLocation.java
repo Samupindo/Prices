@@ -1,18 +1,32 @@
-package com.develop.mic_prices.modelo.dto;
+package com.develop.prices.modelo;
 
-//@JsonIgnoreProperties(ignoreUnknown = false)
-public class UpdateShopDTO {
+public class ShopLocation {
+    private static Integer contador= 1;
+    private Integer shopId;
     private String country;
     private String city;
     private String address;
 
-    public UpdateShopDTO() {
+    public ShopLocation() {
     }
 
-    public UpdateShopDTO(String country, String city, String address) {
+    public ShopLocation(String country, String city, String address) {
+        this.shopId = contador++;
         this.country = country;
         this.city = city;
         this.address = address;
+    }
+
+    public static Integer getNextId(){
+        return contador++;
+    }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
     public String getCountry() {

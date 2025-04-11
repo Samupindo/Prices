@@ -1,6 +1,4 @@
-package com.develop.mic_prices.modelo;
-
-import java.util.List;
+package com.develop.prices.modelo;
 
 public class ProductModel {
     private static Integer  contador = 1;

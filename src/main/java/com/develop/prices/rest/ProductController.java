@@ -1,13 +1,11 @@
-package com.develop.mic_prices.rest;
+package com.develop.prices.rest;
 
-import com.develop.mic_prices.modelo.dto.ProductDTO;
-import com.develop.mic_prices.modelo.dto.ProductNameDTO;
-import com.develop.mic_prices.modelo.dto.ProductWithShopsDTO;
-import com.develop.mic_prices.modelo.dto.ShopInfoDTO;
-import io.swagger.v3.oas.annotations.Operation;
+import com.develop.prices.modelo.dto.ProductDTO;
+import com.develop.prices.modelo.dto.ProductNameDTO;
+import com.develop.prices.modelo.dto.ProductWithShopsDTO;
+import com.develop.prices.modelo.dto.ShopInfoDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;

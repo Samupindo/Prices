@@ -1,4 +1,4 @@
-package com.develop.mic_prices.modelo.dto;
+package com.develop.prices.modelo.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.develop.mic_prices.modelo.dto;
+package com.develop.prices.modelo.dto;
 
 public class ProductDTO {
     private static Integer  contador = 1;

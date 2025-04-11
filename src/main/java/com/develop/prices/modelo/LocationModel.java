@@ -1,17 +1,17 @@
-package com.develop.mic_prices.modelo.dto;
+package com.develop.prices.modelo;
 
 import java.io.Serializable;
 
-public class LocationDTO implements Serializable {
+public class LocationModel implements Serializable {
 
     private String country;
     private String city;
     private String address;
 
-    public LocationDTO() {
+    public LocationModel() {
     }
 
-    public LocationDTO(String country, String adress, String city) {
+    public LocationModel(String country, String adress, String city) {
         this.country = country;
         this.address = adress;
         this.city = city;

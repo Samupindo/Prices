@@ -1,4 +1,4 @@
-package com.develop.mic_prices.modelo;
+package com.develop.prices.modelo;
 
 
 
