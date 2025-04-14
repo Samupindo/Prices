@@ -38,4 +38,13 @@ public class ShopAddDTO {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "ShopAddDTO{" +
+                "country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+
 }

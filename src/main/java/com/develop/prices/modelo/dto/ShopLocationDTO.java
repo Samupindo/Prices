@@ -3,7 +3,7 @@ package com.develop.prices.modelo.dto;
 
 public class ShopLocationDTO {
 
-    private static Integer contador= 1;
+
     private Integer shopId;
     private String country;
     private String city;
@@ -13,10 +13,6 @@ public class ShopLocationDTO {
     }
 
     public ShopLocationDTO(String country, String city, String address) {
-        this.shopId = contador++;
-        this.country = country;
-        this.city = city;
-        this.address = address;
     }
 
     public ShopLocationDTO(Integer shopId, String country, String city, String address) {
@@ -26,9 +22,6 @@ public class ShopLocationDTO {
         this.address = address;
     }
 
-    public static Integer getNextId(){
-        return contador++;
-    }
 
     public Integer getShopId() {
         return shopId;

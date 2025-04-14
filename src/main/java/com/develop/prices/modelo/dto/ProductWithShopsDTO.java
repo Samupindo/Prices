@@ -7,6 +7,10 @@ public class ProductWithShopsDTO {
     private String name;
     private List<ShopInfoDTO> shop;
 
+
+    public ProductWithShopsDTO() {
+    }
+
     public ProductWithShopsDTO(Integer productId, String name, List<ShopInfoDTO> shop) {
         this.productId = productId;
         this.name = name;
@@ -36,4 +40,14 @@ public class ProductWithShopsDTO {
     public void setShop(List<ShopInfoDTO> shop) {
         this.shop = shop;
     }
+
+    @Override
+    public String toString() {
+        return "ProductWithShopsDTO{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", shop=" + shop +
+                '}';
+    }
+
 }

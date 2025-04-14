@@ -50,8 +50,9 @@ public class ProductPriceDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductPriceModel{" +
+        return "ProductPriceDTO{" +
                 "productId=" + productId +
+                ", shopId=" + shopId +
                 ", price=" + price +
                 '}';
     }

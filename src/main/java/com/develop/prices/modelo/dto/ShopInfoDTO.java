@@ -26,4 +26,13 @@ public class ShopInfoDTO {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "ShopInfoDTO{" +
+                "shopId=" + shopId +
+                ", price=" + price +
+                '}';
+    }
+
 }

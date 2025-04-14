@@ -1,21 +1,17 @@
 package com.develop.prices.modelo.dto;
 
 public class ProductDTO {
-    private static Integer  contador = 1;
     private Integer productId;
     private String name;
 
     public ProductDTO() {
     }
 
-    public ProductDTO(String name) {
-        this.productId = contador++;
+    public ProductDTO(Integer productId, String name) {
+        this.productId = productId;
         this.name = name;
     }
 
-    public static Integer getNextId(){
-        return contador++;
-    }
 
     public Integer getProductId() {
         return productId;

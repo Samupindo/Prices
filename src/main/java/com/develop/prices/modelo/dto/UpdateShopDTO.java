@@ -1,5 +1,6 @@
 package com.develop.prices.modelo.dto;
-
+// import jakarta.validation.constraints.NotBlank;
+//@NotBlank
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopDTO {
     private String country;
