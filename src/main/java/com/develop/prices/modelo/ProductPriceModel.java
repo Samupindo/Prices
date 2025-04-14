@@ -1,10 +1,6 @@
 package com.develop.prices.modelo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 import  java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,6 +16,15 @@ public class ProductPriceModel implements Serializable {
     private Integer productId;
 
     private BigDecimal price;
+
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
+    private ProductModel product;
+
+    @ManyToOne
+    @JoinColumn(name = "shop_id", nullable = false)
+    private ProductModel shop;
 
     public ProductPriceModel() {
     }
