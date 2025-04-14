@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/products")
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
@@ -29,7 +29,7 @@ public class ProductController {
         this.productRepository = productRepository; // Asignar el repositorio
     }
 
-    @GetMapping("/products")
+    @GetMapping("")
     public List<ProductWithShopsDTO> getProductsWithShops() {
         List<ProductModel> productModels = productRepository.findAll();  // Obtener productos de la base de datos
         List<ProductWithShopsDTO> productWithShops = new ArrayList<>();
@@ -45,7 +45,7 @@ public class ProductController {
         return productWithShops;
     }
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
@@ -75,7 +75,7 @@ public class ProductController {
                     )
             )
     })
-    @PostMapping("/product")
+    @PostMapping("")
     public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductNameDTO productNameDTO) {
         if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -98,7 +98,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/product/{productId}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
@@ -108,7 +108,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/product/{productId}")
+    @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
@@ -126,7 +126,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/filter")
+    @GetMapping("/filter")
     public List<ProductWithShopsDTO> getProductsWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,

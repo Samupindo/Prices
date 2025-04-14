@@ -221,6 +221,13 @@ public class ShopController {
         }
     }
 
+    @ApiResponses(value ={
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            )
+    })
+
     @PutMapping("/shop/{shopId}")
     public ResponseEntity<ShopLocationDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
         for (int i = 0; i < shopLocationDTOS.size(); i++) {

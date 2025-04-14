@@ -9,7 +9,7 @@ import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "shopLocations")
-public class ShopLocation {
+public class ShopModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
     private Integer shopId;
@@ -19,10 +19,10 @@ public class ShopLocation {
     private String address;
 
     // Constructor vacío y con parámetros
-    public ShopLocation() {
+    public ShopModel() {
     }
 
-    public ShopLocation(String country, String city, String address) {
+    public ShopModel(String country, String city, String address) {
         this.country = country;
         this.city = city;
         this.address = address;
