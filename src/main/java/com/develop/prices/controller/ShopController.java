@@ -20,15 +20,15 @@ import java.util.List;
 @RequestMapping("/shops")
 public class ShopController {
 
-    private List<ShopLocationDTO> shopLocationDTOS = new ArrayList<>();
+    private List<ShopDTO> shopDTOS = new ArrayList<>();
     private List<ProductPriceDTO> productPriceDTOS = new ArrayList<>();
 
 
     public ShopController() {
 
-        shopLocationDTOS.add(new ShopLocationDTO("España", "A Coruña", "Los Mallos, 10"));
-        shopLocationDTOS.add(new ShopLocationDTO("Argentina", "Buenos Aires", "Dirección inventada"));
-        shopLocationDTOS.add(new ShopLocationDTO("España", "Santiago", "Av. Toledo"));
+        shopDTOS.add(new ShopDTO("España", "A Coruña", "Los Mallos, 10"));
+        shopDTOS.add(new ShopDTO("Argentina", "Buenos Aires", "Dirección inventada"));
+        shopDTOS.add(new ShopDTO("España", "Santiago", "Av. Toledo"));
 
         productPriceDTOS.add(new ProductPriceDTO(1,1, new BigDecimal("25.50")));
         productPriceDTOS.add(new ProductPriceDTO(2,2, new BigDecimal("25.50")));
@@ -36,20 +36,20 @@ public class ShopController {
     }
 
     @GetMapping("")
-    public List<ShopLocationDTO> getAllShops() {
-        return shopLocationDTOS;
+    public List<ShopDTO> getAllShops() {
+        return shopDTOS;
     }
 
     @GetMapping("/{shopId}")
-    public List<ShopLocationDTO> getShopLocationDTO(@PathVariable Integer shopId) {
+    public List<ShopDTO> getShopLocationDTO(@PathVariable Integer shopId) {
 
-        for (ShopLocationDTO shopLocationDTO : shopLocationDTOS) {
-            if (shopLocationDTO.getShopId().equals(shopId)) {
-                return List.of(new ShopLocationDTO(
-                        shopLocationDTO.getShopId(),
-                        shopLocationDTO.getCountry(),
-                        shopLocationDTO.getCity(),
-                        shopLocationDTO.getAddress()
+        for (ShopDTO shopDTO : shopDTOS) {
+            if (shopDTO.getShopId().equals(shopId)) {
+                return List.of(new ShopDTO(
+                        shopDTO.getShopId(),
+                        shopDTO.getCountry(),
+                        shopDTO.getCity(),
+                        shopDTO.getAddress()
                 ));
             }
         }
@@ -91,11 +91,11 @@ public class ShopController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ShopLocationDTO> addShop(@RequestBody ShopAddDTO newShopDTO) {
+    public ResponseEntity<ShopDTO> addShop(@RequestBody ShopAddDTO newShopDTO) {
 
-        ShopLocationDTO newShopLocation = new ShopLocationDTO();
+        ShopDTO newShopLocation = new ShopDTO();
 
-        for (ShopLocationDTO shop : shopLocationDTOS) {
+        for (ShopDTO shop : shopDTOS) {
 //           Comprobación para que la calle no exista dos veces,para ello se comprueba que sea en la misma ciudad y país.
 
             if (shop.getCountry().equalsIgnoreCase(newShopDTO.getCountry()) && shop.getCity().equalsIgnoreCase(newShopDTO.getCity()) && shop.getAddress().equalsIgnoreCase(newShopDTO.getAddress())) {
@@ -106,7 +106,7 @@ public class ShopController {
         newShopLocation.setCountry(newShopDTO.getCountry());
         newShopLocation.setCity(newShopDTO.getCity());
         newShopLocation.setAddress(newShopDTO.getAddress());
-        shopLocationDTOS.add(newShopLocation);
+        shopDTOS.add(newShopLocation);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newShopLocation);
     }
@@ -178,7 +178,7 @@ public class ShopController {
         }
 
         boolean shopexists = false;
-        for (ShopLocationDTO shopLocationDTO : shopLocationDTOS){
+        for (ShopDTO shopDTO : shopDTOS){
             shopexists = true;
             break;
         }
@@ -193,7 +193,7 @@ public class ShopController {
             }
         }
 
-        for (ShopLocationDTO currentShop : shopLocationDTOS) {
+        for (ShopDTO currentShop : shopDTOS) {
             if (currentShop.getShopId().equals(shopId)) {
                 ProductPriceDTO newProduct = new ProductPriceDTO();
                 newProduct.setProductId(productId);
@@ -211,8 +211,8 @@ public class ShopController {
     }
 
     @DeleteMapping("/{shopId}")
-    public ResponseEntity<ShopLocationDTO> deleteShop(@PathVariable Integer shopId) {
-        boolean removed = shopLocationDTOS.removeIf(shop -> shop.getShopId().equals(shopId));
+    public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
+        boolean removed = shopDTOS.removeIf(shop -> shop.getShopId().equals(shopId));
 
         if (removed) {
             return ResponseEntity.ok().build();
@@ -229,9 +229,9 @@ public class ShopController {
     })
 
     @PutMapping("/{shopId}")
-    public ResponseEntity<ShopLocationDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
-        for (int i = 0; i < shopLocationDTOS.size(); i++) {
-            ShopLocationDTO currentShop = shopLocationDTOS.get(i);
+    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
+        for (int i = 0; i < shopDTOS.size(); i++) {
+            ShopDTO currentShop = shopDTOS.get(i);
 
             if (currentShop.getShopId().equals(shopId)) {
 
@@ -252,9 +252,9 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopLocationDTO> partialUpdateShop(@PathVariable Integer shopId, @RequestBody UpdateShopDTO updateShopDTO) {
-        ShopLocationDTO shopLocation = null;
-        for (ShopLocationDTO shop : shopLocationDTOS) {
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @RequestBody UpdateShopDTO updateShopDTO) {
+        ShopDTO shopLocation = null;
+        for (ShopDTO shop : shopDTOS) {
             if (shop.getShopId().equals(shopId)) {
                 shopLocation = shop;
                 break;
@@ -304,7 +304,7 @@ public class ShopController {
         }
 
         // Buscar la tienda por shopId
-        ShopLocationDTO shopLocation = shopLocationDTOS.stream()
+        ShopDTO shopLocation = shopDTOS.stream()
                 .filter(shop -> shop.getShopId().equals(shopId))
                 .findFirst()
                 .orElse(null);
@@ -328,12 +328,12 @@ public class ShopController {
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ShopLocationDTO>> getShopLocationWithFilters(
+    public ResponseEntity<List<ShopDTO>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address) {
 
-        List<ShopLocationDTO> shops = new ArrayList<>(shopLocationDTOS);
+        List<ShopDTO> shops = new ArrayList<>(shopDTOS);
         if(city == null && country == null && address == null){
             return ResponseEntity.badRequest().build();
         }

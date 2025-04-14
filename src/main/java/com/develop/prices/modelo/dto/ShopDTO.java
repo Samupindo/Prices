@@ -1,7 +1,7 @@
 package com.develop.prices.modelo.dto;
 
 
-public class ShopLocationDTO {
+public class ShopDTO {
 
 
     private Integer shopId;
@@ -9,13 +9,13 @@ public class ShopLocationDTO {
     private String city;
     private String address;
 
-    public ShopLocationDTO() {
+    public ShopDTO() {
     }
 
-    public ShopLocationDTO(String country, String city, String address) {
+    public ShopDTO(String country, String city, String address) {
     }
 
-    public ShopLocationDTO(Integer shopId, String country, String city, String address) {
+    public ShopDTO(Integer shopId, String country, String city, String address) {
         this.shopId = shopId;
         this.country = country;
         this.city = city;
