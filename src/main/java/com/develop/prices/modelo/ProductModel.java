@@ -16,8 +16,8 @@ public class ProductModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // deja que la base de datos lo autogenere
     private Integer productId;
-
     private String name;
+    private String names;
 
     public ProductModel() {
     }
