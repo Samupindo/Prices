@@ -1,10 +1,8 @@
 package com.develop.prices.modelo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 
 @Entity
@@ -17,6 +15,9 @@ public class ShopModel {
     private String country;
     private String city;
     private String address;
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductPriceModel> shops;
 
     // Constructor vacío y con parámetros
     public ShopModel() {

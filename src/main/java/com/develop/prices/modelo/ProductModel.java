@@ -1,13 +1,10 @@
 package com.develop.prices.modelo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 import  java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -17,7 +14,9 @@ public class ProductModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // deja que la base de datos lo autogenere
     private Integer productId;
     private String name;
-    private String names;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductPriceModel> prices;
 
     public ProductModel() {
     }
