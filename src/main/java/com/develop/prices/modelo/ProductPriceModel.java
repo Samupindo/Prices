@@ -6,7 +6,7 @@ import  java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product_prices")
+@Table(name = "productPrices")
 public class ProductPriceModel implements Serializable {
 
     @Id
@@ -19,12 +19,12 @@ public class ProductPriceModel implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
+    @JoinColumn(name = "productId", nullable = false)
     private ProductModel product;
 
     @ManyToOne
-    @JoinColumn(name = "shop_id", nullable = false)
-    private ProductModel shop;
+    @JoinColumn(name = "shopId", nullable = false)
+    private ShopModel shop;
 
     public ProductPriceModel() {
     }
@@ -32,6 +32,12 @@ public class ProductPriceModel implements Serializable {
     public ProductPriceModel(BigDecimal price, Integer productId) {
         this.price = price;
         this.productId = productId;
+    }
+
+    public ProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
+        this.product = product;
+        this.shop = shop;
+        this.price = price;
     }
 
     public Integer getShopId() {
