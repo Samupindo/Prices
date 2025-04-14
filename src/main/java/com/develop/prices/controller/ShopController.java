@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/shops")
 public class ShopController {
 
     private List<ShopLocationDTO> shopLocationDTOS = new ArrayList<>();
@@ -35,12 +35,12 @@ public class ShopController {
         productPriceDTOS.add(new ProductPriceDTO(3,3, new BigDecimal("15.00")));
     }
 
-    @GetMapping("/shops")
+    @GetMapping("")
     public List<ShopLocationDTO> getAllShops() {
         return shopLocationDTOS;
     }
 
-    @GetMapping("/shop/{shopId}")
+    @GetMapping("/{shopId}")
     public List<ShopLocationDTO> getShopLocationDTO(@PathVariable Integer shopId) {
 
         for (ShopLocationDTO shopLocationDTO : shopLocationDTOS) {
@@ -90,7 +90,7 @@ public class ShopController {
                     )
             )
     })
-    @PostMapping("/shop")
+    @PostMapping("")
     public ResponseEntity<ShopLocationDTO> addShop(@RequestBody ShopAddDTO newShopDTO) {
 
         ShopLocationDTO newShopLocation = new ShopLocationDTO();
@@ -155,7 +155,7 @@ public class ShopController {
                     )
             )
     })
-    @PostMapping("/shop/{shopId}/addProduct/{productId}")
+    @PostMapping("/{shopId}/addProduct/{productId}")
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO product) {
         BigDecimal price = product.getPrice();
 
@@ -210,7 +210,7 @@ public class ShopController {
 
     }
 
-    @DeleteMapping("/shop/{shopId}")
+    @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopLocationDTO> deleteShop(@PathVariable Integer shopId) {
         boolean removed = shopLocationDTOS.removeIf(shop -> shop.getShopId().equals(shopId));
 
@@ -228,7 +228,7 @@ public class ShopController {
             )
     })
 
-    @PutMapping("/shop/{shopId}")
+    @PutMapping("/{shopId}")
     public ResponseEntity<ShopLocationDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
         for (int i = 0; i < shopLocationDTOS.size(); i++) {
             ShopLocationDTO currentShop = shopLocationDTOS.get(i);
@@ -251,7 +251,7 @@ public class ShopController {
 
     }
 
-    @PatchMapping("/shop/{shopId}")
+    @PatchMapping("/{shopId}")
     public ResponseEntity<ShopLocationDTO> partialUpdateShop(@PathVariable Integer shopId, @RequestBody UpdateShopDTO updateShopDTO) {
         ShopLocationDTO shopLocation = null;
         for (ShopLocationDTO shop : shopLocationDTOS) {
@@ -295,7 +295,7 @@ public class ShopController {
         return ResponseEntity.ok(shopLocation);
     }
 
-    @PatchMapping("/shop/{shopId}/product/{productId}")
+    @PatchMapping("/{shopId}/product/{productId}")
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
         // Verificar si el precio está presente en el DTO
@@ -327,7 +327,7 @@ public class ShopController {
     }
 
 
-    @GetMapping("/shop/filter")
+    @GetMapping("/filter")
     public ResponseEntity<List<ShopLocationDTO>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
