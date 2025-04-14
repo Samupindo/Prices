@@ -15,7 +15,7 @@ public class ProductPriceModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer shopId;
 
     private Integer productId;
 
@@ -29,8 +29,8 @@ public class ProductPriceModel implements Serializable {
         this.productId = productId;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getShopId() {
+        return shopId;
     }
 
     public Integer getProductId() {
@@ -41,8 +41,8 @@ public class ProductPriceModel implements Serializable {
         return price;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
     public void setProductId(Integer productId) {
@@ -56,7 +56,7 @@ public class ProductPriceModel implements Serializable {
     @Override
     public String toString() {
         return "ProductPriceModel{" +
-                "id=" + id +
+                "shopId=" + shopId +
                 ", productId=" + productId +
                 ", price=" + price +
                 '}';
