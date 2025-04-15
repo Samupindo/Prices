@@ -10,7 +10,7 @@ import java.util.List;
 public class ShopModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
-    private Integer shopId;
+    private Integer id;
 
     private String country;
     private String city;
@@ -31,11 +31,11 @@ public class ShopModel {
 
     // Getters y Setters
     public Integer getShopId() {
-        return shopId;
+        return id;
     }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
+    public void setShopId(Integer id) {
+        this.id = id;
     }
 
     public String getCountry() {

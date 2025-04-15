@@ -7,12 +7,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
-@Table(name = "products")
+@Table(name = "product")
 public class ProductModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // deja que la base de datos lo autogenere
-    private Integer productId;
+    private Integer id;
     private String name;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -26,11 +26,11 @@ public class ProductModel {
     }
 
     public Integer getProductId() {
-        return productId;
+        return id;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setProductId(Integer id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -44,7 +44,7 @@ public class ProductModel {
     @Override
     public String toString() {
         return "ProductModel{" +
-                "productId=" + productId +
+                "productId=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }

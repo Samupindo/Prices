@@ -13,10 +13,7 @@ public class ShopDTO {
     }
 
     public ShopDTO(String country, String city, String address) {
-    }
 
-    public ShopDTO(Integer shopId, String country, String city, String address) {
-        this.shopId = shopId;
         this.country = country;
         this.city = city;
         this.address = address;

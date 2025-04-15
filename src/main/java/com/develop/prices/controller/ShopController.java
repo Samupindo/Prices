@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,7 +30,7 @@ public class ShopController {
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
 
-    public ShopController(ShopLocationRepository shopLocationRepository,ProductRepository productRepository,ProductPriceRepository productPriceRepository) {
+    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.shopLocationRepository = shopLocationRepository;
         this.productRepository = productRepository;
         this.productPriceRepository = productPriceRepository;
@@ -57,7 +56,7 @@ public class ShopController {
     @GetMapping("/{shopId}")
     public ResponseEntity<List<ShopDTO>> getShopLocationDTO(@PathVariable Integer shopId) {
 
-        ShopModel shop = shopLocationRepository.findById(shopId).orElse(null);
+        ShopModel shop = (ShopModel) shopLocationRepository.findById(shopId).orElse(null);
         if(shop == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
@@ -65,7 +64,6 @@ public class ShopController {
         for (ShopDTO shopLocationDTO : shopDTOS) {
             if (shopLocationDTO.getShopId().equals(shopId)) {
                 return ResponseEntity.ok(List.of(new ShopDTO(
-                        shopLocationDTO.getShopId(),
                         shopLocationDTO.getCountry(),
                         shopLocationDTO.getCity(),
                         shopLocationDTO.getAddress()
@@ -269,7 +267,7 @@ public class ShopController {
         shopModel.setCity(updateShopDTO.getCity());
         shopModel.setAddress(updateShopDTO.getAddress());
 
-        ShopModel udpateShop = shopLocationRepository.save(shopModel);
+        ShopModel udpateShop =  shopLocationRepository.save(shopModel);
 
         ShopDTO shopDTO = new ShopDTO();
         shopDTO.setCountry(udpateShop.getCountry());
@@ -319,7 +317,7 @@ public class ShopController {
         if (updateShopDTO.getAddress() != null) {
             shopModel.setAddress(updateShopDTO.getAddress());
         }
-        ShopModel updateShop = shopLocationRepository.save(shopModel);
+        ShopModel updateShop =  shopLocationRepository.save(shopModel);
 
         ShopDTO shopDTO = new ShopDTO();
         shopDTO.setShopId(updateShop.getShopId());

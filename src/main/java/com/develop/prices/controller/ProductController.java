@@ -29,6 +29,11 @@ public class ProductController {
         this.productRepository = productRepository; // Asignar el repositorio
     }
 
+    @GetMapping("/all")
+    public List<ProductModel> getProducts(){
+        return productRepository.findAll();
+    }
+
     @GetMapping("")
     public List<ProductWithShopsDTO> getProductsWithShops() {
         List<ProductModel> productModels = productRepository.findAll();  // Obtener productos de la base de datos
