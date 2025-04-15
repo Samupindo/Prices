@@ -9,19 +9,16 @@ import java.math.BigDecimal;
 @Table(name = "productPrices")
 public class ProductPriceModel implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer shopId;
 
-    private Integer productId;
 
     private BigDecimal price;
 
-
+    @Id
     @ManyToOne
     @JoinColumn(name = "productId", nullable = false)
     private ProductModel product;
 
+    @Id
     @ManyToOne
     @JoinColumn(name = "shopId", nullable = false)
     private ShopModel shop;
@@ -29,35 +26,30 @@ public class ProductPriceModel implements Serializable {
     public ProductPriceModel() {
     }
 
-    public ProductPriceModel(BigDecimal price, Integer productId) {
+    public ProductPriceModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
-        this.productId = productId;
-    }
-
-    public ProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
         this.product = product;
         this.shop = shop;
-        this.price = price;
-    }
-
-    public Integer getShopId() {
-        return shopId;
-    }
-
-    public Integer getProductId() {
-        return productId;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
+    public ProductModel getProduct() {
+        return product;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setProduct(ProductModel product) {
+        this.product = product;
+    }
+
+    public ShopModel getShop() {
+        return shop;
+    }
+
+    public void setShop(ShopModel shop) {
+        this.shop = shop;
     }
 
     public void setPrice(BigDecimal price) {
@@ -67,9 +59,9 @@ public class ProductPriceModel implements Serializable {
     @Override
     public String toString() {
         return "ProductPriceModel{" +
-                "shopId=" + shopId +
-                ", productId=" + productId +
-                ", price=" + price +
+                "price=" + price +
+                ", product=" + product +
+                ", shop=" + shop +
                 '}';
     }
 }

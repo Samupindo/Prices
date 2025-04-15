@@ -1,6 +1,7 @@
 package com.develop.prices.controller;
 
 
+import com.develop.prices.modelo.ProductModel;
 import com.develop.prices.modelo.ProductPriceModel;
 import com.develop.prices.modelo.ShopModel;
 import com.develop.prices.modelo.dto.*;
@@ -213,15 +214,21 @@ public class ShopController {
         }
 
         ProductPriceModel priceModel = new ProductPriceModel();
-        priceModel.setProductId(productId);
-        priceModel.setShopId(shopId);
+        ProductModel productModel = new ProductModel();
+        ShopModel shopModel = new ShopModel();
+
+        productModel.setProductId(productId);
+        shopModel.setShopId(shopId);
+
+        priceModel.setProduct(productModel);
+        priceModel.setShop(shopModel);
         priceModel.setPrice(price);
 
         productPriceRepository.save(priceModel);
 
         ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setShopId(priceModel.getShopId());
-        productPriceDTO.setProductId(priceModel.getProductId());
+        productPriceDTO.setShopId(shopModel);
+        productPriceDTO.setProductId(productModel);
         productPriceDTO.setPrice(priceModel.getPrice());
 
         return ResponseEntity.ok(productPriceDTO);
@@ -351,7 +358,7 @@ public class ShopController {
         // Buscar el producto y actualizar su precio
 
         ProductPriceModel productPriceModel = priceModel.get();
-        if(productPriceModel.getProductId().equals(productId) && productPriceModel.getShopId().equals(shopId)){
+        if(productPriceModel.getProduct().getProductId().equals(productId) && productPriceModel.getShop().getShopId().equals(shopId)){
             ProductPriceModel priceModel1 = productPriceRepository.save(productPriceModel);
 
             ProductPriceDTO productPriceDTO = new ProductPriceDTO();
