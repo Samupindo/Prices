@@ -36,16 +36,10 @@ public class ProductController {
     @GetMapping("")
     public List<ProductWithShopsDTO> getProducts() {
         List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
-        List<ProductWithShopsDTO> response = new ArrayList<>();
+        List<ProductWithShopsDTO> productWithShops = new ArrayList<>();
 
         for(ProductModel product : productModels){
             List<ShopInfoDTO> shopInfoList = new ArrayList<>();
-
-            if (product.getPrices() != null && !product.getPrices().isEmpty()) {
-                System.out.println("Tiene precios: " + product.getPrices().size());
-            } else {
-                System.out.println("NO TIENE precios asociados.");
-            }
 
             if(product.getPrices()!=null){
                 for(ProductPriceModel priceModel : product.getPrices()){
@@ -61,22 +55,39 @@ public class ProductController {
                     product.getName(),
                     shopInfoList
             );
-            response.add(dto);
+            productWithShops.add(dto);
         }
-        return response;
+        return productWithShops;
     }
 
+    //Guardamos el producto,
     @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(new ProductWithShopsDTO(
+        // Preparamos lista vacía para guardar los precios
+        List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
+
+        if (productModel.getPrices() != null) {
+            //Recorremos el producto obtenido,
+            // productModel.getPrices() indica en que tiendas se vende el producto y
+            for (ProductPriceModel priceModel : productModel.getPrices()) {
+                ShopInfoDTO shopInfo = new ShopInfoDTO(
+                        priceModel.getShop().getShopId(),
+                        priceModel.getPrice()
+                );
+                shopInfoDTOS.add(shopInfo);
+            }
+        }
+        //Volcamos datos en
+        ProductWithShopsDTO productWithShop = new ProductWithShopsDTO(
                 productModel.getProductId(),
                 productModel.getName(),
                 shopInfoDTOS
-        ));
+        );
+        return ResponseEntity.ok(productWithShop);
     }
 
 
