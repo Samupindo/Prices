@@ -1,7 +1,6 @@
 package com.develop.prices.repository;
 
-import com.develop.prices.modelo.ProductPriceModel;
-import com.develop.prices.modelo.ShopModel;
+import com.develop.prices.model.ProductPriceModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

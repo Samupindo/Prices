@@ -1,4 +1,4 @@
-package com.develop.prices.modelo.dto;
+package com.develop.prices.model.dto;
 // import jakarta.validation.constraints.NotBlank;
 //@NotBlank
 //@JsonIgnoreProperties(ignoreUnknown = false)

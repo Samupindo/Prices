@@ -1,31 +1,41 @@
-package com.develop.prices.modelo.dto;
+package com.develop.prices.model;
+
+import jakarta.persistence.*;
+
+import java.util.List;
 
 
-public class ShopDTO {
+@Entity
+@Table(name = "shop")
+public class ShopModel {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
+    private Integer id;
 
-
-    private Integer shopId;
     private String country;
     private String city;
     private String address;
 
-    public ShopDTO() {
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductPriceModel> prices;
+
+    // Constructor vacío y con parámetros
+    public ShopModel() {
     }
 
-    public ShopDTO(String country, String city, String address) {
-
+    public ShopModel(String country, String city, String address) {
         this.country = country;
         this.city = city;
         this.address = address;
     }
 
-
+    // Getters y Setters
     public Integer getShopId() {
-        return shopId;
+        return id;
     }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
+    public void setShopId(Integer id) {
+        this.id = id;
     }
 
     public String getCountry() {

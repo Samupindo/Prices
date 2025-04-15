@@ -1,9 +1,7 @@
-package com.develop.prices.modelo;
+package com.develop.prices.model;
 
 import jakarta.persistence.*;
 
-import  java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity

@@ -1,10 +1,10 @@
 package com.develop.prices.controller;
 
-import com.develop.prices.modelo.ProductModel;
-import com.develop.prices.modelo.dto.ProductDTO;
-import com.develop.prices.modelo.dto.ProductNameDTO;
-import com.develop.prices.modelo.dto.ProductWithShopsDTO;
-import com.develop.prices.modelo.dto.ShopInfoDTO;
+import com.develop.prices.model.ProductModel;
+import com.develop.prices.model.dto.ProductDTO;
+import com.develop.prices.model.dto.ProductNameDTO;
+import com.develop.prices.model.dto.ProductWithShopsDTO;
+import com.develop.prices.model.dto.ShopInfoDTO;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

@@ -1,4 +1,4 @@
-package com.develop.prices.modelo;
+package com.develop.prices.model;
 
 import jakarta.persistence.*;
 

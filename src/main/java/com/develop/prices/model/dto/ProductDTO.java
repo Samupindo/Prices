@@ -1,4 +1,4 @@
-package com.develop.prices.modelo.dto;
+package com.develop.prices.model.dto;
 
 public class ProductDTO {
     private Integer productId;

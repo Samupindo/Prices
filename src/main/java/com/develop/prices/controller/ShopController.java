@@ -1,10 +1,10 @@
 package com.develop.prices.controller;
 
 
-import com.develop.prices.modelo.ProductModel;
-import com.develop.prices.modelo.ProductPriceModel;
-import com.develop.prices.modelo.ShopModel;
-import com.develop.prices.modelo.dto.*;
+import com.develop.prices.model.ProductModel;
+import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopModel;
+import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.repository.ShopLocationRepository;
