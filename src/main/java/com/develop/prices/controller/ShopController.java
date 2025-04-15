@@ -178,7 +178,7 @@ public class ShopController {
                     )
             )
     })
-    @PostMapping("/{shopId}/addProduct/{productId}")
+    @PostMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO product) {
         BigDecimal price = product.getPrice();
 
@@ -324,7 +324,7 @@ public class ShopController {
 
     }
 
-    @PatchMapping("/{shopId}/product/{productId}")
+    @PatchMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
         Optional<ProductPriceModel> priceModel = productPriceRepository.findByShopIdAndProductId(shopId, productId);

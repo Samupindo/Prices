@@ -29,25 +29,9 @@ public class ProductController {
         this.productRepository = productRepository; // Asignar el repositorio
     }
 
-    @GetMapping("/all")
-    public List<ProductModel> getProducts(){
-        return productRepository.findAll();
-    }
-
     @GetMapping("")
-    public List<ProductWithShopsDTO> getProductsWithShops() {
-        List<ProductModel> productModels = productRepository.findAll();  // Obtener productos de la base de datos
-        List<ProductWithShopsDTO> productWithShops = new ArrayList<>();
-
-        for (ProductModel productModel : productModels) {
-            // Asociar tiendas a cada producto (esto lo haces con shopInfoDTOS)
-            productWithShops.add(new ProductWithShopsDTO(
-                    productModel.getProductId(),
-                    productModel.getName(),
-                    shopInfoDTOS
-            ));
-        }
-        return productWithShops;
+    public List<ProductModel> getProducts() {
+        return productRepository.findAll();
     }
 
     @GetMapping("/{productId}")
