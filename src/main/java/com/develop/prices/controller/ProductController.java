@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
 @Transactional
+@RestController
 @RequestMapping("/products")
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-    private final ProductRepository productRepository; //quitar final ¿?
+    private final ProductRepository productRepository;
 
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
@@ -33,7 +34,7 @@ public class ProductController {
 
     @GetMapping("")
     public List<ProductModel> getProducts() {
-        return productRepository.findAll();
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); // Ordenar por ID ascendente
     }
 
     @GetMapping("/{productId}")
@@ -111,6 +112,7 @@ public class ProductController {
         }
 
         existingProduct.setName(productNameDTO.getName());
+
 
         return ResponseEntity.ok(new ProductDTO(existingProduct.getProductId(), existingProduct.getName()));
     }
