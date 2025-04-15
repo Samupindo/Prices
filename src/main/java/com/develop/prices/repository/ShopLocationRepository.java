@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface ShopLocationRepository extends JpaRepository <ShopModel, Integer> {
     @Override
-    List findAll();
-
     ShopModel save(ShopModel entity);
 }

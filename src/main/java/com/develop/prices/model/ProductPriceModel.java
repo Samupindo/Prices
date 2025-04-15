@@ -6,7 +6,7 @@ import  java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "productPrices")
+@Table(name = "productPrice")
 public class ProductPriceModel implements Serializable {
 
     @Id
