@@ -19,6 +19,12 @@ public class ShopDTO {
         this.address = address;
     }
 
+    public ShopDTO(Integer shopId, String country, String city, String address) {
+        this.shopId = shopId;
+        this.country = country;
+        this.city = city;
+        this.address = address;
+    }
 
     public Integer getShopId() {
         return shopId;

@@ -18,7 +18,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/shops")
@@ -41,7 +44,7 @@ public class ShopController {
         List<ShopModel> shopModels = shopLocationRepository.findAll();
 
         List<ShopDTO> shopDTOS = new ArrayList<>();
-        for (ShopModel shopModel : shopModels){
+        for (ShopModel shopModel : shopModels) {
             ShopDTO shopDTO = new ShopDTO();
             shopDTO.setShopId(shopModel.getShopId());
             shopDTO.setCity(shopModel.getCity());
@@ -57,20 +60,16 @@ public class ShopController {
     public ResponseEntity<List<ShopDTO>> getShopLocationDTO(@PathVariable Integer shopId) {
 
         ShopModel shop = (ShopModel) shopLocationRepository.findById(shopId).orElse(null);
-        if(shop == null){
+        if (shop == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
 
-        for (ShopDTO shopLocationDTO : shopDTOS) {
-            if (shopLocationDTO.getShopId().equals(shopId)) {
-                return ResponseEntity.ok(List.of(new ShopDTO(
-                        shopLocationDTO.getCountry(),
-                        shopLocationDTO.getCity(),
-                        shopLocationDTO.getAddress()
-                )));
-            }
-        }
-        return ResponseEntity.ok(Collections.emptyList());
+        return ResponseEntity.ok(List.of(new ShopDTO(
+                shop.getShopId(),
+                shop.getCountry(),
+                shop.getCity(),
+                shop.getAddress()
+        )));
 
     }
 
@@ -110,8 +109,6 @@ public class ShopController {
     @PostMapping("")
     public ResponseEntity<ShopDTO> addShop(@RequestBody ShopAddDTO newShopDTO) {
 
-
-
         for (ShopDTO shop : shopDTOS) {
 //           Comprobación para que la calle no exista dos veces,para ello se comprueba que sea en la misma ciudad y país.
 
@@ -137,7 +134,6 @@ public class ShopController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newShowDTO);
     }
-
 
 
     @ApiResponses(value = {
@@ -191,16 +187,16 @@ public class ShopController {
             return ResponseEntity.badRequest().build();
         }
 
-        if(!productRepository.findById(productId).isPresent()){
+        if (!productRepository.findById(productId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
 
-        if(!shopLocationRepository.findById(shopId).isPresent()){
+        if (!shopLocationRepository.findById(shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if(!productPriceRepository.findByShopIdAndProductId(productId,shopId).isPresent()){
+        if (!productPriceRepository.findByShopIdAndProductId(productId, shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -235,7 +231,7 @@ public class ShopController {
 
     @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
-        if(!shopLocationRepository.findById(shopId).isPresent()){
+        if (!shopLocationRepository.findById(shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         shopLocationRepository.deleteById(shopId);
@@ -243,7 +239,7 @@ public class ShopController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiResponses(value ={
+    @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "204",
                     description = "The shop has been deleted successfully"
@@ -254,11 +250,11 @@ public class ShopController {
     public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
 
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-        if(!optionalShopModel.isPresent()){
+        if (!optionalShopModel.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if(updateShopDTO.getCity() == null || updateShopDTO.getCountry() == null || updateShopDTO.getAddress() == null){
+        if (updateShopDTO.getCity() == null || updateShopDTO.getCountry() == null || updateShopDTO.getAddress() == null) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -267,7 +263,7 @@ public class ShopController {
         shopModel.setCity(updateShopDTO.getCity());
         shopModel.setAddress(updateShopDTO.getAddress());
 
-        ShopModel udpateShop =  shopLocationRepository.save(shopModel);
+        ShopModel udpateShop = shopLocationRepository.save(shopModel);
 
         ShopDTO shopDTO = new ShopDTO();
         shopDTO.setCountry(udpateShop.getCountry());
@@ -277,7 +273,6 @@ public class ShopController {
         return ResponseEntity.ok(shopDTO);
 
 
-
     }
 
     @PatchMapping("/{shopId}")
@@ -285,7 +280,7 @@ public class ShopController {
 
 
         Optional<ShopModel> optionalShop = shopLocationRepository.findById(shopId);
-        if(!optionalShop.isPresent()){
+        if (!optionalShop.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -317,7 +312,7 @@ public class ShopController {
         if (updateShopDTO.getAddress() != null) {
             shopModel.setAddress(updateShopDTO.getAddress());
         }
-        ShopModel updateShop =  shopLocationRepository.save(shopModel);
+        ShopModel updateShop = shopLocationRepository.save(shopModel);
 
         ShopDTO shopDTO = new ShopDTO();
         shopDTO.setShopId(updateShop.getShopId());
@@ -332,8 +327,8 @@ public class ShopController {
     @PatchMapping("/{shopId}/product/{productId}")
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
-        Optional<ProductPriceModel> priceModel = productPriceRepository.findByShopIdAndProductId(shopId,productId);
-        if(!priceModel.isPresent()){
+        Optional<ProductPriceModel> priceModel = productPriceRepository.findByShopIdAndProductId(shopId, productId);
+        if (!priceModel.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -356,7 +351,7 @@ public class ShopController {
         // Buscar el producto y actualizar su precio
 
         ProductPriceModel productPriceModel = priceModel.get();
-        if(productPriceModel.getProduct().getProductId().equals(productId) && productPriceModel.getShop().getShopId().equals(shopId)){
+        if (productPriceModel.getProduct().getProductId().equals(productId) && productPriceModel.getShop().getShopId().equals(shopId)) {
             ProductPriceModel priceModel1 = productPriceRepository.save(productPriceModel);
 
             ProductPriceDTO productPriceDTO = new ProductPriceDTO();
@@ -378,17 +373,17 @@ public class ShopController {
         List<ShopModel> shops = shopLocationRepository.findAll();
         List<ShopDTO> filteredShops = new ArrayList<>();
 
-        for (ShopModel shopModel : shops){
+        for (ShopModel shopModel : shops) {
             boolean match = true;
-            if(country != null && !shopModel.getCountry().toLowerCase().contains(country.toLowerCase())){
+            if (country != null && !shopModel.getCountry().toLowerCase().contains(country.toLowerCase())) {
                 match = false;
             }
 
-            if(city != null && !shopModel.getCity().toLowerCase().contains(city.toLowerCase())){
+            if (city != null && !shopModel.getCity().toLowerCase().contains(city.toLowerCase())) {
                 match = false;
             }
 
-            if(address != null && !shopModel.getAddress().toLowerCase().contains(address.toLowerCase())){
+            if (address != null && !shopModel.getAddress().toLowerCase().contains(address.toLowerCase())) {
                 match = false;
             }
 
@@ -401,11 +396,11 @@ public class ShopController {
         }
 
 
-        if(city == null && country == null && address == null){
+        if (city == null && country == null && address == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        if(filteredShops.isEmpty()){
+        if (filteredShops.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(filteredShops);
