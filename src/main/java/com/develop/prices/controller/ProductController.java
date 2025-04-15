@@ -34,7 +34,7 @@ public class ProductController {
 
     @GetMapping("")
     public List<ProductModel> getProducts() {
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); // Ordenar por ID ascendente
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
     }
 
     @GetMapping("/{productId}")
