@@ -42,20 +42,8 @@ public class ShopController {
     }
 
     @GetMapping("")
-    public List<ShopDTO> getAllShops() {
-        List<ShopModel> shopModels = shopLocationRepository.findAll();
-
-        List<ShopDTO> shopDTOS = new ArrayList<>();
-        for (ShopModel shopModel : shopModels) {
-            ShopDTO shopDTO = new ShopDTO();
-            shopDTO.setShopId(shopModel.getShopId());
-            shopDTO.setCity(shopModel.getCity());
-            shopDTO.setCountry(shopModel.getCountry());
-            shopDTO.setAddress(shopModel.getAddress());
-
-            shopDTOS.add(shopDTO);
-        }
-        return shopDTOS;
+    public List<ShopModel> getAllShops() {
+        return shopLocationRepository.findAll();
     }
 
     @GetMapping("/{shopId}")

@@ -6,7 +6,7 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "shop")
+@Table(name = "shops")
 public class ShopModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
