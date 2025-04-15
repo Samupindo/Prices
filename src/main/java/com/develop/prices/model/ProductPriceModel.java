@@ -6,7 +6,7 @@ import  java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "productPrice")
+@Table(name = "product_price")
 public class ProductPriceModel implements Serializable {
 
     @Id
@@ -17,12 +17,12 @@ public class ProductPriceModel implements Serializable {
 
 
     @ManyToOne
-    @JoinColumn(name = "productId", nullable = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private ProductModel product;
 
 
     @ManyToOne
-    @JoinColumn(name = "shopId", nullable = false)
+    @JoinColumn(name = "shop_id", nullable = false)
     private ShopModel shop;
 
     public ProductPriceModel() {

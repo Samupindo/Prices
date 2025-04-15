@@ -1,11 +1,12 @@
 package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.dto.ProductDTO;
-import com.develop.prices.model.dto.ProductNameDTO;
-import com.develop.prices.model.dto.ProductWithShopsDTO;
-import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopModel;
+import com.develop.prices.model.dto.*;
+import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
+import com.develop.prices.repository.ShopLocationRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,24 +21,33 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Transactional
+
 @RestController
 @RequestMapping("/products")
+@Transactional
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-    private final ProductRepository productRepository;
+    private ProductRepository productRepository;
+    private ShopLocationRepository shopRepository;
 
-    public ProductController(ProductRepository productRepository) {
+
+    public ProductController(ProductRepository productRepository, ShopLocationRepository shopRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
+        this.shopRepository = shopRepository;
     }
+
+//    @GetMapping("")
+//    public List<ProductModel> getProducts() {
+//        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
+//    }
 
     @GetMapping("")
     public List<ProductModel> getProducts() {
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); // Ordenar por ID ascendente
+        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{product_id}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
@@ -90,7 +100,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/{product_id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
@@ -100,7 +110,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{productId}")
+    @PutMapping("/{product_id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
@@ -118,47 +128,48 @@ public class ProductController {
     }
 
 
-    @GetMapping("/filter")
-    public List<ProductWithShopsDTO> getProductsWithFilters(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) BigDecimal priceMin,
-            @RequestParam(required = false) BigDecimal priceMax) {
-
-        // Obtener todos los productos desde la base de datos
-        List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
-
-        for (ProductModel product : productModels) {
-            List<ShopInfoDTO> filteredShops = new ArrayList<>(shopInfoDTOS);
-
-            // Filtrar por el precio mínimo
-            if (priceMin != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMin) < 0);
-            }
-
-            // Filtrar por el precio máximo
-            if (priceMax != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMax) > 0);
-            }
-
-            // Si hay tiendas filtradas y el producto tiene tiendas asociadas
-            if (!filteredShops.isEmpty()) {
-                // Filtrar por nombre, si se proporciona
-                if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                    continue; // Si no contiene el nombre, saltar este producto
-                }
-
-                // Crear el DTO para el producto con las tiendas filtradas
-                filteredProducts.add(new ProductWithShopsDTO(
-                        product.getProductId(),
-                        product.getName(),
-                        filteredShops
-                ));
-            }
-        }
-
-        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
-        return filteredProducts;
-    }
+//    @GetMapping("/filter")
+//    public List<ProductWithShopsDTO> getProductsWithFilters(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) BigDecimal priceMin,
+//            @RequestParam(required = false) BigDecimal priceMax) {
+//
+//        // Obtener todos los productos desde la base de datos
+//        List<ProductModel> productModels = productRepository.findAll();
+//        List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
+//
+//        for (ProductModel product : productModels) {
+//            List<ShopModel> filteredShops = shopRepository.findAll();
+//
+//
+//            // Filtrar por el precio mínimo
+//            if (priceMin != null) {
+//                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMin) < 0);
+//            }
+//
+//            // Filtrar por el precio máximo
+//            if (priceMax != null) {
+//                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMax) > 0);
+//            }
+//
+//            // Si hay tiendas filtradas y el producto tiene tiendas asociadas
+//            if (!filteredShops.isEmpty()) {
+//                // Filtrar por nombre, si se proporciona
+//                if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
+//                    continue; // Si no contiene el nombre, saltar este producto
+//                }
+//
+//                // Crear el DTO para el producto con las tiendas filtradas
+//                filteredProducts.add(new ProductWithShopsDTO(
+//                        product.getProductId(),
+//                        product.getName(),
+//                        filteredShops
+//                ));
+//            }
+//        }
+//
+//        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
+//        return filteredProducts;
+//    }
 
 }
