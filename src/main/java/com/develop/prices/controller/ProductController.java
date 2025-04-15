@@ -1,6 +1,7 @@
 package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
+import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.dto.ProductDTO;
 import com.develop.prices.model.dto.ProductNameDTO;
 import com.develop.prices.model.dto.ProductWithShopsDTO;
@@ -33,8 +34,36 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public List<ProductModel> getProducts() {
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "id")); // Ordenar por ID ascendente
+    public List<ProductWithShopsDTO> getProducts() {
+        List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
+        List<ProductWithShopsDTO> response = new ArrayList<>();
+
+        for(ProductModel product : productModels){
+            List<ShopInfoDTO> shopInfoList = new ArrayList<>();
+
+            if (product.getPrices() != null && !product.getPrices().isEmpty()) {
+                System.out.println("Tiene precios: " + product.getPrices().size());
+            } else {
+                System.out.println("NO TIENE precios asociados.");
+            }
+
+            if(product.getPrices()!=null){
+                for(ProductPriceModel priceModel : product.getPrices()){
+                    ShopInfoDTO shopInfo = new ShopInfoDTO(
+                            priceModel.getShop().getShopId(),
+                            priceModel.getPrice()
+                    );
+                    shopInfoList.add(shopInfo);
+                }
+            }
+            ProductWithShopsDTO dto = new ProductWithShopsDTO(
+                    product.getProductId(),
+                    product.getName(),
+                    shopInfoList
+            );
+            response.add(dto);
+        }
+        return response;
     }
 
     @GetMapping("/{productId}")

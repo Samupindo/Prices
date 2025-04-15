@@ -198,7 +198,7 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (!productPriceRepository.findByShopIdAndProductId(productId, shopId).isPresent()) {
+        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(productId, shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -329,7 +329,7 @@ public class ShopController {
     @PatchMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
-        Optional<ProductPriceModel> priceModel = productPriceRepository.findByShopIdAndProductId(shopId, productId);
+        Optional<ProductPriceModel> priceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId);
         if (!priceModel.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
