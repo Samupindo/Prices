@@ -36,12 +36,14 @@ public class ProductController {
     @GetMapping("")
     public List<ProductWithShopsDTO> getProducts() {
         List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
-        List<ProductWithShopsDTO> productWithShops = new ArrayList<>();
+        List<ProductWithShopsDTO> productWithShopsList = new ArrayList<>();
 
+        //Recorremos el producto y  creamos una lista vacia donde se guardaran los precios
         for(ProductModel product : productModels){
             List<ShopInfoDTO> shopInfoList = new ArrayList<>();
 
             if(product.getPrices()!=null){
+                //Recorremos los productos con el precio y tienda asociado, lo guardamos en la lista mediante ShopInfoDTO
                 for(ProductPriceModel priceModel : product.getPrices()){
                     ShopInfoDTO shopInfo = new ShopInfoDTO(
                             priceModel.getShop().getShopId(),
@@ -50,17 +52,17 @@ public class ProductController {
                     shopInfoList.add(shopInfo);
                 }
             }
-            ProductWithShopsDTO dto = new ProductWithShopsDTO(
+            // DTO con la info de la tienda completa
+            ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
                     shopInfoList
             );
-            productWithShops.add(dto);
+            productWithShopsList.add(productWithShopsDTO);
         }
-        return productWithShops;
+        return productWithShopsList;
     }
 
-    //Guardamos el producto,
     @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
@@ -72,7 +74,7 @@ public class ProductController {
 
         if (productModel.getPrices() != null) {
             //Recorremos el producto obtenido,
-            // productModel.getPrices() indica en que tiendas se vende el producto y
+            // productModel.getPrices() indica en que tiendas se vende el producto
             for (ProductPriceModel priceModel : productModel.getPrices()) {
                 ShopInfoDTO shopInfo = new ShopInfoDTO(
                         priceModel.getShop().getShopId(),
@@ -81,7 +83,7 @@ public class ProductController {
                 shopInfoDTOS.add(shopInfo);
             }
         }
-        //Volcamos datos en
+        //Creamos el objeto que se mostrara
         ProductWithShopsDTO productWithShop = new ProductWithShopsDTO(
                 productModel.getProductId(),
                 productModel.getName(),
