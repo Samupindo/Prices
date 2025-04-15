@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -19,11 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Transactional
 @RequestMapping("/products")
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-    private final ProductRepository productRepository;
+    private final ProductRepository productRepository; //quitar final ¿?
 
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
@@ -109,7 +111,6 @@ public class ProductController {
         }
 
         existingProduct.setName(productNameDTO.getName());
-        productRepository.save(existingProduct);
 
         return ResponseEntity.ok(new ProductDTO(existingProduct.getProductId(), existingProduct.getName()));
     }
