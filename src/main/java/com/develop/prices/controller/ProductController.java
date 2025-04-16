@@ -174,6 +174,10 @@ public class ProductController {
         List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
 
         for (ProductModel product : productModels) {
+            if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
+                continue;
+            }
+
             List<ShopInfoDTO> filteredShops = new ArrayList<>();
 
             if (product.getPrices() != null) {
@@ -194,13 +198,9 @@ public class ProductController {
                 }
             }
 
-            // Si hay tiendas que pasaron los filtros de precio
+            //Comprobar si hay tiendas con esos filtros
             if (!filteredShops.isEmpty()) {
-                // Filtrar por nombre si se proporciona
-                if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                    continue;
-                }
-
+                //Filtrar por nombre, si no coindice salta al final
                 // Agregar el producto con sus tiendas filtradas
                 filteredProducts.add(new ProductWithShopsDTO(
                         product.getProductId(),
