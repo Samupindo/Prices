@@ -1,11 +1,12 @@
 package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.dto.ProductDTO;
-import com.develop.prices.model.dto.ProductNameDTO;
-import com.develop.prices.model.dto.ProductWithShopsDTO;
-import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopModel;
+import com.develop.prices.model.dto.*;
+import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
+import com.develop.prices.repository.ShopLocationRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,25 +20,37 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-@Transactional
+
 @RestController
 @RequestMapping("/products")
+@Transactional
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-    private final ProductRepository productRepository;
+    private ProductRepository productRepository;
+    private ShopLocationRepository shopRepository;
+    private ProductPriceRepository productPriceRepository;
 
-    public ProductController(ProductRepository productRepository) {
+
+    public ProductController(ProductRepository productRepository, ShopLocationRepository shopRepository, ProductPriceRepository productPriceRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
+        this.shopRepository = shopRepository;
+        this.productPriceRepository = productPriceRepository;
     }
+
+//    @GetMapping("")
+//    public List<ProductModel> getProducts() {
+//        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
+//    }
 
     @GetMapping("")
     public List<ProductModel> getProducts() {
         return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
     }
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{product_id}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
@@ -90,7 +103,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/{productId}")
+    @DeleteMapping("/{product_id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
@@ -100,7 +113,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{productId}")
+    @PutMapping("/{product_id}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
@@ -126,39 +139,47 @@ public class ProductController {
 
         // Obtener todos los productos desde la base de datos
         List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
+        List<ProductWithShopsDTO> productWithShopsDTOS;
 
-        for (ProductModel product : productModels) {
-            List<ShopInfoDTO> filteredShops = new ArrayList<>(shopInfoDTOS);
 
-            // Filtrar por el precio mínimo
-            if (priceMin != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMin) < 0);
-            }
+        List<ShopModel> filteredShops = shopRepository.findAll();
+        List<ProductPriceModel> productPriceModel = productPriceRepository.findAll();
 
-            // Filtrar por el precio máximo
-            if (priceMax != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMax) > 0);
-            }
+        List<BigDecimal> prices = productPriceModel.stream()
+                .map(ProductPriceModel::getPrice)
+                .toList();
 
-            // Si hay tiendas filtradas y el producto tiene tiendas asociadas
-            if (!filteredShops.isEmpty()) {
-                // Filtrar por nombre, si se proporciona
-                if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                    continue; // Si no contiene el nombre, saltar este producto
-                }
+        List<Integer> shopIds = filteredShops.stream()
+                .map(ShopModel::getShopId)
+                .toList();
 
-                // Crear el DTO para el producto con las tiendas filtradas
-                filteredProducts.add(new ProductWithShopsDTO(
-                        product.getProductId(),
-                        product.getName(),
-                        filteredShops
-                ));
-            }
-        }
+
+
+        List<ShopInfoDTO> shopsInfo = IntStream.range(0,shopIds.size())   //genera indices (del tamaño de la lista que se le pase) para sincronizar los elementos por posicion
+                .mapToObj(i->new ShopInfoDTO(shopIds.get(i), prices.get(i)))
+                .toList();
+
+
+
+        List<ShopInfoDTO> shopsInfoFiltered = shopsInfo.stream()
+                .filter(p -> p.getPrice().compareTo(priceMin) > 0 && p.getPrice().compareTo(priceMax) < 0)
+                .toList();
+
+
+
+
+        productWithShopsDTOS = IntStream.range(0,productModels.size())
+                .mapToObj(i-> new ProductWithShopsDTO(productModels.get(i).getProductId(),productModels.get(i).getName(),shopsInfoFiltered))
+                .toList();
+
+
+        productWithShopsDTOS = productWithShopsDTOS.stream()
+                .filter(n -> n.getName().contains(name))
+                .toList();
+
 
         // Si no se encuentra ningún producto filtrado, devolver una lista vacía
-        return filteredProducts;
+        return productWithShopsDTOS;
     }
 
 }
