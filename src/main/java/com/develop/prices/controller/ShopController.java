@@ -325,41 +325,26 @@ public class ShopController {
 
     @PatchMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
+        BigDecimal price = productPricePatchDTO.getPrice();
 
-        Optional<ProductPriceModel> priceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId);
-        if (priceModel.isEmpty()) {
+        ProductPriceModel priceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (priceModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        // Verificar si el precio está presente en el DTO
-        if (productPricePatchDTO.getPrice() == null) {
+        if (price == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        // Buscar la tienda por shopId
-        ShopDTO shopLocation = shopDTOS.stream()
-                .filter(shop -> shop.getShopId().equals(shopId))
-                .findFirst()
-                .orElse(null);
+        priceModel.setPrice(price);
 
-        if (shopLocation == null) {
-            // Si no se encuentra la tienda, retornar NOT_FOUND
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        ProductPriceModel savePriceModel = productPriceRepository.save(priceModel);
 
-        // Buscar el producto y actualizar su precio
-
-        ProductPriceModel productPriceModel = priceModel.get();
-        if (productPriceModel.getProduct().getProductId().equals(productId) && productPriceModel.getShop().getShopId().equals(shopId)) {
-            ProductPriceModel priceModel1 = productPriceRepository.save(productPriceModel);
-
-            ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-            productPriceDTO.setPrice(priceModel1.getPrice());
-            return ResponseEntity.ok(productPriceDTO);
-        }
-
-        // Si no se encuentra el producto, retornar NOT_FOUND
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
+        productPriceDTO.setProductId(savePriceModel.getProduct().getProductId());
+        productPriceDTO.setShopId(savePriceModel.getShop().getShopId());
+        productPriceDTO.setPrice(savePriceModel.getPrice());
+        return ResponseEntity.ok(productPriceDTO);
     }
 
 
