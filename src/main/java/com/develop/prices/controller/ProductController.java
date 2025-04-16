@@ -2,11 +2,11 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.ShopModel;
 import com.develop.prices.model.dto.ProductDTO;
 import com.develop.prices.model.dto.ProductNameDTO;
 import com.develop.prices.model.dto.ProductWithShopsDTO;
 import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @RestController
@@ -28,9 +30,12 @@ import java.util.List;
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
     private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
 
-    public ProductController(ProductRepository productRepository) {
+
+    public ProductController(ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
+        this.productPriceRepository = productPriceRepository;
     }
 
     @GetMapping("")
@@ -164,53 +169,44 @@ public class ProductController {
 
 
     @GetMapping("/filter")
-    public List<ProductWithShopsDTO> getProductsWithFilters(
+    public ResponseEntity<List<ProductWithShopsDTO>> getProductsWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
-
+        // Obtener todos los productos
         List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
+        List<ProductWithShopsDTO> result = new ArrayList<>();
 
         for (ProductModel product : productModels) {
+            // Filtrar por nombre si está presente
             if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
                 continue;
             }
 
-            List<ShopInfoDTO> filteredShops = new ArrayList<>();
+            List<ShopInfoDTO> shopList = new ArrayList<>();
 
             if (product.getPrices() != null) {
-                    //Recorremos los precios para este producto
-                for (ProductPriceModel priceModel : product.getPrices()) {
-                    BigDecimal price = priceModel.getPrice();
+                for (ProductPriceModel price : product.getPrices()) {
+                    BigDecimal precio = price.getPrice();
 
-                    boolean isWithinMin = (priceMin == null || price.compareTo(priceMin) >= 0);
-                    boolean isWithinMax = (priceMax == null || price.compareTo(priceMax) <= 0);
+                    boolean cumpleMin = (priceMin == null || precio.compareTo(priceMin) >= 0);
+                    boolean cumpleMax = (priceMax == null || precio.compareTo(priceMax) <= 0);
 
-                    if (isWithinMin && isWithinMax) {
-                        //Se comprueba que la tienda no es null
-                        ShopModel shop = priceModel.getShop();
-                        if (shop != null) {
-                            filteredShops.add(new ShopInfoDTO(shop.getShopId(), price));
-                        }
+                    if (cumpleMin && cumpleMax) {
+                        shopList.add(new ShopInfoDTO(price.getShop().getShopId(), precio));
                     }
                 }
             }
 
-            //Comprobar si hay tiendas con esos filtros
-            if (!filteredShops.isEmpty()) {
-                //Filtrar por nombre, si no coindice salta al final
-                // Agregar el producto con sus tiendas filtradas
-                filteredProducts.add(new ProductWithShopsDTO(
-                        product.getProductId(),
-                        product.getName(),
-                        filteredShops
-                ));
+            // Si hay tiendas que cumplen el filtro, se agrega el producto
+            if (!shopList.isEmpty()) {
+                result.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
             }
         }
 
-        return filteredProducts;
+        return ResponseEntity.ok(result);
     }
+
 
 }
