@@ -191,7 +191,7 @@ public class ShopController {
         priceModel.setShop(shopLocationRepository.findById(shopId).get());
         priceModel.setPrice(price);
 
-        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductIdAndPrice(shopId, productId, price).isPresent()){
+        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -229,6 +229,18 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         shopLocationRepository.deleteById(shopId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId){
+
+        ProductPriceModel productPriceModel =  productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
+        if (productPriceModel == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        productPriceRepository.deleteById(productPriceModel.getProductPriceId());
 
         return ResponseEntity.ok().build();
     }
@@ -315,7 +327,7 @@ public class ShopController {
     public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
         Optional<ProductPriceModel> priceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId);
-        if (!priceModel.isPresent()) {
+        if (priceModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
