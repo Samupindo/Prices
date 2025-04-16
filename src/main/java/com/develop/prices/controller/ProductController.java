@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 
 @RestController
@@ -30,11 +31,13 @@ public class ProductController {
     private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
     private ProductRepository productRepository;
     private ShopLocationRepository shopRepository;
+    private ProductPriceRepository productPriceRepository;
 
 
-    public ProductController(ProductRepository productRepository, ShopLocationRepository shopRepository) {
+    public ProductController(ProductRepository productRepository, ShopLocationRepository shopRepository, ProductPriceRepository productPriceRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
         this.shopRepository = shopRepository;
+        this.productPriceRepository = productPriceRepository;
     }
 
 //    @GetMapping("")
@@ -128,48 +131,55 @@ public class ProductController {
     }
 
 
-//    @GetMapping("/filter")
-//    public List<ProductWithShopsDTO> getProductsWithFilters(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) BigDecimal priceMin,
-//            @RequestParam(required = false) BigDecimal priceMax) {
-//
-//        // Obtener todos los productos desde la base de datos
-//        List<ProductModel> productModels = productRepository.findAll();
-//        List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
-//
-//        for (ProductModel product : productModels) {
-//            List<ShopModel> filteredShops = shopRepository.findAll();
-//
-//
-//            // Filtrar por el precio mínimo
-//            if (priceMin != null) {
-//                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMin) < 0);
-//            }
-//
-//            // Filtrar por el precio máximo
-//            if (priceMax != null) {
-//                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMax) > 0);
-//            }
-//
-//            // Si hay tiendas filtradas y el producto tiene tiendas asociadas
-//            if (!filteredShops.isEmpty()) {
-//                // Filtrar por nombre, si se proporciona
-//                if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-//                    continue; // Si no contiene el nombre, saltar este producto
-//                }
-//
-//                // Crear el DTO para el producto con las tiendas filtradas
-//                filteredProducts.add(new ProductWithShopsDTO(
-//                        product.getProductId(),
-//                        product.getName(),
-//                        filteredShops
-//                ));
-//            }
-//        }
-//
-//        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
-//        return filteredProducts;
-//    }
+    @GetMapping("/filter")
+    public List<ProductWithShopsDTO> getProductsWithFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) BigDecimal priceMin,
+            @RequestParam(required = false) BigDecimal priceMax) {
+
+        // Obtener todos los productos desde la base de datos
+        List<ProductModel> productModels = productRepository.findAll();
+        List<ProductWithShopsDTO> productWithShopsDTOS;
+
+
+        List<ShopModel> filteredShops = shopRepository.findAll();
+        List<ProductPriceModel> productPriceModel = productPriceRepository.findAll();
+
+        List<BigDecimal> prices = productPriceModel.stream()
+                .map(ProductPriceModel::getPrice)
+                .toList();
+
+        List<Integer> shopIds = filteredShops.stream()
+                .map(ShopModel::getShopId)
+                .toList();
+
+
+
+        List<ShopInfoDTO> shopsInfo = IntStream.range(0,shopIds.size())   //genera indices (del tamaño de la lista que se le pase) para sincronizar los elementos por posicion
+                .mapToObj(i->new ShopInfoDTO(shopIds.get(i), prices.get(i)))
+                .toList();
+
+
+
+        List<ShopInfoDTO> shopsInfoFiltered = shopsInfo.stream()
+                .filter(p -> p.getPrice().compareTo(priceMin) > 0 && p.getPrice().compareTo(priceMax) < 0)
+                .toList();
+
+
+
+
+        productWithShopsDTOS = IntStream.range(0,productModels.size())
+                .mapToObj(i-> new ProductWithShopsDTO(productModels.get(i).getProductId(),productModels.get(i).getName(),shopsInfoFiltered))
+                .toList();
+
+
+        productWithShopsDTOS = productWithShopsDTOS.stream()
+                .filter(n -> n.getName().contains(name))
+                .toList();
+
+
+        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
+        return productWithShopsDTOS;
+    }
 
 }
