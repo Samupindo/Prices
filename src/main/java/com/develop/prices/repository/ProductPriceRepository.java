@@ -11,5 +11,7 @@ import java.util.Optional;
 public interface ProductPriceRepository extends JpaRepository<ProductPriceModel,Integer> {
     Optional<ProductPriceModel> findByPrice(BigDecimal precio);
     Optional<ProductPriceModel> findByShop_ShopIdAndProduct_ProductId(Integer shopId, Integer productId);
+    Optional<ProductPriceModel> findByShop_ShopIdAndProduct_ProductIdAndPrice(Integer shopId, Integer productId, BigDecimal price);
+
 
 }
