@@ -176,7 +176,7 @@ public class ProductController {
 
         // Obtener todos los productos
         List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> result = new ArrayList<>();
+        List<ProductWithShopsDTO> productWithShopsDTOS = new ArrayList<>();
 
         for (ProductModel product : productModels) {
             // Filtrar por nombre si está presente
@@ -201,11 +201,11 @@ public class ProductController {
 
             // Si hay tiendas que cumplen el filtro, se agrega el producto
             if (!shopList.isEmpty()) {
-                result.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
+                productWithShopsDTOS.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
             }
         }
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(productWithShopsDTOS);
     }
 
 
