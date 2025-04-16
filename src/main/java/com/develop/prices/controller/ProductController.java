@@ -2,6 +2,7 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopModel;
 import com.develop.prices.model.dto.ProductDTO;
 import com.develop.prices.model.dto.ProductNameDTO;
 import com.develop.prices.model.dto.ProductWithShopsDTO;
@@ -26,7 +27,6 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
-    private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
     private final ProductRepository productRepository;
 
     public ProductController(ProductRepository productRepository) {
@@ -39,12 +39,12 @@ public class ProductController {
         List<ProductWithShopsDTO> productWithShopsList = new ArrayList<>();
 
         //Recorremos el producto y  creamos una lista vacia donde se guardaran los precios
-        for(ProductModel product : productModels){
+        for (ProductModel product : productModels) {
             List<ShopInfoDTO> shopInfoList = new ArrayList<>();
 
-            if(product.getPrices()!=null){
+            if (product.getPrices() != null) {
                 //Recorremos los productos con el precio y tienda asociado, lo guardamos en la lista mediante ShopInfoDTO
-                for(ProductPriceModel priceModel : product.getPrices()){
+                for (ProductPriceModel priceModel : product.getPrices()) {
                     ShopInfoDTO shopInfo = new ShopInfoDTO(
                             priceModel.getShop().getShopId(),
                             priceModel.getPrice()
@@ -116,7 +116,10 @@ public class ProductController {
         }
         if (productNameDTO.getName().length() > 100) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ProductDTO(null, "Name is too long"));
+                    .build();
+        }
+        if (!productNameDTO.getName().matches("[A-Za-z\\s]+")) {
+            return ResponseEntity.badRequest().build();
         }
 
         // Crear nuevo producto
@@ -166,31 +169,39 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
-        // Obtener todos los productos desde la base de datos
+
         List<ProductModel> productModels = productRepository.findAll();
         List<ProductWithShopsDTO> filteredProducts = new ArrayList<>();
 
         for (ProductModel product : productModels) {
-            List<ShopInfoDTO> filteredShops = new ArrayList<>(shopInfoDTOS);
+            List<ShopInfoDTO> filteredShops = new ArrayList<>();
 
-            // Filtrar por el precio mínimo
-            if (priceMin != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMin) < 0);
+            if (product.getPrices() != null) {
+                    //Recorremos los precios para este producto
+                for (ProductPriceModel priceModel : product.getPrices()) {
+                    BigDecimal price = priceModel.getPrice();
+
+                    boolean isWithinMin = (priceMin == null || price.compareTo(priceMin) >= 0);
+                    boolean isWithinMax = (priceMax == null || price.compareTo(priceMax) <= 0);
+
+                    if (isWithinMin && isWithinMax) {
+                        //Se comprueba que la tienda no es null
+                        ShopModel shop = priceModel.getShop();
+                        if (shop != null) {
+                            filteredShops.add(new ShopInfoDTO(shop.getShopId(), price));
+                        }
+                    }
+                }
             }
 
-            // Filtrar por el precio máximo
-            if (priceMax != null) {
-                filteredShops.removeIf(shop -> shop.getPrice().compareTo(priceMax) > 0);
-            }
-
-            // Si hay tiendas filtradas y el producto tiene tiendas asociadas
+            // Si hay tiendas que pasaron los filtros de precio
             if (!filteredShops.isEmpty()) {
-                // Filtrar por nombre, si se proporciona
+                // Filtrar por nombre si se proporciona
                 if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                    continue; // Si no contiene el nombre, saltar este producto
+                    continue;
                 }
 
-                // Crear el DTO para el producto con las tiendas filtradas
+                // Agregar el producto con sus tiendas filtradas
                 filteredProducts.add(new ProductWithShopsDTO(
                         product.getProductId(),
                         product.getName(),
@@ -199,7 +210,6 @@ public class ProductController {
             }
         }
 
-        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
         return filteredProducts;
     }
 
