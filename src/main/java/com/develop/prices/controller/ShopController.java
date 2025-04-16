@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class ShopController {
 
     @GetMapping("")
     public List<ShopModel> getAllShops() {
-        return shopLocationRepository.findAll();
+        return shopLocationRepository.findAll(Sort.by(Sort.Direction.ASC, "shopId"));
     }
 
     @GetMapping("/{shopId}")
@@ -100,7 +101,7 @@ public class ShopController {
     public ResponseEntity<ShopDTO> addShop(@RequestBody ShopAddDTO newShopDTO) {
 
         for (ShopDTO shop : shopDTOS) {
-//           Comprobación para que la calle no exista dos veces,para ello se comprueba que sea en la misma ciudad y país.
+//           Comprobación para que la calle no exista dos veces, para ello se comprueba que sea en la misma ciudad y país.
 
             if (shop.getCountry().equalsIgnoreCase(newShopDTO.getCountry()) && shop.getCity().equalsIgnoreCase(newShopDTO.getCity()) && shop.getAddress().equalsIgnoreCase(newShopDTO.getAddress())) {
                 String message = "That field already exists";
@@ -177,16 +178,15 @@ public class ShopController {
             return ResponseEntity.badRequest().build();
         }
 
-        if (!productRepository.findById(productId).isPresent()) {
+        if (!productRepository.findById(productId).isPresent()) { //isPresent se puede cambiar por isEmpty (pendiente de comprobación)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
 
         if (!shopLocationRepository.findById(shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (!productPriceRepository.findByShop_ShopIdAndProduct_ProductId(productId, shopId).isPresent()) {
+        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(productId, shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -215,7 +215,7 @@ public class ShopController {
         productPriceDTO.setProductId(productModel);
         productPriceDTO.setPrice(priceModel.getPrice());
 
-        return ResponseEntity.ok(productPriceDTO);
+        return ResponseEntity.ok(productPriceDTO); //este return está mal pero el método funciona
 
     }
 
