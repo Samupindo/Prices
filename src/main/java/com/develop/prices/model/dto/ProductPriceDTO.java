@@ -8,32 +8,32 @@ import java.math.BigDecimal;
 
 public class ProductPriceDTO implements Serializable {
 
-    private ProductModel productId;
-    private ShopModel shopId;
+    private Integer productId;
+    private Integer shopId;
     private BigDecimal price;
 
     public ProductPriceDTO() {
     }
 
-    public ProductPriceDTO(ProductModel productId, ShopModel shopId, BigDecimal price) {
+    public ProductPriceDTO(Integer productId, Integer shopId, BigDecimal price) {
         this.productId = productId;
         this.shopId = shopId;
         this.price = price;
     }
 
-    public ProductModel getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(ProductModel productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
-    public ShopModel getShopId() {
+    public Integer getShopId() {
         return shopId;
     }
 
-    public void setShopId(ShopModel shopId) {
+    public void setShopId(Integer shopId) {
         this.shopId = shopId;
     }
 

@@ -211,8 +211,8 @@ public class ShopController {
         productPriceRepository.save(priceModel);
 
         ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setShopId(shopModel);
-        productPriceDTO.setProductId(productModel);
+        productPriceDTO.setShopId(shopId);
+        productPriceDTO.setProductId(productId);
         productPriceDTO.setPrice(priceModel.getPrice());
 
         return ResponseEntity.ok(productPriceDTO);
