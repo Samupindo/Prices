@@ -1,7 +1,6 @@
 package com.develop.prices.model;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -17,6 +16,10 @@ public class ProductModel {
     private List<ProductPriceModel> prices;
 
     public ProductModel() {
+    }
+
+    public List<ProductPriceModel> getPrices() {
+        return prices;
     }
 
     public ProductModel(String name) {

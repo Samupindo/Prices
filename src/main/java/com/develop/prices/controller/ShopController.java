@@ -219,6 +219,20 @@ public class ShopController {
 
     }
 
+    @DeleteMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId){
+
+        ProductPriceModel productPriceModel =  productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
+
+        productPriceRepository.deleteById(productPriceModel.getProductPriceId());
+
+        return ResponseEntity.ok(productPriceModel);
+
+    }
+
+
+
+
     @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
         if (!shopLocationRepository.findById(shopId).isPresent()) {
