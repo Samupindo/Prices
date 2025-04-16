@@ -172,37 +172,21 @@ public class ShopController {
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO product) {
         BigDecimal price = product.getPrice();
 
-
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (!productRepository.findById(productId).isPresent()) {
+        if (productRepository.findById(productId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-
-        if (!shopLocationRepository.findById(shopId).isPresent()) {
+        if (shopLocationRepository.findById(shopId).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (!productPriceRepository.findByShop_ShopIdAndProduct_ProductId(productId, shopId).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
-
-
-        for (ProductPriceDTO existingProduct : productPriceDTOS) {
-            if (productId.equals(existingProduct.getProductId()) && shopId.equals(existingProduct.getShopId())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
         }
 
         ProductPriceModel priceModel = new ProductPriceModel();
-        ProductModel productModel = new ProductModel();
-        ShopModel shopModel = new ShopModel();
-
-        productModel.setProductId(productId);
-        shopModel.setShopId(shopId);
+        ProductModel productModel = productRepository.findById(productId).get();
+        ShopModel shopModel = shopLocationRepository.findById(shopId).get();
 
         priceModel.setProduct(productModel);
         priceModel.setShop(shopModel);
