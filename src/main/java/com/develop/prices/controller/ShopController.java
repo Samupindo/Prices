@@ -355,45 +355,14 @@ public class ShopController {
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ShopDTO>> getShopLocationWithFilters(
+    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address) {
 
-        List<ShopModel> shops = shopLocationRepository.findAll();
-        List<ShopDTO> filteredShops = new ArrayList<>();
+        List<ShopModel> shops = shopLocationRepository.findByLocationContaining(country,city,address);
 
-        for (ShopModel shopModel : shops) {
-            boolean match = true;
-            if (country != null && !shopModel.getCountry().toLowerCase().contains(country.toLowerCase())) {
-                match = false;
-            }
-
-            if (city != null && !shopModel.getCity().toLowerCase().contains(city.toLowerCase())) {
-                match = false;
-            }
-
-            if (address != null && !shopModel.getAddress().toLowerCase().contains(address.toLowerCase())) {
-                match = false;
-            }
-
-            ShopDTO shopDTO = new ShopDTO();
-            shopDTO.setShopId(shopModel.getShopId());
-            shopDTO.setCountry(shopModel.getCountry());
-            shopDTO.setCity(shopModel.getCity());
-            shopDTO.setAddress(shopModel.getAddress());
-            filteredShops.add(shopDTO);
-        }
-
-
-        if (city == null && country == null && address == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (filteredShops.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(filteredShops);
+        return ResponseEntity.ok(shops);
     }
 
 

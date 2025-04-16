@@ -141,7 +141,6 @@ public class ProductController {
         List<ProductModel> productModels = productRepository.findAll();
         List<ProductWithShopsDTO> productWithShopsDTOS;
 
-
         List<ShopModel> filteredShops = shopRepository.findAll();
         List<ProductPriceModel> productPriceModel = productPriceRepository.findAll();
 
@@ -154,17 +153,14 @@ public class ProductController {
                 .toList();
 
 
-
         List<ShopInfoDTO> shopsInfo = IntStream.range(0,shopIds.size())   //genera indices (del tamaño de la lista que se le pase) para sincronizar los elementos por posicion
                 .mapToObj(i->new ShopInfoDTO(shopIds.get(i), prices.get(i)))
                 .toList();
 
 
-
         List<ShopInfoDTO> shopsInfoFiltered = shopsInfo.stream()
                 .filter(p -> p.getPrice().compareTo(priceMin) > 0 && p.getPrice().compareTo(priceMax) < 0)
                 .toList();
-
 
 
 
@@ -177,9 +173,10 @@ public class ProductController {
                 .filter(n -> n.getName().contains(name))
                 .toList();
 
-
         // Si no se encuentra ningún producto filtrado, devolver una lista vacía
         return productWithShopsDTOS;
     }
+
+
 
 }
