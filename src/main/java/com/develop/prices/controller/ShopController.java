@@ -10,8 +10,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,8 +45,19 @@ public class ShopController {
     }
 
     @GetMapping("")
-    public List<ShopModel> getAllShops() {
-        return shopLocationRepository.findAll(Sort.by(Sort.Direction.ASC, "shopId"));
+    public ResponseEntity<PageResponse> getAllShops(
+            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<ShopModel> shopPage = shopLocationRepository.findAll(pageable);
+        List<ShopDTO> shopDTOList = shopPage.getContent().stream().map(this::toShopDTO).toList();
+
+        PageResponse pageResponse = new PageResponse(
+                shopDTOList,
+                shopPage.getTotalElements(),
+                shopPage.getTotalPages()
+        );
+        return ResponseEntity.ok(pageResponse);
+
     }
 
     @GetMapping("/{shopId}")
@@ -329,36 +343,14 @@ public class ShopController {
 
 
 
-//    @GetMapping("/filter")
-//    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
-//            @RequestParam(required = false) String country,
-//            @RequestParam(required = false) String city,
-//            @RequestParam(required = false) String address) {
-//
-//        List<ShopModel> shops = new ArrayList<>();
-//
-//        if(country!=null){
-//            shops = shopLocationRepository.findAll(ShopsSpecification.findByCountry(country));
-//        }
-//
-//        if(city!=null){
-//            shops = shopLocationRepository.findAll(ShopsSpecification.findByCity(city));
-//        }
-//
-//        if(address!=null){
-//            shops = shopLocationRepository.findAll(ShopsSpecification.findByAddress(address));
-//        }
-//
-//
-//        return ResponseEntity.ok(shops);
-//    }
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
+    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
-            @RequestParam(required = false) String address) {
+            @RequestParam(required = false) String address,
+            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ShopModel> spec = Specification.where(null);
 
@@ -375,10 +367,20 @@ public class ShopController {
         }
 
 
-        List<ShopModel> shops = shopLocationRepository.findAll(spec);
+        Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
+        List<ShopDTO> shopDTOList = shopModelPage.getContent()
+                .stream()
+                .map(this::toShopDTO)
+                .toList();
 
+        PageResponse<ShopDTO> pageResponse = new PageResponse<>(
+                shopDTOList,
+                shopModelPage.getTotalElements(),
+                shopModelPage.getTotalPages()
+        );
 
-        return ResponseEntity.ok(shops);
+        return ResponseEntity.ok(pageResponse);
+
     }
 
     private ProductPriceModel buildProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {

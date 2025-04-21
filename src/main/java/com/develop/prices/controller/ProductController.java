@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductModel> productPage = productRepository.findAll(pageable);
         List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
@@ -58,13 +58,13 @@ public class ProductController {
             ));
         }
 
-        PageResponse PageResponse = new PageResponse(
+        PageResponse<ProductWithShopsDTO> pageResponse = new PageResponse<>(
                 productWithShopsDTOList,
                 productPage.getTotalElements(),
                 productPage.getTotalPages()
         );
 
-        return ResponseEntity.ok(PageResponse);
+        return ResponseEntity.ok(pageResponse);
     }
      //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
 
@@ -170,10 +170,11 @@ public class ProductController {
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ProductWithShopsDTO>> getProductsWithFilters(
+    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
-            @RequestParam(required = false) BigDecimal priceMax) {
+            @RequestParam(required = false) BigDecimal priceMax,
+            @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
 
@@ -189,10 +190,10 @@ public class ProductController {
             spec = spec.and(ProductPriceSpecification.hasPriceMax(priceMax));
         }
 
-        List<ProductModel> products = productRepository.findAll(spec);
+        Page<ProductModel> productModelPage = productRepository.findAll(spec, pageable);
         List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
-        for (ProductModel product : products) {
+        for (ProductModel product : productModelPage.getContent()) {
             List<ShopInfoDTO> shops = new ArrayList<>();
 
             if (product.getPrices() != null) {
@@ -207,12 +208,22 @@ public class ProductController {
             }
 
             // Se agregará el producto aunque no tenga tiendas
-            productWithShopsDTOList.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shops));
+            productWithShopsDTOList.add(new ProductWithShopsDTO(
+                    product.getProductId(),
+                    product.getName(),
+                    shops
+            ));
         }
 
-        return ResponseEntity.ok(productWithShopsDTOList);
-    }
+        PageResponse<ProductWithShopsDTO> pageResponse = new PageResponse<>(
+                productWithShopsDTOList,
+                productModelPage.getTotalElements(),
+                productModelPage.getTotalPages()
+        );
 
+        return ResponseEntity.ok(pageResponse);
+
+    }
 
 
 }
