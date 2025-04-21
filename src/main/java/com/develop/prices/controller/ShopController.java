@@ -8,6 +8,7 @@ import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.repository.ShopLocationRepository;
+import com.develop.prices.repository.ShopsSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -368,13 +369,26 @@ public class ShopController {
     }
 
 
+//    @GetMapping("/filter")
+//    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
+//            @RequestParam(required = false) String country,
+//            @RequestParam(required = false) String city,
+//            @RequestParam(required = false) String address) {
+//
+//        List<ShopModel> shops = shopLocationRepository.findByLocationContaining(country,city,address);
+//
+//        return ResponseEntity.ok(shops);
+//    }
+
     @GetMapping("/filter")
     public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address) {
 
-        List<ShopModel> shops = shopLocationRepository.findByLocationContaining(country,city,address);
+        List<ShopModel> shops = shopLocationRepository.findAll(ShopsSpecification.findByCountry(country)
+                                                        .or(ShopsSpecification.findByCity(city))
+                                                        .or(ShopsSpecification.findByAddress(address)));
 
         return ResponseEntity.ok(shops);
     }
