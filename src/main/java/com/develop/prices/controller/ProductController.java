@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -124,7 +125,7 @@ public class ProductController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> addProduct( @Validated @RequestBody ProductNameDTO productNameDTO) {
         if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -160,7 +161,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

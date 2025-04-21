@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 
 public class ShopAddDTO {
 
-    @NotBlank(message = "El campo country no debe ir vacío")
+    @NotBlank(message = "The field country cannot be empty")
     private String country;
-    @NotBlank(message = "El campo city no debe ir vacío")
+    @NotBlank(message = "The field city cannot be empty")
     private String city;
-    @NotBlank(message = "El campo address no debe ir vacío")
+    @NotBlank(message = "The field address cannot be empty")
     private String address;
 
     public ShopAddDTO() {
