@@ -373,13 +373,13 @@ public class ShopController {
                 .map(this::toShopDTO)
                 .toList();
 
-        PageResponse<ShopDTO> pageResponse = new PageResponse<>(
+        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
                 shopDTOList,
                 shopModelPage.getTotalElements(),
                 shopModelPage.getTotalPages()
         );
 
-        return ResponseEntity.ok(pageResponse);
+        return ResponseEntity.ok(shopDTOPageResponse);
 
     }
 
