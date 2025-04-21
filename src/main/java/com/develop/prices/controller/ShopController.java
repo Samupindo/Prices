@@ -174,6 +174,7 @@ public class ShopController {
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO product) {
         BigDecimal price = product.getPrice();
 
+
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
             return ResponseEntity.badRequest().build();
         }
@@ -238,7 +239,17 @@ public class ShopController {
             @ApiResponse(
                     responseCode = "204",
                     description = "The shop has been deleted successfully"
-            )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop not found\" }"
+                            )
+                    )
+            ),
     })
 
     @DeleteMapping("/{shopId}/products/{productId}")
