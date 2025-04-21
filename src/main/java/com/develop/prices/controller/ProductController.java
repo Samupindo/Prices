@@ -18,6 +18,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -116,7 +117,7 @@ public class ProductController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> addProduct( @Validated @RequestBody ProductNameDTO productNameDTO) {
         if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -152,7 +153,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

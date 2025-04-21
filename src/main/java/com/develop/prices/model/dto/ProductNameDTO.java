@@ -1,11 +1,12 @@
 package com.develop.prices.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.NotBlank;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 public class ProductNameDTO {
-//    @Pattern(regexp = "^[A-Za-z\\s]+$", message = "El nombre debe contener solo letras y espacios")
 
+    @NotBlank(message = "The field name cannot be empty")
     private String name;
 
     public ProductNameDTO(){
