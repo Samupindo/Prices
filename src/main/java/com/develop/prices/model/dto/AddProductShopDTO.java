@@ -1,10 +1,13 @@
 package com.develop.prices.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class AddProductShopDTO implements  Serializable { //este DTO y el de ProductPricePatchDTO son lo mismo
 
+    @NotBlank(message = "El campo price no debe ir vacío")
     private BigDecimal price;
 
     public AddProductShopDTO() {

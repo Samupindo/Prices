@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
@@ -106,7 +107,7 @@ public class ShopController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ShopDTO> addShop(@RequestBody ShopAddDTO shopAddDTO) {
+    public ResponseEntity<ShopDTO> addShop(@Validated @RequestBody ShopAddDTO shopAddDTO) {
 
         for (ShopDTO shop : shopDTOS) {
 //           Comprobación para que la calle no exista dos veces, para ello se comprueba que sea en la misma ciudad y país.
@@ -171,7 +172,7 @@ public class ShopController {
             )
     })
     @PostMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO addProductShopDTO) {
+    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId,@Validated @RequestBody AddProductShopDTO addProductShopDTO) {
         BigDecimal price = addProductShopDTO.getPrice();
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
@@ -281,7 +282,7 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @RequestBody UpdateShopDTO updateShopDTO) {
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId,@Validated @RequestBody UpdateShopDTO updateShopDTO) {
 
 
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
@@ -322,7 +323,7 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @RequestBody ProductPricePatchDTO productPricePatchDTO) {
+    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId,@Validated @RequestBody ProductPricePatchDTO productPricePatchDTO) {
         BigDecimal price = productPricePatchDTO.getPrice();
 
         ProductPriceModel productPriceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);

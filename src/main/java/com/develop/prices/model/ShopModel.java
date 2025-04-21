@@ -1,6 +1,7 @@
 package com.develop.prices.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
