@@ -2,17 +2,19 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.dto.ProductDTO;
-import com.develop.prices.model.dto.ProductNameDTO;
-import com.develop.prices.model.dto.ProductWithShopsDTO;
-import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
+import com.develop.prices.repository.ProductPriceSpecification;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Transactional
 @RestController
@@ -39,34 +39,35 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public List<ProductWithShopsDTO> getProducts() {
-        List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
-        List<ProductWithShopsDTO> productWithShopsList = new ArrayList<>();
+    public ResponseEntity<PageResponse> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ProductModel> productPage = productRepository.findAll(pageable);
+        List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
-        //Recorremos el producto y  creamos una lista vacia donde se guardaran los precios
-        for (ProductModel product : productModels) {
-            List<ShopInfoDTO> shopInfoList = new ArrayList<>();
-
+        for (ProductModel product : productPage.getContent()) {
+            List<ShopInfoDTO> shopList = new ArrayList<>();
             if (product.getPrices() != null) {
-                //Recorremos los productos con el precio y tienda asociado, lo guardamos en la lista mediante ShopInfoDTO
-                for (ProductPriceModel priceModel : product.getPrices()) {
-                    ShopInfoDTO shopInfo = new ShopInfoDTO(
-                            priceModel.getShop().getShopId(),
-                            priceModel.getPrice()
-                    );
-                    shopInfoList.add(shopInfo);
+                for (ProductPriceModel price : product.getPrices()) {
+                    shopList.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
                 }
             }
-            // DTO con la info de la tienda completa
-            ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO(
+
+            productWithShopsDTOList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
-                    shopInfoList
-            );
-            productWithShopsList.add(productWithShopsDTO);
+                    shopList
+            ));
         }
-        return productWithShopsList;
+
+        PageResponse PageResponse = new PageResponse(
+                productWithShopsDTOList,
+                productPage.getTotalElements(),
+                productPage.getTotalPages()
+        );
+
+        return ResponseEntity.ok(PageResponse);
     }
+     //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
@@ -174,39 +175,44 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
-        // Obtener todos los productos
-        List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> productWithShopsDTOS = new ArrayList<>();
+        Specification<ProductModel> spec = Specification.where(null);
 
-        for (ProductModel product : productModels) {
-            // Filtrar por nombre si está presente
-            if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                continue;
-            }
+        if (name != null && !name.isBlank()) {
+            spec = spec.and(ProductPriceSpecification.hasName(name));
+        }
 
-            List<ShopInfoDTO> shopList = new ArrayList<>();
+        if (priceMin != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMin(priceMin));
+        }
+
+        if (priceMax != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMax(priceMax));
+        }
+
+        List<ProductModel> products = productRepository.findAll(spec);
+        List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
+
+        for (ProductModel product : products) {
+            List<ShopInfoDTO> shops = new ArrayList<>();
 
             if (product.getPrices() != null) {
                 for (ProductPriceModel price : product.getPrices()) {
-                    BigDecimal precio = price.getPrice();
+                    // Volvemos a verificar rango de precio aquí si se desea precisión extra
+                    if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
+                            (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
 
-                    boolean cumpleMin = (priceMin == null || precio.compareTo(priceMin) >= 0);
-                    boolean cumpleMax = (priceMax == null || precio.compareTo(priceMax) <= 0);
-
-                    if (cumpleMin && cumpleMax) {
-                        shopList.add(new ShopInfoDTO(price.getShop().getShopId(), precio));
+                        shops.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
                     }
                 }
             }
 
-            // Si hay tiendas que cumplen el filtro, se agrega el producto
-            if (!shopList.isEmpty()) {
-                productWithShopsDTOS.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
-            }
+            // Se agregará el producto aunque no tenga tiendas
+            productWithShopsDTOList.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shops));
         }
 
-        return ResponseEntity.ok(productWithShopsDTOS);
+        return ResponseEntity.ok(productWithShopsDTOList);
     }
+
 
 
 }
