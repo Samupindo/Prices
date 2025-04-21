@@ -54,12 +54,7 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
 
-        return ResponseEntity.ok(List.of(new ShopDTO(
-                shopModel.getShopId(),
-                shopModel.getCountry(),
-                shopModel.getCity(),
-                shopModel.getAddress()
-        )));
+        return ResponseEntity.ok(List.of(toShopDTO(shopModel)));
 
     }
 
@@ -115,14 +110,7 @@ public class ShopController {
 
         ShopModel shopModel = shopLocationRepository.save(newShopLocation);
 
-        ShopDTO shopDTO = new ShopDTO();
-
-        shopDTO.setShopId(shopModel.getShopId());
-        shopDTO.setCountry(shopModel.getCountry());
-        shopDTO.setCity(shopModel.getCity());
-        shopDTO.setAddress(shopModel.getAddress());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(shopDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(toShopDTO(shopModel));
     }
 
 
@@ -171,25 +159,22 @@ public class ShopController {
     @PostMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO addProductShopDTO) {
         BigDecimal price = addProductShopDTO.getPrice();
-
+        Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
+        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
         if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (productRepository.findById(productId).isEmpty()) {
+        if (optionalProductModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (shopLocationRepository.findById(shopId).isEmpty()) {
+        if (optionalShopModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        ProductPriceModel productPriceModel = new ProductPriceModel();
-
-        productPriceModel.setProduct(productRepository.findById(productId).get());
-        productPriceModel.setShop(shopLocationRepository.findById(shopId).get());
-        productPriceModel.setPrice(price);
+        ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), addProductShopDTO.getPrice());
 
         if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -197,12 +182,8 @@ public class ShopController {
 
         productPriceRepository.save(productPriceModel);
 
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setShopId(productPriceModel.getShop().getShopId());
-        productPriceDTO.setProductId(productPriceModel.getProduct().getProductId());
-        productPriceDTO.setPrice(productPriceModel.getPrice());
 
-        return ResponseEntity.ok(productPriceDTO);
+        return ResponseEntity.ok(toProductPriceDTO(productPriceModel));
 
     }
 
@@ -280,17 +261,9 @@ public class ShopController {
         shopModel.setCity(updateShopDTO.getCity());
         shopModel.setAddress(updateShopDTO.getAddress());
 
-        ShopModel udpateShop = shopLocationRepository.save(shopModel);
+        ShopModel shopModel1 = shopLocationRepository.save(shopModel);
 
-        ShopDTO shopDTO = new ShopDTO();
-        shopDTO.setShopId(udpateShop.getShopId());
-        shopDTO.setCountry(udpateShop.getCountry());
-        shopDTO.setCity(udpateShop.getCity());
-        shopDTO.setAddress(udpateShop.getAddress());
-
-        return ResponseEntity.ok(shopDTO);
-
-
+        return ResponseEntity.ok(toShopDTO(shopModel1));
     }
 
     @PatchMapping("/{shopId}")
@@ -330,13 +303,7 @@ public class ShopController {
         }
         ShopModel updateShopModel = shopLocationRepository.save(shopModel);
 
-        ShopDTO shopDTO = new ShopDTO();
-        shopDTO.setShopId(updateShopModel.getShopId());
-        shopDTO.setCountry(updateShopModel.getCountry());
-        shopDTO.setCity(updateShopModel.getCity());
-        shopDTO.setAddress(updateShopModel.getAddress());
-
-        return ResponseEntity.ok(shopDTO);
+        return ResponseEntity.ok(toShopDTO(updateShopModel));
 
     }
 
@@ -357,11 +324,7 @@ public class ShopController {
 
         ProductPriceModel savePriceModel = productPriceRepository.save(productPriceModel);
 
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setProductId(savePriceModel.getProduct().getProductId());
-        productPriceDTO.setShopId(savePriceModel.getShop().getShopId());
-        productPriceDTO.setPrice(savePriceModel.getPrice());
-        return ResponseEntity.ok(productPriceDTO);
+        return ResponseEntity.ok(toProductPriceDTO(savePriceModel));
     }
 
 
@@ -418,6 +381,33 @@ public class ShopController {
         return ResponseEntity.ok(shops);
     }
 
+    private ProductPriceModel buildProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
+        ProductPriceModel productPriceModel = new ProductPriceModel();
+        productPriceModel.setProduct(product);
+        productPriceModel.setShop(shop);
+        productPriceModel.setPrice(price);
+
+        return productPriceModel;
+    }
+
+    private ProductPriceDTO toProductPriceDTO(ProductPriceModel productPriceModel) {
+        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
+        productPriceDTO.setShopId(productPriceModel.getShop().getShopId());
+        productPriceDTO.setProductId(productPriceModel.getProduct().getProductId());
+        productPriceDTO.setPrice(productPriceModel.getPrice());
+        return productPriceDTO;
+    }
+
+    private ShopDTO toShopDTO (ShopModel shopModel){
+        ShopDTO shopDTO = new ShopDTO();
+
+        shopDTO.setShopId(shopModel.getShopId());
+        shopDTO.setCountry(shopModel.getCountry());
+        shopDTO.setCity(shopModel.getCity());
+        shopDTO.setAddress(shopModel.getAddress());
+
+        return shopDTO;
+    }
 
 }
 
