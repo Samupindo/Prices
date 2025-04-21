@@ -169,7 +169,6 @@ public class ShopController {
                     )
             )
     })
-
     @PostMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @RequestBody AddProductShopDTO product) {
         BigDecimal price = product.getPrice();
@@ -179,55 +178,64 @@ public class ShopController {
             return ResponseEntity.badRequest().build();
         }
 
-        if (productRepository.findById(productId).isEmpty()) {
+        if (!productRepository.findById(productId).isPresent()) { //isPresent se puede cambiar por isEmpty (pendiente de comprobación)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (shopLocationRepository.findById(shopId).isEmpty()) {
+        if (!shopLocationRepository.findById(shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(productId, shopId).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
+
+        for (ProductPriceDTO existingProduct : productPriceDTOS) {
+            if (productId.equals(existingProduct.getProductId()) && shopId.equals(existingProduct.getShopId())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
         }
 
         ProductPriceModel priceModel = new ProductPriceModel();
+        ProductModel productModel = new ProductModel();
+        ShopModel shopModel = new ShopModel();
 
-        priceModel.setProduct(productRepository.findById(productId).get());
-        priceModel.setShop(shopLocationRepository.findById(shopId).get());
+        productModel.setProductId(productId);
+        shopModel.setShopId(shopId);
+
+        priceModel.setProduct(productModel);
+        priceModel.setShop(shopModel);
         priceModel.setPrice(price);
-
-        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
 
         productPriceRepository.save(priceModel);
 
         ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setShopId(shopId);
-        productPriceDTO.setProductId(productId);
+        productPriceDTO.setShopId(shopModel);
+        productPriceDTO.setProductId(productModel);
         productPriceDTO.setPrice(priceModel.getPrice());
 
-        return ResponseEntity.ok(productPriceDTO);
+        return ResponseEntity.ok(productPriceDTO); //este return está mal pero el método funciona
 
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "The shop has been deleted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Shop not found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = "{ \"error\": \"Shop not found\" }"
-                            )
-                    )
-            ),
-    })
+    @DeleteMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId){
+
+        ProductPriceModel productPriceModel =  productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
+
+        productPriceRepository.deleteById(productPriceModel.getProductPriceId());
+
+        return ResponseEntity.ok(productPriceModel);
+
+    }
+
+
+
 
     @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
-        if (shopLocationRepository.findById(shopId).isEmpty()) {
+        if (!shopLocationRepository.findById(shopId).isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         shopLocationRepository.deleteById(shopId);
@@ -235,17 +243,12 @@ public class ShopController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId){
-
-        ProductPriceModel productPriceModel =  productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
-        if (productPriceModel == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        productPriceRepository.deleteById(productPriceModel.getProductPriceId());
-
-        return ResponseEntity.ok().build();
-    }
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            )
+    })
 
     @PutMapping("/{shopId}")
     public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
@@ -351,45 +354,14 @@ public class ShopController {
 
 
     @GetMapping("/filter")
-    public ResponseEntity<List<ShopDTO>> getShopLocationWithFilters(
+    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address) {
 
-        List<ShopModel> shops = shopLocationRepository.findAll();
-        List<ShopDTO> filteredShops = new ArrayList<>();
+        List<ShopModel> shops = shopLocationRepository.findByLocationContaining(country,city,address);
 
-        for (ShopModel shopModel : shops) {
-            boolean match = true;
-            if (country != null && !shopModel.getCountry().toLowerCase().contains(country.toLowerCase())) {
-                match = false;
-            }
-
-            if (city != null && !shopModel.getCity().toLowerCase().contains(city.toLowerCase())) {
-                match = false;
-            }
-
-            if (address != null && !shopModel.getAddress().toLowerCase().contains(address.toLowerCase())) {
-                match = false;
-            }
-
-            ShopDTO shopDTO = new ShopDTO();
-            shopDTO.setShopId(shopModel.getShopId());
-            shopDTO.setCountry(shopModel.getCountry());
-            shopDTO.setCity(shopModel.getCity());
-            shopDTO.setAddress(shopModel.getAddress());
-            filteredShops.add(shopDTO);
-        }
-
-
-        if (city == null && country == null && address == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (filteredShops.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(filteredShops);
+        return ResponseEntity.ok(shops);
     }
 
 

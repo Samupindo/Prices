@@ -2,11 +2,12 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.ShopModel;
-import com.develop.prices.model.dto.*;
+import com.develop.prices.model.dto.ProductDTO;
+import com.develop.prices.model.dto.ProductNameDTO;
+import com.develop.prices.model.dto.ProductWithShopsDTO;
+import com.develop.prices.model.dto.ShopInfoDTO;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
-import com.develop.prices.repository.ShopLocationRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,48 +20,81 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Map;
 
-
+@Transactional
 @RestController
 @RequestMapping("/products")
-@Transactional
 public class ProductController {
     private List<ProductDTO> products = new ArrayList<>();
-    private List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-    private ProductRepository productRepository;
-    private ShopLocationRepository shopRepository;
-    private ProductPriceRepository productPriceRepository;
+    private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
 
 
-    public ProductController(ProductRepository productRepository, ShopLocationRepository shopRepository, ProductPriceRepository productPriceRepository) {
+    public ProductController(ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.productRepository = productRepository; // Asignar el repositorio
-        this.shopRepository = shopRepository;
         this.productPriceRepository = productPriceRepository;
     }
 
-//    @GetMapping("")
-//    public List<ProductModel> getProducts() {
-//        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
-//    }
-
     @GetMapping("")
-    public List<ProductModel> getProducts() {
-        return productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId")); // Ordenar por ID ascendente
+    public List<ProductWithShopsDTO> getProducts() {
+        List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
+        List<ProductWithShopsDTO> productWithShopsList = new ArrayList<>();
+
+        //Recorremos el producto y  creamos una lista vacia donde se guardaran los precios
+        for (ProductModel product : productModels) {
+            List<ShopInfoDTO> shopInfoList = new ArrayList<>();
+
+            if (product.getPrices() != null) {
+                //Recorremos los productos con el precio y tienda asociado, lo guardamos en la lista mediante ShopInfoDTO
+                for (ProductPriceModel priceModel : product.getPrices()) {
+                    ShopInfoDTO shopInfo = new ShopInfoDTO(
+                            priceModel.getShop().getShopId(),
+                            priceModel.getPrice()
+                    );
+                    shopInfoList.add(shopInfo);
+                }
+            }
+            // DTO con la info de la tienda completa
+            ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO(
+                    product.getProductId(),
+                    product.getName(),
+                    shopInfoList
+            );
+            productWithShopsList.add(productWithShopsDTO);
+        }
+        return productWithShopsList;
     }
 
-    @GetMapping("/{product_id}")
+    @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(new ProductWithShopsDTO(
+        // Preparamos lista vacía para guardar los precios
+        List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
+
+        if (productModel.getPrices() != null) {
+            //Recorremos el producto obtenido,
+            // productModel.getPrices() indica en que tiendas se vende el producto
+            for (ProductPriceModel priceModel : productModel.getPrices()) {
+                ShopInfoDTO shopInfo = new ShopInfoDTO(
+                        priceModel.getShop().getShopId(),
+                        priceModel.getPrice()
+                );
+                shopInfoDTOS.add(shopInfo);
+            }
+        }
+        //Creamos el objeto que se mostrara
+        ProductWithShopsDTO productWithShop = new ProductWithShopsDTO(
                 productModel.getProductId(),
                 productModel.getName(),
                 shopInfoDTOS
-        ));
+        );
+        return ResponseEntity.ok(productWithShop);
     }
 
 
@@ -87,7 +121,10 @@ public class ProductController {
         }
         if (productNameDTO.getName().length() > 100) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ProductDTO(null, "Name is too long"));
+                    .build();
+        }
+        if (!productNameDTO.getName().matches("[A-Za-z\\s]+")) {
+            return ResponseEntity.badRequest().build();
         }
 
         // Crear nuevo producto
@@ -103,7 +140,7 @@ public class ProductController {
     }
 
 
-    @DeleteMapping("/{product_id}")
+    @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
         if (productRepository.existsById(productId)) {
             productRepository.deleteById(productId);
@@ -113,7 +150,7 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{product_id}")
+    @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @RequestBody ProductNameDTO productNameDTO) {
         ProductModel existingProduct = productRepository.findById(productId).orElse(null);
         if (existingProduct == null) {
@@ -132,54 +169,44 @@ public class ProductController {
 
 
     @GetMapping("/filter")
-    public List<ProductWithShopsDTO> getProductsWithFilters(
+    public ResponseEntity<List<ProductWithShopsDTO>> getProductsWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
-        // Obtener todos los productos desde la base de datos
+        // Obtener todos los productos
         List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> productWithShopsDTOS;
+        List<ProductWithShopsDTO> productWithShopsDTOS = new ArrayList<>();
 
+        for (ProductModel product : productModels) {
+            // Filtrar por nombre si está presente
+            if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
+                continue;
+            }
 
-        List<ShopModel> filteredShops = shopRepository.findAll();
-        List<ProductPriceModel> productPriceModel = productPriceRepository.findAll();
+            List<ShopInfoDTO> shopList = new ArrayList<>();
 
-        List<BigDecimal> prices = productPriceModel.stream()
-                .map(ProductPriceModel::getPrice)
-                .toList();
+            if (product.getPrices() != null) {
+                for (ProductPriceModel price : product.getPrices()) {
+                    BigDecimal precio = price.getPrice();
 
-        List<Integer> shopIds = filteredShops.stream()
-                .map(ShopModel::getShopId)
-                .toList();
+                    boolean cumpleMin = (priceMin == null || precio.compareTo(priceMin) >= 0);
+                    boolean cumpleMax = (priceMax == null || precio.compareTo(priceMax) <= 0);
 
+                    if (cumpleMin && cumpleMax) {
+                        shopList.add(new ShopInfoDTO(price.getShop().getShopId(), precio));
+                    }
+                }
+            }
 
+            // Si hay tiendas que cumplen el filtro, se agrega el producto
+            if (!shopList.isEmpty()) {
+                productWithShopsDTOS.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
+            }
+        }
 
-        List<ShopInfoDTO> shopsInfo = IntStream.range(0,shopIds.size())   //genera indices (del tamaño de la lista que se le pase) para sincronizar los elementos por posicion
-                .mapToObj(i->new ShopInfoDTO(shopIds.get(i), prices.get(i)))
-                .toList();
-
-
-
-        List<ShopInfoDTO> shopsInfoFiltered = shopsInfo.stream()
-                .filter(p -> p.getPrice().compareTo(priceMin) > 0 && p.getPrice().compareTo(priceMax) < 0)
-                .toList();
-
-
-
-
-        productWithShopsDTOS = IntStream.range(0,productModels.size())
-                .mapToObj(i-> new ProductWithShopsDTO(productModels.get(i).getProductId(),productModels.get(i).getName(),shopsInfoFiltered))
-                .toList();
-
-
-        productWithShopsDTOS = productWithShopsDTOS.stream()
-                .filter(n -> n.getName().contains(name))
-                .toList();
-
-
-        // Si no se encuentra ningún producto filtrado, devolver una lista vacía
-        return productWithShopsDTOS;
+        return ResponseEntity.ok(productWithShopsDTOS);
     }
+
 
 }
