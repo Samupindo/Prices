@@ -2,17 +2,18 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.dto.ProductDTO;
-import com.develop.prices.model.dto.ProductNameDTO;
-import com.develop.prices.model.dto.ProductWithShopsDTO;
-import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,34 +40,36 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public List<ProductWithShopsDTO> getProducts() {
-        List<ProductModel> productModels = productRepository.findAll(Sort.by(Sort.Direction.ASC, "productId"));
-        List<ProductWithShopsDTO> productWithShopsList = new ArrayList<>();
+    public ResponseEntity<ProductPageResponse> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<ProductModel> productPage = productRepository.findAll(pageable);
+        List<ProductWithShopsDTO> dtoList = new ArrayList<>();
 
-        //Recorremos el producto y  creamos una lista vacia donde se guardaran los precios
-        for (ProductModel product : productModels) {
-            List<ShopInfoDTO> shopInfoList = new ArrayList<>();
-
+        for (ProductModel product : productPage.getContent()) {
+            List<ShopInfoDTO> shopList = new ArrayList<>();
             if (product.getPrices() != null) {
-                //Recorremos los productos con el precio y tienda asociado, lo guardamos en la lista mediante ShopInfoDTO
-                for (ProductPriceModel priceModel : product.getPrices()) {
-                    ShopInfoDTO shopInfo = new ShopInfoDTO(
-                            priceModel.getShop().getShopId(),
-                            priceModel.getPrice()
-                    );
-                    shopInfoList.add(shopInfo);
+                for (ProductPriceModel price : product.getPrices()) {
+                    shopList.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
                 }
             }
-            // DTO con la info de la tienda completa
-            ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO(
+
+            dtoList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
-                    shopInfoList
-            );
-            productWithShopsList.add(productWithShopsDTO);
+                    shopList
+            ));
         }
-        return productWithShopsList;
+
+        ProductPageResponse response = new ProductPageResponse(
+                dtoList,
+                productPage.getTotalElements(),
+                productPage.getTotalPages(),
+                productPage.isEmpty()
+        );
+
+        return ResponseEntity.ok(response);
     }
+     //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
+
 
     @GetMapping("/{productId}")
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
