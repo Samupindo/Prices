@@ -1,8 +1,14 @@
 package com.develop.prices.model.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class ShopAddDTO {
+
+    @NotBlank(message = "El campo country no debe ir vacío")
     private String country;
+    @NotBlank(message = "El campo city no debe ir vacío")
     private String city;
+    @NotBlank(message = "El campo address no debe ir vacío")
     private String address;
 
     public ShopAddDTO() {

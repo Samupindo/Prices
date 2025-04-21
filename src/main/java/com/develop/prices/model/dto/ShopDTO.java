@@ -1,6 +1,7 @@
 package com.develop.prices.model.dto;
 
 
+
 public class ShopDTO {
 
 
