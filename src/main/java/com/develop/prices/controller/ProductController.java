@@ -124,7 +124,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-        if (!productNameDTO.getName().matches("[A-Za-z\\s]+")) {
+        if (!productNameDTO.getName().matches("\\p{L}[\\p{L}\\s]+")) {
             return ResponseEntity.badRequest().build();
         }
 
