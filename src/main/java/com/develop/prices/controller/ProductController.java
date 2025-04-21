@@ -59,14 +59,14 @@ public class ProductController {
             ));
         }
 
-        ProductPageResponse response = new ProductPageResponse(
+        ProductPageResponse productPageResponse = new ProductPageResponse(
                 dtoList,
                 productPage.getTotalElements(),
                 productPage.getTotalPages(),
                 productPage.isEmpty()
         );
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(productPageResponse);
     }
      //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
 
