@@ -2,7 +2,11 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.dto.*;
+import com.develop.prices.model.dto.ProductDTO;
+import com.develop.prices.model.dto.ProductWithShopsDTO;
+import com.develop.prices.model.dto.ProductNameDTO;
+import com.develop.prices.model.dto.PageResponse;
+import com.develop.prices.model.dto.ShopInfoDTO;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductPriceSpecification;
 import com.develop.prices.repository.ProductRepository;

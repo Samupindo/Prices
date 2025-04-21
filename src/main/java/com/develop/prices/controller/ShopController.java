@@ -4,15 +4,23 @@ package com.develop.prices.controller;
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.ShopModel;
-import com.develop.prices.model.dto.*;
-import com.develop.prices.repository.*;
+import com.develop.prices.model.dto.ShopAddDTO;
+import com.develop.prices.model.dto.ShopDTO;
+import com.develop.prices.model.dto.UpdateShopDTO;
+import com.develop.prices.model.dto.PageResponse;
+import com.develop.prices.model.dto.ProductPriceDTO;
+import com.develop.prices.model.dto.AddProductShopDTO;
+import com.develop.prices.model.dto.ProductPricePatchDTO;
+import com.develop.prices.repository.ShopLocationRepository;
+import com.develop.prices.repository.ProductPriceRepository;
+import com.develop.prices.repository.ProductRepository;
+import com.develop.prices.repository.ShopsSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
@@ -349,9 +357,6 @@ public class ShopController {
 
         return ResponseEntity.ok(toProductPriceDTO(savePriceModel));
     }
-
-
-
 
 
     @GetMapping("/filter")
