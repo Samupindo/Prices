@@ -1,12 +1,10 @@
 package com.develop.prices.repository;
 
-import com.develop.prices.model.ProductModel;
+
 import com.develop.prices.model.ShopModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 
 public interface ShopLocationRepository extends JpaRepository <ShopModel, Integer>, JpaSpecificationExecutor {
     @Override

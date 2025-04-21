@@ -1,7 +1,6 @@
 package com.develop.prices.repository;
 
 import com.develop.prices.model.ShopModel;
-import com.develop.prices.model.dto.ShopDTO;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ShopsSpecification {

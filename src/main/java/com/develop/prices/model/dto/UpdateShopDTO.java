@@ -2,8 +2,6 @@ package com.develop.prices.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 
-// import jakarta.validation.constraints.NotBlank;
-//@NotBlank
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopDTO {
     @NotBlank(message = "El campo country no debe ir vacío")

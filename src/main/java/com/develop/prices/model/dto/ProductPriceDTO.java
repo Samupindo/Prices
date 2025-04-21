@@ -1,8 +1,5 @@
 package com.develop.prices.model.dto;
 
-import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.ShopModel;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 
