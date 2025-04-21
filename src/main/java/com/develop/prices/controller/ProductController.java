@@ -4,6 +4,7 @@ import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
+import com.develop.prices.repository.ProductPriceSpecification;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -173,44 +175,44 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
+        Specification<ProductModel> spec = Specification.where(null);
 
-        Specification<ProductPriceModel> spec = Specification.where(null);
-
-        if(name != null && !name.isBlank()){
-            spec = spec.and(ProductPriceSpecification.findByProductId(name));
-        }
-        if(priceMin != null){
-            spec = spec.and(ProductPriceSpecification.findByPriceMin(priceMin));
+        if (name != null && !name.isBlank()) {
+            spec = spec.and(ProductPriceSpecification.hasName(name));
         }
 
-        if(priceMax != null){
-            spec = spec.and(ProductPriceSpecification.findByPriceMax(priceMax));
+        if (priceMin != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMin(priceMin));
         }
-        List<ProductPriceModel> productPriceModels = productPriceRepository.findAll(spec);
-        List<ProductWithShopsDTO> productWithShopsDTO = new ArrayList<>();
 
+        if (priceMax != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMax(priceMax));
+        }
 
-        for (ProductPriceModel productModel : productPriceModels) {
-            Integer productId = productModel.getProduct().getProductId();
-            String name1 = productModel.getProduct().getName();
+        List<ProductModel> products = productRepository.findAll(spec);
+        List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
-            List<ShopInfoDTO> shopInfoDTOS1 = new ArrayList<>();
-            if (productModel.getProduct().getProductId().equals(productId) && productModel.getProduct().getName().toLowerCase().contains(name1.toLowerCase())) {
-                shopInfoDTOS1.add(new ShopInfoDTO(
-                        productModel.getShop().getShopId(),
-                        productModel.getPrice()
-                ));
+        for (ProductModel product : products) {
+            List<ShopInfoDTO> shops = new ArrayList<>();
 
+            if (product.getPrices() != null) {
+                for (ProductPriceModel price : product.getPrices()) {
+                    // Volvemos a verificar rango de precio aquí si se desea precisión extra
+                    if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
+                            (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
 
+                        shops.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
+                    }
+                }
             }
-            productWithShopsDTO.add(new ProductWithShopsDTO(
-                    productId, name1, shopInfoDTOS1
-            ));
+
+            // Se agregará el producto aunque no tenga tiendas
+            productWithShopsDTOList.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shops));
         }
 
-
-        return ResponseEntity.ok(productWithShopsDTO);
+        return ResponseEntity.ok(productWithShopsDTOList);
     }
+
 
 
 }
