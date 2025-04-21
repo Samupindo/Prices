@@ -274,6 +274,7 @@ public class ShopController {
         ShopModel udpateShop = shopLocationRepository.save(shopModel);
 
         ShopDTO shopDTO = new ShopDTO();
+        shopDTO.setShopId(udpateShop.getShopId());
         shopDTO.setCountry(udpateShop.getCountry());
         shopDTO.setCity(udpateShop.getCity());
         shopDTO.setAddress(udpateShop.getAddress());
