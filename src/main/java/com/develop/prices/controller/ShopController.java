@@ -5,15 +5,13 @@ import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.ShopModel;
 import com.develop.prices.model.dto.*;
-import com.develop.prices.repository.ProductPriceRepository;
-import com.develop.prices.repository.ProductRepository;
-import com.develop.prices.repository.ShopLocationRepository;
-import com.develop.prices.repository.ShopsSpecification;
+import com.develop.prices.repository.*;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -368,25 +366,53 @@ public class ShopController {
 
 
 
+//    @GetMapping("/filter")
+//    public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
+//            @RequestParam(required = false) String country,
+//            @RequestParam(required = false) String city,
+//            @RequestParam(required = false) String address) {
+//
+//        List<ShopModel> shops = new ArrayList<>();
+//
+//        if(country!=null){
+//            shops = shopLocationRepository.findAll(ShopsSpecification.findByCountry(country));
+//        }
+//
+//        if(city!=null){
+//            shops = shopLocationRepository.findAll(ShopsSpecification.findByCity(city));
+//        }
+//
+//        if(address!=null){
+//            shops = shopLocationRepository.findAll(ShopsSpecification.findByAddress(address));
+//        }
+//
+//
+//        return ResponseEntity.ok(shops);
+//    }
+
+
     @GetMapping("/filter")
     public ResponseEntity<List<ShopModel>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address) {
 
-        List<ShopModel> shops = new ArrayList<>();
+        Specification<ShopModel> spec = Specification.where(null);
 
         if(country!=null){
-            shops = shopLocationRepository.findAll(ShopsSpecification.findByCountry(country));
+            spec = spec.and(ShopsSpecification.findByCountry(country));
         }
 
         if(city!=null){
-            shops = shopLocationRepository.findAll(ShopsSpecification.findByCity(city));
+            spec = spec.and(ShopsSpecification.findByCity(city));
         }
 
         if(address!=null){
-            shops = shopLocationRepository.findAll(ShopsSpecification.findByAddress(address));
+            spec = spec.and(ShopsSpecification.findByAddress(address));
         }
+
+
+        List<ShopModel> shops = shopLocationRepository.findAll(spec);
 
 
         return ResponseEntity.ok(shops);
