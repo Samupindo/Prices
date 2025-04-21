@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -21,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Transactional
 @RestController
@@ -40,9 +37,9 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<ProductPageResponse> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<PageResponse> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<ProductModel> productPage = productRepository.findAll(pageable);
-        List<ProductWithShopsDTO> dtoList = new ArrayList<>();
+        List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
         for (ProductModel product : productPage.getContent()) {
             List<ShopInfoDTO> shopList = new ArrayList<>();
@@ -52,21 +49,20 @@ public class ProductController {
                 }
             }
 
-            dtoList.add(new ProductWithShopsDTO(
+            productWithShopsDTOList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
                     shopList
             ));
         }
 
-        ProductPageResponse productPageResponse = new ProductPageResponse(
-                dtoList,
+        PageResponse PageResponse = new PageResponse(
+                productWithShopsDTOList,
                 productPage.getTotalElements(),
-                productPage.getTotalPages(),
-                productPage.isEmpty()
+                productPage.getTotalPages()
         );
 
-        return ResponseEntity.ok(productPageResponse);
+        return ResponseEntity.ok(PageResponse);
     }
      //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
 
@@ -177,38 +173,43 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax) {
 
-        // Obtener todos los productos
-        List<ProductModel> productModels = productRepository.findAll();
-        List<ProductWithShopsDTO> productWithShopsDTOS = new ArrayList<>();
 
-        for (ProductModel product : productModels) {
-            // Filtrar por nombre si está presente
-            if (name != null && !product.getName().toLowerCase().contains(name.toLowerCase())) {
-                continue;
-            }
+        Specification<ProductPriceModel> spec = Specification.where(null);
 
-            List<ShopInfoDTO> shopList = new ArrayList<>();
-
-            if (product.getPrices() != null) {
-                for (ProductPriceModel price : product.getPrices()) {
-                    BigDecimal precio = price.getPrice();
-
-                    boolean cumpleMin = (priceMin == null || precio.compareTo(priceMin) >= 0);
-                    boolean cumpleMax = (priceMax == null || precio.compareTo(priceMax) <= 0);
-
-                    if (cumpleMin && cumpleMax) {
-                        shopList.add(new ShopInfoDTO(price.getShop().getShopId(), precio));
-                    }
-                }
-            }
-
-            // Si hay tiendas que cumplen el filtro, se agrega el producto
-            if (!shopList.isEmpty()) {
-                productWithShopsDTOS.add(new ProductWithShopsDTO(product.getProductId(), product.getName(), shopList));
-            }
+        if(name != null && !name.isBlank()){
+            spec = spec.and(ProductPriceSpecification.findByProductId(name));
+        }
+        if(priceMin != null){
+            spec = spec.and(ProductPriceSpecification.findByPriceMin(priceMin));
         }
 
-        return ResponseEntity.ok(productWithShopsDTOS);
+        if(priceMax != null){
+            spec = spec.and(ProductPriceSpecification.findByPriceMax(priceMax));
+        }
+        List<ProductPriceModel> productPriceModels = productPriceRepository.findAll(spec);
+        List<ProductWithShopsDTO> productWithShopsDTO = new ArrayList<>();
+
+
+        for (ProductPriceModel productModel : productPriceModels) {
+            Integer productId = productModel.getProduct().getProductId();
+            String name1 = productModel.getProduct().getName();
+
+            List<ShopInfoDTO> shopInfoDTOS1 = new ArrayList<>();
+            if (productModel.getProduct().getProductId().equals(productId) && productModel.getProduct().getName().toLowerCase().contains(name1.toLowerCase())) {
+                shopInfoDTOS1.add(new ShopInfoDTO(
+                        productModel.getShop().getShopId(),
+                        productModel.getPrice()
+                ));
+
+
+            }
+            productWithShopsDTO.add(new ProductWithShopsDTO(
+                    productId, name1, shopInfoDTOS1
+            ));
+        }
+
+
+        return ResponseEntity.ok(productWithShopsDTO);
     }
 
 

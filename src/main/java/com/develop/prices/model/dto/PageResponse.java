@@ -2,19 +2,19 @@ package com.develop.prices.model.dto;
 
 import java.util.List;
 
-public class ProductPageResponse {
-    private List<ProductWithShopsDTO> content;
+public class PageResponse<T> {
+    private List<T> content;
     private long totalElements;
     private int totalPages;
 
     // Constructor
-    public ProductPageResponse(List<ProductWithShopsDTO> content, long totalElements, int totalPages, boolean empty) {
+    public PageResponse(List<T> content, long totalElements, int totalPages) {
         this.content = content;
         this.totalElements = totalElements;
         this.totalPages = totalPages;
     }
 
-    public List<ProductWithShopsDTO> getContent() {
+    public List<T> getContent() {
         return content;
     }
 
@@ -26,7 +26,7 @@ public class ProductPageResponse {
         return totalPages;
     }
 
-    public void setContent(List<ProductWithShopsDTO> content) {
+    public void setContent(List<T> content) {
         this.content = content;
     }
 
