@@ -410,6 +410,5 @@ public class ShopController {
 
         return shopDTO;
     }
-
 }
 
