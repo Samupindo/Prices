@@ -1,4 +1,4 @@
-package com.develop.prices.model.dto;
+package com.develop.prices.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;

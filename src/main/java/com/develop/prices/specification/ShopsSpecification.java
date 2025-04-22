@@ -1,4 +1,4 @@
-package com.develop.prices.repository;
+package com.develop.prices.specification;
 
 import com.develop.prices.model.ShopModel;
 import org.springframework.data.jpa.domain.Specification;

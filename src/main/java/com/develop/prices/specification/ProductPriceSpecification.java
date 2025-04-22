@@ -1,8 +1,7 @@
-package com.develop.prices.repository;
+package com.develop.prices.specification;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.ShopModel;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
