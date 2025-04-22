@@ -1,4 +1,4 @@
-package com.develop.prices.model;
+package com.develop.prices.exceptions;
 
 
 
