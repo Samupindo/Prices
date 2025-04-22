@@ -299,12 +299,8 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
-
-        if(updateShopDTO.getCountry() == null || updateShopDTO.getCity() == null ||  updateShopDTO.getAddress()== null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @RequestBody UpdateShopDTO updateShopDTO) {
+        // Primero verificar si la tienda existe
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
         if (optionalShopModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -312,20 +308,31 @@ public class ShopController {
 
         ShopModel shopModel = optionalShopModel.get();
 
-        // Actualizar solo los campos no nulos
+
         if (updateShopDTO.getCountry() != null) {
+            if (updateShopDTO.getCountry().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
             shopModel.setCountry(updateShopDTO.getCountry());
         }
+
         if (updateShopDTO.getCity() != null) {
+            if (updateShopDTO.getCity().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
             shopModel.setCity(updateShopDTO.getCity());
         }
+
         if (updateShopDTO.getAddress() != null) {
+            if (updateShopDTO.getAddress().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
             shopModel.setAddress(updateShopDTO.getAddress());
         }
+
+
         ShopModel saveShopModel = shopLocationRepository.save(shopModel);
-
         return ResponseEntity.ok(shopMapper.shopModelToShopDTO(saveShopModel));
-
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
