@@ -1,6 +1,8 @@
 package com.develop.prices.controller;
 
 
+import com.develop.prices.mapper.ProductPriceMapper;
+import com.develop.prices.mapper.ShopMapper;
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.ShopModel;
@@ -38,11 +40,15 @@ public class ShopController {
     private final ShopLocationRepository shopLocationRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
+    private final ShopMapper shopMapper;
+    private final ProductPriceMapper productPriceMapper;
 
-    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
+    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductPriceRepository productPriceRepository, ShopMapper shopMapper, ProductPriceMapper productPriceMapper) {
         this.shopLocationRepository = shopLocationRepository;
         this.productRepository = productRepository;
         this.productPriceRepository = productPriceRepository;
+        this.shopMapper = shopMapper;
+        this.productPriceMapper = productPriceMapper;
     }
 
     @GetMapping("")
@@ -50,7 +56,7 @@ public class ShopController {
             @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<ShopModel> shopPage = shopLocationRepository.findAll(pageable);
-        List<ShopDTO> shopDTOList = shopPage.getContent().stream().map(this::toShopDTO).toList();
+        List<ShopDTO> shopDTOList = shopPage.getContent().stream().map(shopMapper::shopModelToShopDTO).toList();
 
         PageResponse pageResponse = new PageResponse(
                 shopDTOList,
@@ -69,7 +75,7 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
         }
 
-        return ResponseEntity.ok(List.of(toShopDTO(shopModel)));
+        return ResponseEntity.ok(List.of(shopMapper.shopModelToShopDTO(shopModel)));
 
     }
 
@@ -117,7 +123,7 @@ public class ShopController {
 
         ShopModel shopModel = shopLocationRepository.save(newShopModel);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(toShopDTO(shopModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(shopMapper.shopModelToShopDTO(shopModel));
     }
 
 
@@ -185,7 +191,7 @@ public class ShopController {
         ProductPriceModel productPriceModelDB = productPriceRepository.save(productPriceModel);
 
 
-        return ResponseEntity.ok(toProductPriceDTO(productPriceModelDB));
+        return ResponseEntity.ok(productPriceMapper.productPriceModelToProductPriceDTO(productPriceModelDB));
 
     }
 
@@ -261,7 +267,7 @@ public class ShopController {
 
         ShopModel saveShopModel = shopLocationRepository.save(shopModel);
 
-        return ResponseEntity.ok(toShopDTO(saveShopModel));
+        return ResponseEntity.ok(shopMapper.shopModelToShopDTO(saveShopModel));
     }
 
     @PatchMapping("/{shopId}")
@@ -286,7 +292,7 @@ public class ShopController {
         }
         ShopModel saveShopModel = shopLocationRepository.save(shopModel);
 
-        return ResponseEntity.ok(toShopDTO(saveShopModel));
+        return ResponseEntity.ok(shopMapper.shopModelToShopDTO(saveShopModel));
 
     }
 
@@ -303,7 +309,7 @@ public class ShopController {
 
         ProductPriceModel savePriceModel = productPriceRepository.save(productPriceModel);
 
-        return ResponseEntity.ok(toProductPriceDTO(savePriceModel));
+        return ResponseEntity.ok(productPriceMapper.productPriceModelToProductPriceDTO(savePriceModel));
     }
 
 
@@ -333,7 +339,7 @@ public class ShopController {
         List<ShopDTO> shopDTOList = shopModelPage.getContent()
                 .stream()
                 //.map(s -> toShopDTO(s))
-                .map(this::toShopDTO)
+                .map(shopMapper::shopModelToShopDTO)
                 .toList();
 
         PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
@@ -355,24 +361,5 @@ public class ShopController {
         return productPriceModel;
     }
 
-    private ProductPriceDTO toProductPriceDTO(ProductPriceModel productPriceModel) {
-        ProductPriceDTO productPriceDTO = new ProductPriceDTO();
-        productPriceDTO.setShopId(productPriceModel.getShop().getShopId());
-        productPriceDTO.setProductId(productPriceModel.getProduct().getProductId());
-        productPriceDTO.setPrice(productPriceModel.getPrice());
-        return productPriceDTO;
-    }
-
-    private ShopDTO toShopDTO(ShopModel shopModel) {
-        ShopDTO shopDTO = new ShopDTO();
-
-        shopDTO.setShopId(shopModel.getShopId());
-        shopDTO.setCountry(shopModel.getCountry());
-        shopDTO.setCity(shopModel.getCity());
-        shopDTO.setAddress(shopModel.getAddress());
-
-        return shopDTO;
-    }
-    //orika, dozer, mapstruct
 }
 
