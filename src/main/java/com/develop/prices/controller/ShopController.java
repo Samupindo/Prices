@@ -185,7 +185,7 @@ public class ShopController {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
 
-        ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), addProductShopDTO.getPrice());
+        ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), price);
 
         if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
