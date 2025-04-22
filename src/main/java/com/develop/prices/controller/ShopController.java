@@ -50,7 +50,6 @@ import java.util.Optional;
 public class ShopController {
 
     private List<ShopDTO> shopDTOS = new ArrayList<>();
-    private List<ProductPriceDTO> productPriceDTOS = new ArrayList<>();
     private final ShopLocationRepository shopLocationRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
@@ -125,14 +124,6 @@ public class ShopController {
     @PostMapping("")
     public ResponseEntity<ShopDTO> addShop(@Validated @RequestBody ShopAddDTO shopAddDTO) {
 
-        for (ShopDTO shop : shopDTOS) {
-//           Comprobación para que la calle no exista dos veces, para ello se comprueba que sea en la misma ciudad y país.
-
-            if (shop.getCountry().equalsIgnoreCase(shopAddDTO.getCountry()) && shop.getCity().equalsIgnoreCase(shopAddDTO.getCity()) && shop.getAddress().equalsIgnoreCase(shopAddDTO.getAddress())) {
-                String message = "That field already exists";
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
-            }
-        }
         ShopModel newShopModel = new ShopModel();
 
         newShopModel.setCountry(shopAddDTO.getCountry());
@@ -193,17 +184,6 @@ public class ShopController {
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if (price == null || price.compareTo(BigDecimal.ZERO) < 0) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        if (optionalProductModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (optionalShopModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
 
         ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), addProductShopDTO.getPrice());
 
@@ -283,10 +263,6 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (updateShopDTO.getCity() == null || updateShopDTO.getCountry() == null || updateShopDTO.getAddress() == null) {
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
         ShopModel shopModel = optionalShopModel.get();
         shopModel.setCountry(updateShopDTO.getCountry());
         shopModel.setCity(updateShopDTO.getCity());
@@ -307,20 +283,6 @@ public class ShopController {
         }
 
         ShopModel shopModel = optionalShopModel.get();
-
-        // Validar los campos del DTO
-        if (updateShopDTO.getCountry() != null && updateShopDTO.getCountry().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        if (updateShopDTO.getCity() != null && updateShopDTO.getCity().trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
-        if (updateShopDTO.getAddress() != null && updateShopDTO.getAddress().trim().isEmpty()) {
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         // Actualizar solo los campos no nulos
         if (updateShopDTO.getCountry() != null) {
@@ -343,13 +305,6 @@ public class ShopController {
         BigDecimal price = productPricePatchDTO.getPrice();
 
         ProductPriceModel productPriceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-        if (productPriceModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (price == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         productPriceModel.setPrice(price);
 

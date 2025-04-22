@@ -41,7 +41,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private List<ProductDTO> productDTOS = new ArrayList<>();
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
 
@@ -130,17 +129,6 @@ public class ProductController {
     })
     @PostMapping("")
     public ResponseEntity<ProductDTO> addProduct( @Validated @RequestBody ProductNameDTO productNameDTO) {
-//        if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        if (productNameDTO.getName().length() > 100) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .build();
-//        }
-//        if (!productNameDTO.getName().matches("\\p{L}[\\p{L}\\s]+")) {
-//            return ResponseEntity.badRequest().build();
-//        }
-
         // Crear nuevo producto
         ProductModel productModel = new ProductModel();
         productModel.setName(productNameDTO.getName());
@@ -167,17 +155,7 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
-        if (productModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-
         productModel.setName(productNameDTO.getName());
-
-
         return ResponseEntity.ok(new ProductDTO(productModel.getProductId(), productModel.getName()));
     }
 
