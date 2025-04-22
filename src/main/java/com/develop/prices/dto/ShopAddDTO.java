@@ -5,16 +5,16 @@ import jakarta.validation.constraints.Size;
 
 public class ShopAddDTO {
 
-    @Size(min = 3, max = 100, message = "The name can only hace 100 characters")
-    @NotBlank(message = "The field country cannot be empty")
+    @Size(min = 3, max = 100)
+    @NotBlank
     private String country;
 
-    @Size(min = 3,max = 100, message = "The name can only hace 100 characters")
-    @NotBlank(message = "The field city cannot be empty")
+    @Size(min = 3,max = 100)
+    @NotBlank
     private String city;
 
-    @Size(max = 100, message = "The name can only hace 100 characters")
-    @NotBlank(message = "The field address cannot be empty")
+    @Size(max = 100)
+    @NotBlank
     private String address;
 
     public ShopAddDTO() {

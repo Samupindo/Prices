@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopDTO {
-    @NotBlank(message = "The field country cannot be empty")
+    @NotBlank
     private String country;
-    @NotBlank(message = "The field city cannot be empty")
+    @NotBlank
     private String city;
-    @NotBlank(message = "The field address cannot be empty")
+    @NotBlank
     private String address;
 
     public UpdateShopDTO() {

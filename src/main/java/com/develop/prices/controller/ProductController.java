@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,6 +33,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +130,7 @@ public class ProductController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ProductDTO> addProduct(@Validated @RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductNameDTO productNameDTO) {
         // Crear nuevo producto
         ProductModel productModel = new ProductModel();
         productModel.setName(productNameDTO.getName());
@@ -152,7 +155,7 @@ public class ProductController {
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
         if (productModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

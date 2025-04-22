@@ -134,7 +134,7 @@ public class ShopController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ShopDTO> addShop(@Validated @RequestBody ShopAddDTO shopAddDTO) {
+    public ResponseEntity<ShopDTO> addShop(@Valid @RequestBody ShopAddDTO shopAddDTO) {
 
         ShopModel newShopModel = new ShopModel();
 
@@ -191,7 +191,7 @@ public class ShopController {
             )
     })
     @PostMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Validated @RequestBody AddProductShopDTO addProductShopDTO) {
+    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
 
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
@@ -318,7 +318,7 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @Validated @RequestBody ProductPricePatchDTO productPricePatchDTO) {
+    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
         ProductPriceModel productPriceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
         if(productPriceModel == null){

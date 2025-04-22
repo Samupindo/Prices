@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public class ProductPricePatchDTO implements Serializable {
 
-    @NotBlank(message = "El campo price no debe ir vacío")
+    @NotBlank
     private BigDecimal price;
 
     public ProductPricePatchDTO() {

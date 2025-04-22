@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 public class AddProductShopDTO implements  Serializable { //este DTO y el de ProductPricePatchDTO son lo mismo
 
     @Positive
-    @DecimalMin(value="0.01", message = "The minimum price must be 0.01")
-    @DecimalMax(value = "999999999.99", message = "The maximum price must be 999999999")
+    @DecimalMin(value="0.01")
+    @DecimalMax(value = "999999999.99")
     @NotNull
     private BigDecimal price;
 
