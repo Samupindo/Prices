@@ -2,11 +2,7 @@ package com.develop.prices.controller;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.dto.ProductDTO;
-import com.develop.prices.model.dto.ProductWithShopsDTO;
-import com.develop.prices.model.dto.ProductNameDTO;
-import com.develop.prices.model.dto.PageResponse;
-import com.develop.prices.model.dto.ShopInfoDTO;
+import com.develop.prices.model.dto.*;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductPriceSpecification;
 import com.develop.prices.repository.ProductRepository;
@@ -22,16 +18,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -128,7 +116,7 @@ public class ProductController {
             )
     })
     @PostMapping("")
-    public ResponseEntity<ProductDTO> addProduct( @Validated @RequestBody ProductNameDTO productNameDTO) {
+    public ResponseEntity<ProductDTO> addProduct(@Validated @RequestBody ProductNameDTO productNameDTO) {
         // Crear nuevo producto
         ProductModel productModel = new ProductModel();
         productModel.setName(productNameDTO.getName());
@@ -155,6 +143,9 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
         ProductModel productModel = productRepository.findById(productId).orElse(null);
+        if (productModel == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         productModel.setName(productNameDTO.getName());
         return ResponseEntity.ok(new ProductDTO(productModel.getProductId(), productModel.getName()));
     }

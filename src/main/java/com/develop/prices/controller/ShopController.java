@@ -14,6 +14,7 @@ import com.develop.prices.model.dto.ProductPricePatchDTO;
 import com.develop.prices.repository.ShopLocationRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.ProductRepository;
+import com.develop.prices.repository.ShopLocationRepository;
 import com.develop.prices.repository.ShopsSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -195,12 +196,16 @@ public class ShopController {
             )
     })
     @PostMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId,@Validated @RequestBody AddProductShopDTO addProductShopDTO) {
+    public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Validated @RequestBody AddProductShopDTO addProductShopDTO) {
 
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
+        if (optionalProductModel.isEmpty() || optionalShopModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
@@ -261,10 +266,10 @@ public class ShopController {
     })
 
     @DeleteMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId){
+    public ResponseEntity<ProductPriceModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
 
-        ProductPriceModel productPriceModel =  productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
-        if (productPriceModel == null){
+        ProductPriceModel productPriceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (productPriceModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         shopLocationRepository.deleteById(shopId);
@@ -286,14 +291,13 @@ public class ShopController {
         shopModel.setCity(updateShopDTO.getCity());
         shopModel.setAddress(updateShopDTO.getAddress());
 
-        ShopModel saveShopModel1 = shopLocationRepository.save(shopModel);
+        ShopModel saveShopModel = shopLocationRepository.save(shopModel);
 
-        return ResponseEntity.ok(toShopDTO(saveShopModel1));
+        return ResponseEntity.ok(toShopDTO(saveShopModel));
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId,@Valid @RequestBody UpdateShopDTO updateShopDTO) {
-
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
         if (optionalShopModel.isEmpty()) {
@@ -319,10 +323,13 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId,@Validated @RequestBody ProductPricePatchDTO productPricePatchDTO) {
-        BigDecimal price = productPricePatchDTO.getPrice();
+    public ResponseEntity<ProductPriceDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @Validated @RequestBody ProductPricePatchDTO productPricePatchDTO) {
 
         ProductPriceModel productPriceModel = productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if(productPriceModel == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        BigDecimal price = productPricePatchDTO.getPrice();
 
         productPriceModel.setPrice(price);
 
@@ -351,7 +358,7 @@ public class ShopController {
         return productPriceDTO;
     }
 
-    private ShopDTO toShopDTO (ShopModel shopModel){
+    private ShopDTO toShopDTO(ShopModel shopModel) {
         ShopDTO shopDTO = new ShopDTO();
 
         shopDTO.setShopId(shopModel.getShopId());
