@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -180,21 +181,23 @@ public class ShopController {
     })
     @PostMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductPriceDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId,@Validated @RequestBody AddProductShopDTO addProductShopDTO) {
-        BigDecimal price = addProductShopDTO.getPrice();
+
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-
-
-        ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), price);
 
         if (productPriceRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()){
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        productPriceRepository.save(productPriceModel);
+        BigDecimal price = addProductShopDTO.getPrice();
+
+        ProductPriceModel productPriceModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), price);
 
 
-        return ResponseEntity.ok(toProductPriceDTO(productPriceModel));
+        ProductPriceModel productPriceModelDB = productPriceRepository.save(productPriceModel);
+
+
+        return ResponseEntity.ok(toProductPriceDTO(productPriceModelDB));
 
     }
 
@@ -256,7 +259,7 @@ public class ShopController {
 
 
     @PutMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Validated @RequestBody UpdateShopDTO updateShopDTO) {
+    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
         if (optionalShopModel.isEmpty()) {
@@ -274,7 +277,7 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId,@Validated @RequestBody UpdateShopDTO updateShopDTO) {
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId,@Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
 
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
@@ -339,6 +342,7 @@ public class ShopController {
         Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
         List<ShopDTO> shopDTOList = shopModelPage.getContent()
                 .stream()
+                //.map(s -> toShopDTO(s))
                 .map(this::toShopDTO)
                 .toList();
 
@@ -379,5 +383,6 @@ public class ShopController {
 
         return shopDTO;
     }
+    //orika, dozer, mapstruct
 }
 
