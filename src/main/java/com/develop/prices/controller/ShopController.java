@@ -62,18 +62,41 @@ public class ShopController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse> getAllShops(
+    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String address,
             @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<ShopModel> shopPage = shopLocationRepository.findAll(pageable);
-        List<ShopDTO> shopDTOList = shopPage.getContent().stream().map(this::toShopDTO).toList();
+        Specification<ShopModel> spec = Specification.where(null);
 
-        PageResponse pageResponse = new PageResponse(
+        if(country!=null){
+            spec = spec.and(ShopsSpecification.findByCountry(country));
+        }
+
+        if(city!=null){
+            spec = spec.and(ShopsSpecification.findByCity(city));
+        }
+
+        if(address!=null){
+            spec = spec.and(ShopsSpecification.findByAddress(address));
+        }
+
+
+        Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
+        List<ShopDTO> shopDTOList = shopModelPage.getContent()
+                .stream()
+                //.map(s -> toShopDTO(s))
+                .map(this::toShopDTO)
+                .toList();
+
+        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
                 shopDTOList,
-                shopPage.getTotalElements(),
-                shopPage.getTotalPages()
+                shopModelPage.getTotalElements(),
+                shopModelPage.getTotalPages()
         );
-        return ResponseEntity.ok(pageResponse);
+
+        return ResponseEntity.ok(shopDTOPageResponse);
 
     }
 
@@ -317,44 +340,7 @@ public class ShopController {
     }
 
 
-    @GetMapping("/filter")
-    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
-            @RequestParam(required = false) String country,
-            @RequestParam(required = false) String city,
-            @RequestParam(required = false) String address,
-            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Specification<ShopModel> spec = Specification.where(null);
-
-        if(country!=null){
-            spec = spec.and(ShopsSpecification.findByCountry(country));
-        }
-
-        if(city!=null){
-            spec = spec.and(ShopsSpecification.findByCity(city));
-        }
-
-        if(address!=null){
-            spec = spec.and(ShopsSpecification.findByAddress(address));
-        }
-
-
-        Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
-        List<ShopDTO> shopDTOList = shopModelPage.getContent()
-                .stream()
-                //.map(s -> toShopDTO(s))
-                .map(this::toShopDTO)
-                .toList();
-
-        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
-                shopDTOList,
-                shopModelPage.getTotalElements(),
-                shopModelPage.getTotalPages()
-        );
-
-        return ResponseEntity.ok(shopDTOPageResponse);
-
-    }
 
     private ProductPriceModel buildProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
         ProductPriceModel productPriceModel = new ProductPriceModel();

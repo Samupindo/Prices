@@ -51,22 +51,48 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<ProductModel> productModelPage = productRepository.findAll(pageable);
+    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) BigDecimal priceMin,
+            @RequestParam(required = false) BigDecimal priceMax,
+            @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Specification<ProductModel> spec = Specification.where(null);
+
+        if (name != null && !name.isBlank()) {
+            spec = spec.and(ProductPriceSpecification.hasName(name));
+        }
+
+        if (priceMin != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMin(priceMin));
+        }
+
+        if (priceMax != null) {
+            spec = spec.and(ProductPriceSpecification.hasPriceMax(priceMax));
+        }
+
+        Page<ProductModel> productModelPage = productRepository.findAll(spec, pageable);
         List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
         for (ProductModel product : productModelPage.getContent()) {
-            List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
+            List<ShopInfoDTO> shops = new ArrayList<>();
+
             if (product.getPrices() != null) {
                 for (ProductPriceModel price : product.getPrices()) {
-                    shopInfoDTOS.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
+                    // Volvemos a verificar rango de precio aquí si se desea precisión extra
+                    if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
+                            (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
+
+                        shops.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
+                    }
                 }
             }
 
+            // Se agregará el producto aunque no tenga tiendas
             productWithShopsDTOList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
-                    shopInfoDTOS
+                    shops
             ));
         }
 
@@ -77,8 +103,9 @@ public class ProductController {
         );
 
         return ResponseEntity.ok(pageResponse);
+
     }
-     //Spring por defecto pagina cada 20 elementos, para cambiarlo añadir en size y cantidad en el @PageableDefault
+
 
 
     @GetMapping("/{productId}")
@@ -160,61 +187,6 @@ public class ProductController {
     }
 
 
-    @GetMapping("/filter")
-    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) BigDecimal priceMin,
-            @RequestParam(required = false) BigDecimal priceMax,
-            @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
-
-        Specification<ProductModel> spec = Specification.where(null);
-
-        if (name != null && !name.isBlank()) {
-            spec = spec.and(ProductPriceSpecification.hasName(name));
-        }
-
-        if (priceMin != null) {
-            spec = spec.and(ProductPriceSpecification.hasPriceMin(priceMin));
-        }
-
-        if (priceMax != null) {
-            spec = spec.and(ProductPriceSpecification.hasPriceMax(priceMax));
-        }
-
-        Page<ProductModel> productModelPage = productRepository.findAll(spec, pageable);
-        List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
-
-        for (ProductModel product : productModelPage.getContent()) {
-            List<ShopInfoDTO> shops = new ArrayList<>();
-
-            if (product.getPrices() != null) {
-                for (ProductPriceModel price : product.getPrices()) {
-                    // Volvemos a verificar rango de precio aquí si se desea precisión extra
-                    if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
-                            (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
-
-                        shops.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
-                    }
-                }
-            }
-
-            // Se agregará el producto aunque no tenga tiendas
-            productWithShopsDTOList.add(new ProductWithShopsDTO(
-                    product.getProductId(),
-                    product.getName(),
-                    shops
-            ));
-        }
-
-        PageResponse<ProductWithShopsDTO> pageResponse = new PageResponse<>(
-                productWithShopsDTOList,
-                productModelPage.getTotalElements(),
-                productModelPage.getTotalPages()
-        );
-
-        return ResponseEntity.ok(pageResponse);
-
-    }
 
 
 }

@@ -1,13 +1,19 @@
 package com.develop.prices.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public class ShopAddDTO {
 
+    @Size(min = 3, max = 100, message = "The name can only hace 100 characters")
     @NotBlank(message = "The field country cannot be empty")
     private String country;
+
+    @Size(min = 3,max = 100, message = "The name can only hace 100 characters")
     @NotBlank(message = "The field city cannot be empty")
     private String city;
+
+    @Size(max = 100, message = "The name can only hace 100 characters")
     @NotBlank(message = "The field address cannot be empty")
     private String address;
 
