@@ -77,7 +77,6 @@ public class CustomerController {
                     customerPage.getTotalPages()
             );
             return ResponseEntity.ok(pageResponse);
-
         }
 
 
