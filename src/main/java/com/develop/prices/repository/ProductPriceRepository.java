@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface ProductPriceRepository extends JpaRepository<ProductPriceModel,Integer>, JpaSpecificationExecutor {
+public interface ProductPriceRepository extends JpaRepository<ProductPriceModel,Integer>, JpaSpecificationExecutor<ProductPriceModel> {
     Optional<ProductPriceModel> findByShop_ShopIdAndProduct_ProductId(Integer shopId, Integer productId);
 
 

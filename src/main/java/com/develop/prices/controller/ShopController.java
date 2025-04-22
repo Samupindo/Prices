@@ -1,6 +1,5 @@
 package com.develop.prices.controller;
 
-
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.ShopModel;
@@ -40,7 +39,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +47,6 @@ import java.util.Optional;
 @RequestMapping("/shops")
 public class ShopController {
 
-    private List<ShopDTO> shopDTOS = new ArrayList<>();
     private final ShopLocationRepository shopLocationRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
