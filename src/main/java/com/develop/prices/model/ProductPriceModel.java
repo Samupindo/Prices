@@ -25,10 +25,14 @@ public class ProductPriceModel implements Serializable {
     @JoinColumn(name = "shop_id", nullable = false)
     private ShopModel shop;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id", nullable = false)
+    private PurchaseModel purchase;
+
     public ProductPriceModel() {
     }
 
-    public ProductPriceModel( BigDecimal price, ProductModel product, ShopModel shop) {
+    public ProductPriceModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
         this.product = product;
         this.shop = shop;
@@ -66,12 +70,22 @@ public class ProductPriceModel implements Serializable {
         this.productPriceId = productPriceId;
     }
 
+    public PurchaseModel getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(PurchaseModel purchase) {
+        this.purchase = purchase;
+    }
+
     @Override
     public String toString() {
         return "ProductPriceModel{" +
-                "price=" + price +
+                "productPriceId=" + productPriceId +
+                ", price=" + price +
                 ", product=" + product +
                 ", shop=" + shop +
+                ", purchase=" + purchase +
                 '}';
     }
 }
