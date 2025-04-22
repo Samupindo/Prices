@@ -130,16 +130,16 @@ public class ProductController {
     })
     @PostMapping("")
     public ResponseEntity<ProductDTO> addProduct( @Validated @RequestBody ProductNameDTO productNameDTO) {
-        if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        if (productNameDTO.getName().length() > 100) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
-        if (!productNameDTO.getName().matches("\\p{L}[\\p{L}\\s]+")) {
-            return ResponseEntity.badRequest().build();
-        }
+//        if (productNameDTO.getName() == null || productNameDTO.getName().isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        if (productNameDTO.getName().length() > 100) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .build();
+//        }
+//        if (!productNameDTO.getName().matches("\\p{L}[\\p{L}\\s]+")) {
+//            return ResponseEntity.badRequest().build();
+//        }
 
         // Crear nuevo producto
         ProductModel productModel = new ProductModel();
