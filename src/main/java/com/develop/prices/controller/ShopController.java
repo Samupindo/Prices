@@ -66,9 +66,14 @@ public class ShopController {
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address,
+            @RequestParam(required = false) Integer shopId,
             @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ShopModel> spec = Specification.where(null);
+
+        if(shopId!=null){
+            spec = spec.and(ShopsSpecification.findByShopId(shopId));
+        }
 
         if(country!=null){
             spec = spec.and(ShopsSpecification.findByCountry(country));
@@ -99,19 +104,6 @@ public class ShopController {
         return ResponseEntity.ok(shopDTOPageResponse);
 
     }
-
-    @GetMapping("/{shopId}")
-    public ResponseEntity<List<ShopDTO>> getShopLocationDTO(@PathVariable Integer shopId) {
-
-        ShopModel shopModel = (ShopModel) shopLocationRepository.findById(shopId).orElse(null);
-        if (shopModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
-        }
-
-        return ResponseEntity.ok(List.of(toShopDTO(shopModel)));
-
-    }
-
 
     @ApiResponses(value = {
             @ApiResponse(

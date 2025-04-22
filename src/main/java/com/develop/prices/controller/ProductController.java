@@ -55,9 +55,14 @@ public class ProductController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax,
+            @RequestParam(required = false) Integer productId,
             @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
+
+        if (productId != null) {
+            spec = spec.and(ProductPriceSpecification.hasProductId(productId));
+        }
 
         if (name != null && !name.isBlank()) {
             spec = spec.and(ProductPriceSpecification.hasName(name));
@@ -105,38 +110,6 @@ public class ProductController {
         return ResponseEntity.ok(pageResponse);
 
     }
-
-
-
-    @GetMapping("/{productId}")
-    public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
-        ProductModel productModel = productRepository.findById(productId).orElse(null);
-        if (productModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        // Preparamos lista vacía para guardar los precios
-        List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
-
-        if (productModel.getPrices() != null) {
-            //Recorremos el producto obtenido,
-            // productModel.getPrices() indica en que tiendas se vende el producto
-            for (ProductPriceModel priceModel : productModel.getPrices()) {
-                ShopInfoDTO shopInfo = new ShopInfoDTO(
-                        priceModel.getShop().getShopId(),
-                        priceModel.getPrice()
-                );
-                shopInfoDTOS.add(shopInfo);
-            }
-        }
-        //Creamos el objeto que se mostrara
-        ProductWithShopsDTO productWithShop = new ProductWithShopsDTO(
-                productModel.getProductId(),
-                productModel.getName(),
-                shopInfoDTOS
-        );
-        return ResponseEntity.ok(productWithShop);
-    }
-
 
     @ApiResponses(value = {
             @ApiResponse(

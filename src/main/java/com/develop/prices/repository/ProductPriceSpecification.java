@@ -2,6 +2,7 @@ package com.develop.prices.repository;
 
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopModel;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,5 +29,13 @@ public class ProductPriceSpecification {
             return criteriaBuilder.lessThanOrEqualTo(join.get("price"), priceMax);
         };
     }
+
+    public static Specification<ProductModel> hasProductId(Integer productId) {
+        return (root, query, criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get("productId"),productId);
+        };
+    }
+
+
 }
 
