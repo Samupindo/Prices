@@ -294,6 +294,10 @@ public class ShopController {
     @PatchMapping("/{shopId}")
     public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
+        if(updateShopDTO.getCountry() == null || updateShopDTO.getCity() == null ||  updateShopDTO.getAddress()== null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
         if (optionalShopModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
