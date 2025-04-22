@@ -1,10 +1,8 @@
 package com.develop.prices.controller;
 
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ShopModel;
 import com.develop.prices.model.dto.CustomerDTO;
-import com.develop.prices.model.dto.PageResponse;
-import com.develop.prices.model.dto.ShopDTO;
+import com.develop.prices.dto.PageResponse;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import org.springframework.data.domain.Page;
