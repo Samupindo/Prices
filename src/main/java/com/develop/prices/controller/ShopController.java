@@ -351,9 +351,6 @@ public class ShopController {
         return ResponseEntity.ok(productPriceMapper.productPriceModelToProductPriceDTO(savePriceModel));
     }
 
-
-
-
     private ProductPriceModel buildProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
         ProductPriceModel productPriceModel = new ProductPriceModel();
         productPriceModel.setProduct(product);
@@ -364,4 +361,3 @@ public class ShopController {
     }
 
 }
-
