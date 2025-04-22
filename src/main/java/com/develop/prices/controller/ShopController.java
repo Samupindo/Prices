@@ -95,7 +95,7 @@ public class ShopController {
         List<ShopDTO> shopDTOList = shopModelPage.getContent()
                 .stream()
                 //.map(s -> toShopDTO(s))
-                .map(this::toShopDTO)
+                .map(shopMapper::shopModelToShopDTO)
                 .toList();
 
         PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
@@ -105,7 +105,6 @@ public class ShopController {
         );
 
         return ResponseEntity.ok(shopDTOPageResponse);
-        //return ResponseEntity.ok(List.of(shopMapper.shopModelToShopDTO(shopModel)));
 
     }
 

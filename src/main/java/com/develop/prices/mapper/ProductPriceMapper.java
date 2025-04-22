@@ -1,7 +1,7 @@
 package com.develop.prices.mapper;
 
 import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.dto.ProductPriceDTO;
+import com.develop.prices.dto.ProductPriceDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
