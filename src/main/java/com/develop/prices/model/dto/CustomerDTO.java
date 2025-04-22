@@ -21,6 +21,10 @@ public class CustomerDTO {
         return customerId;
     }
 
+    public void setCustomerId(Integer customerId) {
+        this.customerId = customerId;
+    }
+
     public String getName() {
         return name;
     }
