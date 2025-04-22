@@ -133,13 +133,13 @@ public class ShopController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).build();
             }
         }
-        ShopModel newShopLocation = new ShopModel();
+        ShopModel newShopModel = new ShopModel();
 
-        newShopLocation.setCountry(shopAddDTO.getCountry());
-        newShopLocation.setCity(shopAddDTO.getCity());
-        newShopLocation.setAddress(shopAddDTO.getAddress());
+        newShopModel.setCountry(shopAddDTO.getCountry());
+        newShopModel.setCity(shopAddDTO.getCity());
+        newShopModel.setAddress(shopAddDTO.getAddress());
 
-        ShopModel shopModel = shopLocationRepository.save(newShopLocation);
+        ShopModel shopModel = shopLocationRepository.save(newShopModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(toShopDTO(shopModel));
     }
@@ -292,9 +292,9 @@ public class ShopController {
         shopModel.setCity(updateShopDTO.getCity());
         shopModel.setAddress(updateShopDTO.getAddress());
 
-        ShopModel shopModel1 = shopLocationRepository.save(shopModel);
+        ShopModel saveShopModel1 = shopLocationRepository.save(shopModel);
 
-        return ResponseEntity.ok(toShopDTO(shopModel1));
+        return ResponseEntity.ok(toShopDTO(saveShopModel1));
     }
 
     @PatchMapping("/{shopId}")
@@ -332,9 +332,9 @@ public class ShopController {
         if (updateShopDTO.getAddress() != null) {
             shopModel.setAddress(updateShopDTO.getAddress());
         }
-        ShopModel updateShopModel = shopLocationRepository.save(shopModel);
+        ShopModel saveShopModel = shopLocationRepository.save(shopModel);
 
-        return ResponseEntity.ok(toShopDTO(updateShopModel));
+        return ResponseEntity.ok(toShopDTO(saveShopModel));
 
     }
 

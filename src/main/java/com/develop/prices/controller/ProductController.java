@@ -41,7 +41,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-    private List<ProductDTO> products = new ArrayList<>();
+    private List<ProductDTO> productDTOS = new ArrayList<>();
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
 
@@ -53,28 +53,28 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProducts(@PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<ProductModel> productPage = productRepository.findAll(pageable);
+        Page<ProductModel> productModelPage = productRepository.findAll(pageable);
         List<ProductWithShopsDTO> productWithShopsDTOList = new ArrayList<>();
 
-        for (ProductModel product : productPage.getContent()) {
-            List<ShopInfoDTO> shopList = new ArrayList<>();
+        for (ProductModel product : productModelPage.getContent()) {
+            List<ShopInfoDTO> shopInfoDTOS = new ArrayList<>();
             if (product.getPrices() != null) {
                 for (ProductPriceModel price : product.getPrices()) {
-                    shopList.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
+                    shopInfoDTOS.add(new ShopInfoDTO(price.getShop().getShopId(), price.getPrice()));
                 }
             }
 
             productWithShopsDTOList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),
-                    shopList
+                    shopInfoDTOS
             ));
         }
 
         PageResponse<ProductWithShopsDTO> pageResponse = new PageResponse<>(
                 productWithShopsDTOList,
-                productPage.getTotalElements(),
-                productPage.getTotalPages()
+                productModelPage.getTotalElements(),
+                productModelPage.getTotalPages()
         );
 
         return ResponseEntity.ok(pageResponse);
@@ -142,11 +142,11 @@ public class ProductController {
         }
 
         // Crear nuevo producto
-        ProductModel newProduct = new ProductModel();
-        newProduct.setName(productNameDTO.getName());
+        ProductModel productModel = new ProductModel();
+        productModel.setName(productNameDTO.getName());
 
         // Guardar en base de datos
-        ProductModel savedProduct = productRepository.save(newProduct);
+        ProductModel savedProduct = productRepository.save(productModel);
 
         // Devolver DTO como respuesta
         ProductDTO productDTO = new ProductDTO(savedProduct.getProductId(), savedProduct.getName());
@@ -166,8 +166,8 @@ public class ProductController {
 
     @PutMapping("/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Validated @RequestBody ProductNameDTO productNameDTO) {
-        ProductModel existingProduct = productRepository.findById(productId).orElse(null);
-        if (existingProduct == null) {
+        ProductModel productModel = productRepository.findById(productId).orElse(null);
+        if (productModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
@@ -175,10 +175,10 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        existingProduct.setName(productNameDTO.getName());
+        productModel.setName(productNameDTO.getName());
 
 
-        return ResponseEntity.ok(new ProductDTO(existingProduct.getProductId(), existingProduct.getName()));
+        return ResponseEntity.ok(new ProductDTO(productModel.getProductId(), productModel.getName()));
     }
 
 
