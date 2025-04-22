@@ -1,5 +1,6 @@
 package com.develop.prices.controller;
 
+import com.develop.prices.mapper.CustomerMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.dto.CustomerDTO;
 import com.develop.prices.dto.PageResponse;
@@ -23,10 +24,12 @@ import java.util.List;
 public class CustomerController {
     private CustomerRepository customerRepository;
     private PurchaseRepository purchaseRepository;
+    private CustomerMapper customerMapper;
 
-    public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository) {
+    public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
         this.purchaseRepository = purchaseRepository;
+        this.customerMapper = customerMapper;
     }
 
     @GetMapping("")
@@ -34,7 +37,10 @@ public class CustomerController {
         @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
 
             Page<CustomerModel> customerPage = customerRepository.findAll(pageable);
-            List<CustomerDTO> customerDTOList = customerPage.getContent().stream().map(this::toCustomerDTO).toList();
+            List<CustomerDTO> customerDTOList = customerPage.getContent()
+                    .stream()
+                    .map(customerMapper::customerModelToCustomerDTO)
+                    .toList();
 
             PageResponse pageResponse = new PageResponse(
                     customerDTOList,
@@ -46,14 +52,5 @@ public class CustomerController {
         }
 
 
-    private CustomerDTO toCustomerDTO (CustomerModel customerModel){
-        CustomerDTO customerDTO = new CustomerDTO();
 
-        customerDTO.setCustomerId(customerModel.getCustomerId());
-        customerDTO.setName(customerModel.getName());
-        customerDTO.setEmail(customerModel.getEmail());
-        customerDTO.setPhone(customerModel.getPhone());
-
-        return customerDTO;
-    }
 }
