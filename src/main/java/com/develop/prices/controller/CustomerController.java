@@ -6,6 +6,10 @@ import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ShopModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.PurchaseRepository;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import com.develop.prices.specification.CustomerSpecification;
 import com.develop.prices.specification.ProductPriceSpecification;
@@ -79,6 +83,22 @@ public class CustomerController {
 
         }
 
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created",
+                    content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Missing required field: name\" }"
+                            )
+                    )
+            )
+    })
     @PostMapping("")
     public ResponseEntity<CustomerDTO> addCustomer(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
 
