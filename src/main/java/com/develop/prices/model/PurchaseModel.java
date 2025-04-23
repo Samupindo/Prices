@@ -20,8 +20,9 @@ public class PurchaseModel {
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ProductPriceModel> info;
 
+    //TODO Holi
     private BigDecimal totalPrice;
-
+    //FIXME sdfijsdofgs
     public PurchaseModel() {
     }
     public Integer getPurchaseId() {
