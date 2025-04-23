@@ -49,7 +49,7 @@ public class PurchaseController {
     @GetMapping("")
     public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
             @RequestParam(required = false) Integer purchaseId,
-            @RequestParam(required = false) CustomerDTO customer,
+            @RequestParam(required = false) Integer customerId,
             @RequestParam(required = false) Set<ProductPriceModel> info,
             @RequestParam(required = false) BigDecimal totalPrice,
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -61,8 +61,8 @@ public class PurchaseController {
             spec = spec.and(PurchaseSpecification.hasPurchaseId(purchaseId));
         }
 
-        if (customer != null) {
-            spec = spec.and(PurchaseSpecification.hasCustomer(customer));
+        if (customerId != null) {
+            spec = spec.and(PurchaseSpecification.hasCustomer(customerId));
         }
 
         if (info != null && !info.isEmpty()) {
@@ -70,17 +70,18 @@ public class PurchaseController {
 
         }
 
+
         Page<PurchaseModel> purchasePage = purchaseRepository.findAll(spec,pageable);
 
         List<PurchaseDTO> purchaseDTOList = purchasePage.getContent()
                 .stream()
                 .map(purchase -> {
-                    PurchaseDTO dto = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
+                    PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
-                    dto.setInfo(purchase.getInfo().stream()
+                    purchaseDTO.setInfo(purchase.getInfo().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
                             .collect(Collectors.toSet()));
-                    return dto;
+                    return purchaseDTO;
                 })
                 .collect(Collectors.toList());
 
