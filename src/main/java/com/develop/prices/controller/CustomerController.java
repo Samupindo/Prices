@@ -1,20 +1,20 @@
 package com.develop.prices.controller;
 
+import com.develop.prices.dto.*;
 import com.develop.prices.mapper.CustomerMapper;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.dto.CustomerDTO;
-import com.develop.prices.dto.PageResponse;
+import com.develop.prices.model.ShopModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.PurchaseRepository;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,6 +50,20 @@ public class CustomerController {
             return ResponseEntity.ok(pageResponse);
 
         }
+
+    @PostMapping("")
+    public ResponseEntity<CustomerDTO> addCustomer(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+
+        CustomerModel newCustomerModel = new CustomerModel();
+
+        newCustomerModel.setName(createCustomerDTO.getName());
+        newCustomerModel.setPhone(createCustomerDTO.getPhone());
+        newCustomerModel.setEmail(createCustomerDTO.getEmail());
+
+        CustomerModel customerModel = customerRepository.save(newCustomerModel);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerMapper.customerModelToCustomerDTO(customerModel));
+    }
 
 
 
