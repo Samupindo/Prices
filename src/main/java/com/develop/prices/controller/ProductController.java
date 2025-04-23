@@ -166,5 +166,4 @@ public class ProductController {
         return ResponseEntity.ok(productMapper.toProductDTO(productModel));
     }
 
-
 }
