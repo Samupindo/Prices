@@ -70,7 +70,6 @@ public class PurchaseController {
 
         }
 
-
         Page<PurchaseModel> purchasePage = purchaseRepository.findAll(spec,pageable);
 
         List<PurchaseDTO> purchaseDTOList = purchasePage.getContent()
