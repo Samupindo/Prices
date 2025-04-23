@@ -10,7 +10,7 @@ public class ProductNameDTO {
 
     @Size(max = 100, message = "The name can only have 100 characteres")
     @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
-    @NotBlank(message = "The field name cannot be empty")
+    @NotBlank
     private String name;
 
     public ProductNameDTO(){

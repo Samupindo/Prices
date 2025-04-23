@@ -17,10 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -94,6 +91,20 @@ public class CustomerController {
         CustomerModel customerModel = customerRepository.save(newCustomerModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(customerMapper.customerModelToCustomerDTO(customerModel));
+    }
+
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> updateProduct(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO){
+      CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
+
+      if(customerModel == null){
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      }
+
+      customerModel.setName(customerPutDTO.getName());
+      customerModel.setPhone(customerPutDTO.getPhone());
+      customerModel.setEmail(customerPutDTO.getEmail());
+      return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
     }
 
 
