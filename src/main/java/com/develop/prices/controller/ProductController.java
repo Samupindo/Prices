@@ -1,5 +1,6 @@
 package com.develop.prices.controller;
 
+import com.develop.prices.mapper.ProductMapper;
 import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.dto.ProductWithShopsDTO;
@@ -45,11 +46,13 @@ import java.util.List;
 public class ProductController {
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
+    private final ProductMapper productMapper;
 
 
-    public ProductController(ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
+    public ProductController(ProductRepository productRepository, ProductPriceRepository productPriceRepository, ProductMapper productMapper) {
         this.productRepository = productRepository; // Asignar el repositorio
         this.productPriceRepository = productPriceRepository;
+        this.productMapper = productMapper;
     }
 
     @GetMapping("")
@@ -139,8 +142,7 @@ public class ProductController {
         ProductModel savedProduct = productRepository.save(productModel);
 
         // Devolver DTO como respuesta
-        ProductDTO productDTO = new ProductDTO(savedProduct.getProductId(), savedProduct.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(productMapper.toProductDTO(savedProduct));
     }
 
 
@@ -161,7 +163,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         productModel.setName(productNameDTO.getName());
-        return ResponseEntity.ok(new ProductDTO(productModel.getProductId(), productModel.getName()));
+        return ResponseEntity.ok(productMapper.toProductDTO(productModel));
     }
 
 

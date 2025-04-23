@@ -11,5 +11,5 @@ public interface ProductPriceMapper {
     @Mapping(target = "shopId", source = "shop.shopId")
     ProductPriceDTO productPriceModelToProductPriceDTO(ProductPriceModel productPriceModel);
 
-    ProductPriceModel productPriceDTOToproductPriceModel(ProductPriceDTO productPriceDTO);
+    ProductPriceModel productPriceDTOToproductPriceModel(ProductPriceDTO productPriceDTO);//esto lo puedo borrar
 }
