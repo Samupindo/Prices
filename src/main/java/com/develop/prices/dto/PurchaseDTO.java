@@ -5,19 +5,20 @@ import com.develop.prices.model.ProductPriceModel;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 public class PurchaseDTO {
 
     private Integer purchaseId;
-    private CustomerModel customer;
-    private Set<ProductPriceModel> info;
+    private CustomerDTO customer;
+    private Set<ProductPriceDTO> info;
     private BigDecimal totalPrice;
 
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(CustomerModel customer, Set<ProductPriceModel> info, BigDecimal totalPrice) {
+    public PurchaseDTO(CustomerDTO customer, Set<ProductPriceDTO> info, BigDecimal totalPrice) {
         this.customer = customer;
         this.info = info;
         this.totalPrice = totalPrice;
@@ -27,19 +28,23 @@ public class PurchaseDTO {
         return purchaseId;
     }
 
-    public CustomerModel getCustomer() {
+    public void setPurchaseId(Integer purchaseId) {
+        this.purchaseId = purchaseId;
+    }
+
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(CustomerModel customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 
-    public Set<ProductPriceModel> getInfo() {
+    public Set<ProductPriceDTO> getInfo() {
         return info;
     }
 
-    public void setInfo(Set<ProductPriceModel> info) {
+    public void setInfo(Set<ProductPriceDTO> info) {
         this.info = info;
     }
 
@@ -48,7 +53,18 @@ public class PurchaseDTO {
     }
 
     public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+        this.totalPrice = info.stream()
+                .map(ProductPriceDTO::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    @Override
+    public String toString() {
+        return "PurchaseDTO{" +
+                "purchaseId=" + purchaseId +
+                ", customer=" + customer +
+                ", info=" + info +
+                ", totalPrice=" + totalPrice +
+                '}';
+    }
 }
