@@ -1,9 +1,12 @@
 package com.develop.prices.model;
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
+
 
 @Entity
 @Table(name="purchases")
@@ -18,6 +21,7 @@ public class PurchaseModel {
     private CustomerModel customer;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<ProductPriceModel> info;
 
     private BigDecimal totalPrice;
@@ -26,6 +30,10 @@ public class PurchaseModel {
     }
     public Integer getPurchaseId() {
         return purchaseId;
+    }
+
+    public void setPurchaseId(Integer purchaseId) {
+        this.purchaseId = purchaseId;
     }
 
     public CustomerModel getCustomer() {

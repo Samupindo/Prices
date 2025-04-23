@@ -1,5 +1,6 @@
 package com.develop.prices.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import  java.io.Serializable;
@@ -27,6 +28,7 @@ public class ProductPriceModel implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
+    @JsonBackReference
     private PurchaseModel purchase;
 
     public ProductPriceModel() {
