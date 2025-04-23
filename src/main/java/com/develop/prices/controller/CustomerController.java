@@ -17,12 +17,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Transactional
@@ -94,6 +92,43 @@ public class CustomerController {
         CustomerModel customerModel = customerRepository.save(newCustomerModel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(customerMapper.customerModelToCustomerDTO(customerModel));
+    }
+
+    @PatchMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @RequestBody CreateCustomerDTO createCustomerDTO) {
+        // Primero verificar si la tienda existe
+        Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
+        if (optionalCustomerModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        CustomerModel customerModel = optionalCustomerModel.get();
+
+
+        if (createCustomerDTO.getName() != null) {
+            if (createCustomerDTO.getName().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            customerModel.setName(createCustomerDTO.getName());
+        }
+
+        if (createCustomerDTO.getPhone() != null) {
+            if (createCustomerDTO.getPhone().equals("")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            customerModel.setPhone(createCustomerDTO.getPhone());
+        }
+
+        if (createCustomerDTO.getEmail() != null) {
+            if (createCustomerDTO.getEmail().trim().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            customerModel.setEmail(createCustomerDTO.getEmail());
+        }
+
+
+        CustomerModel saveCustomerModel = customerRepository.save(customerModel);
+        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(saveCustomerModel));
     }
 
 
