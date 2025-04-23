@@ -113,7 +113,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> updateProduct(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
         CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
 
         if (customerModel == null) {
