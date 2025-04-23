@@ -20,7 +20,6 @@ public class PurchaseModel {
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<ProductPriceModel> info;
 
-
     private BigDecimal totalPrice;
 
     public PurchaseModel() {
