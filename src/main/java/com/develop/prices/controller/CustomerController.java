@@ -3,7 +3,6 @@ package com.develop.prices.controller;
 import com.develop.prices.dto.*;
 import com.develop.prices.mapper.CustomerMapper;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ShopModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import com.develop.prices.specification.CustomerSpecification;
-import com.develop.prices.specification.ProductPriceSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,10 +19,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -118,12 +113,21 @@ public class CustomerController {
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> updateProduct(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO){
-      CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
+    public ResponseEntity<CustomerDTO> updateProduct(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
+        CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
 
-      if(customerModel == null){
-          return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-      }
+        if (customerModel == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+        customerModel.setName(customerPutDTO.getName());
+        customerModel.setPhone(customerPutDTO.getPhone());
+        customerModel.setEmail(customerPutDTO.getEmail());
+        CustomerModel saveCustomerModel = customerRepository.save(customerModel);
+        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(saveCustomerModel));
+
+    }
     @PatchMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @RequestBody CreateCustomerDTO createCustomerDTO) {
         // Primero verificar si la tienda existe
@@ -162,11 +166,7 @@ public class CustomerController {
     }
 
 
-      customerModel.setName(customerPutDTO.getName());
-      customerModel.setPhone(customerPutDTO.getPhone());
-      customerModel.setEmail(customerPutDTO.getEmail());
-      return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
-    }
+
 
 
     @DeleteMapping("/{customerId}")
