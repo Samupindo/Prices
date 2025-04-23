@@ -1,4 +1,4 @@
-package com.develop.prices.model.dto;
+package com.develop.prices.dto;
 
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductPriceModel;
