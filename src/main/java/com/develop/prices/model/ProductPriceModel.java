@@ -31,7 +31,7 @@ public class ProductPriceModel implements Serializable {
 
     public ProductPriceModel() {
     }
-
+// si
     public ProductPriceModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
         this.product = product;
