@@ -1,4 +1,4 @@
-package com.develop.prices.model.dto;
+package com.develop.prices.dto;
 
 
 
