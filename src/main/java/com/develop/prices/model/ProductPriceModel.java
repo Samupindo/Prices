@@ -28,12 +28,11 @@ public class ProductPriceModel implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
-    @JsonBackReference
     private PurchaseModel purchase;
 
     public ProductPriceModel() {
     }
-// si
+
     public ProductPriceModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
         this.product = product;
