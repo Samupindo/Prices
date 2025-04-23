@@ -22,7 +22,7 @@ public class PurchaseModel {
 
     //TODO Holi
     private BigDecimal totalPrice;
-    //FIXME sdfijsdofgs
+
     public PurchaseModel() {
     }
     public Integer getPurchaseId() {
