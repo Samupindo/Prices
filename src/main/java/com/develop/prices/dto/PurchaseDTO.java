@@ -53,9 +53,7 @@ public class PurchaseDTO {
     }
 
     public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = info.stream()
-                .map(ProductPriceDTO::getPrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalPrice = totalPrice;
     }
 
     @Override

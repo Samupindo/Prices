@@ -1,6 +1,7 @@
 package com.develop.prices.model;
 
 
+import com.develop.prices.dto.ProductPriceDTO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -21,10 +22,10 @@ public class PurchaseModel {
     private CustomerModel customer;
 
     @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private Set<ProductPriceModel> info;
 
     //TODO Holi
+    @Transient
     private BigDecimal totalPrice;
 
     public PurchaseModel() {
@@ -54,6 +55,9 @@ public class PurchaseModel {
     }
 
     public BigDecimal getTotalPrice() {
+        this.totalPrice = info.stream()
+                .map(ProductPriceModel::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
     }
 

@@ -51,7 +51,9 @@ public class PurchaseController {
             @RequestParam(required = false) Integer purchaseId,
             @RequestParam(required = false) Integer customerId,
             @RequestParam(required = false) Set<ProductPriceModel> info,
-            @RequestParam(required = false) BigDecimal totalPrice,
+            @RequestParam(required = false) BigDecimal totalPriceMax,
+            @RequestParam(required = false) BigDecimal totalPriceMin,
+
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
@@ -68,6 +70,13 @@ public class PurchaseController {
         if (info != null && !info.isEmpty()) {
             spec = spec.and(PurchaseSpecification.hasProductPrice(info));
 
+        }
+        if(totalPriceMax != null){
+            spec =spec.and(PurchaseSpecification.hasPriceMax(totalPriceMax));
+        }
+
+        if(totalPriceMin != null){
+            spec =spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
         }
 
         Page<PurchaseModel> purchasePage = purchaseRepository.findAll(spec,pageable);
