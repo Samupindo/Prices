@@ -1,26 +1,21 @@
 package com.develop.prices.dto;
 
-import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ProductPriceModel;
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 public class PurchaseDTO {
 
     private Integer purchaseId;
     private CustomerDTO customer;
-    private Set<ProductPriceDTO> info;
+    private Set<ProductPriceDTO> products;
     private BigDecimal totalPrice;
 
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(CustomerDTO customer, Set<ProductPriceDTO> info, BigDecimal totalPrice) {
+    public PurchaseDTO(CustomerDTO customer, Set<ProductPriceDTO> products, BigDecimal totalPrice) {
         this.customer = customer;
-        this.info = info;
+        this.products = products;
         this.totalPrice = totalPrice;
     }
 
@@ -40,12 +35,12 @@ public class PurchaseDTO {
         this.customer = customer;
     }
 
-    public Set<ProductPriceDTO> getInfo() {
-        return info;
+    public Set<ProductPriceDTO> getProducts() {
+        return products;
     }
 
-    public void setInfo(Set<ProductPriceDTO> info) {
-        this.info = info;
+    public void setProducts(Set<ProductPriceDTO> products) {
+        this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
@@ -61,7 +56,7 @@ public class PurchaseDTO {
         return "PurchaseDTO{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + info +
+                ", products=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

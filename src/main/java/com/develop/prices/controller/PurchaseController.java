@@ -1,6 +1,5 @@
 package com.develop.prices.controller;
 
-import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
@@ -86,7 +85,7 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
-                    purchaseDTO.setInfo(purchase.getInfo().stream()
+                    purchaseDTO.setProducts(purchase.getProductPriceModel().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
                             .collect(Collectors.toSet()));
                     return purchaseDTO;
@@ -103,12 +102,12 @@ public class PurchaseController {
     }
 
     @PostMapping("")
-    public ResponseEntity<PurchaseDTO> postPurchase(@Valid  @RequestBody PostPurchaseDTO postPurchaseDTO) {
+    public ResponseEntity<PurchaseDTO> postPurchase(@Valid @RequestBody PostPurchaseDTO postPurchaseDTO) {
         CustomerModel customerModel = customerRepository.findById(postPurchaseDTO.getCustomerId()).orElse(null);
 
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
-        purchaseModel.setInfo(Set.of());
+        purchaseModel.setProductPriceModel(Set.of());
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
