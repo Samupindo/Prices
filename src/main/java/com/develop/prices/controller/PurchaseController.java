@@ -2,12 +2,14 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
+import com.develop.prices.dto.ProductPriceDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
+import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
@@ -36,12 +38,14 @@ public class PurchaseController {
     private ProductPriceRepository productPriceRepository;
     private PurchaseMapper purchaseMapper;
     private ProductPriceMapper productPriceMapper;
+    private CustomerRepository customerRepository;
 
-    public PurchaseController( PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
+    public PurchaseController(PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper, CustomerRepository customerRepository) {
         this.purchaseRepository = purchaseRepository;
         this.productPriceRepository = productPriceRepository;
         this.purchaseMapper = purchaseMapper;
         this.productPriceMapper = productPriceMapper;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
@@ -106,7 +110,7 @@ public class PurchaseController {
 
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
-        purchaseModel.setProductPriceModel(Set.of());
+        purchaseModel.setProducts(List.of());
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
