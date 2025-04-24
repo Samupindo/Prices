@@ -1,9 +1,15 @@
 package com.develop.prices.dto;
 
+import com.develop.prices.validation.PatchPutNotBlank;
+import com.develop.prices.validation.PatchPutNotNull;
+
 public class CreateCustomerDTO {
 
+        @PatchPutNotBlank
         private String name;
+        @PatchPutNotNull
         private Integer phone;
+        @PatchPutNotBlank
         private String email;
 
         public CreateCustomerDTO() {
