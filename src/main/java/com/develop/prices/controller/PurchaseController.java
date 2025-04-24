@@ -1,8 +1,6 @@
 package com.develop.prices.controller;
 
-import com.develop.prices.dto.CustomerDTO;
-import com.develop.prices.dto.PageResponse;
-import com.develop.prices.dto.PurchaseDTO;
+import com.develop.prices.dto.*;
 import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.ProductPriceModel;
@@ -16,15 +14,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -99,6 +97,36 @@ public class PurchaseController {
                 purchasePage.getTotalPages()
         );
         return ResponseEntity.ok(pageResponse);
+
+    }
+
+    @PostMapping("/{purchaseId}/productPrices/{productPriceId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productPriceId) {
+
+
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+        Optional<ProductPriceModel> optionalProductPriceModel = productPriceRepository.findById(productPriceId);
+
+        if (optionalPurchaseModel.isEmpty() || optionalProductPriceModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+        ProductPriceModel productPriceModel = optionalProductPriceModel.get();
+
+        purchaseModel.getInfo().add(productPriceModel);
+
+        ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
+
+        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel);
+
+        purchaseDTO.getInfo().add(productPriceDTO);
+
+        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
+
+        System.out.println(purchaseDTO);
+
+        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
 
     }
 }

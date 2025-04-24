@@ -17,11 +17,12 @@ public class PurchaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer purchaseId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id")
     private Set<ProductPriceModel> info;
 
     //TODO Holi
