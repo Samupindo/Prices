@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,13 +30,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/purchases")
 public class PurchaseController {
     private PurchaseRepository purchaseRepository;
-    private CustomerRepository customerRepository;
     private ProductPriceRepository productPriceRepository;
     private PurchaseMapper purchaseMapper;
     private ProductPriceMapper productPriceMapper;
 
-    public PurchaseController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
-        this.customerRepository = customerRepository;
+    public PurchaseController( PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
         this.purchaseRepository = purchaseRepository;
         this.productPriceRepository = productPriceRepository;
         this.purchaseMapper = purchaseMapper;
@@ -86,7 +83,7 @@ public class PurchaseController {
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
                     purchaseDTO.setInfo(purchase.getInfo().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
-                            .collect(Collectors.toSet()));
+                            .collect(Collectors.toList()));
                     return purchaseDTO;
                 })
                 .collect(Collectors.toList());
@@ -118,13 +115,10 @@ public class PurchaseController {
 
         ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
 
-        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel);
-
-        purchaseDTO.getInfo().add(productPriceDTO);
+        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
 
         PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
 
-        System.out.println(purchaseDTO);
 
         return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
 

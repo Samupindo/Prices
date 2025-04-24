@@ -2,11 +2,10 @@ package com.develop.prices.model;
 
 
 import com.develop.prices.dto.ProductPriceDTO;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -23,7 +22,7 @@ public class PurchaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id")
-    private Set<ProductPriceModel> info;
+    private List<ProductPriceModel> info;
 
     //TODO Holi
     @Transient
@@ -47,11 +46,11 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public Set<ProductPriceModel> getInfo() {
+    public List<ProductPriceModel> getInfo() {
         return info;
     }
 
-    public void setInfo(Set<ProductPriceModel> info) {
+    public void setInfo(List<ProductPriceModel> info) {
         this.info = info;
     }
 
