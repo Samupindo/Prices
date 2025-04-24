@@ -2,15 +2,18 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.PageResponse;
+import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;
+import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,10 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -100,5 +100,22 @@ public class PurchaseController {
         );
         return ResponseEntity.ok(pageResponse);
 
+    }
+
+    @PostMapping("")
+    public ResponseEntity<PurchaseDTO> postPurchase(@Valid  @RequestBody PostPurchaseDTO postPurchaseDTO) {
+        CustomerModel customerModel = customerRepository.findById(postPurchaseDTO.getCustomerId()).orElse(null);
+
+        PurchaseModel purchaseModel =new PurchaseModel();
+        purchaseModel.setCustomer(customerModel);
+        purchaseModel.setInfo(Set.of());
+        purchaseModel.setTotalPrice(BigDecimal.ZERO);
+
+        PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
+
+
+        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(savedPurchaseModel);
+
+        return ResponseEntity.ok(purchaseDTO);
     }
 }
