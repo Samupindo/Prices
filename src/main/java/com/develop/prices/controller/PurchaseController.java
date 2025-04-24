@@ -60,20 +60,14 @@ public class PurchaseController {
 
     @GetMapping("")
     public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
-            @RequestParam(required = false) Integer purchaseId,
             @RequestParam(required = false) Integer customerId,
             @RequestParam(required = false) List<ProductPriceModel> info,
             @RequestParam(required = false) BigDecimal totalPriceMax,
             @RequestParam(required = false) BigDecimal totalPriceMin,
-
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
         Specification<PurchaseModel> spec = Specification.where(null);
-
-        if (purchaseId != null) {
-            spec = spec.and(PurchaseSpecification.hasPurchaseId(purchaseId));
-        }
 
         if (customerId != null) {
             spec = spec.and(PurchaseSpecification.hasCustomer(customerId));
@@ -111,6 +105,18 @@ public class PurchaseController {
                 purchasePage.getTotalPages()
         );
         return ResponseEntity.ok(pageResponse);
+
+    }
+
+
+    @GetMapping("/{purchaseId}")
+    public ResponseEntity<PurchaseDTO> getPurchaseById(@PathVariable Integer purchaseId){
+
+        Optional<PurchaseModel> optionalPurchasePage = purchaseRepository.findById(purchaseId);
+
+        PurchaseModel purchaseModel = optionalPurchasePage.get();
+
+        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
 
     }
 
