@@ -8,7 +8,6 @@ import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
-import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,13 +33,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/purchases")
 public class PurchaseController {
     private PurchaseRepository purchaseRepository;
-    private CustomerRepository customerRepository;
     private ProductPriceRepository productPriceRepository;
     private PurchaseMapper purchaseMapper;
     private ProductPriceMapper productPriceMapper;
 
-    public PurchaseController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
-        this.customerRepository = customerRepository;
+    public PurchaseController( PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
         this.purchaseRepository = purchaseRepository;
         this.productPriceRepository = productPriceRepository;
         this.purchaseMapper = purchaseMapper;
@@ -86,9 +84,9 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
-                    purchaseDTO.setProducts(purchase.getProductPriceModel().stream()
+                    purchaseDTO.setProducts(purchase.getProducts().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
-                            .collect(Collectors.toSet()));
+                            .collect(Collectors.toList()));
                     return purchaseDTO;
                 })
                 .collect(Collectors.toList());
@@ -127,5 +125,32 @@ public class PurchaseController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/{purchaseId}/productPrices/{productPriceId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productPriceId) {
+
+
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+        Optional<ProductPriceModel> optionalProductPriceModel = productPriceRepository.findById(productPriceId);
+
+        if (optionalPurchaseModel.isEmpty() || optionalProductPriceModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+        ProductPriceModel productPriceModel = optionalProductPriceModel.get();
+
+        purchaseModel.getProducts().add(productPriceModel);
+
+        ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
+
+        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
+
+        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
+
+
+        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
+
     }
 }

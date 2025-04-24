@@ -1,16 +1,11 @@
 package com.develop.prices.dto;
 
-import jakarta.validation.constraints.*;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 public class AddProductShopDTO implements  Serializable { //este DTO y el de ProductPricePatchDTO son lo mismo
 
-    @Positive
-    @DecimalMin(value="0.01")
-    @DecimalMax(value = "999999999.99")
-    @NotNull
     private BigDecimal price;
 
     public AddProductShopDTO() {

@@ -1,14 +1,11 @@
 package com.develop.prices.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 public class ProductPricePatchDTO implements Serializable {
 
-    @NotNull
     private BigDecimal price;
 
     public ProductPricePatchDTO() {
