@@ -2,6 +2,7 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
+import com.develop.prices.dto.ProductPriceDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,17 +35,17 @@ import java.util.stream.Collectors;
 @RequestMapping("/purchases")
 public class PurchaseController {
     private PurchaseRepository purchaseRepository;
-    private CustomerRepository customerRepository;
     private ProductPriceRepository productPriceRepository;
     private PurchaseMapper purchaseMapper;
     private ProductPriceMapper productPriceMapper;
+    private CustomerRepository customerRepository;
 
-    public PurchaseController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper) {
-        this.customerRepository = customerRepository;
+    public PurchaseController(PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper, CustomerRepository customerRepository) {
         this.purchaseRepository = purchaseRepository;
         this.productPriceRepository = productPriceRepository;
         this.purchaseMapper = purchaseMapper;
         this.productPriceMapper = productPriceMapper;
+        this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
@@ -86,9 +88,9 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
-                    purchaseDTO.setProducts(purchase.getProductPriceModel().stream()
+                    purchaseDTO.setProducts(purchase.getProducts().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
-                            .collect(Collectors.toSet()));
+                            .collect(Collectors.toList()));
                     return purchaseDTO;
                 })
                 .collect(Collectors.toList());
@@ -108,7 +110,7 @@ public class PurchaseController {
 
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
-        purchaseModel.setProductPriceModel(Set.of());
+        purchaseModel.setProducts(List.of());
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
@@ -127,5 +129,32 @@ public class PurchaseController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/{purchaseId}/productPrices/{productPriceId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productPriceId) {
+
+
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+        Optional<ProductPriceModel> optionalProductPriceModel = productPriceRepository.findById(productPriceId);
+
+        if (optionalPurchaseModel.isEmpty() || optionalProductPriceModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+        ProductPriceModel productPriceModel = optionalProductPriceModel.get();
+
+        purchaseModel.getProducts().add(productPriceModel);
+
+        ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
+
+        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
+
+        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
+
+
+        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
+
     }
 }

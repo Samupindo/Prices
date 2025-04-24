@@ -1,10 +1,10 @@
 package com.develop.prices.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import  java.io.Serializable;
 import java.math.BigDecimal;
+
 
 @Entity
 @Table(name = "product_price")

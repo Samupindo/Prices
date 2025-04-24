@@ -4,7 +4,7 @@ package com.develop.prices.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -15,12 +15,13 @@ public class PurchaseModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer purchaseId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ProductPriceModel> productPriceModel;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "purchase_id")
+    private List<ProductPriceModel> products;
 
     //TODO Holi
     @Transient
@@ -44,16 +45,16 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public Set<ProductPriceModel> getProductPriceModel() {
-        return productPriceModel;
+    public List<ProductPriceModel> getProducts() {
+        return products;
     }
 
-    public void setProductPriceModel(Set<ProductPriceModel> productPriceModel) {
-        this.productPriceModel = productPriceModel;
+    public void setProducts(List<ProductPriceModel> products) {
+        this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
-        this.totalPrice = productPriceModel.stream()
+        this.totalPrice = products.stream()
                 .map(ProductPriceModel::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
@@ -68,7 +69,7 @@ public class PurchaseModel {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", products=" + productPriceModel +
+                ", info=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }
