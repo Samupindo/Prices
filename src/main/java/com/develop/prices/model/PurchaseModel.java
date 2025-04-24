@@ -1,7 +1,6 @@
 package com.develop.prices.model;
 
 
-import com.develop.prices.dto.ProductPriceDTO;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -22,7 +21,7 @@ public class PurchaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id")
-    private List<ProductPriceModel> info;
+    private List<ProductPriceModel> products;
 
     //TODO Holi
     @Transient
@@ -46,16 +45,16 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public List<ProductPriceModel> getInfo() {
-        return info;
+    public List<ProductPriceModel> getProducts() {
+        return products;
     }
 
-    public void setInfo(List<ProductPriceModel> info) {
-        this.info = info;
+    public void setProducts(List<ProductPriceModel> products) {
+        this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
-        this.totalPrice = info.stream()
+        this.totalPrice = products.stream()
                 .map(ProductPriceModel::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
@@ -70,7 +69,7 @@ public class PurchaseModel {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + info +
+                ", info=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

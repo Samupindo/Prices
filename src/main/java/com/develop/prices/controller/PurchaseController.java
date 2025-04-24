@@ -5,7 +5,6 @@ import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
-import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
@@ -81,7 +80,7 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductPriceModel) a ProductPriceDTO
-                    purchaseDTO.setInfo(purchase.getInfo().stream()
+                    purchaseDTO.setProducts(purchase.getProducts().stream()
                             .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
                             .collect(Collectors.toList()));
                     return purchaseDTO;
@@ -111,7 +110,7 @@ public class PurchaseController {
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
         ProductPriceModel productPriceModel = optionalProductPriceModel.get();
 
-        purchaseModel.getInfo().add(productPriceModel);
+        purchaseModel.getProducts().add(productPriceModel);
 
         ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
 

@@ -1,7 +1,5 @@
 package com.develop.prices.dto;
 
-import com.develop.prices.model.ProductPriceModel;
-
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -9,15 +7,15 @@ public class PurchaseDTO {
 
     private Integer purchaseId;
     private CustomerDTO customer;
-    private List<ProductPriceDTO> info;
+    private List<ProductPriceDTO> products;
     private BigDecimal totalPrice;
 
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(CustomerDTO customer, List<ProductPriceDTO> info, BigDecimal totalPrice) {
+    public PurchaseDTO(CustomerDTO customer, List<ProductPriceDTO> products, BigDecimal totalPrice) {
         this.customer = customer;
-        this.info = info;
+        this.products = products;
         this.totalPrice = totalPrice;
     }
 
@@ -37,12 +35,12 @@ public class PurchaseDTO {
         this.customer = customer;
     }
 
-    public List<ProductPriceDTO> getInfo() {
-        return info;
+    public List<ProductPriceDTO> getProducts() {
+        return products;
     }
 
-    public void setInfo( List<ProductPriceDTO> info) {
-        this.info = info;
+    public void setProducts(List<ProductPriceDTO> products) {
+        this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
@@ -58,7 +56,7 @@ public class PurchaseDTO {
         return "PurchaseDTO{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + info +
+                ", info=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }
