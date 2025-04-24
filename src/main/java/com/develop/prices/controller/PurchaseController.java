@@ -118,4 +118,14 @@ public class PurchaseController {
 
         return ResponseEntity.ok(purchaseDTO);
     }
+
+    @DeleteMapping("{purchaseId}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable Integer purchaseId) {
+        if (purchaseRepository.existsById(purchaseId)) {
+            purchaseRepository.deleteById(purchaseId);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(404).build();
+        }
+    }
 }
