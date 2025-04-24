@@ -124,8 +124,9 @@ public class CustomerController {
         customerModel.setName(customerPutDTO.getName());
         customerModel.setPhone(customerPutDTO.getPhone());
         customerModel.setEmail(customerPutDTO.getEmail());
-        CustomerModel saveCustomerModel = customerRepository.save(customerModel);
-        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(saveCustomerModel));
+
+
+        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
 
     }
     @PatchMapping("/{customerId}")
@@ -161,11 +162,9 @@ public class CustomerController {
         }
 
 
-        CustomerModel saveCustomerModel = customerRepository.save(customerModel);
-        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(saveCustomerModel));
+
+        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
     }
-
-
 
 
 
