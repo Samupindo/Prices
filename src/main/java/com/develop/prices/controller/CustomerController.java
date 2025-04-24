@@ -1,7 +1,10 @@
 package com.develop.prices.controller;
 
-import com.develop.prices.dto.*;
+import com.develop.prices.dto.CustomerDTO;
+import com.develop.prices.dto.PageResponse;
+import com.develop.prices.dto.CreateCustomerDTO;
 import com.develop.prices.mapper.CustomerMapper;
+import com.develop.prices.dto.CustomerPutDTO;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.PurchaseRepository;
@@ -19,8 +22,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import java.util.List;
 import java.util.Optional;
 

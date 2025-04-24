@@ -2,8 +2,6 @@ package com.develop.prices.dto;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.math.BigDecimal;
-import java.util.Set;
 
 public class PostPurchaseDTO {
     @NotNull

@@ -1,15 +1,15 @@
 package com.develop.prices.specification;
 
-import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ProductModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Subquery;
+import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
-
 import java.math.BigDecimal;
-import java.util.Set;
+import java.util.List;
 
 public class PurchaseSpecification {
 
@@ -25,7 +25,7 @@ public class PurchaseSpecification {
         };
     }
 
-    public static Specification<PurchaseModel> hasProductPrice(Set<ProductPriceModel> info) {
+    public static Specification<PurchaseModel> hasProductPrice(List<ProductPriceModel> info) {
         return (root, query, cb) -> {
             Join<PurchaseModel, ProductPriceModel> join = root.join("info");
             return join.get("productPriceId").in(info);

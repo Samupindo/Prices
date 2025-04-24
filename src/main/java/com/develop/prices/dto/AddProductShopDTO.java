@@ -2,7 +2,6 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.function.Function;
 
 public class AddProductShopDTO implements  Serializable { //este DTO y el de ProductPricePatchDTO son lo mismo
 

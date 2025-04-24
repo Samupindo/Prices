@@ -1,7 +1,6 @@
 package com.develop.prices.dto;
 
 import com.develop.prices.validation.PatchPutNotBlank;
-import jakarta.validation.constraints.NotBlank;
 
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopDTO {

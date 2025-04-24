@@ -4,7 +4,6 @@ import com.develop.prices.dto.ShopDTO;
 import com.develop.prices.model.ShopModel;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ShopMapper {
