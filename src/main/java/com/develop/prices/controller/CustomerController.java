@@ -97,8 +97,6 @@ public class CustomerController {
 
         CustomerModel customerModel = optionalCustomerModel.get();
 
-
-
         return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
     }
 

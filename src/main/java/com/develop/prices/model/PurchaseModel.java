@@ -34,7 +34,6 @@ public class PurchaseModel {
     @JoinColumn(name = "purchase_id")
     private List<ProductPriceModel> products = new ArrayList<>();
 
-    //TODO Holi
     @Transient
     private BigDecimal totalPrice;
 
@@ -80,7 +79,7 @@ public class PurchaseModel {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + products +
+                ", products=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }
