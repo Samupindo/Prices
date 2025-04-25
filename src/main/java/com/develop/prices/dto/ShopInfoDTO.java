@@ -1,7 +1,6 @@
 package com.develop.prices.dto;
 
 import java.math.BigDecimal;
-import java.util.function.Function;
 
 public class ShopInfoDTO {
     private Integer shopId;

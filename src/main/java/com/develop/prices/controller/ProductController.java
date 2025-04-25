@@ -33,11 +33,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @RestController
@@ -59,14 +58,9 @@ public class ProductController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax,
-            @RequestParam(required = false) Integer productId,
             @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
-
-        if (productId != null) {
-            spec = spec.and(ProductPriceSpecification.hasProductId(productId));
-        }
 
         if (name != null && !name.isBlank()) {
             spec = spec.and(ProductPriceSpecification.hasName(name));
@@ -113,6 +107,30 @@ public class ProductController {
 
         return ResponseEntity.ok(pageResponse);
 
+    }
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId){
+        Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
+        if(optionalProductModel.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ProductModel productModel = optionalProductModel.get();
+
+        ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO();
+        productWithShopsDTO.setProductId(productModel.getProductId());
+        productWithShopsDTO.setName(productModel.getName());
+
+        List<ShopInfoDTO> shopInfoDTOList = new ArrayList<>();
+
+        for (ProductPriceModel productPriceModel : productModel.getPrices()){
+            shopInfoDTOList.add(new ShopInfoDTO(productPriceModel.getShop().getShopId(),productPriceModel.getPrice()));
+        }
+
+        productWithShopsDTO.setShop(shopInfoDTOList);
+
+        return ResponseEntity.ok(productWithShopsDTO);
     }
 
     @ApiResponses(value = {

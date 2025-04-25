@@ -6,15 +6,17 @@ import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.model.PurchaseModel;
+import com.develop.prices.model.ProductModel;
+import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductPriceRepository;
 import com.develop.prices.repository.PurchaseRepository;
+import com.develop.prices.specification.CustomerSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import com.develop.prices.specification.CustomerSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,6 +27,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -40,27 +43,22 @@ public class CustomerController {
     private CustomerMapper customerMapper;
     private PurchaseMapper purchaseMapper;
 
-    public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, CustomerMapper customerMapper, PurchaseMapper purchaseMapper) {
+    public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
         this.purchaseRepository = purchaseRepository;
         this.customerMapper = customerMapper;
-        this.purchaseMapper = purchaseMapper;
     }
 
     @GetMapping("")
     public ResponseEntity<PageResponse<CustomerDTO>> getCustomersWithFilters(
-            @RequestParam(required = false) Integer customerId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer phone,
             @RequestParam(required = false) String email,
-        @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
+            @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
-            Specification<CustomerModel> spec = Specification.where(null);
+        Specification<CustomerModel> spec = Specification.where(null);
 
-        if (customerId != null) {
-            spec = spec.and(CustomerSpecification.hasCustomerId(customerId));
-        }
 
         if (name != null && !name.isBlank()) {
             spec = spec.and(CustomerSpecification.hasName(name));
@@ -75,21 +73,34 @@ public class CustomerController {
         }
 
 
+        Page<CustomerModel> customerPage = customerRepository.findAll(spec, pageable);
+        List<CustomerDTO> customerDTOList = customerPage.getContent()
+                .stream()
+                .map(customerMapper::customerModelToCustomerDTO)
+                .toList();
 
-            Page<CustomerModel> customerPage = customerRepository.findAll(spec,pageable);
-            List<CustomerDTO> customerDTOList = customerPage.getContent()
-                    .stream()
-                    .map(customerMapper::customerModelToCustomerDTO)
-                    .toList();
+        PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
+                customerDTOList,
+                customerPage.getTotalElements(),
+                customerPage.getTotalPages()
+        );
+        return ResponseEntity.ok(pageResponse);
 
-            PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
-                    customerDTOList,
-                    customerPage.getTotalElements(),
-                    customerPage.getTotalPages()
-            );
-            return ResponseEntity.ok(pageResponse);
+    }
 
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
+        Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
+        if (optionalCustomerModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+
+        CustomerModel customerModel = optionalCustomerModel.get();
+
+
+
+        return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
+    }
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -138,8 +149,9 @@ public class CustomerController {
         return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));
 
     }
+
     @PatchMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId,@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @RequestBody CreateCustomerDTO createCustomerDTO) {
         // Primero verificar si la tienda existe
         Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
         if (optionalCustomerModel.isEmpty()) {
@@ -169,7 +181,6 @@ public class CustomerController {
             }
             customerModel.setEmail(createCustomerDTO.getEmail());
         }
-
 
 
         return ResponseEntity.ok(customerMapper.customerModelToCustomerDTO(customerModel));

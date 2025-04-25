@@ -1,7 +1,6 @@
 package com.develop.prices.dto;
 
 
-
 public class CustomerDTO {
     private Integer customerId;
     private String name;
