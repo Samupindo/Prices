@@ -14,6 +14,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Transient;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,7 +32,7 @@ public class PurchaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id")
-    private List<ProductPriceModel> products;
+    private List<ProductPriceModel> products = new ArrayList<>();
 
     //TODO Holi
     @Transient

@@ -143,7 +143,6 @@ public class PurchaseController {
 
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
-        purchaseModel.setProducts(List.of());
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
