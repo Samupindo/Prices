@@ -141,13 +141,16 @@ public class PurchaseController {
     public ResponseEntity<PurchaseDTO> postPurchase(@Valid @RequestBody PostPurchaseDTO postPurchaseDTO) {
         CustomerModel customerModel = customerRepository.findById(postPurchaseDTO.getCustomerId()).orElse(null);
 
+        if(customerModel == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
         purchaseModel.setProducts(List.of());
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
-
 
         PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(savedPurchaseModel);
 
@@ -187,8 +190,6 @@ public class PurchaseController {
         ProductPriceModel productPriceModel = optionalProductPriceModel.get();
 
         purchaseModel.getProducts().add(productPriceModel);
-
-        ProductPriceDTO productPriceDTO = productPriceMapper.productPriceModelToProductPriceDTO(productPriceModel);
 
         System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
 

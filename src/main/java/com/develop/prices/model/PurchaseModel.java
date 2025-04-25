@@ -31,9 +31,8 @@ public class PurchaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id")
-    private List<ProductPriceModel> products;
+    private List<ProductPriceModel> products; //cambiar por productPrices
 
-    //TODO Holi
     @Transient
     private BigDecimal totalPrice;
 
@@ -79,7 +78,7 @@ public class PurchaseModel {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + products +
+                ", products=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }
