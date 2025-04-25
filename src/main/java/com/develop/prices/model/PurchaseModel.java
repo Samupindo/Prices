@@ -39,6 +39,7 @@ public class PurchaseModel {
 
     public PurchaseModel() {
     }
+
     public Integer getPurchaseId() {
         return purchaseId;
     }

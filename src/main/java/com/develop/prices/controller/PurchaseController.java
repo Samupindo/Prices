@@ -2,7 +2,6 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.ProductPriceDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.ProductPriceMapper;
 import com.develop.prices.mapper.PurchaseMapper;

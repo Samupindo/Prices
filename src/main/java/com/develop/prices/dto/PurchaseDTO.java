@@ -1,6 +1,7 @@
 package com.develop.prices.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PurchaseDTO {
@@ -16,6 +17,12 @@ public class PurchaseDTO {
     public PurchaseDTO(CustomerDTO customer, List<ProductPriceDTO> products, BigDecimal totalPrice) {
         this.customer = customer;
         this.products = products;
+        this.totalPrice = totalPrice;
+    }
+
+    public PurchaseDTO(Integer purchaseId, CustomerDTO customer, BigDecimal totalPrice) {
+        this.purchaseId = purchaseId;
+        this.customer = customer;
         this.totalPrice = totalPrice;
     }
 
@@ -56,7 +63,7 @@ public class PurchaseDTO {
         return "PurchaseDTO{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", info=" + products +
+                ", products=" + products +
                 ", totalPrice=" + totalPrice +
                 '}';
     }
