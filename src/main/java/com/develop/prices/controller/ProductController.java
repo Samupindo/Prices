@@ -58,14 +58,9 @@ public class ProductController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax,
-            @RequestParam(required = false) Integer productId,
             @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
-
-        if (productId != null) {
-            spec = spec.and(ProductPriceSpecification.hasProductId(productId));
-        }
 
         if (name != null && !name.isBlank()) {
             spec = spec.and(ProductPriceSpecification.hasName(name));
