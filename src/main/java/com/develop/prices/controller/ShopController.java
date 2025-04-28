@@ -217,7 +217,7 @@ public class ShopController {
 
         BigDecimal price = addProductShopDTO.getPrice();
 
-        ShopProductInfoModel shopProductInfoModel = buildProductPriceModel(optionalProductModel.get(), optionalShopModel.get(), price);
+        ShopProductInfoModel shopProductInfoModel = buildShopProductInfoModel(optionalProductModel.get(), optionalShopModel.get(), price);
 
 
         ShopProductInfoModel shopProductInfoModelDB = shopProductInfoRepository.save(shopProductInfoModel);
@@ -333,7 +333,7 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ShopProductInfoDTO> updateProductPrice(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ShopProductInfoPatchDTO shopProductInfoPatchDTO) {
+    public ResponseEntity<ShopProductInfoDTO> updateShopProductInfo(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ShopProductInfoPatchDTO shopProductInfoPatchDTO) {
 
         ShopProductInfoModel shopProductInfoModel = shopProductInfoRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
         if(shopProductInfoModel == null){
@@ -348,7 +348,7 @@ public class ShopController {
         return ResponseEntity.ok(shopProductInfoMapper.shopProductInfoModelToShopProductInfoDTO(savePriceModel));
     }
 
-    private ShopProductInfoModel buildProductPriceModel(ProductModel product, ShopModel shop, BigDecimal price) {
+    private ShopProductInfoModel buildShopProductInfoModel(ProductModel product, ShopModel shop, BigDecimal price) {
         ShopProductInfoModel shopProductInfoModel = new ShopProductInfoModel();
         shopProductInfoModel.setProduct(product);
         shopProductInfoModel.setShop(shop);

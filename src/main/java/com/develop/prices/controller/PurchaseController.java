@@ -73,7 +73,7 @@ public class PurchaseController {
         }
 
         if (info != null && !info.isEmpty()) {
-            spec = spec.and(PurchaseSpecification.hasProductPrice(info));
+            spec = spec.and(PurchaseSpecification.hasShopProductInfo(info));
 
         }
         if(totalPriceMax != null){
@@ -173,19 +173,19 @@ public class PurchaseController {
             )
     })
 
-    @PostMapping("/{purchaseId}/productPrices/{productPriceId}")
-    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productPriceId) {
+    @PostMapping("/{purchaseId}/shopProductInfo/{shopProductInfoId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer shopProductInfoId) {
 
 
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ShopProductInfoModel> optionalProductPriceModel = shopProductInfoRepository.findById(productPriceId);
+        Optional<ShopProductInfoModel> optionalShopProductInfoModel = shopProductInfoRepository.findById(shopProductInfoId);
 
-        if (optionalPurchaseModel.isEmpty() || optionalProductPriceModel.isEmpty()) {
+        if (optionalPurchaseModel.isEmpty() || optionalShopProductInfoModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        ShopProductInfoModel shopProductInfoModel = optionalProductPriceModel.get();
+        ShopProductInfoModel shopProductInfoModel = optionalShopProductInfoModel.get();
 
         purchaseModel.getProducts().add(shopProductInfoModel);
 
@@ -203,6 +203,16 @@ public class PurchaseController {
     public ResponseEntity<Void> deletePurchase(@PathVariable Integer purchaseId) {
         if (purchaseRepository.existsById(purchaseId)) {
             purchaseRepository.deleteById(purchaseId);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @DeleteMapping("/{purchaseId}/shopProductInfo/{shopProductInfoId}")
+    public ResponseEntity<Void> deleteProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer shopProductInfoId){
+        if (purchaseRepository.existsById(purchaseId) && shopProductInfoRepository.existsById(shopProductInfoId)) {
+            shopProductInfoRepository.deleteById(shopProductInfoId);
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

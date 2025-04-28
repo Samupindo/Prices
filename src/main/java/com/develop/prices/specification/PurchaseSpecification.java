@@ -25,10 +25,10 @@ public class PurchaseSpecification {
         };
     }
 
-    public static Specification<PurchaseModel> hasProductPrice(List<ShopProductInfoModel> info) {
+    public static Specification<PurchaseModel> hasShopProductInfo(List<ShopProductInfoModel> info) {
         return (root, query, cb) -> {
             Join<PurchaseModel, ShopProductInfoModel> join = root.join("info");
-            return join.get("productPriceId").in(info);
+            return join.get("shopProductInfoId").in(info);
         };
     }
 

@@ -20,7 +20,7 @@ public class ShopProductInfoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer productPriceId;
+    private Integer shopProductInfoId;
 
     private BigDecimal price;
 
@@ -71,12 +71,12 @@ public class ShopProductInfoModel implements Serializable {
         this.price = price;
     }
 
-    public Integer getProductPriceId() {
-        return productPriceId;
+    public Integer getShopProductInfoId() {
+        return shopProductInfoId;
     }
 
-    public void setProductPriceId(Integer productPriceId) {
-        this.productPriceId = productPriceId;
+    public void setShopProductInfoId(Integer shopProductInfoId) {
+        this.shopProductInfoId = shopProductInfoId;
     }
 
     public PurchaseModel getPurchase() {
@@ -90,7 +90,7 @@ public class ShopProductInfoModel implements Serializable {
     @Override
     public String toString() {
         return "ShopProductInfoModel{" +
-                "productPriceId=" + productPriceId +
+                "shopProductInfoId=" + shopProductInfoId +
                 ", price=" + price +
                 ", product=" + product +
                 ", shop=" + shop +

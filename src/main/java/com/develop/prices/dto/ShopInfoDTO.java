@@ -3,15 +3,15 @@ package com.develop.prices.dto;
 import java.math.BigDecimal;
 
 public class ShopInfoDTO {
-    private Integer productPriceId;
+    private Integer shopProductInfoId;
     private Integer shopId;
     private BigDecimal price;
 
     public ShopInfoDTO() {
     }
 
-    public ShopInfoDTO(Integer productPriceId, Integer shopId, BigDecimal price) {
-        this.productPriceId = productPriceId;
+    public ShopInfoDTO(Integer shopProductInfoId, Integer shopId, BigDecimal price) {
+        this.shopProductInfoId = shopProductInfoId;
         this.shopId = shopId;
         this.price = price;
     }
@@ -37,12 +37,12 @@ public class ShopInfoDTO {
         this.price = price;
     }
 
-    public Integer getProductPriceId() {
-        return productPriceId;
+    public Integer getShopProductInfoId() {
+        return shopProductInfoId;
     }
 
-    public void setProductPriceId(Integer productPriceId) {
-        this.productPriceId = productPriceId;
+    public void setShopProductInfoId(Integer shopProductInfoId) {
+        this.shopProductInfoId = shopProductInfoId;
     }
 
     @Override

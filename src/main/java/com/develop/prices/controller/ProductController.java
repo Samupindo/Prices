@@ -86,7 +86,7 @@ public class ProductController {
                     if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
                             (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
 
-                        shops.add(new ShopInfoDTO(price.getProductPriceId(),price.getShop().getShopId(), price.getPrice()));
+                        shops.add(new ShopInfoDTO(price.getShopProductInfoId(),price.getShop().getShopId(), price.getPrice()));
                     }
                 }
             }
@@ -125,7 +125,7 @@ public class ProductController {
         List<ShopInfoDTO> shopInfoDTOList = new ArrayList<>();
 
         for (ShopProductInfoModel shopProductInfoModel : productModel.getPrices()){
-            shopInfoDTOList.add(new ShopInfoDTO(shopProductInfoModel.getProductPriceId(), shopProductInfoModel.getShop().getShopId(), shopProductInfoModel.getPrice()));
+            shopInfoDTOList.add(new ShopInfoDTO(shopProductInfoModel.getShopProductInfoId(), shopProductInfoModel.getShop().getShopId(), shopProductInfoModel.getPrice()));
         }
 
         productWithShopsDTO.setShop(shopInfoDTOList);
