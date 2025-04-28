@@ -3,7 +3,7 @@ package com.develop.prices.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AddProductShopDTO implements  Serializable { //este DTO y el de ProductPricePatchDTO son lo mismo
+public class AddProductShopDTO implements  Serializable { //este DTO y el de ShopProductInfoPatchDTO son lo mismo
 
     private BigDecimal price;
 
@@ -28,7 +28,7 @@ public class AddProductShopDTO implements  Serializable { //este DTO y el de Pro
 
     @Override
     public String toString() {
-        return "ProductPriceModel{" +
+        return "ShopProductInfoModel{" +
                 ", price=" + price +
                 '}';
     }

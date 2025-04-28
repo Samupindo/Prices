@@ -1,7 +1,7 @@
 package com.develop.prices.specification;
 
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopProductInfoModel;
 import com.develop.prices.model.PurchaseModel;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -25,9 +25,9 @@ public class PurchaseSpecification {
         };
     }
 
-    public static Specification<PurchaseModel> hasProductPrice(List<ProductPriceModel> info) {
+    public static Specification<PurchaseModel> hasProductPrice(List<ShopProductInfoModel> info) {
         return (root, query, cb) -> {
-            Join<PurchaseModel, ProductPriceModel> join = root.join("info");
+            Join<PurchaseModel, ShopProductInfoModel> join = root.join("info");
             return join.get("productPriceId").in(info);
         };
     }
@@ -37,7 +37,7 @@ public class PurchaseSpecification {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
             Root<PurchaseModel> subRoot = subquery.from(PurchaseModel.class);
-            Join<PurchaseModel, ProductPriceModel> pricesJoin = subRoot.join("info");
+            Join<PurchaseModel, ShopProductInfoModel> pricesJoin = subRoot.join("info");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(root.get("purchaseId"), subRoot.get("purchaseId")));
@@ -52,7 +52,7 @@ public class PurchaseSpecification {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
             Root<PurchaseModel> subRoot = subquery.from(PurchaseModel.class);
-            Join<PurchaseModel, ProductPriceModel> pricesJoin = subRoot.join("info");
+            Join<PurchaseModel, ShopProductInfoModel> pricesJoin = subRoot.join("info");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(root.get("purchaseId"), subRoot.get("purchaseId")));

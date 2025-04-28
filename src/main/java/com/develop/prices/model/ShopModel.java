@@ -26,7 +26,7 @@ public class ShopModel {
     private String address;
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProductPriceModel> prices;
+    private List<ShopProductInfoModel> prices;
 
     // Constructor vacío y con parámetros
     public ShopModel() {

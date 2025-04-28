@@ -21,12 +21,12 @@ public class ProductModel {
     private String name;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProductPriceModel> prices;
+    private List<ShopProductInfoModel> prices;
 
     public ProductModel() {
     }
 
-    public List<ProductPriceModel> getPrices() {
+    public List<ShopProductInfoModel> getPrices() {
         return prices;
     }
 

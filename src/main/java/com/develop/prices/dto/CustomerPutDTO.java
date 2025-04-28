@@ -1,5 +1,7 @@
 package com.develop.prices.dto;
 
+import com.develop.prices.validation.PatchPutNotBlank;
+import com.develop.prices.validation.PatchPutNotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,13 +11,13 @@ public class CustomerPutDTO {
 
     @Size(max = 100, message = "The name can only have 100 characteres")
     @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
-    @NotBlank
+    @PatchPutNotBlank
     private String name;
 
-    @NotNull
+    @PatchPutNotNull
     private Integer phone;
 
-    @NotBlank
+    @PatchPutNotBlank
     private String email;
 
     public CustomerPutDTO() {

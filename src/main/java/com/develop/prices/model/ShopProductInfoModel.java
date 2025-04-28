@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 
 
 @Entity
-@Table(name = "product_price")
-public class ProductPriceModel implements Serializable {
+@Table(name = "shop_product_info")
+public class ShopProductInfoModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +38,10 @@ public class ProductPriceModel implements Serializable {
     @JoinColumn(name = "purchase_id", nullable = false)
     private PurchaseModel purchase;
 
-    public ProductPriceModel() {
+    public ShopProductInfoModel() {
     }
 
-    public ProductPriceModel(BigDecimal price, ProductModel product, ShopModel shop) {
+    public ShopProductInfoModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
         this.product = product;
         this.shop = shop;
@@ -89,7 +89,7 @@ public class ProductPriceModel implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductPriceModel{" +
+        return "ShopProductInfoModel{" +
                 "productPriceId=" + productPriceId +
                 ", price=" + price +
                 ", product=" + product +

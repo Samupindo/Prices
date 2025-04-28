@@ -3,13 +3,13 @@ package com.develop.prices.controller;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
-import com.develop.prices.mapper.ProductPriceMapper;
+import com.develop.prices.mapper.ShopProductInfoMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ProductPriceModel;
+import com.develop.prices.model.ShopProductInfoModel;
 import com.develop.prices.model.PurchaseModel;
 import com.develop.prices.repository.CustomerRepository;
-import com.develop.prices.repository.ProductPriceRepository;
+import com.develop.prices.repository.ShopProductInfoRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,24 +43,24 @@ import java.util.stream.Collectors;
 @Transactional
 @RequestMapping("/purchases")
 public class PurchaseController {
-    private PurchaseRepository purchaseRepository;
-    private ProductPriceRepository productPriceRepository;
-    private PurchaseMapper purchaseMapper;
-    private ProductPriceMapper productPriceMapper;
-    private CustomerRepository customerRepository;
+    private final PurchaseRepository purchaseRepository;
+    private final ShopProductInfoRepository shopProductInfoRepository;
+    private final PurchaseMapper purchaseMapper;
+    private final ShopProductInfoMapper shopProductInfoMapper;
+    private final CustomerRepository customerRepository;
 
-    public PurchaseController(PurchaseRepository purchaseRepository, ProductPriceRepository productPriceRepository, PurchaseMapper purchaseMapper, ProductPriceMapper productPriceMapper, CustomerRepository customerRepository) {
+    public PurchaseController(PurchaseRepository purchaseRepository, ShopProductInfoRepository shopProductInfoRepository, PurchaseMapper purchaseMapper, ShopProductInfoMapper shopProductInfoMapper, CustomerRepository customerRepository) {
         this.purchaseRepository = purchaseRepository;
-        this.productPriceRepository = productPriceRepository;
+        this.shopProductInfoRepository = shopProductInfoRepository;
         this.purchaseMapper = purchaseMapper;
-        this.productPriceMapper = productPriceMapper;
+        this.shopProductInfoMapper = shopProductInfoMapper;
         this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
     public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
             @RequestParam(required = false) Integer customerId,
-            @RequestParam(required = false) List<ProductPriceModel> info,
+            @RequestParam(required = false) List<ShopProductInfoModel> info,
             @RequestParam(required = false) BigDecimal totalPriceMax,
             @RequestParam(required = false) BigDecimal totalPriceMin,
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -90,9 +90,9 @@ public class PurchaseController {
                 .stream()
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
-                    // Convertir info (ProductPriceModel) a ProductPriceDTO
+                    // Convertir info (ShopProductInfoModel) a ShopProductInfoDTO
                     purchaseDTO.setProducts(purchase.getProducts().stream()
-                            .map(productPrice -> productPriceMapper.productPriceModelToProductPriceDTO(productPrice))
+                            .map(shopProductInfoMapper::shopProductInfoModelToShopProductInfoDTO)
                             .collect(Collectors.toList()));
                     return purchaseDTO;
                 })
@@ -178,16 +178,16 @@ public class PurchaseController {
 
 
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ProductPriceModel> optionalProductPriceModel = productPriceRepository.findById(productPriceId);
+        Optional<ShopProductInfoModel> optionalProductPriceModel = shopProductInfoRepository.findById(productPriceId);
 
         if (optionalPurchaseModel.isEmpty() || optionalProductPriceModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        ProductPriceModel productPriceModel = optionalProductPriceModel.get();
+        ShopProductInfoModel shopProductInfoModel = optionalProductPriceModel.get();
 
-        purchaseModel.getProducts().add(productPriceModel);
+        purchaseModel.getProducts().add(shopProductInfoModel);
 
         System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
 

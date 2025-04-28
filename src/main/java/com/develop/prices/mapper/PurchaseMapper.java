@@ -4,7 +4,7 @@ import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.model.PurchaseModel;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring",uses = {ProductPriceMapper.class})
+@Mapper(componentModel = "spring",uses = {ShopProductInfoMapper.class})
 public interface PurchaseMapper {
     PurchaseDTO purchaseModelToPurchaseDTO (PurchaseModel purchaseModel);
 

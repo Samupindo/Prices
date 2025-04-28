@@ -4,12 +4,8 @@ import com.develop.prices.dto.*;
 import com.develop.prices.mapper.CustomerMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ProductPriceModel;
-import com.develop.prices.model.PurchaseModel;
-import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.ProductPriceModel;
 import com.develop.prices.repository.CustomerRepository;
-import com.develop.prices.repository.ProductPriceRepository;
+import com.develop.prices.repository.ShopProductInfoRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.CustomerSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,21 +23,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 @Transactional
 @RequestMapping("/customers")
 public class CustomerController {
-    private CustomerRepository customerRepository;
-    private PurchaseRepository purchaseRepository;
-    private ProductPriceRepository productPriceRepository;
-    private CustomerMapper customerMapper;
-    private PurchaseMapper purchaseMapper;
+    private final CustomerRepository customerRepository;
+    private final PurchaseRepository purchaseRepository;
+    private final CustomerMapper customerMapper;
 
     public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
@@ -149,7 +140,7 @@ public class CustomerController {
     }
 
     @PatchMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @RequestBody CreateCustomerDTO createCustomerDTO) {
+    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
         // Primero verificar si la tienda existe
         Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
         if (optionalCustomerModel.isEmpty()) {

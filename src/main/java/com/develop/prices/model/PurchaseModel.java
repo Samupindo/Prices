@@ -32,7 +32,7 @@ public class PurchaseModel {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id")
-    private List<ProductPriceModel> products = new ArrayList<>();
+    private List<ShopProductInfoModel> products = new ArrayList<>();
 
     @Transient
     private BigDecimal totalPrice;
@@ -56,17 +56,17 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public List<ProductPriceModel> getProducts() {
+    public List<ShopProductInfoModel> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ProductPriceModel> products) {
+    public void setProducts(List<ShopProductInfoModel> products) {
         this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
         this.totalPrice = products.stream()
-                .map(ProductPriceModel::getPrice)
+                .map(ShopProductInfoModel::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
     }

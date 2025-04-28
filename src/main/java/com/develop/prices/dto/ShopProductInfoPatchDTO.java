@@ -2,16 +2,15 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.function.Function;
 
-public class ProductPricePatchDTO implements Serializable {
+public class ShopProductInfoPatchDTO implements Serializable {
 
     private BigDecimal price;
 
-    public ProductPricePatchDTO() {
+    public ShopProductInfoPatchDTO() {
     }
 
-    public ProductPricePatchDTO(BigDecimal price) {
+    public ShopProductInfoPatchDTO(BigDecimal price) {
         this.price = price;
 
     }
@@ -29,7 +28,7 @@ public class ProductPricePatchDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductPriceModel{" +
+        return "ShopProductInfoModel{" +
                 ", price=" + price +
                 '}';
     }

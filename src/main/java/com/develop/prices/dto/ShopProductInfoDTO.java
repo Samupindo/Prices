@@ -3,16 +3,16 @@ package com.develop.prices.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ProductPriceDTO implements Serializable {
+public class ShopProductInfoDTO implements Serializable {
 
     private Integer productId;
     private Integer shopId;
     private BigDecimal price;
 
-    public ProductPriceDTO() {
+    public ShopProductInfoDTO() {
     }
 
-    public ProductPriceDTO(Integer productId, Integer shopId, BigDecimal price) {
+    public ShopProductInfoDTO(Integer productId, Integer shopId, BigDecimal price) {
         this.productId = productId;
         this.shopId = shopId;
         this.price = price;
@@ -44,7 +44,7 @@ public class ProductPriceDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductPriceDTO{" +
+        return "ShopProductInfoDTO{" +
                 "productId=" + productId +
                 ", shopId=" + shopId +
                 ", price=" + price +
