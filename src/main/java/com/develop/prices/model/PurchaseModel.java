@@ -75,6 +75,7 @@ public class PurchaseModel {
         this.totalPrice = totalPrice;
     }
 
+
     @Override
     public String toString() {
         return "PurchaseModel{" +
