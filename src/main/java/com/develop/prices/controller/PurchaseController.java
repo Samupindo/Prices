@@ -193,7 +193,6 @@ public class PurchaseController {
 
         PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
 
-
         return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
 
     }

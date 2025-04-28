@@ -2,9 +2,11 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ShopProductInfoDTO implements Serializable {
 
+    private Integer shopProductInfoId;
     private Integer productId;
     private Integer shopId;
     private BigDecimal price;
@@ -12,10 +14,19 @@ public class ShopProductInfoDTO implements Serializable {
     public ShopProductInfoDTO() {
     }
 
-    public ShopProductInfoDTO(Integer productId, Integer shopId, BigDecimal price) {
+    public ShopProductInfoDTO(Integer shopProductInfoId, Integer productId, Integer shopId, BigDecimal price) {
+        this.shopProductInfoId = shopProductInfoId;
         this.productId = productId;
         this.shopId = shopId;
         this.price = price;
+    }
+
+    public Integer getShopProductInfoId() {
+        return shopProductInfoId;
+    }
+
+    public void setShopProductInfoId(Integer shopProductInfoId) {
+        this.shopProductInfoId = shopProductInfoId;
     }
 
     public Integer getProductId() {
@@ -45,6 +56,7 @@ public class ShopProductInfoDTO implements Serializable {
     @Override
     public String toString() {
         return "ShopProductInfoDTO{" +
+                "shopProductInfoId=" + shopProductInfoId +
                 "productId=" + productId +
                 ", shopId=" + shopId +
                 ", price=" + price +
