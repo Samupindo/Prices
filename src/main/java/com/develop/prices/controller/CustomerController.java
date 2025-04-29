@@ -2,10 +2,8 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.*;
 import com.develop.prices.mapper.CustomerMapper;
-import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.repository.CustomerRepository;
-import com.develop.prices.repository.ShopProductInfoRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.CustomerSpecification;
 import io.swagger.v3.oas.annotations.media.Content;

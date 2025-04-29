@@ -26,7 +26,7 @@ public class PurchaseModel {
             joinColumns = @JoinColumn(name= "purchase_id"),
             inverseJoinColumns = @JoinColumn(name = "shop_product_info_id")
     )
-    private List<ShopProductInfoModel> products = new ArrayList<>();
+    private List<ProductInShopModel> products = new ArrayList<>();
 
     @Transient
     private BigDecimal totalPrice;
@@ -50,17 +50,17 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public List<ShopProductInfoModel> getProducts() {
+    public List<ProductInShopModel> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ShopProductInfoModel> products) {
+    public void setProducts(List<ProductInShopModel> products) {
         this.products = products;
     }
 
     public BigDecimal getTotalPrice() {
         this.totalPrice = products.stream()
-                .map(ShopProductInfoModel::getPrice)
+                .map(ProductInShopModel::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
     }

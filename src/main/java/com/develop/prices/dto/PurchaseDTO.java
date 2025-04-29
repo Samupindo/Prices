@@ -7,13 +7,13 @@ public class PurchaseDTO {
 
     private Integer purchaseId;
     private CustomerDTO customer;
-    private List<ShopProductInfoDTO> products;
+    private List<ProductInShopDTO> products;
     private BigDecimal totalPrice;
 
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(CustomerDTO customer, List<ShopProductInfoDTO> products, BigDecimal totalPrice) {
+    public PurchaseDTO(CustomerDTO customer, List<ProductInShopDTO> products, BigDecimal totalPrice) {
         this.customer = customer;
         this.products = products;
         this.totalPrice = totalPrice;
@@ -41,11 +41,11 @@ public class PurchaseDTO {
         this.customer = customer;
     }
 
-    public List<ShopProductInfoDTO> getProducts() {
+    public List<ProductInShopDTO> getProducts() {
         return products;
     }
 
-    public void setProducts(List<ShopProductInfoDTO> products) {
+    public void setProducts(List<ProductInShopDTO> products) {
         this.products = products;
     }
 

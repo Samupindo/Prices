@@ -3,13 +3,13 @@ package com.develop.prices.controller;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
-import com.develop.prices.mapper.ShopProductInfoMapper;
+import com.develop.prices.mapper.ProductInShopMapper;
 import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
-import com.develop.prices.model.ShopProductInfoModel;
+import com.develop.prices.model.ProductInShopModel;
 import com.develop.prices.model.PurchaseModel;
 import com.develop.prices.repository.CustomerRepository;
-import com.develop.prices.repository.ShopProductInfoRepository;
+import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,23 +44,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/purchases")
 public class PurchaseController {
     private final PurchaseRepository purchaseRepository;
-    private final ShopProductInfoRepository shopProductInfoRepository;
+    private final ProductInShopRepository productInShopRepository;
     private final PurchaseMapper purchaseMapper;
-    private final ShopProductInfoMapper shopProductInfoMapper;
+    private final ProductInShopMapper productInShopMapper;
     private final CustomerRepository customerRepository;
 
-    public PurchaseController(PurchaseRepository purchaseRepository, ShopProductInfoRepository shopProductInfoRepository, PurchaseMapper purchaseMapper, ShopProductInfoMapper shopProductInfoMapper, CustomerRepository customerRepository) {
+    public PurchaseController(PurchaseRepository purchaseRepository, ProductInShopRepository productInShopRepository, PurchaseMapper purchaseMapper, ProductInShopMapper productInShopMapper, CustomerRepository customerRepository) {
         this.purchaseRepository = purchaseRepository;
-        this.shopProductInfoRepository = shopProductInfoRepository;
+        this.productInShopRepository = productInShopRepository;
         this.purchaseMapper = purchaseMapper;
-        this.shopProductInfoMapper = shopProductInfoMapper;
+        this.productInShopMapper = productInShopMapper;
         this.customerRepository = customerRepository;
     }
 
     @GetMapping("")
     public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
             @RequestParam(required = false) Integer customerId,
-            @RequestParam(required = false) List<ShopProductInfoModel> info,
+            @RequestParam(required = false) List<ProductInShopModel> info,
             @RequestParam(required = false) BigDecimal totalPriceMax,
             @RequestParam(required = false) BigDecimal totalPriceMin,
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -73,7 +73,7 @@ public class PurchaseController {
         }
 
         if (info != null && !info.isEmpty()) {
-            spec = spec.and(PurchaseSpecification.hasShopProductInfo(info));
+            spec = spec.and(PurchaseSpecification.hasProductInShop(info));
 
         }
         if(totalPriceMax != null){
@@ -90,9 +90,9 @@ public class PurchaseController {
                 .stream()
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
-                    // Convertir info (ShopProductInfoModel) a ShopProductInfoDTO
+                    // Convertir info (ProductInShopModel) a ProductInShopDTO
                     purchaseDTO.setProducts(purchase.getProducts().stream()
-                            .map(shopProductInfoMapper::shopProductInfoModelToShopProductInfoDTO)
+                            .map(productInShopMapper::productInShopModelToProductInShopDTO)
                             .collect(Collectors.toList()));
                     return purchaseDTO;
                 })
@@ -173,21 +173,21 @@ public class PurchaseController {
             )
     })
 
-    @PostMapping("/{purchaseId}/shopProductInfo/{shopProductInfoId}")
-    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer shopProductInfoId) {
+    @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
 
 
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ShopProductInfoModel> optionalShopProductInfoModel = shopProductInfoRepository.findById(shopProductInfoId);
+        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
 
-        if (optionalPurchaseModel.isEmpty() || optionalShopProductInfoModel.isEmpty()) {
+        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        ShopProductInfoModel shopProductInfoModel = optionalShopProductInfoModel.get();
+        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
 
-        purchaseModel.getProducts().add(shopProductInfoModel);
+        purchaseModel.getProducts().add(productInShopModel);
 
         System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
 
@@ -208,13 +208,16 @@ public class PurchaseController {
         }
     }
 
-    @DeleteMapping("/{purchaseId}/shopProductInfo/{shopProductInfoId}")
-    public ResponseEntity<Void> deleteProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer shopProductInfoId){
-        if (purchaseRepository.existsById(purchaseId) && shopProductInfoRepository.existsById(shopProductInfoId)) {
-            shopProductInfoRepository.deleteById(shopProductInfoId);
-            return ResponseEntity.ok().build();
-        } else {
+    @DeleteMapping("/{purchaseId}/productInShop/{productInShopId}")
+    public ResponseEntity<Void> deleteProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId){
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
+        if (optionalPurchaseModel.isEmpty() && optionalProductInShopModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+
+        } else {
+            productInShopRepository.deleteById(productInShopId);
+            return ResponseEntity.ok().build();
         }
     }
 }

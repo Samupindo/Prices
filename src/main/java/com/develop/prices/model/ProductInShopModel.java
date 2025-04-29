@@ -9,12 +9,12 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "shop_product_info")
-public class ShopProductInfoModel implements Serializable {
+@Table(name = "product_in_shop")
+public class ProductInShopModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer shopProductInfoId;
+    private Integer productInShopId;
 
     private BigDecimal price;
 
@@ -30,10 +30,10 @@ public class ShopProductInfoModel implements Serializable {
     @ManyToMany(mappedBy = "products" , fetch = FetchType.LAZY)
     private List<PurchaseModel> purchases = new ArrayList<>();
 
-    public ShopProductInfoModel() {
+    public ProductInShopModel() {
     }
 
-    public ShopProductInfoModel(BigDecimal price, ProductModel product, ShopModel shop) {
+    public ProductInShopModel(BigDecimal price, ProductModel product, ShopModel shop) {
         this.price = price;
         this.product = product;
         this.shop = shop;
@@ -63,12 +63,12 @@ public class ShopProductInfoModel implements Serializable {
         this.price = price;
     }
 
-    public Integer getShopProductInfoId() {
-        return shopProductInfoId;
+    public Integer getProductInShopId() {
+        return productInShopId;
     }
 
-    public void setShopProductInfoId(Integer shopProductInfoId) {
-        this.shopProductInfoId = shopProductInfoId;
+    public void setProductInShopId(Integer productInShopId) {
+        this.productInShopId = productInShopId;
     }
 
     public List<PurchaseModel> getPurchase() {
@@ -81,8 +81,8 @@ public class ShopProductInfoModel implements Serializable {
 
     @Override
     public String toString() {
-        return "ShopProductInfoModel{" +
-                "shopProductInfoId=" + shopProductInfoId +
+        return "ProductInShopModel{" +
+                "productInShopId=" + productInShopId +
                 ", price=" + price +
                 ", product=" + product +
                 ", shop=" + shop +

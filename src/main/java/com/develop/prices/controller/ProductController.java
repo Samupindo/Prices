@@ -1,15 +1,15 @@
 package com.develop.prices.controller;
 
 import com.develop.prices.mapper.ProductMapper;
+import com.develop.prices.model.ProductInShopModel;
 import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.ShopProductInfoModel;
 import com.develop.prices.dto.ProductWithShopsDTO;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.ShopInfoDTO;
 import com.develop.prices.dto.ProductDTO;
 import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.repository.ShopProductInfoRepository;
-import com.develop.prices.specification.ShopProductInfoSpecification;
+import com.develop.prices.repository.ProductInShopRepository;
+import com.develop.prices.specification.ProductInShopSpecification;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -43,13 +43,13 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductRepository productRepository;
-    private final ShopProductInfoRepository shopProductInfoRepository;
+    private final ProductInShopRepository productInShopRepository;
     private final ProductMapper productMapper;
 
 
-    public ProductController(ProductRepository productRepository, ShopProductInfoRepository shopProductInfoRepository, ProductMapper productMapper) {
+    public ProductController(ProductRepository productRepository, ProductInShopRepository productInShopRepository, ProductMapper productMapper) {
         this.productRepository = productRepository; // Asignar el repositorio
-        this.shopProductInfoRepository = shopProductInfoRepository;
+        this.productInShopRepository = productInShopRepository;
         this.productMapper = productMapper;
     }
 
@@ -63,15 +63,15 @@ public class ProductController {
         Specification<ProductModel> spec = Specification.where(null);
 
         if (name != null && !name.isBlank()) {
-            spec = spec.and(ShopProductInfoSpecification.hasName(name));
+            spec = spec.and(ProductInShopSpecification.hasName(name));
         }
 
         if (priceMin != null) {
-            spec = spec.and(ShopProductInfoSpecification.hasPriceMin(priceMin));
+            spec = spec.and(ProductInShopSpecification.hasPriceMin(priceMin));
         }
 
         if (priceMax != null) {
-            spec = spec.and(ShopProductInfoSpecification.hasPriceMax(priceMax));
+            spec = spec.and(ProductInShopSpecification.hasPriceMax(priceMax));
         }
 
         Page<ProductModel> productModelPage = productRepository.findAll(spec, pageable);
@@ -81,12 +81,12 @@ public class ProductController {
             List<ShopInfoDTO> shops = new ArrayList<>();
 
             if (product.getPrices() != null) {
-                for (ShopProductInfoModel price : product.getPrices()) {
+                for (ProductInShopModel price : product.getPrices()) {
                     // Volvemos a verificar rango de precio aquí si se desea precisión extra
                     if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
                             (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
 
-                        shops.add(new ShopInfoDTO(price.getShopProductInfoId(),price.getShop().getShopId(), price.getPrice()));
+                        shops.add(new ShopInfoDTO(price.getProductInShopId(),price.getShop().getShopId(), price.getPrice()));
                     }
                 }
             }
@@ -124,8 +124,8 @@ public class ProductController {
 
         List<ShopInfoDTO> shopInfoDTOList = new ArrayList<>();
 
-        for (ShopProductInfoModel shopProductInfoModel : productModel.getPrices()){
-            shopInfoDTOList.add(new ShopInfoDTO(shopProductInfoModel.getShopProductInfoId(), shopProductInfoModel.getShop().getShopId(), shopProductInfoModel.getPrice()));
+        for (ProductInShopModel productInShopModel : productModel.getPrices()){
+            shopInfoDTOList.add(new ShopInfoDTO(productInShopModel.getProductInShopId(), productInShopModel.getShop().getShopId(), productInShopModel.getPrice()));
         }
 
         productWithShopsDTO.setShop(shopInfoDTOList);

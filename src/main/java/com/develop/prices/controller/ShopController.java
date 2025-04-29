@@ -2,14 +2,14 @@ package com.develop.prices.controller;
 
 
 import com.develop.prices.dto.*;
-import com.develop.prices.mapper.ShopProductInfoMapper;
+import com.develop.prices.mapper.ProductInShopMapper;
 import com.develop.prices.mapper.ShopMapper;
+import com.develop.prices.model.ProductInShopModel;
 import com.develop.prices.model.ProductModel;
-import com.develop.prices.model.ShopProductInfoModel;
 import com.develop.prices.model.ShopModel;
-import com.develop.prices.dto.ShopProductInfoDTO;
+import com.develop.prices.dto.ProductInShopDTO;
 import com.develop.prices.repository.ShopLocationRepository;
-import com.develop.prices.repository.ShopProductInfoRepository;
+import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.specification.ShopsSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,16 +46,16 @@ public class ShopController {
 
     private final ShopLocationRepository shopLocationRepository;
     private final ProductRepository productRepository;
-    private final ShopProductInfoRepository shopProductInfoRepository;
+    private final ProductInShopRepository productInShopRepository;
     private final ShopMapper shopMapper;
-    private final ShopProductInfoMapper shopProductInfoMapper;
+    private final ProductInShopMapper productInShopMapper;
 
-    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ShopProductInfoRepository shopProductInfoRepository, ShopMapper shopMapper, ShopProductInfoMapper shopProductInfoMapper) {
+    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductInShopRepository productInShopRepository, ShopMapper shopMapper, ProductInShopMapper productInShopMapper) {
         this.shopLocationRepository = shopLocationRepository;
         this.productRepository = productRepository;
-        this.shopProductInfoRepository = shopProductInfoRepository;
+        this.productInShopRepository = productInShopRepository;
         this.shopMapper = shopMapper;
-        this.shopProductInfoMapper = shopProductInfoMapper;
+        this.productInShopMapper = productInShopMapper;
     }
 
     @GetMapping("")
@@ -202,7 +202,7 @@ public class ShopController {
             )
     })
     @PostMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ShopProductInfoDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
+    public ResponseEntity<ProductInShopDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
 
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
@@ -211,19 +211,19 @@ public class ShopController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        if (shopProductInfoRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
+        if (productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         BigDecimal price = addProductShopDTO.getPrice();
 
-        ShopProductInfoModel shopProductInfoModel = buildShopProductInfoModel(optionalProductModel.get(), optionalShopModel.get(), price);
+        ProductInShopModel productInShopModel = buildProductInShopModel(optionalProductModel.get(), optionalShopModel.get(), price);
 
 
-        ShopProductInfoModel shopProductInfoModelDB = shopProductInfoRepository.save(shopProductInfoModel);
+        ProductInShopModel productInShopModelDB = productInShopRepository.save(productInShopModel);
 
 
-        return ResponseEntity.ok(shopProductInfoMapper.shopProductInfoModelToShopProductInfoDTO(shopProductInfoModelDB));
+        return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(productInShopModelDB));
 
     }
 
@@ -272,10 +272,10 @@ public class ShopController {
     })
 
     @DeleteMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ShopProductInfoModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
+    public ResponseEntity<ProductInShopModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
 
-        ShopProductInfoModel shopProductInfoModel = shopProductInfoRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-        if (shopProductInfoModel == null) {
+        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (productInShopModel == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         shopLocationRepository.deleteById(shopId);
@@ -333,28 +333,28 @@ public class ShopController {
     }
 
     @PatchMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ShopProductInfoDTO> updateShopProductInfo(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ShopProductInfoPatchDTO shopProductInfoPatchDTO) {
+    public ResponseEntity<ProductInShopDTO> updateProductInShop(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ProductInShopPatchDTO productInShopPatchDTO) {
 
-        ShopProductInfoModel shopProductInfoModel = shopProductInfoRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-        if(shopProductInfoModel == null){
+        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if(productInShopModel == null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        BigDecimal price = shopProductInfoPatchDTO.getPrice();
+        BigDecimal price = productInShopPatchDTO.getPrice();
 
-        shopProductInfoModel.setPrice(price);
+        productInShopModel.setPrice(price);
 
-        ShopProductInfoModel savePriceModel = shopProductInfoRepository.save(shopProductInfoModel);
+        ProductInShopModel savePriceModel = productInShopRepository.save(productInShopModel);
 
-        return ResponseEntity.ok(shopProductInfoMapper.shopProductInfoModelToShopProductInfoDTO(savePriceModel));
+        return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(savePriceModel));
     }
 
-    private ShopProductInfoModel buildShopProductInfoModel(ProductModel product, ShopModel shop, BigDecimal price) {
-        ShopProductInfoModel shopProductInfoModel = new ShopProductInfoModel();
-        shopProductInfoModel.setProduct(product);
-        shopProductInfoModel.setShop(shop);
-        shopProductInfoModel.setPrice(price);
+    private ProductInShopModel buildProductInShopModel(ProductModel product, ShopModel shop, BigDecimal price) {
+        ProductInShopModel productInShopModel = new ProductInShopModel();
+        productInShopModel.setProduct(product);
+        productInShopModel.setShop(shop);
+        productInShopModel.setPrice(price);
 
-        return shopProductInfoModel;
+        return productInShopModel;
     }
 
 }
