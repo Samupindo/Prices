@@ -20,16 +20,13 @@ public class PurchaseModel {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "purchase_product_info",
-            joinColumns = @JoinColumn(name= "purchase_id"),
-            inverseJoinColumns = @JoinColumn(name = "shop_product_info_id")
+    @OneToMany(
+            mappedBy = "purchase",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
     )
-    private List<ProductInShopModel> products = new ArrayList<>();
-
-    @Transient
-    private BigDecimal totalPrice;
+    private List<PurchaseProductModel> purchaseProductModels = new ArrayList<>();
 
     public PurchaseModel() {
     }
@@ -50,33 +47,30 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public List<ProductInShopModel> getProducts() {
-        return products;
+    public List<PurchaseProductModel> getPurchaseProductModels() {
+        return purchaseProductModels;
     }
 
-    public void setProducts(List<ProductInShopModel> products) {
-        this.products = products;
+    public void setPurchaseProductModels(List<PurchaseProductModel> purchaseProductModels) {
+        this.purchaseProductModels = purchaseProductModels;
     }
 
     public BigDecimal getTotalPrice() {
-        this.totalPrice = products.stream()
-                .map(ProductInShopModel::getPrice)
+        if (purchaseProductModels == null) {
+            return BigDecimal.ZERO;
+        }
+        return purchaseProductModels.stream()
+                .map(item -> item.getProductInShop().getPrice())
+                .filter(java.util.Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return totalPrice;
     }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
 
     @Override
     public String toString() {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", products=" + products +
-                ", totalPrice=" + totalPrice +
+                ", purchaseProductModels=" + purchaseProductModels +
                 '}';
     }
 }

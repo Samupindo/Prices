@@ -18,7 +18,6 @@ public class ProductInShopModel implements Serializable {
 
     private BigDecimal price;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductModel product;
@@ -27,8 +26,13 @@ public class ProductInShopModel implements Serializable {
     @JoinColumn(name = "shop_id", nullable = false)
     private ShopModel shop;
 
-    @ManyToMany(mappedBy = "products" , fetch = FetchType.LAZY)
-    private List<PurchaseModel> purchases = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "productInShop",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<PurchaseProductModel> purchaseLines = new ArrayList<>();
 
     public ProductInShopModel() {
     }
@@ -71,12 +75,12 @@ public class ProductInShopModel implements Serializable {
         this.productInShopId = productInShopId;
     }
 
-    public List<PurchaseModel> getPurchase() {
-        return purchases;
+    public List<PurchaseProductModel> getPurchaseLines() {
+        return purchaseLines;
     }
 
-    public void setPurchase(List<PurchaseModel> purchases) {
-        this.purchases = purchases;
+    public void setPurchase(List<PurchaseProductModel> purchaseLines) {
+        this.purchaseLines = purchaseLines;
     }
 
     @Override
@@ -86,7 +90,7 @@ public class ProductInShopModel implements Serializable {
                 ", price=" + price +
                 ", product=" + product +
                 ", shop=" + shop +
-                ", purchase=" + purchases +
+                ", purchaseLines=" + purchaseLines +
                 '}';
     }
 }

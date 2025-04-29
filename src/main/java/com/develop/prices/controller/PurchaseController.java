@@ -2,6 +2,7 @@ package com.develop.prices.controller;
 
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
+import com.develop.prices.dto.ProductInShopDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.ProductInShopMapper;
 import com.develop.prices.mapper.PurchaseMapper;
@@ -60,7 +61,7 @@ public class PurchaseController {
     @GetMapping("")
     public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
             @RequestParam(required = false) Integer customerId,
-            @RequestParam(required = false) List<ProductInShopModel> info,
+            @RequestParam(required = false) List<Integer> productInShop,
             @RequestParam(required = false) BigDecimal totalPriceMax,
             @RequestParam(required = false) BigDecimal totalPriceMin,
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
@@ -72,8 +73,8 @@ public class PurchaseController {
             spec = spec.and(PurchaseSpecification.hasCustomer(customerId));
         }
 
-        if (info != null && !info.isEmpty()) {
-            spec = spec.and(PurchaseSpecification.hasProductInShop(info));
+        if (productInShop != null && !productInShop.isEmpty()) {
+            spec = spec.and(PurchaseSpecification.hasProductInShop(productInShop));
 
         }
         if(totalPriceMax != null){
@@ -91,9 +92,10 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductInShopModel) a ProductInShopDTO
-                    purchaseDTO.setProducts(purchase.getProducts().stream()
-                            .map(productInShopMapper::productInShopModelToProductInShopDTO)
-                            .collect(Collectors.toList()));
+                    List<ProductInShopDTO> productDTOs = purchase.getPurchaseProductModels().stream()
+                            .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
+                            .collect(Collectors.toList());
+                    purchaseDTO.setProducts(productDTOs);
                     return purchaseDTO;
                 })
                 .collect(Collectors.toList());
@@ -136,66 +138,66 @@ public class PurchaseController {
             )
     })
 
-    @PostMapping("")
-    public ResponseEntity<PurchaseDTO> postPurchase(@Valid @RequestBody PostPurchaseDTO postPurchaseDTO) {
-        CustomerModel customerModel = customerRepository.findById(postPurchaseDTO.getCustomerId()).orElse(null);
-
-        if(customerModel == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        PurchaseModel purchaseModel =new PurchaseModel();
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(BigDecimal.ZERO);
-
-        PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
-
-        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(savedPurchaseModel);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDTO);
-    }
-
-
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "Created",
-                    content = @Content(mediaType = "application/json")
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input",
-                    content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = "{ \"error\": \"Missing required field: name\" }"
-                            )
-                    )
-            )
-    })
-
-    @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
-    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
+//    @PostMapping("")
+//    public ResponseEntity<PurchaseDTO> postPurchase(@Valid @RequestBody PostPurchaseDTO postPurchaseDTO) {
+//        CustomerModel customerModel = customerRepository.findById(postPurchaseDTO.getCustomerId()).orElse(null);
+//
+//        if(customerModel == null){
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//
+//        PurchaseModel purchaseModel =new PurchaseModel();
+//        purchaseModel.setCustomer(customerModel);
+//        purchaseModel.setTotalPrice(BigDecimal.ZERO);
+//
+//        PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
+//
+//        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(savedPurchaseModel);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDTO);
+//    }
 
 
-        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
-
-        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
-
-        purchaseModel.getProducts().add(productInShopModel);
-
-        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
-
-        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
-
-        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
-
-    }
+//    @ApiResponses(value = {
+//            @ApiResponse(
+//                    responseCode = "201",
+//                    description = "Created",
+//                    content = @Content(mediaType = "application/json")
+//            ),
+//            @ApiResponse(
+//                    responseCode = "400",
+//                    description = "Invalid input",
+//                    content = @Content(mediaType = "application/json",
+//                            examples = @ExampleObject(
+//                                    value = "{ \"error\": \"Missing required field: name\" }"
+//                            )
+//                    )
+//            )
+//    })
+//
+//    @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
+//    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
+//
+//
+//        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+//        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
+//
+//        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//
+//        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+//        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
+//
+//        purchaseModel.getProducts().add(productInShopModel);
+//
+//        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
+//
+//        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
+//
+//        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
+//
+//    }
 
 
     @DeleteMapping("{purchaseId}")
