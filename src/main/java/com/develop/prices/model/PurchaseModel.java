@@ -1,17 +1,7 @@
 package com.develop.prices.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,8 +20,12 @@ public class PurchaseModel {
     @JoinColumn(name = "customer_id", nullable = false)
     private CustomerModel customer;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "purchase_product_info",
+            joinColumns = @JoinColumn(name= "purchase_id"),
+            inverseJoinColumns = @JoinColumn(name = "shop_product_info_id")
+    )
     private List<ShopProductInfoModel> products = new ArrayList<>();
 
     @Transient

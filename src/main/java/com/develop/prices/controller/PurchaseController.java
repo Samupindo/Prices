@@ -152,7 +152,7 @@ public class PurchaseController {
 
         PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(savedPurchaseModel);
 
-        return ResponseEntity.ok(purchaseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDTO);
     }
 
 

@@ -1,17 +1,11 @@
 package com.develop.prices.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-
-import jakarta.persistence.FetchType;
+import jakarta.persistence.*;
 
 import  java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -29,14 +23,12 @@ public class ShopProductInfoModel implements Serializable {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductModel product;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shop_id", nullable = false)
     private ShopModel shop;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id", nullable = false)
-    private PurchaseModel purchase;
+    @ManyToMany(mappedBy = "products" , fetch = FetchType.LAZY)
+    private List<PurchaseModel> purchases = new ArrayList<>();
 
     public ShopProductInfoModel() {
     }
@@ -79,12 +71,12 @@ public class ShopProductInfoModel implements Serializable {
         this.shopProductInfoId = shopProductInfoId;
     }
 
-    public PurchaseModel getPurchase() {
-        return purchase;
+    public List<PurchaseModel> getPurchase() {
+        return purchases;
     }
 
-    public void setPurchase(PurchaseModel purchase) {
-        this.purchase = purchase;
+    public void setPurchase(List<PurchaseModel> purchases) {
+        this.purchases = purchases;
     }
 
     @Override
@@ -94,7 +86,7 @@ public class ShopProductInfoModel implements Serializable {
                 ", price=" + price +
                 ", product=" + product +
                 ", shop=" + shop +
-                ", purchase=" + purchase +
+                ", purchase=" + purchases +
                 '}';
     }
 }
