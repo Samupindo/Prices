@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "purchase_product")
+@Table(name = "purchase_line")
 public class PurchaseLineModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "purchase_product_id")
+    @Column(name = "purchase_line_id")
     private Integer purchaseLineId;
 
     @ManyToOne(fetch = FetchType.LAZY)

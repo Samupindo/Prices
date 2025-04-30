@@ -27,14 +27,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -65,6 +58,7 @@ public class PurchaseController {
             @RequestParam(required = false) List<Integer> productInShop,
             @RequestParam(required = false) BigDecimal totalPriceMax,
             @RequestParam(required = false) BigDecimal totalPriceMin,
+            @RequestParam(required = false) Boolean shopping,
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
@@ -86,13 +80,16 @@ public class PurchaseController {
             spec =spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
         }
 
+        if(shopping != null){
+            spec = spec.and(PurchaseSpecification.hasShoppingStatus(shopping));
+        }
+
         Page<PurchaseModel> purchasePage = purchaseRepository.findAll(spec,pageable);
 
         List<PurchaseDTO> purchaseDTOList = purchasePage.getContent()
                 .stream()
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
-                    // Convertir info (ProductInShopModel) a ProductInShopDTO
                     List<ProductInShopDTO> productDTOs = purchase.getPurchaseLineModels().stream()
                             .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
                             .collect(Collectors.toList());
@@ -151,6 +148,7 @@ public class PurchaseController {
         PurchaseModel purchaseModel =new PurchaseModel();
         purchaseModel.setCustomer(customerModel);
         purchaseModel.setTotalPrice(BigDecimal.ZERO);
+        purchaseModel.setShopping(true);
 
         PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
 
@@ -188,6 +186,11 @@ public class PurchaseController {
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+        if (!purchaseModel.isShopping()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         ProductInShopModel productInShopModel = optionalProductInShopModel.get();
 
         PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
@@ -231,6 +234,10 @@ public class PurchaseController {
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
+        if (!purchaseModel.isShopping()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         purchaseModel.getPurchaseLineModels().removeIf(purchaseLine ->
                 purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
         );
@@ -239,6 +246,32 @@ public class PurchaseController {
 
         return ResponseEntity.ok().build();
 
-
     }
+
+    @PatchMapping("/{purchaseId}/finish")
+    public ResponseEntity<PurchaseDTO> finishPurchase(@PathVariable Integer purchaseId) {
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+
+        if (optionalPurchaseModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+        if (!purchaseModel.isShopping()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        purchaseModel.setShopping(false);
+
+        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel);
+
+        List<ProductInShopDTO> productDTOs = purchaseModel.getPurchaseLineModels().stream()
+                .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
+                .collect(Collectors.toList());
+        purchaseDTO.setProducts(productDTOs);
+
+        return ResponseEntity.ok(purchaseDTO);
+    }
+
 }

@@ -9,14 +9,17 @@ public class PurchaseDTO {
     private CustomerDTO customer;
     private List<ProductInShopDTO> products;
     private BigDecimal totalPrice;
+    private boolean shopping = true;
 
     public PurchaseDTO() {
     }
 
-    public PurchaseDTO(CustomerDTO customer, List<ProductInShopDTO> products, BigDecimal totalPrice) {
+    public PurchaseDTO(Integer purchaseId, CustomerDTO customer, List<ProductInShopDTO> products, BigDecimal totalPrice, boolean shopping) {
+        this.purchaseId = purchaseId;
         this.customer = customer;
         this.products = products;
         this.totalPrice = totalPrice;
+        this.shopping = shopping;
     }
 
     public PurchaseDTO(Integer purchaseId, CustomerDTO customer, BigDecimal totalPrice) {
@@ -57,6 +60,14 @@ public class PurchaseDTO {
         this.totalPrice = totalPrice;
     }
 
+    public boolean isShopping() {
+        return shopping;
+    }
+
+    public void setShopping(boolean shopping) {
+        this.shopping = shopping;
+    }
+
     @Override
     public String toString() {
         return "PurchaseDTO{" +
@@ -64,6 +75,7 @@ public class PurchaseDTO {
                 ", customer=" + customer +
                 ", products=" + products +
                 ", totalPrice=" + totalPrice +
+                ", shopping=" + shopping +
                 '}';
     }
 }

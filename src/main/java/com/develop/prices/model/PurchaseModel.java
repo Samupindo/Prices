@@ -42,6 +42,8 @@ public class PurchaseModel {
     @Transient
     private BigDecimal totalPrice;
 
+    private boolean shopping = true;
+
     public PurchaseModel() {
     }
 
@@ -81,6 +83,14 @@ public class PurchaseModel {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public boolean isShopping() {
+        return shopping;
+    }
+
+    public void setShopping(boolean shopping) {
+        this.shopping = shopping;
     }
 
     @Override
