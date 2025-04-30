@@ -244,6 +244,15 @@ public class PurchaseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
+        boolean productoExiste = purchaseModel.getPurchaseLineModels().stream()
+                .anyMatch(purchaseLine ->
+                        purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
+                );
+
+        if (!productoExiste) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         purchaseModel.getPurchaseLineModels().removeIf(purchaseLine ->
                 purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
         );

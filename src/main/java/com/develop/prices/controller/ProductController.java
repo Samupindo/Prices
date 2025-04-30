@@ -8,7 +8,6 @@ import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.ShopInfoDTO;
 import com.develop.prices.dto.ProductDTO;
 import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.specification.ProductInShopSpecification;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -43,13 +42,11 @@ import java.util.Optional;
 @RequestMapping("/products")
 public class ProductController {
     private final ProductRepository productRepository;
-    private final ProductInShopRepository productInShopRepository;
     private final ProductMapper productMapper;
 
 
-    public ProductController(ProductRepository productRepository, ProductInShopRepository productInShopRepository, ProductMapper productMapper) {
+    public ProductController(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
-        this.productInShopRepository = productInShopRepository;
         this.productMapper = productMapper;
     }
 

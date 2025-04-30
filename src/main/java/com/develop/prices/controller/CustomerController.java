@@ -4,7 +4,6 @@ import com.develop.prices.dto.*;
 import com.develop.prices.mapper.CustomerMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.repository.CustomerRepository;
-import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.CustomerSpecification;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -29,12 +28,10 @@ import java.util.Optional;
 @RequestMapping("/customers")
 public class CustomerController {
     private final CustomerRepository customerRepository;
-    private final PurchaseRepository purchaseRepository;
     private final CustomerMapper customerMapper;
 
-    public CustomerController(CustomerRepository customerRepository, PurchaseRepository purchaseRepository, CustomerMapper customerMapper) {
+    public CustomerController(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
-        this.purchaseRepository = purchaseRepository;
         this.customerMapper = customerMapper;
     }
 
@@ -156,9 +153,6 @@ public class CustomerController {
         }
 
         if (createCustomerDTO.getPhone() != null) {
-            if (createCustomerDTO.getPhone().equals("")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
             customerModel.setPhone(createCustomerDTO.getPhone());
         }
 
