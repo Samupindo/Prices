@@ -28,6 +28,9 @@ public class PurchaseModel {
     )
     private List<PurchaseProductModel> purchaseProductModels = new ArrayList<>();
 
+    @Transient
+    private BigDecimal totalPrice;
+
     public PurchaseModel() {
     }
 
@@ -65,12 +68,17 @@ public class PurchaseModel {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     @Override
     public String toString() {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
                 ", purchaseProductModels=" + purchaseProductModels +
+                ", totalPrice=" + totalPrice +
                 '}';
     }
 }
