@@ -1,7 +1,18 @@
 package com.develop.prices.model;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Transient;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,7 +37,7 @@ public class PurchaseModel {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
-    private List<PurchaseProductModel> purchaseProductModels = new ArrayList<>();
+    private List<PurchaseLineModel> purchaseLineModels = new ArrayList<>();
 
     @Transient
     private BigDecimal totalPrice;
@@ -50,19 +61,19 @@ public class PurchaseModel {
         this.customer = customer;
     }
 
-    public List<PurchaseProductModel> getPurchaseProductModels() {
-        return purchaseProductModels;
+    public List<PurchaseLineModel> getPurchaseLineModels() {
+        return purchaseLineModels;
     }
 
-    public void setPurchaseProductModels(List<PurchaseProductModel> purchaseProductModels) {
-        this.purchaseProductModels = purchaseProductModels;
+    public void setPurchaseLineModels(List<PurchaseLineModel> purchaseLineModels) {
+        this.purchaseLineModels = purchaseLineModels;
     }
 
     public BigDecimal getTotalPrice() {
-        if (purchaseProductModels == null) {
+        if (purchaseLineModels == null) {
             return BigDecimal.ZERO;
         }
-        return purchaseProductModels.stream()
+        return purchaseLineModels.stream()
                 .map(item -> item.getProductInShop().getPrice())
                 .filter(java.util.Objects::nonNull)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -77,7 +88,7 @@ public class PurchaseModel {
         return "PurchaseModel{" +
                 "purchaseId=" + purchaseId +
                 ", customer=" + customer +
-                ", purchaseProductModels=" + purchaseProductModels +
+                ", purchaseLineModels=" + purchaseLineModels +
                 ", totalPrice=" + totalPrice +
                 '}';
     }

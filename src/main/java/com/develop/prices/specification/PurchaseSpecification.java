@@ -2,8 +2,8 @@ package com.develop.prices.specification;
 
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductInShopModel;
+import com.develop.prices.model.PurchaseLineModel;
 import com.develop.prices.model.PurchaseModel;
-import com.develop.prices.model.PurchaseProductModel;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Subquery;
@@ -23,8 +23,8 @@ public class PurchaseSpecification {
 
     public static Specification<PurchaseModel> hasProductInShop(List<Integer> productInShop) {
         return (root, query, cb) -> {
-            Join<PurchaseModel, PurchaseProductModel> purchaseProductJoin = root.join("purchaseProductModels", JoinType.INNER);
-            Join<PurchaseProductModel, ProductInShopModel> productInShopJoin = purchaseProductJoin.join("productInShop", JoinType.INNER);
+            Join<PurchaseModel, PurchaseLineModel> purchaseProductJoin = root.join("purchaseProductModels", JoinType.INNER);
+            Join<PurchaseLineModel, ProductInShopModel> productInShopJoin = purchaseProductJoin.join("productInShop", JoinType.INNER);
             return productInShopJoin.get("productInShopId").in(productInShop);
         };
     }
@@ -33,8 +33,8 @@ public class PurchaseSpecification {
         return (root, query, criteriaBuilder) -> {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
-            Root<PurchaseProductModel> subRoot = subquery.from(PurchaseProductModel.class);
-            Join<PurchaseProductModel, ProductInShopModel> pricesJoin = subRoot.join("info");
+            Root<PurchaseLineModel> subRoot = subquery.from(PurchaseLineModel.class);
+            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("info");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(subRoot.get("purchase"), root));
@@ -48,8 +48,8 @@ public class PurchaseSpecification {
         return (root, query, criteriaBuilder) -> {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
-            Root<PurchaseProductModel> subRoot = subquery.from(PurchaseProductModel.class);
-            Join<PurchaseProductModel, ProductInShopModel> pricesJoin = subRoot.join("info");
+            Root<PurchaseLineModel> subRoot = subquery.from(PurchaseLineModel.class);
+            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("info");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(subRoot.get("purchase"), root));

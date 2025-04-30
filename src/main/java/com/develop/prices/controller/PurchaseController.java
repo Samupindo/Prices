@@ -9,7 +9,7 @@ import com.develop.prices.mapper.PurchaseMapper;
 import com.develop.prices.model.CustomerModel;
 import com.develop.prices.model.ProductInShopModel;
 import com.develop.prices.model.PurchaseModel;
-import com.develop.prices.model.PurchaseProductModel;
+import com.develop.prices.model.PurchaseLineModel;
 import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.PurchaseRepository;
@@ -93,7 +93,7 @@ public class PurchaseController {
                 .map(purchase -> {
                     PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchase);
                     // Convertir info (ProductInShopModel) a ProductInShopDTO
-                    List<ProductInShopDTO> productDTOs = purchase.getPurchaseProductModels().stream()
+                    List<ProductInShopDTO> productDTOs = purchase.getPurchaseLineModels().stream()
                             .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
                             .collect(Collectors.toList());
                     purchaseDTO.setProducts(productDTOs);
@@ -190,11 +190,11 @@ public class PurchaseController {
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
         ProductInShopModel productInShopModel = optionalProductInShopModel.get();
 
-        PurchaseProductModel purchaseProductModel = new PurchaseProductModel();
-        purchaseProductModel.setPurchase(purchaseModel);
-        purchaseProductModel.setProductInShop(productInShopModel);
+        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+        purchaseLineModel.setPurchase(purchaseModel);
+        purchaseLineModel.setProductInShop(productInShopModel);
 
-        purchaseModel.getPurchaseProductModels().add(purchaseProductModel);
+        purchaseModel.getPurchaseLineModels().add(purchaseLineModel);
 
         purchaseModel.setTotalPrice(purchaseModel.getTotalPrice());
 
@@ -203,7 +203,7 @@ public class PurchaseController {
 
         PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB);
 
-        List<ProductInShopDTO> productDTOs = purchaseModelDB.getPurchaseProductModels().stream()
+        List<ProductInShopDTO> productDTOs = purchaseModelDB.getPurchaseLineModels().stream()
                 .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
                 .collect(Collectors.toList());
         purchaseDTO.setProducts(productDTOs);
@@ -231,8 +231,8 @@ public class PurchaseController {
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
-        purchaseModel.getPurchaseProductModels().removeIf(purchaseProduct ->
-                purchaseProduct.getProductInShop().getProductInShopId().equals(productInShopId)
+        purchaseModel.getPurchaseLineModels().removeIf(purchaseLine ->
+                purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
         );
 
         purchaseRepository.save(purchaseModel);

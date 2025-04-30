@@ -5,12 +5,12 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "purchase_product")
-public class PurchaseProductModel implements Serializable {
+public class PurchaseLineModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "purchase_product_id")
-    private Integer purchaseProductId;
+    private Integer purchaseLineId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_id", nullable = false)
@@ -20,20 +20,20 @@ public class PurchaseProductModel implements Serializable {
     @JoinColumn(name = "product_in_shop_id", nullable = false)
     private ProductInShopModel productInShop;
 
-    public PurchaseProductModel() {}
+    public PurchaseLineModel() {}
 
     // Constructor útil
-    public PurchaseProductModel(PurchaseModel purchase, ProductInShopModel productInShop) {
+    public PurchaseLineModel(PurchaseModel purchase, ProductInShopModel productInShop) {
         this.purchase = purchase;
         this.productInShop = productInShop;
     }
 
-    public Integer getPurchaseProductId() {
-        return purchaseProductId;
+    public Integer getPurchaseLineId() {
+        return purchaseLineId;
     }
 
-    public void setPurchaseProductId(Integer purchaseProductId) {
-        this.purchaseProductId = purchaseProductId;
+    public void setPurchaseLineId(Integer purchaseLineId) {
+        this.purchaseLineId = purchaseLineId;
     }
 
     public PurchaseModel getPurchase() {
@@ -54,8 +54,8 @@ public class PurchaseProductModel implements Serializable {
 
     @Override
     public String toString() {
-        return "PurchaseProductModel{" +
-                "purchaseProductId=" + purchaseProductId +
+        return "PurchaseLineModel{" +
+                "purchaseLineId=" + purchaseLineId +
                 ", purchase=" + purchase +
                 ", productInShop=" + productInShop +
                 '}';

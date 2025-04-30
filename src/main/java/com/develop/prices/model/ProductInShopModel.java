@@ -32,7 +32,7 @@ public class ProductInShopModel implements Serializable {
             fetch = FetchType.LAZY,
             orphanRemoval = true
     )
-    private List<PurchaseProductModel> purchaseLines = new ArrayList<>();
+    private List<PurchaseLineModel> purchaseLines = new ArrayList<>();
 
     public ProductInShopModel() {
     }
@@ -75,11 +75,11 @@ public class ProductInShopModel implements Serializable {
         this.productInShopId = productInShopId;
     }
 
-    public List<PurchaseProductModel> getPurchaseLines() {
+    public List<PurchaseLineModel> getPurchaseLines() {
         return purchaseLines;
     }
 
-    public void setPurchase(List<PurchaseProductModel> purchaseLines) {
+    public void setPurchase(List<PurchaseLineModel> purchaseLines) {
         this.purchaseLines = purchaseLines;
     }
 
