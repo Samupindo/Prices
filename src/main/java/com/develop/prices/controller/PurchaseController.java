@@ -228,11 +228,17 @@ public class PurchaseController {
     @DeleteMapping("/{purchaseId}/productInShop/{productInShopId}")
     public ResponseEntity<Void> deleteProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId){
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+
         if (optionalPurchaseModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+        List<PurchaseLineModel> purchaseLineModels = purchaseModel.getPurchaseLineModels();
+        if(purchaseLineModels.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
         if (!purchaseModel.isShopping()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
