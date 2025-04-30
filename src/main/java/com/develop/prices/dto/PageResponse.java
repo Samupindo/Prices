@@ -7,7 +7,6 @@ public class PageResponse<T> {
     private long totalElements;
     private int totalPages;
 
-    // Constructor
     public PageResponse(List<T> content, long totalElements, int totalPages) {
         this.content = content;
         this.totalElements = totalElements;

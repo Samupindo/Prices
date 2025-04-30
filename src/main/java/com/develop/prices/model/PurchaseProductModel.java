@@ -4,20 +4,20 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "purchase_product") // Mapea a la tabla del ERD
+@Table(name = "purchase_product")
 public class PurchaseProductModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "purchase_product_id") // Mapea a la columna PK del ERD
-    private Integer purchaseProductId; // Nombre de campo Java
+    @Column(name = "purchase_product_id")
+    private Integer purchaseProductId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "purchase_id", nullable = false) // FK a purchases
+    @JoinColumn(name = "purchase_id", nullable = false)
     private PurchaseModel purchase;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_in_shop_id", nullable = false) // FK a product_in_shop
+    @JoinColumn(name = "product_in_shop_id", nullable = false)
     private ProductInShopModel productInShop;
 
     public PurchaseProductModel() {}

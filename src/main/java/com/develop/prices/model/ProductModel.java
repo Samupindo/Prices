@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // deja que la base de datos lo autogenere
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer productId;
     private String name;
 

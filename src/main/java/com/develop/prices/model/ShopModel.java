@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "shops")
 public class ShopModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ⚠️ ESTA es la clave
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer shopId;
 
     private String country;
@@ -28,7 +28,7 @@ public class ShopModel {
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ProductInShopModel> prices;
 
-    // Constructor vacío y con parámetros
+
     public ShopModel() {
     }
 

@@ -139,7 +139,7 @@ public class CustomerController {
 
     @PatchMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
-        // Primero verificar si la tienda existe
+
         Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
         if (optionalCustomerModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

@@ -48,7 +48,7 @@ public class ProductController {
 
 
     public ProductController(ProductRepository productRepository, ProductInShopRepository productInShopRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository; // Asignar el repositorio
+        this.productRepository = productRepository;
         this.productInShopRepository = productInShopRepository;
         this.productMapper = productMapper;
     }
@@ -82,7 +82,6 @@ public class ProductController {
 
             if (product.getPrices() != null) {
                 for (ProductInShopModel price : product.getPrices()) {
-                    // Volvemos a verificar rango de precio aquí si se desea precisión extra
                     if ((priceMin == null || price.getPrice().compareTo(priceMin) >= 0) &&
                             (priceMax == null || price.getPrice().compareTo(priceMax) <= 0)) {
 
@@ -91,7 +90,6 @@ public class ProductController {
                 }
             }
 
-            // Se agregará el producto aunque no tenga tiendas
             productWithShopsDTOList.add(new ProductWithShopsDTO(
                     product.getProductId(),
                     product.getName(),

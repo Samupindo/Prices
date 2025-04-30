@@ -190,24 +190,19 @@ public class PurchaseController {
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
         ProductInShopModel productInShopModel = optionalProductInShopModel.get();
 
-        // Crear nueva relación PurchaseProductModel
         PurchaseProductModel purchaseProductModel = new PurchaseProductModel();
         purchaseProductModel.setPurchase(purchaseModel);
         purchaseProductModel.setProductInShop(productInShopModel);
 
-        // Agregar a la lista de productos de la compra
         purchaseModel.getPurchaseProductModels().add(purchaseProductModel);
 
-        // Actualizar el precio total
         purchaseModel.setTotalPrice(purchaseModel.getTotalPrice());
 
-        // Guardar en la base de datos
         PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
 
 
         PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB);
 
-        // Convertir y establecer la lista de productos
         List<ProductInShopDTO> productDTOs = purchaseModelDB.getPurchaseProductModels().stream()
                 .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
                 .collect(Collectors.toList());
@@ -240,7 +235,6 @@ public class PurchaseController {
                 purchaseProduct.getProductInShop().getProductInShopId().equals(productInShopId)
         );
 
-        // Guardar los cambios
         purchaseRepository.save(purchaseModel);
 
         return ResponseEntity.ok().build();
