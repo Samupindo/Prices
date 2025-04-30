@@ -101,6 +101,7 @@ public class PurchaseController {
                 })
                 .collect(Collectors.toList());
 
+
         PageResponse<PurchaseDTO> pageResponse = new PageResponse<>(
                 purchaseDTOList,
                 purchasePage.getTotalElements(),
@@ -158,7 +159,6 @@ public class PurchaseController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDTO);
     }
-
 
     @ApiResponses(value = {
             @ApiResponse(
