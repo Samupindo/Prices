@@ -177,29 +177,44 @@ public class PurchaseController {
             )
     })
 
-//    @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
-//    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
-//
-//
-//        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-//        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
-//
-//        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        PurchaseModel purchaseModel = optionalPurchaseModel.get();
-//        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
-//
-//        purchaseModel.getProducts().add(productInShopModel);
-//
-//        System.out.println(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
-//
-//        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
-//
-//        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB));
-//
-//    }
+
+    @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
+    public ResponseEntity<PurchaseDTO> addProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
+
+        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
+
+        // Crear nueva relación PurchaseProductModel
+        PurchaseProductModel purchaseProductModel = new PurchaseProductModel();
+        purchaseProductModel.setPurchase(purchaseModel);
+        purchaseProductModel.setProductInShop(productInShopModel);
+
+        // Agregar a la lista de productos de la compra
+        purchaseModel.getPurchaseProductModels().add(purchaseProductModel);
+
+        // Actualizar el precio total
+        purchaseModel.setTotalPrice(purchaseModel.getTotalPrice());
+
+        // Guardar en la base de datos
+        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
+
+
+        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModelDB);
+
+        // Convertir y establecer la lista de productos
+        List<ProductInShopDTO> productDTOs = purchaseModelDB.getPurchaseProductModels().stream()
+                .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
+                .collect(Collectors.toList());
+        purchaseDTO.setProducts(productDTOs);
+
+        return ResponseEntity.ok(purchaseDTO);
+    }
 
 
     @DeleteMapping("{purchaseId}")
@@ -215,13 +230,21 @@ public class PurchaseController {
     @DeleteMapping("/{purchaseId}/productInShop/{productInShopId}")
     public ResponseEntity<Void> deleteProductPurchase(@PathVariable Integer purchaseId, @PathVariable Integer productInShopId){
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
-        if (optionalPurchaseModel.isEmpty() && optionalProductInShopModel.isEmpty()) {
+        if (optionalPurchaseModel.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        } else {
-            productInShopRepository.deleteById(productInShopId);
-            return ResponseEntity.ok().build();
         }
+
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+        purchaseModel.getPurchaseProductModels().removeIf(purchaseProduct ->
+                purchaseProduct.getProductInShop().getProductInShopId().equals(productInShopId)
+        );
+
+        // Guardar los cambios
+        purchaseRepository.save(purchaseModel);
+
+        return ResponseEntity.ok().build();
+
+
     }
 }
