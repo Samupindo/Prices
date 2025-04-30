@@ -61,8 +61,7 @@ public class PurchaseSpecification {
 
     public static Specification<PurchaseModel> hasShoppingStatus(Boolean shopping) {
         return (root, query, criteriaBuilder) -> {
-            Join<PurchaseModel, PurchaseLineModel> purchaseLineJoin = root.join("purchaseLineModels", JoinType.INNER);
-            return criteriaBuilder.equal(purchaseLineJoin.get("shopping"), shopping);
+            return criteriaBuilder.equal(root.get("shopping"), shopping);
         };
     }
 
