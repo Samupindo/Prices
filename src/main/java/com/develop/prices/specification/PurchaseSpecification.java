@@ -34,7 +34,7 @@ public class PurchaseSpecification {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
             Root<PurchaseLineModel> subRoot = subquery.from(PurchaseLineModel.class);
-            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("purchaseLines");
+            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("productInShop");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(subRoot.get("purchase"), root));
@@ -49,7 +49,7 @@ public class PurchaseSpecification {
             // Crear subquery
             Subquery<BigDecimal> subquery = query.subquery(BigDecimal.class);
             Root<PurchaseLineModel> subRoot = subquery.from(PurchaseLineModel.class);
-            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("purchaseLines");
+            Join<PurchaseLineModel, ProductInShopModel> pricesJoin = subRoot.join("productInShop");
 
             subquery.select(criteriaBuilder.sum(pricesJoin.get("price")))
                     .where(criteriaBuilder.equal(subRoot.get("purchase"), root));
