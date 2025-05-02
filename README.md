@@ -133,11 +133,9 @@ Ejemplo JSON respuesta
 ```
 Ejemplo Producto no existente
 ```
-HTTP/1.1 200 OK
+HTTP/1.1 404 Not Found
 ```
-```json
-[]
-```
+
 
 #### Añadir un producto
 ```
@@ -223,55 +221,59 @@ Json Respuesta
 }
 ```
 ### **Tienda** ###
-#### Obtener todas las tiendas
+#### Obtener todas las tiendas pudiendo aplicar filtros
 
 ```
 http
-GET /shops
+GET /shops?
 ```
 Ejemplo salida
 ```json
-[
-  {
-    "shopId": 1,
-    "country": "Argentina",
-    "city": "Buenos Aires",
-    "address": "Alfredo R. Bufano 2701-2799"
-  },
-  {
-    "shopId": 2,
-    "country": "Argentina",
-    "city": "Córdoba",
-    "address": "Av. Vélez Sarsfield"
-  },
-  {
-    "shopId": 3,
-    "country": "España",
-    "city": "A Coruña",
-    "address": "Rúa Río Brexa, 5 "
-  }
-]
+{
+    "content": [
+        {
+            "shopId": 1,
+            "country": "Argentina",
+            "city": "Buenos Aires",
+            "address": "Alfredo R. Bufano 2701-2799"
+        },
+        {
+            "shopId": 2,
+            "country": "Argentina",
+            "city": "Córdoba",
+            "address": "Av. Vélez Sarsfield"
+        },
+        {
+            "shopId": 3,
+            "country": "España",
+            "city": "A Coruña",
+            "address": "Rúa Río Brexa, 5 "
+        }
+    ],
+    "totalElements": 3,
+    "totalPages": 1
+}
 
 ```
-#### Listado con filtros de tiendas
+Ejemplo  JSON respuesta con filtros
 ```
 http
-GET /shops?=
-```
-Ejemplo
-```
-GET /shops?country=fr
+GET shops?country=es
 ```
 Json respuesta
 ```json
-[
-  {
-    "shopId": 4,
-    "country": "Francia",
-    "city": "Marsella",
-    "address": "Grands-Carmes 13002 Marsella"
-  }
-]
+{
+    "content": [
+        {
+            "shopId": 3,
+            "country": "España",
+            "city": "A Coruña",
+            "address": "Rúa Río Brexa, 5 "
+        }
+    ],
+    "totalElements": 1,
+    "totalPages": 1
+}
 ```
 Ejemplo  Error
 ```
