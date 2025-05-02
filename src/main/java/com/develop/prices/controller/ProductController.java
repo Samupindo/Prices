@@ -157,6 +157,16 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(productMapper.toProductDTO(savedProduct));
     }
 
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
+        ProductModel productModel = productRepository.findById(productId).orElse(null);
+        if (productModel == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        productModel.setName(productNameDTO.getName());
+        return ResponseEntity.ok(productMapper.toProductDTO(productModel));
+    }
+
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
@@ -168,14 +178,6 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
-        ProductModel productModel = productRepository.findById(productId).orElse(null);
-        if (productModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        productModel.setName(productNameDTO.getName());
-        return ResponseEntity.ok(productMapper.toProductDTO(productModel));
-    }
+
 
 }

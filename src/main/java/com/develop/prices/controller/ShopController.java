@@ -226,64 +226,6 @@ public class ShopController {
         return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(productInShopModelDB));
 
     }
-
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "The shop has been deleted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Shop not found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = "{ \"error\": \"Shop not found\" }"
-                            )
-                    )
-            ),
-    })
-
-    @DeleteMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
-        if (shopLocationRepository.findById(shopId).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        shopLocationRepository.deleteById(shopId);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "204",
-                    description = "The shop has been deleted successfully"
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "Shop not found",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(
-                                    value = "{ \"error\": \"Shop not found\" }"
-                            )
-                    )
-            ),
-    })
-
-    @DeleteMapping("/{shopId}/products/{productId}")
-    public ResponseEntity<ProductInShopModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
-
-        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-        if (productInShopModel == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        shopLocationRepository.deleteById(shopId);
-
-        return ResponseEntity.ok().build();
-    }
-
-
     @PutMapping("/{shopId}")
     public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
@@ -346,6 +288,62 @@ public class ShopController {
         ProductInShopModel savePriceModel = productInShopRepository.save(productInShopModel);
 
         return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(savePriceModel));
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop not found\" }"
+                            )
+                    )
+            ),
+    })
+
+    @DeleteMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
+        if (shopLocationRepository.findById(shopId).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        shopLocationRepository.deleteById(shopId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop not found\" }"
+                            )
+                    )
+            ),
+    })
+
+    @DeleteMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductInShopModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
+
+        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (productInShopModel == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        shopLocationRepository.deleteById(shopId);
+
+        return ResponseEntity.ok().build();
     }
 
     private ProductInShopModel buildProductInShopModel(ProductModel product, ShopModel shop, BigDecimal price) {
