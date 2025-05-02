@@ -297,11 +297,7 @@ Ejemplo salida
 ```
 Ejemplo si no encuentra tiendas
 ```
-HTTP/1.1 200 OK
-```
-
-```json
-[]
+HTTP/1.1 404 Not Found
 ```
 #### Crear una tienda
 
@@ -332,7 +328,12 @@ Status: 201 Created
 ```
 **Ejemplo error**
 ```
-HTTP/1.1 409 Conflict
+HTTP/1.1 404 Bad Request
+```
+```json
+{
+    "message": "Fields misentered"
+}
 ```
 #### Añadir un producto a la tienda 
 
