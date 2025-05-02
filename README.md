@@ -229,7 +229,6 @@ GET /shops?
 ```
 Ejemplo salida
 ```json
-{
     "content": [
         {
             "shopId": 1,
@@ -252,8 +251,6 @@ Ejemplo salida
     ],
     "totalElements": 3,
     "totalPages": 1
-}
-
 ```
 Ejemplo  JSON respuesta con filtros
 ```
@@ -326,7 +323,7 @@ Status: 201 Created
     "address":"Av Buenos Aires"
 }
 ```
-**Ejemplo error**
+Ejemplo error
 ```
 HTTP/1.1 404 Bad Request
 ```
