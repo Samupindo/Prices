@@ -8,7 +8,7 @@ Este proyecto proporciona una API REST para la gestión de productos y tiendas. 
 ### 📦 Productos  
 - **Alta de productos** → Permite añadir nuevos productos a la base de datos.  
 - **Baja de productos** → Elimina un producto de la base de datos.  
-- **Modificación de productos** → Permite modificar los valores de un producto.  
+- **Modificación de productos** → Permite modificar el nombre de los productos.  
 - **Filtrar productos** → Permite buscar productos por **name** y **price**.  
 
 
@@ -16,8 +16,9 @@ Este proyecto proporciona una API REST para la gestión de productos y tiendas. 
 - **Alta de tienda** → Permite registrar una nueva .  
 - **Baja de tienda** → Elimina una  existente.  
 - **Modificación de tienda** → Permite actualizar los datos de una tienda.  
-- **Añadir un producto a tienda** → Asigna un producto a una tienda específica.  
-- **Filtrar tiendas** → Permite buscar tiendas por **name, país y ubicación**.
+- **Añadir un producto a tienda** → Asigna un producto a una tienda específica.
+- **Modificar un producto de la tienda** → Cambiar el precio un producto de una tienda
+- **Filtrar tiendas** → Permite buscar tiendas por **city, country y address**.
 
 
 ### 👨 Cliente
@@ -32,7 +33,7 @@ Este proyecto proporciona una API REST para la gestión de productos y tiendas. 
 - **Baja de compra** → Elimina una  existente.
 - **Modificación de compra** → Permite actualizar los datos de una compra.
 - **Añadir un producto a una compra** → Asigna un producto a una tienda específica.
-- **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda, price, shopping**.
+- **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda,       price, shopping**.
 ---
 
 
