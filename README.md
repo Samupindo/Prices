@@ -41,84 +41,77 @@ Este proyecto proporciona una API REST para la gestión de productos y tiendas. 
 ## ENDPOINTS ##
 
 ### Productos 
-#### Obtener los productos 
+#### Obtener los productos  pudiendo aplicar filtros
 ```
 http
-GET /products
+GET /products?
 ```
-Ejemplo JSON respuesta
+Ejemplo  JSON respuesta
 ```json
-[
-  {
-    "productId": 1,
-    "name": "Zumos",
-    "shop": [
-      {
-        "productInShopId": 1,
-        "shopId": 1,
-        "price": 7.90
-      }
-    ]
-  },
-  {
-    "productId": 2,
-    "name": "Bebidas energéticas",
-    "shop": [
-      {
-        "productInShopId": 2,
-        "shopId": 2,
-        "price": 8.90
-      }
-    ]
-  }
-]
-
+{
+    "content": [
+        {
+            "productId": 1,
+            "name": "Zumos",
+            "shop": [
+                {
+                    "productInShopId": 1,
+                    "shopId": 1,
+                    "price": 7.90
+                }
+            ]
+        },
+        {
+            "productId": 2,
+            "name": "Bebidas energéticas",
+            "shop": [
+                {
+                    "productInShopId": 2,
+                    "shopId": 2,
+                    "price": 8.90
+                }
+            ]
+        },
+        {
+            "productId": 3,
+            "name": "Agua",
+            "shop": [
+                {
+                    "productInShopId": 3,
+                    "shopId": 3,
+                    "price": 3.90
+                }
+            ]
+        }
+    ],
+    "totalElements": 3,
+    "totalPages": 1
+}
 ```
-#### Filtro de productos
+Ejemplo  JSON respuesta con filtros
 ```
-http
-GET /products/filter?=
-```
-
-Ejemplo busqueda:
-```
-GET /products?priceMax=4
-```
-Salida
-```json
-[
-  {
-    "productId": 3,
-    "name": "Agua",
-    "shop": [
-      {
-        "productInShopId": 3,
-        "shopId": 3,
-        "price": 3.90
-      }
-    ]
-  },
-  {
-    "productId": 5,
-    "name": "Fruta",
-    "shop": [
-      {
-        "productInShopId": 5,
-        "shopId": 5,
-        "price": 3.20
-      }
-    ]
-  }
-]
-```
-
-Ejemplo  Sin productos
-```
-HTTP/1.1 200 OK
+http://localhost:8080/products?name=fru
 ```
 ```json
-[]
+{
+    "content": [
+        {
+            "productId": 5,
+            "name": "Fruta",
+            "shop": [
+                {
+                    "productInShopId": 5,
+                    "shopId": 5,
+                    "price": 3.20
+                }
+            ]
+        }
+    ],
+    "totalElements": 1,
+    "totalPages": 1
+}
 ```
+
 #### Obtener producto por ID  
 ```
 http
