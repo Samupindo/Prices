@@ -168,7 +168,7 @@ HTTP/1.1 400 Bad Request
 
 ```json
 {
-  "message": "The field doesn`t exist"
+  "message": "Fields misentered"
 }
 
 ```
@@ -184,7 +184,7 @@ HTTP/1.1 200 OK
 ```
 Ejemplo  Error
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 #### Actualizar producto 
 ```
@@ -217,7 +217,7 @@ Json Respuesta
 
 ```json
 {
-    "message": "The field doesn`t exist"
+    "message": "Fields misentered"
 }
 ```
 ### **Tienda** ###
@@ -274,7 +274,7 @@ Json respuesta
 ```
 Ejemplo  Error
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 #### Obtener una tienda por id
@@ -325,7 +325,7 @@ Status: 201 Created
 ```
 Ejemplo error
 ```
-HTTP/1.1 404 Bad Request
+HTTP/1.1 400 Bad Request
 ```
 ```json
 {
@@ -360,12 +360,6 @@ HTTP/1.1 200 OK
 ```
 HTTP/1.1 409 Conflict
 ```
-Json Salida 
-```json
-{
-    "message": "The product alredy exists"
-}
-```
 
 #### Actualizar tienda
 ```
@@ -398,7 +392,7 @@ HTTP/1.1 200 OK
 **Ejemplo  Error**
 Salida
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 **Ejemplo  Error**
 ```
@@ -436,7 +430,7 @@ HTTP/1.1 200 OK
 **Ejemplo  Error**
 Salida
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 **Ejemplo  Error**
 ```
@@ -469,7 +463,7 @@ HTTP/1.1 200 OK
 **Ejemplo  Error**
 Salida
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 **Ejemplo  Error**
 ```
@@ -495,7 +489,7 @@ HTTP/1.1 200 OK
 Ejemplo  Error
 
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 #### Borrar un producto de la tienda
@@ -584,7 +578,7 @@ Json respuesta
 ```
 Ejemplo  Error
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 #### Obtener un cliente por id
@@ -608,7 +602,7 @@ HTTP/1.1 200 OK
 ```
 Ejemplo si no encuentra clientes
 ```
-HTTP/1.1 404 NOT FOUND
+HTTP/1.1 404 Not Found
 ```
 
 #### Crear un cliente
@@ -690,7 +684,7 @@ HTTP/1.1 200 OK
 **Ejemplo  Error**
 Salida
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 **Ejemplo  Error**
 ```json
@@ -736,7 +730,7 @@ HTTP/1.1 200 OK
 **Ejemplo  Error**
 Salida
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 **Ejemplo  Error**
 ```
@@ -762,7 +756,7 @@ HTTP/1.1 200 OK
 Ejemplo  Error
 
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 ### **Compra** ###
@@ -856,7 +850,7 @@ Json respuesta
 ```
 Ejemplo  Error
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 #### Obtener una tienda por id
@@ -889,7 +883,7 @@ Ejemplo salida
 ```
 Ejemplo si no encuentra compras
 ```
-HTTP/1.1 404 NOT FOUND
+HTTP/1.1 404 Not Found
 ```
 #### Crear una compra
 
@@ -931,7 +925,7 @@ Json entrada
 }
 ```
 ```
-HTTP/1.1 404 NOT FOUND
+HTTP/1.1 404 Not Found
 ```
 #### Añadir un producto a una compra
 
@@ -1022,7 +1016,7 @@ HTTP/1.1 200 OK
 Ejemplo  Error
 
 ```
-HTTP/1.1 404 Not found
+HTTP/1.1 404 Not Found
 ```
 
 #### Borrar un producto de la compra
