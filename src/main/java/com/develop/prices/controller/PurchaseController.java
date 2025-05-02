@@ -111,13 +111,22 @@ public class PurchaseController {
 
     @GetMapping("/{purchaseId}")
     public ResponseEntity<PurchaseDTO> getPurchaseById(@PathVariable Integer purchaseId){
+        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
 
-        Optional<PurchaseModel> optionalPurchasePage = purchaseRepository.findById(purchaseId);
+        if (optionalPurchaseModel.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-        PurchaseModel purchaseModel = optionalPurchasePage.get();
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
-        return ResponseEntity.ok(purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel));
+        PurchaseDTO purchaseDTO = purchaseMapper.purchaseModelToPurchaseDTO(purchaseModel);
 
+        List<ProductInShopDTO> productDTOs = purchaseModel.getPurchaseLineModels().stream()
+                .map(p -> productInShopMapper.productInShopModelToProductInShopDTO(p.getProductInShop()))
+                .collect(Collectors.toList());
+        purchaseDTO.setProducts(productDTOs);
+
+        return ResponseEntity.ok(purchaseDTO);
     }
 
     @ApiResponses(value = {
