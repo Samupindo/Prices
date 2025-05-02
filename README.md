@@ -20,14 +20,14 @@ Este proyecto proporciona una API REST para la gestión de productos y tiendas. 
 - **Filtrar tiendas** → Permite buscar tiendas por **name, país y ubicación**.
 
 
-### Cliente
+### 👨 Cliente
 - **Alta de cliente** → Permite registrar uno nuevo .
 - **Baja de cliente** → Elimina uno  existente.
 - **Modificación de cliente** → Permite actualizar los datos de un cliente.
 - **Filtrado de clientes** → Permite buscar clientes por **name, phone y email**. 
 
 
-### Compra
+### 🎟️ Compra
 - **Alta de compra** → Permite registrar una nueva .
 - **Baja de compra** → Elimina una  existente.
 - **Modificación de compra** → Permite actualizar los datos de una compra.
