@@ -6,7 +6,7 @@ import com.develop.prices.entity.ShopModel;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface ShopMapper {
+public interface ShopModelMapper {
     ShopDTO shopModelToShopDTO(ShopModel shopModel);
 
     ShopModel shopDTOToShopModel(ShopDTO shopDTO);
