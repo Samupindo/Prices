@@ -38,7 +38,7 @@ import java.util.Optional;
 
 
 @RestController
-public class ProductController implements Produ{
+public class ProductController {
     private final ProductService productService;
 
     private final ProductRestMapper productRestMapper;
