@@ -1,29 +1,30 @@
 package com.develop.prices.service;
 
 import com.develop.prices.dto.*;
+import com.develop.prices.to.*;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ShopService {
 
-    List<ShopDTO> findAllShops();
+    List<ShopTo> findAllShops();
 
-    List<ShopDTO> findAllShopWithFilters(String country, String city, String address);
+    List<ShopTo> findAllShopWithFilters(String country, String city, String address);
 
-    Optional<ShopDTO> findShopById(Integer shopId);
+    ShopTo findShopById(Integer shopId);
 
-    ShopDTO saveShop(ShopAddDTO shopAddDTO);
+    ShopTo saveShop(ShopAddTo shopAddTo);
 
-    Optional<ShopDTO> updateShop(Integer shopId, UpdateShopDTO updateShopDTO);
+    ShopTo updateShop(Integer shopId, UpdateShopTo updateShopTo);
 
-    Optional<ShopDTO> partialUpdateShop(Integer shopId, UpdateShopDTO updateShopDTO);
+    ShopTo partialUpdateShop(Integer shopId, UpdateShopTo updateShopTo);
 
     void deleteShop(Integer shopId);
 
-    Optional<ProductInShopDTO> addProductToShop(Integer productId, Integer shopId, AddProductShopDTO addProductShopDTO);
+    ProductInShopTo addProductToShop(Integer productId, Integer shopId, AddProductShopTo addProductShopTo);
 
-    Optional<ProductInShopDTO> updateProductPriceInShop(Integer shopId, Integer productId, ProductInShopPatchDTO productInShopPatchDTO);
+    ProductInShopTo updateProductPriceInShop(Integer shopId, Integer productId, ProductInShopPatchTo productInShopPatchTo);
 
     void deleteProductFromShop(Integer shopId, Integer productId);
 

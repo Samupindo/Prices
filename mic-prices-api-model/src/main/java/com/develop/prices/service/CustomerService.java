@@ -4,20 +4,25 @@ import com.develop.prices.dto.CreateCustomerDTO;
 import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.CustomerPutDTO;
 import com.develop.prices.dto.PageResponse;
+import com.develop.prices.to.CreateCustomerTo;
+import com.develop.prices.to.CustomerPutTo;
+import com.develop.prices.to.CustomerTo;
 
 import java.util.List;
 
 public interface CustomerService {
 
-    List<CustomerDTO> findAllCustomers();
+    List<CustomerTo> findAllCustomers();
 
-    PageResponse<CustomerDTO> findAllWithFilters(String name, Integer phone, String email);
+    List<CustomerTo> findAllWithFilters(String name, Integer phone, String email);
 
-    CustomerDTO findByCustomerId(Integer customerId);
+    CustomerTo findByCustomerId(Integer customerId);
 
-    CustomerDTO saveCustomer(CreateCustomerDTO createCustomerDTO);
+    CustomerTo saveCustomer(CreateCustomerTo createCustomerTo);
 
-    CustomerDTO updateCustomer(Integer customerId, CustomerPutDTO customerPutDTO);
+    CustomerTo updateCustomer(Integer customerId, CustomerPutTo customerPutTo);
+
+    CustomerTo updatePatchCustomer(Integer customerId, CreateCustomerTo createCustomerTo);
 
     void deleteCustomer(Integer customerId);
 

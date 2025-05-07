@@ -3,6 +3,8 @@ package com.develop.prices.service;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
+import com.develop.prices.to.PostPurchaseTo;
+import com.develop.prices.to.PurchaseTo;
 
 import java.awt.print.Pageable;
 import java.math.BigDecimal;
@@ -11,19 +13,21 @@ import java.util.Optional;
 
 public interface PurchaseService {
 
-    List<PurchaseDTO> findAllPurchase();
+    List<PurchaseTo> findAllPurchase();
 
-    PageResponse<PurchaseDTO> findAllWithFilters(Integer customerId, List<Integer> productInShop,
+    List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
                                                  BigDecimal totalPriceMax, BigDecimal totalPriceMin,
                                                  Boolean shopping, Pageable pageable);
 
-    Optional<PurchaseDTO> findPurchaseById(Integer purchaseId);
+    Optional<PurchaseTo> findPurchaseById(Integer purchaseId);
 
-    PurchaseDTO savePurchase(PostPurchaseDTO postPurchaseDTO);
+    PurchaseTo savePurchase(PostPurchaseTo postPurchaseTo);
 
-    Optional<PurchaseDTO> savePurchaseAndPurchaseLine(Integer purchaseId, Integer productInShopId);
+    PurchaseTo savePurchaseAndPurchaseLine(Integer purchaseId, Integer productInShopId);
 
-    Optional<PurchaseDTO> updatePurchaseStatusToFinishes(Integer purchaseId);
+    PurchaseTo updatePurchaseStatusToFinishes(Integer purchaseId);
 
     void deletePurchase(Integer purchaseId);
+
+    void deleteProductToPurchase(Integer purchaseId, Integer productInShopId);
 }

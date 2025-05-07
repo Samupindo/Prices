@@ -62,7 +62,7 @@ public class CustomerController {
         Page<CustomerModel> customerPage = customerRepository.findAll(spec, pageable);
         List<CustomerDTO> customerDTOList = customerPage.getContent()
                 .stream()
-                .map(customerModelMapper::customerModelToCustomerDTO)
+                .map(customerModelMapper::toCustomerTo)
                 .toList();
 
         PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
@@ -83,7 +83,7 @@ public class CustomerController {
 
         CustomerModel customerModel = optionalCustomerModel.get();
 
-        return ResponseEntity.ok(customerModelMapper.customerModelToCustomerDTO(customerModel));
+        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
     }
 
     @ApiResponses(value = {
@@ -113,7 +113,7 @@ public class CustomerController {
 
         CustomerModel customerModel = customerRepository.save(newCustomerModel);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerModelMapper.customerModelToCustomerDTO(customerModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerModelMapper.toCustomerTo(customerModel));
     }
 
     @PutMapping("/{customerId}")
@@ -130,7 +130,7 @@ public class CustomerController {
         customerModel.setEmail(customerPutDTO.getEmail());
 
 
-        return ResponseEntity.ok(customerModelMapper.customerModelToCustomerDTO(customerModel));
+        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
 
     }
 
@@ -164,7 +164,7 @@ public class CustomerController {
         }
 
 
-        return ResponseEntity.ok(customerModelMapper.customerModelToCustomerDTO(customerModel));
+        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
     }
 
 

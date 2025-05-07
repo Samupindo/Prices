@@ -5,6 +5,9 @@ import com.develop.prices.dto.ProductNameDTO;
 import com.develop.prices.dto.ShopInfoDTO;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
+import com.develop.prices.to.ProductNameTo;
+import com.develop.prices.to.ProductTo;
+import com.develop.prices.to.ShopInfoTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -14,25 +17,25 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductModelMapper {
 
-    ProductDTO toProductDTO (ProductModel productModel);
+    ProductTo toProductTo (ProductModel productModel);
 
-    List<ProductDTO> toProductTo(List<ProductModel> productModels);
-
-    @Mapping(target = "productId", ignore = true)
-    @Mapping(target = "prices", ignore = true)
-    ProductModel toProductModel(ProductDTO productDTO);
+    List<ProductTo> toProductTo(List<ProductModel> productModels);
 
     @Mapping(target = "productId", ignore = true)
     @Mapping(target = "prices", ignore = true)
-    ProductModel toProductModel(ProductNameDTO productNameDTO);
+    ProductModel toProductModel(ProductTo productTo);
 
     @Mapping(target = "productId", ignore = true)
     @Mapping(target = "prices", ignore = true)
-    ProductModel toProductModelUpdate(ProductNameDTO productNameDTO);
+    ProductModel toProductModel(ProductNameTo productNameTo);
 
-    ShopInfoDTO toShopInfoDTO(ProductInShopModel productInShopModel);
+    @Mapping(target = "productId", ignore = true)
+    @Mapping(target = "prices", ignore = true)
+    ProductModel toProductModelUpdate(ProductNameTo productNameTo);
 
-    List<ShopInfoDTO> toShopInfoDTO(List<ProductInShopModel> productInShopModels);
+    ShopInfoTo toShopInfoTo(ProductInShopModel productInShopModel);
+
+    List<ShopInfoTo> toShopInfoTos(List<ProductInShopModel> productInShopModels);
 
     default ProductModel map(Integer productId){
         if(productId == null){

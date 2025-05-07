@@ -1,0 +1,158 @@
+openapi: 3.0.1
+info:
+  title: Products API
+  description: API for managing products
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/products
+    description: Shop
+
+paths:
+  /products:
+    get:
+      summary: Get all products
+      tags:
+        - Product
+      operationId: getAllProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductWithShopsDTO'
+        '500':
+          description: An error occurred while trying to retrieve the list
+
+  /products/{productId}:
+    get:
+      summary: Get a product by ID
+      tags:
+        - Product
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductWithShopsDTO'
+        '404':
+          description: Not Found
+
+    post:
+      summary: Create a new product
+      operationId: newProduct
+      requestBody:
+        description: Data to create a new product
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductNameDTO'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+        '400':
+          description: Bad Request
+
+    put:
+      summary: Update a product by ID
+      tags:
+        - Product
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Data of the product to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductNameDTO'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+        '404':
+          description: Not Found
+        '400':
+          description: Bad Request
+
+    delete:
+      summary: Delete a product by ID
+      tags:
+        - Product
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+
+components:
+  schemas:
+    ProductDto:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Laptop"
+        description:
+          type: string
+          example: "A high-performance laptop."
+        registerDate:
+          type: string
+          format: date
+          example: "2023-01-01"
+        stock:
+          type: integer
+          example: 50
+        price:
+          type: number
+          format: double
+          example: 999.99
+
+    ProductNameDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          pattern: "\p{L}[\p{L}\s]+"
+          description: Product name
+      required:
+        - name

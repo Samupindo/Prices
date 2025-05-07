@@ -3,21 +3,23 @@ package com.develop.prices.service;
 import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.ProductDTO;
 import com.develop.prices.dto.ProductNameDTO;
+import com.develop.prices.to.ProductNameTo;
+import com.develop.prices.to.ProductTo;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
 
-    List<ProductDTO> findAllProduct();
+    List<ProductTo> findAllProduct();
 
-    PageResponse<ProductDTO> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax);
+    List<ProductTo> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax);
 
-    ProductDTO findByProductById(Integer productId);
+    ProductTo findByProductById(Integer productId);
 
-    ProductDTO saveProduct(ProductNameDTO productNameDTO);
+    ProductTo saveProduct(ProductNameTo productNameTo);
 
-    ProductDTO updateProduct(Integer productId, ProductNameDTO productNameDTO);
+    ProductTo updateProduct(Integer productId, ProductNameTo productNameTo);
 
     void deleteProduct(Integer productId);
 }

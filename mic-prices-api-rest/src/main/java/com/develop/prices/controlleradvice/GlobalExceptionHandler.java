@@ -2,11 +2,15 @@ package com.develop.prices.controlleradvice;
 
 
 
+import com.develop.prices.exception.BusinessException;
+import com.develop.prices.exception.ConflictException;
+import com.develop.prices.exception.InstanceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@RestControllerAdvice
+@ControllerAdvice
 public class GlobalExceptionHandler{
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -52,6 +56,21 @@ public class GlobalExceptionHandler{
             errors.put(fieldName, errorMessage);
         });
         return errors;
+    }
+
+    @ExceptionHandler(InstanceNotFoundException.class)
+    public ResponseEntity<String> instanceNotFoundException(InstanceNotFoundException ex) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<String> handleBusinessException(BusinessException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<String> handleConflictException(ConflictException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }

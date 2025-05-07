@@ -4,6 +4,8 @@ import com.develop.prices.dto.*;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.dto.ProductWithShopsDTO;
+import com.develop.prices.mapper.ProductRestMapper;
+import com.develop.prices.service.ProductService;
 import com.develop.prices.specification.ProductInShopSpecification;
 import com.develop.prices.repository.ProductRepository;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,17 +36,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
+
 @RestController
-@RequestMapping("/products")
-public class ProductController {
-    private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
+public class ProductController implements Produ{
+    private final ProductService productService;
 
+    private final ProductRestMapper productRestMapper;
 
-    public ProductController(ProductRepository productRepository, ProductMapper productMapper) {
-        this.productRepository = productRepository;
-        this.productMapper = productMapper;
+    @Autowired
+    public ProductController(ProductService productService, ProductRestMapper productRestMapper) {
+        this.productService = productService;
+        this.productRestMapper = productRestMapper;
     }
 
     @GetMapping("")
