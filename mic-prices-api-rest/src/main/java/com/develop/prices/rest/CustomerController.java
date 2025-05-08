@@ -63,7 +63,7 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
 
-        Optional<CustomerTo> optionalCustomerTo = Optional.ofNullable(customerService.findByCustomerId(customerId));
+        Optional<CustomerTo> optionalCustomerTo =customerService.findByCustomerId(customerId);
         if (optionalCustomerTo.isEmpty()) {
             throw new InstanceNotFoundException();
         }
@@ -99,7 +99,7 @@ public class CustomerController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(customerRestMapper.toCustomerDTO(newCustomerModel));
     }
-//
+
 //    @PutMapping("/{customerId}")
 //    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
 //        CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);

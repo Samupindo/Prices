@@ -17,7 +17,7 @@ public interface CustomerService {
 
     PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
 
-    <Optional>CustomerTo findByCustomerId(Integer customerId);
+    Optional<CustomerTo> findByCustomerId(Integer customerId);
 
     CustomerTo saveCustomer(CreateCustomerTo createCustomerTo);
 

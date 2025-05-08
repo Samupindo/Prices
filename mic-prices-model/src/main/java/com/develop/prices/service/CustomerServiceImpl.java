@@ -75,10 +75,14 @@ public class CustomerServiceImpl implements CustomerService {
         
     }
 
+
     @Override
-    public <Optional>CustomerTo findByCustomerId(Integer customerId) {
+    public Optional<CustomerTo> findByCustomerId(Integer customerId) {
         CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
-        return customerModelMapper.toCustomerTo(customerModel);
+        if (customerModel == null) {
+            return Optional.empty();
+        }
+        return Optional.of(customerModelMapper.toCustomerTo(customerModel));
     }
 
     @Override

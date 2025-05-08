@@ -9,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Mapper(componentModel = "spring")
@@ -16,9 +17,11 @@ public interface CustomerModelMapper {
 
     CustomerTo toCustomerTo(CustomerModel customerModel);
 
+
     List<CustomerTo> toCustomerTo(List<CustomerModel> customerModels);
 
     PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
+
 
     CustomerTo dtoCustomerTo(CreateCustomerTo createCustomerTo);
     @Mapping(target = "customerId", ignore = true)
