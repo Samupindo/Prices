@@ -1,6 +1,5 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.entity.CustomerModel;
 import com.develop.prices.entity.PurchaseModel;
 import com.develop.prices.to.PostPurchaseTo;
@@ -10,9 +9,12 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = {ProductInShopModelMapper.class})
+@Mapper(componentModel = "spring")
 public interface PurchaseModelMapper {
-    @Mapping(source = "customer.customerId", target = "customerId")
+
+    @Mapping(target = "products", source = "purchaseLineModels")
+    @Mapping(target = "customer", source = "customer")
+    @Mapping(target = "shopping", source = "shopping")
     PurchaseTo toPurchaseTo(PurchaseModel purchaseModel);
 
     List<PurchaseTo> toPurchaseTo(List<PurchaseModel> purchaseModels);

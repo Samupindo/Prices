@@ -23,13 +23,13 @@ public interface CustomerModelMapper {
 
     @Mapping(target = "customerId", ignore = true)
     @Mapping(target = "purchases", ignore = true)
-    CustomerModel toCustomerModel (CustomerPutTo customerPutTo);
+    CustomerModel toCustomerModel(CustomerPutTo customerPutTo);
 
-    @Mapping(target = "purchases",ignore = true)
+    @Mapping(target = "purchases", ignore = true)
     CustomerModel toCustomerModel(CustomerTo customerTo);
 
-    default CustomerModel map(Integer customerId){
-        if(customerId == null){
+    default CustomerModel map(Integer customerId) {
+        if (customerId == null) {
             return null;
         }
 

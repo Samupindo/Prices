@@ -5,9 +5,9 @@ import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.CustomerPutDTO;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
+import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponse;
 import org.mapstruct.Mapper;
-import com.develop.prices.to.CustomerTo;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface CustomerRestMapper {
 
     List<CustomerDTO> toListCustomerDTO(List<CustomerTo> customerTo);
 
-    List<CustomerDTO> toListCustomerDTO(PageResponse<CustomerTo> customerTo);
+//    List<CustomerDTO> toListCustomerDTO(PageResponse<CustomerTo> customerTo);
 
     CustomerPutTo toCustomerPutTo(CustomerPutDTO customerPutDTO);
 

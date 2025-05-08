@@ -10,6 +10,7 @@ public class CustomerSpecification {
             return criteriaBuilder.equal(root.get("customerId"), customerId);
         };
     }
+
     public static Specification<CustomerModel> hasName(String name) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%");
@@ -21,6 +22,7 @@ public class CustomerSpecification {
             return criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + email.toLowerCase() + "%");
         };
     }
+
     public static Specification<CustomerModel> hasPhone(Integer phone) {
         return (root, query, criteriaBuilder) -> {
             return criteriaBuilder.equal(root.get("phone"), phone);

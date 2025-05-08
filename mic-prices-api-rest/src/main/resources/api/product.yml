@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8080/products
+  - url: http://localhost:8080/api
     description: Shop
 
 paths:
@@ -121,7 +121,7 @@ paths:
 
 components:
   schemas:
-    ProductDto:
+    ProductDTO:
       type: object
       properties:
         productId:
@@ -152,7 +152,33 @@ components:
         name:
           type: string
           maxLength: 50
-          pattern: "\p{L}[\p{L}\s]+"
+          pattern: "[A-Za-z\\s]+"
           description: Product name
       required:
         - name
+    ProductWithShopsDTO:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        shop:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopInfoDTO'
+
+    ShopInfoDTO:
+      type: object
+      properties:
+        productInShopId:
+          type: integer
+          format: int64
+        shopId:
+          type: integer
+          format: int64
+        price:
+          type: number
+          format: double
+          example: 19.99

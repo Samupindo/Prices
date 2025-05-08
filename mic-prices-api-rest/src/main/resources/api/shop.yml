@@ -289,16 +289,6 @@ paths:
                     productId: 1
                     shopId: 2
                     price: 15.99
-        '400':
-          description: Invalid price provided.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-              examples:
-                invalidPrice: # Ejemplo de tu anotación
-                  value:
-                    error: "Price must be greater than or equal to 0"
         '404':
           description: Shop or product not found.
 

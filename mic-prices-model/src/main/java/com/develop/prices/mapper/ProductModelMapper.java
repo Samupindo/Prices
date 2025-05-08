@@ -1,8 +1,5 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.ProductDTO;
-import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.dto.ShopInfoDTO;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.to.ProductNameTo;
@@ -17,7 +14,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductModelMapper {
 
-    ProductTo toProductTo (ProductModel productModel);
+    ProductTo toProductTo(ProductModel productModel);
 
     List<ProductTo> toProductTo(List<ProductModel> productModels);
 
@@ -33,12 +30,14 @@ public interface ProductModelMapper {
     @Mapping(target = "prices", ignore = true)
     ProductModel toProductModelUpdate(ProductNameTo productNameTo);
 
+    @Mapping(target = "shopId", source = "shop.shopId")
+    @Mapping(target = "price", source = "price")
     ShopInfoTo toShopInfoTo(ProductInShopModel productInShopModel);
 
     List<ShopInfoTo> toShopInfoTos(List<ProductInShopModel> productInShopModels);
 
-    default ProductModel map(Integer productId){
-        if(productId == null){
+    default ProductModel map(Integer productId) {
+        if (productId == null) {
             return null;
         }
         ProductModel productModel = new ProductModel();

@@ -1,8 +1,5 @@
 package com.develop.prices.service;
 
-import com.develop.prices.dto.PageResponse;
-import com.develop.prices.dto.ProductDTO;
-import com.develop.prices.dto.ProductNameDTO;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 

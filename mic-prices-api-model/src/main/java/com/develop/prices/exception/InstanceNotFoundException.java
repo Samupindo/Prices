@@ -1,8 +1,8 @@
 package com.develop.prices.exception;
 
-public class InstanceNotFoundException extends RuntimeException{
+public class InstanceNotFoundException extends RuntimeException {
 
-    public InstanceNotFoundException(){
+    public InstanceNotFoundException() {
         super();
     }
 }

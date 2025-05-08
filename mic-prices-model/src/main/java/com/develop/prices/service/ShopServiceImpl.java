@@ -4,22 +4,18 @@ import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.entity.ShopModel;
 import com.develop.prices.exception.BusinessException;
+import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductInShopModelMapper;
 import com.develop.prices.mapper.ShopModelMapper;
 import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.repository.ShopLocationRepository;
 import com.develop.prices.specification.ShopsSpecification;
-import com.develop.prices.to.ShopTo;
-import com.develop.prices.to.ShopAddTo;
-import com.develop.prices.to.UpdateShopTo;
-import com.develop.prices.to.ProductInShopTo;
-import com.develop.prices.to.AddProductShopTo;
-import com.develop.prices.to.ProductInShopPatchTo;
+import com.develop.prices.to.*;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.domain.Specification;
-import com.develop.prices.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +42,9 @@ public class ShopServiceImpl implements ShopService {
         this.productRepository = productRepository;
     }
 
-    /** REVISAR PARA QUE FUNCIONE LA EXCEPTION CREADA EN LA CAPA DE API-MODEL **/
+    /**
+     * REVISAR PARA QUE FUNCIONE LA EXCEPTION CREADA EN LA CAPA DE API-MODEL
+     **/
     @Override
     public List<ShopTo> findAllShops() {
         return shopModelMapper.toShopTos(shopLocationRepository.findAll());
@@ -56,15 +54,15 @@ public class ShopServiceImpl implements ShopService {
     public List<ShopTo> findAllShopWithFilters(String country, String city, String address) {
         Specification<ShopModel> spec = Specification.where(null);
 
-        if(country!=null){
+        if (country != null) {
             spec = spec.and(ShopsSpecification.findByCountry(country));
         }
 
-        if(city!=null){
+        if (city != null) {
             spec = spec.and(ShopsSpecification.findByCity(city));
         }
 
-        if(address!=null){
+        if (address != null) {
             spec = spec.and(ShopsSpecification.findByAddress(address));
         }
         List<ShopModel> shopModels = shopLocationRepository.findAll(spec);
@@ -97,10 +95,10 @@ public class ShopServiceImpl implements ShopService {
         Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if(optionalShopModel.isEmpty() || optionalProductModel.isEmpty()){
+        if (optionalShopModel.isEmpty() || optionalProductModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
-        if(productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).isPresent()){
+        if (productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
             throw new BusinessException();
         }
 
@@ -120,7 +118,7 @@ public class ShopServiceImpl implements ShopService {
     public ShopTo updateShop(Integer shopId, UpdateShopTo updateShopTo) {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if(optionalShopModel.isEmpty()){
+        if (optionalShopModel.isEmpty()) {
             return null;
         }
 
@@ -139,18 +137,18 @@ public class ShopServiceImpl implements ShopService {
     public ShopTo partialUpdateShop(Integer shopId, UpdateShopTo updateShopTo) {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if(optionalShopModel.isEmpty()){
+        if (optionalShopModel.isEmpty()) {
             return null;
         }
         ShopModel shopModel = optionalShopModel.get();
 
-        if(updateShopTo.getCountry() != null){
+        if (updateShopTo.getCountry() != null) {
             shopModel.setCountry(updateShopTo.getCountry());
         }
-        if(updateShopTo.getCity() != null){
+        if (updateShopTo.getCity() != null) {
             shopModel.setCity(updateShopTo.getCity());
         }
-        if(updateShopTo.getAddress() != null){
+        if (updateShopTo.getAddress() != null) {
             shopModel.setAddress(updateShopTo.getAddress());
         }
 
@@ -160,8 +158,8 @@ public class ShopServiceImpl implements ShopService {
 
     @Override
     public ProductInShopTo updateProductPriceInShop(Integer shopId, Integer productId, ProductInShopPatchTo productInShopPatchTo) {
-        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
-        if(productInShopModel == null){
+        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (productInShopModel == null) {
             throw new InstanceNotFoundException();
         }
 
@@ -178,7 +176,7 @@ public class ShopServiceImpl implements ShopService {
     public void deleteShop(Integer shopId) {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
-        if(optionalShopModel.isEmpty()){
+        if (optionalShopModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
 
@@ -186,13 +184,13 @@ public class ShopServiceImpl implements ShopService {
     }
 
 
-
-
-    /** REVISAR ESTE METODO YA QUE SE ESTÁ ELIMINANDO UNA TIENDA EN VEZ DEL PRODUCTO **/
+    /**
+     * REVISAR ESTE METODO YA QUE SE ESTÁ ELIMINANDO UNA TIENDA EN VEZ DEL PRODUCTO
+     **/
     @Override
     public void deleteProductFromShop(Integer shopId, Integer productId) {
-        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId,productId).orElse(null);
-        if(productInShopModel == null){
+        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
+        if (productInShopModel == null) {
             throw new InstanceNotFoundException();
         }
 

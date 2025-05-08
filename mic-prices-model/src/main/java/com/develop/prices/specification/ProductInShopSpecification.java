@@ -1,7 +1,7 @@
 package com.develop.prices.specification;
 
-import com.develop.prices.entity.ProductModel;
 import com.develop.prices.entity.ProductInShopModel;
+import com.develop.prices.entity.ProductModel;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,7 +31,7 @@ public class ProductInShopSpecification {
 
     public static Specification<ProductModel> hasProductId(Integer productId) {
         return (root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("productId"),productId);
+            return criteriaBuilder.equal(root.get("productId"), productId);
         };
     }
 

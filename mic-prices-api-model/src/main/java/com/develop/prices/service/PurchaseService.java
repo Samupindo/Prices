@@ -1,8 +1,5 @@
 package com.develop.prices.service;
 
-import com.develop.prices.dto.PageResponse;
-import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
 
@@ -16,8 +13,8 @@ public interface PurchaseService {
     List<PurchaseTo> findAllPurchase();
 
     List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
-                                                 BigDecimal totalPriceMax, BigDecimal totalPriceMin,
-                                                 Boolean shopping, Pageable pageable);
+                                        BigDecimal totalPriceMax, BigDecimal totalPriceMin,
+                                        Boolean shopping, Pageable pageable);
 
     Optional<PurchaseTo> findPurchaseById(Integer purchaseId);
 

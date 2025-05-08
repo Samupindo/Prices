@@ -9,7 +9,7 @@ public class ShopAddDTO {
     @NotBlank
     private String country;
 
-    @Size(min = 3,max = 100)
+    @Size(min = 3, max = 100)
     @NotBlank
     private String city;
 

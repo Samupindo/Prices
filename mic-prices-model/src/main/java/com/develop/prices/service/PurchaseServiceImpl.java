@@ -1,10 +1,9 @@
 package com.develop.prices.service;
 
-import com.develop.prices.entity.PurchaseModel;
 import com.develop.prices.entity.CustomerModel;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.PurchaseLineModel;
-import com.develop.prices.exception.BusinessException;
+import com.develop.prices.entity.PurchaseModel;
 import com.develop.prices.exception.ConflictException;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductInShopModelMapper;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class PurchaseServiceImpl implements PurchaseService{
+public class PurchaseServiceImpl implements PurchaseService {
 
     private final PurchaseRepository purchaseRepository;
 
@@ -39,7 +38,6 @@ public class PurchaseServiceImpl implements PurchaseService{
     private final ProductInShopModelMapper productInShopModelMapper;
 
     private final CustomerRepository customerRepository;
-
 
 
     public PurchaseServiceImpl(PurchaseRepository purchaseRepository, PurchaseModelMapper purchaseModelMapper, ProductInShopRepository productInShopRepository, ProductInShopModelMapper productInShopModelMapper, CustomerRepository customerRepository) {
@@ -68,15 +66,15 @@ public class PurchaseServiceImpl implements PurchaseService{
             spec = spec.and(PurchaseSpecification.hasProductInShop(productInShop));
 
         }
-        if(totalPriceMax != null){
-            spec =spec.and(PurchaseSpecification.hasPriceMax(totalPriceMax));
+        if (totalPriceMax != null) {
+            spec = spec.and(PurchaseSpecification.hasPriceMax(totalPriceMax));
         }
 
-        if(totalPriceMin != null){
-            spec =spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
+        if (totalPriceMin != null) {
+            spec = spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
         }
 
-        if(shopping != null){
+        if (shopping != null) {
             spec = spec.and(PurchaseSpecification.hasShoppingStatus(shopping));
         }
 
@@ -89,7 +87,7 @@ public class PurchaseServiceImpl implements PurchaseService{
     public Optional<PurchaseTo> findPurchaseById(Integer purchaseId) {
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
 
-        if(optionalPurchaseModel.isEmpty()){
+        if (optionalPurchaseModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
 
@@ -107,7 +105,7 @@ public class PurchaseServiceImpl implements PurchaseService{
     public PurchaseTo savePurchase(PostPurchaseTo postPurchaseTo) {
         CustomerModel customerModel = customerRepository.findById(postPurchaseTo.getCustomerId()).orElse(null);
 
-        if(customerModel == null){
+        if (customerModel == null) {
             throw new InstanceNotFoundException();
         }
 
@@ -130,13 +128,13 @@ public class PurchaseServiceImpl implements PurchaseService{
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
         Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
 
-        if(optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()){
+        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
 
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
-        if(!purchaseModel.isShopping()){
+        if (!purchaseModel.isShopping()) {
             throw new ConflictException();
         }
 
@@ -163,11 +161,11 @@ public class PurchaseServiceImpl implements PurchaseService{
     @Override
     public PurchaseTo updatePurchaseStatusToFinishes(Integer purchaseId) {
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        if(optionalPurchaseModel.isEmpty()){
+        if (optionalPurchaseModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        if(!purchaseModel.isShopping()){
+        if (!purchaseModel.isShopping()) {
             throw new ConflictException();
         }
 
@@ -186,7 +184,7 @@ public class PurchaseServiceImpl implements PurchaseService{
     @Override
     public void deletePurchase(Integer purchaseId) {
         PurchaseModel purchaseModel = purchaseRepository.findById(purchaseId).orElse(null);
-        if(purchaseModel == null){
+        if (purchaseModel == null) {
             throw new InstanceNotFoundException();
         }
 
@@ -204,7 +202,7 @@ public class PurchaseServiceImpl implements PurchaseService{
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
         List<PurchaseLineModel> purchaseLineModels = purchaseModel.getPurchaseLineModels();
-        if(purchaseLineModels.isEmpty()){
+        if (purchaseLineModels.isEmpty()) {
             throw new InstanceNotFoundException();
         }
 

@@ -1,6 +1,5 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.ProductInShopDTO;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.to.ProductInShopTo;
 import org.mapstruct.Mapper;

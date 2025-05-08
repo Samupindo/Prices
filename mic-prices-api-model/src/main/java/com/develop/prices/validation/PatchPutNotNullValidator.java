@@ -7,7 +7,7 @@ public class PatchPutNotNullValidator implements ConstraintValidator<PatchPutNot
 
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext constraintValidatorContext) {
-        if (value == null ||value.toString().isEmpty()) {
+        if (value == null || value.toString().isEmpty()) {
             return false;
         }
 

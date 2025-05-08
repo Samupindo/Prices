@@ -1,9 +1,7 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.ShopDTO;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ShopModel;
-
 import com.develop.prices.to.ShopAddTo;
 import com.develop.prices.to.ShopInfoTo;
 import com.develop.prices.to.ShopTo;
@@ -13,7 +11,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(uses = ProductInShopModel.class)
+@Mapper(componentModel = "spring")
 public interface ShopModelMapper {
 
     ShopTo toShopTo(ShopModel shopModel);
@@ -21,17 +19,18 @@ public interface ShopModelMapper {
     List<ShopTo> toShopTos(List<ShopModel> shopModels);
 
     @Mapping(target = "shopId", ignore = true)
-    @Mapping(target = "prices", ignore = true)
+    @Mapping(target = "city", ignore = true)
     ShopModel toShopModel(ShopTo shopTo);
 
     @Mapping(target = "shopId", ignore = true)
-    @Mapping(target = "prices", ignore = true)
+    @Mapping(target = "city", ignore = true)
     ShopModel toShopModel(ShopAddTo shopAddTo);
 
     @Mapping(target = "shopId", ignore = true)
-    @Mapping(target = "prices", ignore = true)
+    @Mapping(target = "city", ignore = true)
     ShopModel toShopModelUpdate(UpdateShopTo updateShopTo);
 
+    @Mapping(target = "shopId", ignore = true)
     ShopInfoTo toShopInfoTo(ShopModel shopModel);
 
     List<ShopInfoTo> toShopInfoTos(List<ShopModel> shopModels);

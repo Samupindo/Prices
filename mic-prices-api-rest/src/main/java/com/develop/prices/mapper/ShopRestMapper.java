@@ -5,7 +5,6 @@ import com.develop.prices.dto.ShopAddDTO;
 import com.develop.prices.dto.ShopDTO;
 import com.develop.prices.dto.UpdateShopDTO;
 import com.develop.prices.to.ShopAddTo;
-
 import com.develop.prices.to.ShopTo;
 import com.develop.prices.to.UpdateShopTo;
 import org.mapstruct.Mapper;
@@ -18,7 +17,7 @@ public interface ShopRestMapper {
 
     List<ShopDTO> toListShopDTO(List<ShopTo> shopTo);
 
-    List<ShopDTO> toListShopDTO(PageResponse<ShopTo> shopTo);
+//    List<ShopDTO> toListShopDTO(PageResponse<ShopTo> shopTo);
 
     ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
 

@@ -1,9 +1,5 @@
 package com.develop.prices.service;
 
-import com.develop.prices.dto.CreateCustomerDTO;
-import com.develop.prices.dto.CustomerDTO;
-import com.develop.prices.dto.CustomerPutDTO;
-import com.develop.prices.dto.PageResponse;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;

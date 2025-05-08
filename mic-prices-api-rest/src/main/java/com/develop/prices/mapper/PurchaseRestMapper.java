@@ -9,14 +9,14 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",uses = {ProductInShopRestMapper.class})
+@Mapper(componentModel = "spring", uses = {ProductInShopRestMapper.class})
 public interface PurchaseRestMapper {
 
     PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
 
     List<PurchaseDTO> toListPurchaseDTO(List<PurchaseTo> purchaseTo);
 
-    List<PurchaseDTO> toListPurchaseDTO(PageResponse<PurchaseTo> purchaseTo);
+//    List<PurchaseDTO> toListPurchaseDTO(PageResponse<PurchaseTo> purchaseTo);
 
     PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
 }

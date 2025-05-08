@@ -1,10 +1,8 @@
 package com.develop.prices.service;
 
-import com.develop.prices.dto.*;
 import com.develop.prices.to.*;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ShopService {
 

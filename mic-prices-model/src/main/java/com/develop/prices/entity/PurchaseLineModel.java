@@ -1,6 +1,7 @@
 package com.develop.prices.entity;
 
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 
 @Entity
@@ -20,7 +21,8 @@ public class PurchaseLineModel implements Serializable {
     @JoinColumn(name = "product_in_shop_id", nullable = false)
     private ProductInShopModel productInShop;
 
-    public PurchaseLineModel() {}
+    public PurchaseLineModel() {
+    }
 
     // Constructor útil
     public PurchaseLineModel(PurchaseModel purchase, ProductInShopModel productInShop) {

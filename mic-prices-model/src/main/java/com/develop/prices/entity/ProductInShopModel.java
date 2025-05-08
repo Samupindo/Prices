@@ -2,7 +2,7 @@ package com.develop.prices.entity;
 
 import jakarta.persistence.*;
 
-import  java.io.Serializable;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;

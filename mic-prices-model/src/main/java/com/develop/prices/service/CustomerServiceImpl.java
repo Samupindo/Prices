@@ -115,7 +115,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(Integer customerId) {
         CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
-        if(customerModel == null){
+        if (customerModel == null) {
             throw new InstanceNotFoundException();
         }
 
