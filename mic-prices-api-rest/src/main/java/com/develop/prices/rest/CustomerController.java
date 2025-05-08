@@ -1,76 +1,55 @@
-//package com.develop.prices.rest;
-//
-//import com.develop.prices.dto.*;
-//import com.develop.prices.mapper.CustomerModelMapper;
-//import com.develop.prices.entity.CustomerModel;
-//import com.develop.prices.repository.CustomerRepository;
-//import com.develop.prices.specification.CustomerSpecification;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.ExampleObject;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import jakarta.validation.Valid;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.data.jpa.domain.Specification;
-//import org.springframework.data.web.PageableDefault;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@RestController
-//public class CustomerController {
-//    private final CustomerRepository customerRepository;
-//    private final CustomerModelMapper customerModelMapper;
-//
-//    public CustomerController(CustomerRepository customerRepository, CustomerModelMapper customerModelMapper) {
-//        this.customerRepository = customerRepository;
-//        this.customerModelMapper = customerModelMapper;
-//    }
-//
-//    @GetMapping("")
-//    public ResponseEntity<PageResponse<CustomerDTO>> getCustomersWithFilters(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) Integer phone,
-//            @RequestParam(required = false) String email,
-//            @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
-//
-//
-//        Specification<CustomerModel> spec = Specification.where(null);
-//
-//
-//        if (name != null && !name.isBlank()) {
-//            spec = spec.and(CustomerSpecification.hasName(name));
-//        }
-//
-//        if (phone != null) {
-//            spec = spec.and(CustomerSpecification.hasPhone(phone));
-//        }
-//
-//        if (email != null && !email.isBlank()) {
-//            spec = spec.and(CustomerSpecification.hasEmail(email));
-//        }
-//
-//
-//        Page<CustomerModel> customerPage = customerRepository.findAll(spec, pageable);
-//        List<CustomerDTO> customerDTOList = customerPage.getContent()
-//                .stream()
-//                .map(customerModelMapper::toCustomerTo)
-//                .toList();
-//
-//        PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
-//                customerDTOList,
-//                customerPage.getTotalElements(),
-//                customerPage.getTotalPages()
-//        );
-//        return ResponseEntity.ok(pageResponse);
-//
-//    }
+package com.develop.prices.rest;
+
+import com.develop.prices.dto.*;
+import com.develop.prices.mapper.CustomerRestMapper;
+import com.develop.prices.service.CustomerService;
+import com.develop.prices.to.CustomerTo;
+import com.develop.prices.to.PageResponse;
+import  com.develop.prices.to.CustomerTo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/customers")
+public class CustomerController {
+    private final CustomerService customerService;
+    private final CustomerRestMapper customerRestMapper;
+
+    public CustomerController(CustomerService customerService, CustomerRestMapper customerRestMapper) {
+        this.customerService = customerService;
+        this.customerRestMapper = customerRestMapper;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<PageResponse<CustomerDTO>> getCustomersWithFilters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer phone,
+            @RequestParam(required = false) String email,
+            @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+
+
+        PageResponse<CustomerTo> customerPage = customerService.findAllWithFilters(name,phone,email, pageable);
+
+        List<CustomerDTO> customerDTOList = customerPage.getContent()
+                .stream()
+                .map(customerRestMapper::toCustomerDTO)
+                .toList();
+
+        PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
+                customerDTOList,
+                customerPage.getTotalElements(),
+                customerPage.getTotalPages()
+        );
+        return ResponseEntity.ok(pageResponse);
+
+    }
 //
 //    @GetMapping("/{customerId}")
 //    public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
@@ -178,4 +157,4 @@
 //        }
 //    }
 //
-//}
+}

@@ -30,28 +30,6 @@ public class ProductController {
         this.productRestMapper = productRestMapper;
     }
 
-//    @GetMapping("")
-//    public ResponseEntity<PageResponse<ProductDTO>> getProductsWithFilters(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) BigDecimal priceMin,
-//            @RequestParam(required = false) BigDecimal priceMax,
-//            @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
-//
-//        List<ProductTo> productTos = productService.findAllWithFilters(name,priceMin,priceMax);
-//        List<ProductDTO> productDTOS = productTos.stream()
-//                .map(productRestMapper::toProductDTO)
-//                .toList();
-//
-//        PageResponse<ProductDTO> response = new PageResponse<>(
-//                productDTOS,
-//                productDTOS.size(),
-//                1
-//        );
-//
-//        return ResponseEntity.ok(response);
-//
-//    }
-
     @GetMapping("")
     public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
             @RequestParam(required = false) String name,

@@ -4,6 +4,7 @@ import com.develop.prices.entity.CustomerModel;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
+import com.develop.prices.to.PageResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -29,13 +30,8 @@ public interface CustomerModelMapper {
     CustomerModel toCustomerModel(CustomerTo customerTo);
 
     default CustomerModel map(Integer customerId) {
-        if (customerId == null) {
-            return null;
-        }
-
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(customerId);
-        return customerModel;
+        return null;
     }
 
+    PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
 }
