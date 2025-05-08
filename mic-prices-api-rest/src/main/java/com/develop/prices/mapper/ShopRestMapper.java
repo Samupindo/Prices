@@ -1,6 +1,5 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.PageResponse;
 import com.develop.prices.dto.ShopAddDTO;
 import com.develop.prices.dto.ShopDTO;
 import com.develop.prices.dto.UpdateShopDTO;

@@ -1,30 +1,30 @@
-//package com.develop.prices.rest;
-//
-//import com.develop.prices.dto.*;
-//import com.develop.prices.mapper.CustomerModelMapper;
-//import com.develop.prices.entity.CustomerModel;
-//import com.develop.prices.repository.CustomerRepository;
-//import com.develop.prices.specification.CustomerSpecification;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.ExampleObject;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import jakarta.validation.Valid;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.data.jpa.domain.Specification;
-//import org.springframework.data.web.PageableDefault;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//@RestController
-//public class CustomerController {
+package com.develop.prices.rest;
+
+import com.develop.prices.dto.*;
+import com.develop.prices.mapper.CustomerModelMapper;
+import com.develop.prices.entity.CustomerModel;
+import com.develop.prices.repository.CustomerRepository;
+import com.develop.prices.specification.CustomerSpecification;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+public class CustomerController {
 //    private final CustomerRepository customerRepository;
 //    private final CustomerModelMapper customerModelMapper;
 //
@@ -178,4 +178,4 @@
 //        }
 //    }
 //
-//}
+}

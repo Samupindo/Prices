@@ -5,11 +5,8 @@ import com.develop.prices.validation.PatchPutNotNull;
 
 public class CreateCustomerTo {
 
-        @PatchPutNotBlank
         private String name;
-        @PatchPutNotNull
         private Integer phone;
-        @PatchPutNotBlank
         private String email;
 
         public CreateCustomerTo() {

@@ -3,7 +3,6 @@ package com.develop.prices.mapper;
 import com.develop.prices.dto.ProductDTO;
 import com.develop.prices.dto.ProductNameDTO;
 import com.develop.prices.dto.ProductWithShopsDTO;
-import com.develop.prices.to.PageResponse;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;

@@ -4,11 +4,8 @@ import com.develop.prices.validation.PatchPutNotBlank;
 
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopTo {
-    @PatchPutNotBlank
     private String country;
-    @PatchPutNotBlank
     private String city;
-    @PatchPutNotBlank
     private String address;
 
     public UpdateShopTo() {

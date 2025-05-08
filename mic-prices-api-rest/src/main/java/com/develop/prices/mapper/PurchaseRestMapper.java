@@ -2,7 +2,6 @@ package com.develop.prices.mapper;
 
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
-import com.develop.prices.to.PageResponse;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
 import org.mapstruct.Mapper;

@@ -6,7 +6,6 @@ import com.develop.prices.dto.CustomerPutDTO;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
-import com.develop.prices.to.PageResponse;
 import org.mapstruct.Mapper;
 
 import java.util.List;

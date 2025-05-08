@@ -9,13 +9,10 @@ public class CustomerPutTo {
 
     @Size(max = 100, message = "The name can only have 100 characteres")
     @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
-    @PatchPutNotBlank
     private String name;
 
-    @PatchPutNotNull
     private Integer phone;
 
-    @PatchPutNotBlank
     private String email;
 
     public CustomerPutTo() {

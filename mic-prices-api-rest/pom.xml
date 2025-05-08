@@ -41,7 +41,11 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
         </dependency>
 
         <dependency>
@@ -50,10 +54,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -77,33 +77,6 @@
                         </compilerArg>
                     </compilerArgs>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>${open-api-tools.version}</version>
-                <executions>
-
-                    <execution>
-                        <id>generate-products-api</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpecRootDirectory>${project.basedir}/src/main/resources/api</inputSpecRootDirectory>
-                            <generatorName>spring</generatorName>
-                            <library>spring-boot</library>
-                            <configOptions>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <openApiNullable>false</openApiNullable>
-                                <apiPackage>com.develop.prices.controller</apiPackage>
-                                <modelPackage>com.develop.prices.dto</modelPackage>
-                                <interfaceOnly>true</interfaceOnly>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>
