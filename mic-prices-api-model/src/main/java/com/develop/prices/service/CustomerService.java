@@ -7,6 +7,7 @@ import com.develop.prices.to.PageResponse;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerService {
 
@@ -16,7 +17,7 @@ public interface CustomerService {
 
     PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
 
-    CustomerTo findByCustomerId(Integer customerId);
+    <Optional>CustomerTo findByCustomerId(Integer customerId);
 
     CustomerTo saveCustomer(CreateCustomerTo createCustomerTo);
 

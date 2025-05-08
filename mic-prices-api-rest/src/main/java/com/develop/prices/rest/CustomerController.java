@@ -1,6 +1,7 @@
 package com.develop.prices.rest;
 
 import com.develop.prices.dto.*;
+import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
 import com.develop.prices.to.CustomerTo;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
@@ -50,19 +52,20 @@ public class CustomerController {
         return ResponseEntity.ok(pageResponse);
 
     }
-//
-//    @GetMapping("/{customerId}")
-//    public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
-//        Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
-//        if (optionalCustomerModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        CustomerModel customerModel = optionalCustomerModel.get();
-//
-//        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
-//    }
-//
+
+    @GetMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
+
+        Optional<CustomerTo> optionalCustomerTo = Optional.ofNullable(customerService.findByCustomerId(customerId));
+        if (optionalCustomerTo.isEmpty()) {
+            throw new InstanceNotFoundException();
+        }
+
+        CustomerTo customerTo = optionalCustomerTo.get();
+
+        return ResponseEntity.ok(customerRestMapper.toCustomerDTO(customerTo));
+    }
+
 //    @ApiResponses(value = {
 //            @ApiResponse(
 //                    responseCode = "201",
