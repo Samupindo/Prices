@@ -7,6 +7,7 @@ import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -14,11 +15,15 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ProductRestMapper {
 
+    @Mapping(target = "description", ignore = true)
+    @Mapping(target = "registerDate", ignore = true)
+    @Mapping(target = "stock", ignore = true)
+    @Mapping(target = "price", ignore = true)
     ProductDTO toProductDTO(ProductTo productTo);
 
     List<ProductDTO> toListProductDTO(List<ProductTo> productTo);
 
-//    List<ProductDTO> toListProductDTO(PageResponse<ProductTo> productTo);
+
 
     ProductNameTo toProductNameTo(ProductNameDTO productNameDTO);
 

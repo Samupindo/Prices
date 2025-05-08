@@ -31,6 +31,8 @@ public interface ShopModelMapper {
     ShopModel toShopModelUpdate(UpdateShopTo updateShopTo);
 
     @Mapping(target = "shopId", ignore = true)
+    @Mapping(target = "productInShopId", ignore = true)
+    @Mapping(target = "prices", ignore = true)
     ShopInfoTo toShopInfoTo(ShopModel shopModel);
 
     List<ShopInfoTo> toShopInfoTos(List<ShopModel> shopModels);
