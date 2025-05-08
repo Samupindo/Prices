@@ -4,13 +4,20 @@ import com.develop.prices.dto.*;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
+import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponse;
 import  com.develop.prices.to.CustomerTo;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,35 +73,32 @@ public class CustomerController {
         return ResponseEntity.ok(customerRestMapper.toCustomerDTO(customerTo));
     }
 
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "201",
-//                    description = "Created",
-//                    content = @Content(mediaType = "application/json")
-//            ),
-//            @ApiResponse(
-//                    responseCode = "400",
-//                    description = "Invalid input",
-//                    content = @Content(mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Missing required field: name\" }"
-//                            )
-//                    )
-//            )
-//    })
-//    @PostMapping("")
-//    public ResponseEntity<CustomerDTO> addCustomer(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
-//
-//        CustomerModel newCustomerModel = new CustomerModel();
-//
-//        newCustomerModel.setName(createCustomerDTO.getName());
-//        newCustomerModel.setPhone(createCustomerDTO.getPhone());
-//        newCustomerModel.setEmail(createCustomerDTO.getEmail());
-//
-//        CustomerModel customerModel = customerRepository.save(newCustomerModel);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(customerModelMapper.toCustomerTo(customerModel));
-//    }
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created",
+                    content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Missing required field: name\" }"
+                            )
+                    )
+            )
+    })
+    @PostMapping("")
+    public ResponseEntity<CustomerDTO> addCustomer(@Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+
+        CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDTO);
+
+        CustomerTo newCustomerModel = customerService.saveCustomer(createCustomerTo);
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerRestMapper.toCustomerDTO(newCustomerModel));
+    }
 //
 //    @PutMapping("/{customerId}")
 //    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {

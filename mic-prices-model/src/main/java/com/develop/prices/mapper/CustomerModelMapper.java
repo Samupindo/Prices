@@ -18,6 +18,9 @@ public interface CustomerModelMapper {
 
     List<CustomerTo> toCustomerTo(List<CustomerModel> customerModels);
 
+    PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
+
+    CustomerTo dtoCustomerTo(CreateCustomerTo createCustomerTo);
     @Mapping(target = "customerId", ignore = true)
     @Mapping(target = "purchases", ignore = true)
     CustomerModel toCustomerModel(CreateCustomerTo createCustomerTo);
@@ -33,5 +36,4 @@ public interface CustomerModelMapper {
         return null;
     }
 
-    PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
 }
