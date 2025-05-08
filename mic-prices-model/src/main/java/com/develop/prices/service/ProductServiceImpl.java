@@ -1,18 +1,23 @@
 package com.develop.prices.service;
 
+import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductModelMapper;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.specification.ProductInShopSpecification;
-import com.develop.prices.to.ProductNameTo;
-import com.develop.prices.to.ProductTo;
+import com.develop.prices.to.*;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -37,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductTo> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax) {
+    public PageResponse<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
 
@@ -53,15 +58,60 @@ public class ProductServiceImpl implements ProductService {
             spec = spec.and(ProductInShopSpecification.hasPriceMax(priceMax));
         }
 
-        List<ProductModel> productModels = productRepository.findAll(spec);
+        Page<ProductModel> productModels = productRepository.findAll(spec,pageable);
+        List<ProductWithShopsTo> productWithShopsTos = new ArrayList<>();
 
-        return productModelMapper.toProductTo(productModels);
+        for (ProductModel productModel : productModels.getContent()){
+            List<ShopInfoTo> shopInfoTos = new ArrayList<>();
+
+            if(productModel.getPrices() != null){
+                for (ProductInShopModel productInShopModel : productModel.getPrices()){
+                    if ((priceMin == null || productInShopModel.getPrice().compareTo(priceMin) >= 0) &&
+                            (priceMax == null || productInShopModel.getPrice().compareTo(priceMax) <= 0)) {
+
+                        shopInfoTos.add(new ShopInfoTo(productInShopModel.getProductInShopId(),productInShopModel.getShop().getShopId(), productInShopModel.getPrice()));
+                    }
+                }
+            }
+            productWithShopsTos.add(new ProductWithShopsTo(
+                    productModel.getProductId(),
+                    productModel.getName(),
+                    shopInfoTos
+            ));
+        }
+
+        PageResponse<ProductWithShopsTo> pageResponse = new PageResponse<>(
+                productWithShopsTos,
+                productModels.getTotalElements(),
+                productModels.getTotalPages()
+        );
+
+
+        return productModelMapper.toProductModelTo(pageResponse);
     }
 
     @Override
-    public ProductTo findByProductById(Integer productId) {
-        ProductModel productModel = productRepository.findById(productId).orElse(null);
-        return productModelMapper.toProductTo(productModel);
+    public ProductWithShopsTo findByProductById(Integer productId) {
+        Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
+        if(optionalProductModel.isEmpty()){
+            throw new InstanceNotFoundException();
+        }
+
+        ProductModel productModel = optionalProductModel.get();
+
+        ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
+        productWithShopsTo.setProductId(productModel.getProductId());
+        productWithShopsTo.setName(productModel.getName());
+
+        List<ShopInfoTo> shopInfoToList = new ArrayList<>();
+
+        for (ProductInShopModel productInShopModel : productModel.getPrices()){
+            shopInfoToList.add(new ShopInfoTo(productInShopModel.getProductInShopId(), productInShopModel.getShop().getShopId(), productInShopModel.getPrice()));
+        }
+
+        productWithShopsTo.setShop(shopInfoToList);
+
+        return productWithShopsTo;
     }
 
     @Override

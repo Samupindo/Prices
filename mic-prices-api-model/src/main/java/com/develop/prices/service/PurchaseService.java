@@ -12,9 +12,13 @@ public interface PurchaseService {
 
     List<PurchaseTo> findAllPurchase();
 
+//    List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
+//                                        BigDecimal totalPriceMax, BigDecimal totalPriceMin,
+//                                        Boolean shopping, Pageable pageable);
+
     List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
                                         BigDecimal totalPriceMax, BigDecimal totalPriceMin,
-                                        Boolean shopping, Pageable pageable);
+                                        Boolean shopping);
 
     Optional<PurchaseTo> findPurchaseById(Integer purchaseId);
 

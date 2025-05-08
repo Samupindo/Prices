@@ -1,7 +1,10 @@
 package com.develop.prices.service;
 
+import com.develop.prices.to.PageResponse;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
+import com.develop.prices.to.ProductWithShopsTo;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,9 +13,11 @@ public interface ProductService {
 
     List<ProductTo> findAllProduct();
 
-    List<ProductTo> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax);
+    //PageResponse<ProductWithShopsTo> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable);
 
-    ProductTo findByProductById(Integer productId);
+    PageResponse<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable);
+
+    ProductWithShopsTo findByProductById(Integer productId);
 
     ProductTo saveProduct(ProductNameTo productNameTo);
 

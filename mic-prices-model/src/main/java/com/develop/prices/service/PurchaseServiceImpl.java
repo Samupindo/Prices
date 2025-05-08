@@ -54,7 +54,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     }
 
     @Override
-    public List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping, Pageable pageable) {
+    public List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping) {
 
         Specification<PurchaseModel> spec = Specification.where(null);
 
@@ -79,6 +79,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
         List<PurchaseModel> purchaseModels = purchaseRepository.findAll(spec);
+
 
         return purchaseModelMapper.toPurchaseTo(purchaseModels);
     }

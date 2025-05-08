@@ -12,11 +12,10 @@ import java.util.List;
 @Mapper(componentModel = "spring", uses = {ProductInShopRestMapper.class})
 public interface PurchaseRestMapper {
 
-    @Mapping(target = "customerId", source = "customer.customerId")
     PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
 
     List<PurchaseDTO> toListPurchaseDTO(List<PurchaseTo> purchaseTo);
 
-    @Mapping(target = "customerId", source = "customer.customerId")
+    @Mapping(target = "customerId", source = "customerId")
     PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
 }

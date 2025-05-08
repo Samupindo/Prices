@@ -32,7 +32,7 @@ public interface ShopModelMapper {
 
     @Mapping(target = "shopId", ignore = true)
     @Mapping(target = "productInShopId", ignore = true)
-    @Mapping(target = "prices", ignore = true)
+    @Mapping(target = "price", ignore = true)
     ShopInfoTo toShopInfoTo(ShopModel shopModel);
 
     List<ShopInfoTo> toShopInfoTos(List<ShopModel> shopModels);

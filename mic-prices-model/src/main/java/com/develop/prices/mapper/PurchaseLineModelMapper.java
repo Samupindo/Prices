@@ -10,9 +10,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PurchaseLineModelMapper {
 
-    @Mapping(target = "productId", source = "productId")
-    @Mapping(target = "productInShopId", source = "productInShopId")
-    @Mapping(target = "shopId", source = "shopId")
+    @Mapping(target = "productInShopId", source = "productInShop.productInShopId")
+    @Mapping(target = "productId", source = "productInShop.product.productId")
+    @Mapping(target = "shopId", source = "productInShop.shop.shopId")
     @Mapping(target = "price", source = "productInShop.price")
     ProductInShopTo toProductInShopTo(PurchaseLineModel purchaseLineModel);
 
