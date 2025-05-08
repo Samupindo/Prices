@@ -80,8 +80,9 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<CustomerTo> findByCustomerId(Integer customerId) {
         CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
         if (customerModel == null) {
-            return Optional.empty();
+            throw new InstanceNotFoundException();
         }
+
         return Optional.of(customerModelMapper.toCustomerTo(customerModel));
     }
 

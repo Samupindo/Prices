@@ -1,19 +1,19 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.dto.*;
-import com.develop.prices.exception.InstanceNotFoundException;
+import com.develop.prices.dto.CreateCustomerDTO;
+import com.develop.prices.dto.CustomerDTO;
+import com.develop.prices.dto.CustomerPutDTO;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
 import com.develop.prices.to.CreateCustomerTo;
+import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponse;
-import  com.develop.prices.to.CustomerTo;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -43,8 +43,7 @@ public class CustomerController {
             @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
-
-        PageResponse<CustomerTo> customerPage = customerService.findAllWithFilters(name,phone,email, pageable);
+        PageResponse<CustomerTo> customerPage = customerService.findAllWithFilters(name, phone, email, pageable);
 
         List<CustomerDTO> customerDTOList = customerPage.getContent()
                 .stream()
@@ -63,10 +62,7 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
 
-        Optional<CustomerTo> optionalCustomerTo =customerService.findByCustomerId(customerId);
-        if (optionalCustomerTo.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
+        Optional<CustomerTo> optionalCustomerTo = customerService.findByCustomerId(customerId);
 
         CustomerTo customerTo = optionalCustomerTo.get();
 
@@ -100,23 +96,16 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerRestMapper.toCustomerDTO(newCustomerModel));
     }
 
-//    @PutMapping("/{customerId}")
-//    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
-//        CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
-//
-//        if (customerModel == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//
-//        customerModel.setName(customerPutDTO.getName());
-//        customerModel.setPhone(customerPutDTO.getPhone());
-//        customerModel.setEmail(customerPutDTO.getEmail());
-//
-//
-//        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
-//
-//    }
+    @PutMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> updateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
+
+        CustomerPutTo customerTo = customerRestMapper.toCustomerPutTo(customerPutDTO);
+
+        CustomerDTO customerDTO = customerRestMapper.toCustomerDTO(customerService.updateCustomer(customerId, customerTo));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
+
+    }
 //
 //    @PatchMapping("/{customerId}")
 //    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
