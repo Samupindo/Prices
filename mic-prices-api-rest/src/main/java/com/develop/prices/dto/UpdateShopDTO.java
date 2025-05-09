@@ -1,15 +1,15 @@
 package com.develop.prices.dto;
 
-import com.develop.prices.validation.PatchPutNotBlank;
+import com.develop.prices.validation.StringNotBlank;
 
 import java.io.Serializable;
 
 public class UpdateShopDTO implements Serializable {
-    @PatchPutNotBlank
+    @StringNotBlank
     private String country;
-    @PatchPutNotBlank
+    @StringNotBlank
     private String city;
-    @PatchPutNotBlank
+    @StringNotBlank
     private String address;
 
     public UpdateShopDTO() {

@@ -3,7 +3,7 @@ package com.develop.prices.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PatchPutNotBlankValidator implements ConstraintValidator<PatchPutNotBlank, String> {
+public class StringNotBlankValidator implements ConstraintValidator<StringNotBlank, String> {
 
 
     @Override
