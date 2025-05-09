@@ -21,5 +21,7 @@ public interface ShopRestMapper {
 
     ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
 
+    ShopAddDTO toShopAddDTO(ShopAddTo shopAddTo);
+
     UpdateShopTo toUpdateShopTo(UpdateShopDTO updateShopDTO);
 }
