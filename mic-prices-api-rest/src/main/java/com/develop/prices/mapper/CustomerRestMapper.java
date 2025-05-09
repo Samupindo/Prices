@@ -17,7 +17,6 @@ public interface CustomerRestMapper {
     CustomerDTO toCustomerDTO(CustomerTo customerTo);
 
     CustomerPutTo toCustomerPutTo(CustomerPutDTO customerPutDTO);
-
     CreateCustomerTo toCreateCustomerTo(CreateCustomerDTO createCustomerDTO);
 
 }
