@@ -103,7 +103,7 @@ public class CustomerController {
 
         CustomerDTO customerDTO = customerRestMapper.toCustomerDTO(customerService.updateCustomer(customerId, customerTo));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
+        return ResponseEntity.ok().body(customerDTO);
 
     }
 
@@ -114,7 +114,7 @@ public class CustomerController {
 
         CustomerDTO customerDTO = customerRestMapper.toCustomerDTO(customerService.updatePatchCustomer(customerId, createCustomerTo));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
+        return ResponseEntity.ok().body(customerDTO);
     }
 
 
