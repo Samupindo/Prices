@@ -106,43 +106,20 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
 
     }
-//
-//    @PatchMapping("/{customerId}")
-//    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
-//
-//        Optional<CustomerModel> optionalCustomerModel = customerRepository.findById(customerId);
-//        if (optionalCustomerModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        CustomerModel customerModel = optionalCustomerModel.get();
-//
-//
-//        if (createCustomerDTO.getName() != null) {
-//            if (createCustomerDTO.getName().trim().isEmpty()) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//            }
-//            customerModel.setName(createCustomerDTO.getName());
-//        }
-//
-//        if (createCustomerDTO.getPhone() != null) {
-//            customerModel.setPhone(createCustomerDTO.getPhone());
-//        }
-//
-//        if (createCustomerDTO.getEmail() != null) {
-//            if (createCustomerDTO.getEmail().trim().isEmpty()) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//            }
-//            customerModel.setEmail(createCustomerDTO.getEmail());
-//        }
-//
-//
-//        return ResponseEntity.ok(customerModelMapper.toCustomerTo(customerModel));
-//    }
-//
-//
-//
-//
+
+    @PatchMapping("/{customerId}")
+    public ResponseEntity<CustomerDTO> partialUpdateCustomer(@PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+
+        CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDTO);
+
+        CustomerDTO customerDTO = customerRestMapper.toCustomerDTO(customerService.updatePatchCustomer(customerId, createCustomerTo));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerDTO);
+    }
+
+
+
+
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId) {
         customerService.deleteCustomer(customerId);
