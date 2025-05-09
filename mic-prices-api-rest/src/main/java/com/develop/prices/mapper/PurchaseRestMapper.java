@@ -15,8 +15,6 @@ public interface PurchaseRestMapper {
     PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
 
 
-    List<PurchaseDTO> toListPurchaseDTO(List<PurchaseTo> purchaseTo);
-
     @Mapping(target = "customerId", source = "customerId")
     PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
 }

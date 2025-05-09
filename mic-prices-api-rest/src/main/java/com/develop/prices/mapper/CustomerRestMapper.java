@@ -16,10 +16,6 @@ import java.util.Optional;
 public interface CustomerRestMapper {
     CustomerDTO toCustomerDTO(CustomerTo customerTo);
 
-    List<CustomerDTO> toListCustomerDTO(List<CustomerTo> customerTo);
-
-//    List<CustomerDTO> toListCustomerDTO(PageResponse<CustomerTo> customerTo);
-
     CustomerPutTo toCustomerPutTo(CustomerPutDTO customerPutDTO);
 
     CreateCustomerTo toCreateCustomerTo(CreateCustomerDTO createCustomerDTO);

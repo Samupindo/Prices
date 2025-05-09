@@ -11,10 +11,6 @@ import java.util.Optional;
 
 public interface CustomerService {
 
-    List<CustomerTo> findAllCustomers();
-
-    List<CustomerTo> findAllWithFilters(String name, Integer phone, String email);
-
     PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
 
     Optional<CustomerTo> findByCustomerId(Integer customerId);

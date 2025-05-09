@@ -22,21 +22,10 @@ public interface CustomerModelMapper {
 
     PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
 
-
-    CustomerTo dtoCustomerTo(CreateCustomerTo createCustomerTo);
     @Mapping(target = "customerId", ignore = true)
     @Mapping(target = "purchases", ignore = true)
     CustomerModel toCustomerModel(CreateCustomerTo createCustomerTo);
 
-    @Mapping(target = "customerId", ignore = true)
-    @Mapping(target = "purchases", ignore = true)
-    CustomerModel toCustomerModel(CustomerPutTo customerPutTo);
 
-    @Mapping(target = "purchases", ignore = true)
-    CustomerModel toCustomerModel(CustomerTo customerTo);
-
-    default CustomerModel map(Integer customerId) {
-        return null;
-    }
 
 }

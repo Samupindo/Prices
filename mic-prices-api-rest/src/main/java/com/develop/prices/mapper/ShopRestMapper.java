@@ -15,13 +15,9 @@ import java.util.List;
 public interface ShopRestMapper {
     ShopDTO toShopDTO(ShopTo shopTo);
 
-    List<ShopDTO> toListShopDTO(List<ShopTo> shopTo);
-
-    PageResponse<ShopDTO> toListShopDTO(PageResponse<ShopTo> shopTo);
 
     ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
 
-    ShopAddDTO toShopAddDTO(ShopAddTo shopAddTo);
 
     UpdateShopTo toUpdateShopTo(UpdateShopDTO updateShopDTO);
 }

@@ -21,26 +21,4 @@ public interface PurchaseModelMapper {
     PurchaseTo toPurchaseTo(PurchaseModel purchaseModel);
 
 
-    PageResponse<PurchaseTo> toPurchaseTo(PageResponse<PurchaseModel> purchaseModels);
-
-    @Mapping(target = "purchaseId", ignore = true)
-    @Mapping(target = "purchaseLineModels", ignore = true)
-    @Mapping(target = "totalPrice", ignore = true)
-    PurchaseModel toPurchaseModel(PostPurchaseTo postPurchaseTo);
-
-
-
-    default PurchaseModel map(Integer purchaseId) {
-        if (purchaseId == null) return null;
-        PurchaseModel purchase = new PurchaseModel();
-        purchase.setPurchaseId(purchaseId);
-        return purchase;
-    }
-
-    default CustomerModel mapCustomer(Integer customerId) {
-        if (customerId == null) return null;
-        CustomerModel customer = new CustomerModel();
-        customer.setCustomerId(customerId);
-        return customer;
-    }
 }

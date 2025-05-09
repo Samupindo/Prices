@@ -183,10 +183,6 @@ public class ShopServiceImpl implements ShopService {
         shopLocationRepository.deleteById(shopId);
     }
 
-
-    /**
-     * REVISAR ESTE METODO YA QUE SE ESTÁ ELIMINANDO UNA TIENDA EN VEZ DEL PRODUCTO
-     **/
     @Override
     public void deleteProductFromShop(Integer shopId, Integer productId) {
         ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);

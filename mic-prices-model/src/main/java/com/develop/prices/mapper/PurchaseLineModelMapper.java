@@ -16,6 +16,5 @@ public interface PurchaseLineModelMapper {
     @Mapping(target = "price", source = "productInShop.price")
     ProductInShopTo toProductInShopTo(PurchaseLineModel purchaseLineModel);
 
-    List<ProductInShopTo> toProductInShopTos(List<PurchaseLineModel> purchaseLineModels);
 
 }

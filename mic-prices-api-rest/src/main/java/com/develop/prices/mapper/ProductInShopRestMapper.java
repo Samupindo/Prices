@@ -17,9 +17,4 @@ public interface ProductInShopRestMapper {
 
     List<ProductInShopDTO> toListCustomerDTO(List<ProductInShopTo> productInShopTo);
 
-//    List<ProductInShopDTO> toListCustomerDTO(PageResponse<ProductInShopTo> productInShopTo);
-
-    ProductInShopPatchTo toProductInShopPatchTo(ProductInShopPatchDTO productInShopPatchDTO);
-
-    ShopInfoTo toShopInfoTo(ShopInfoDTO shopInfoDTO);
 }

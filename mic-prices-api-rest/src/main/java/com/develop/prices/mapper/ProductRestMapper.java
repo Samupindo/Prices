@@ -15,11 +15,8 @@ public interface ProductRestMapper {
     @Mapping(target = "name", source = "name")
     ProductDTO toProductDTO(ProductTo productTo);
 
-    List<ProductDTO> toListProductDTO(List<ProductTo> productTo);
-
     ProductNameTo toProductNameTo(ProductNameDTO productNameDTO);
 
-    ProductWithShopsTo toProductWithShopsTo(ProductWithShopsDTO productWithShopsDTO);
 
     ProductWithShopsDTO toProductWithShopsDTO(ProductWithShopsTo productWithShopsTo);
 

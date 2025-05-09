@@ -33,16 +33,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public List<CustomerTo> findAllCustomers() {
-        return customerModelMapper.toCustomerTo(customerRepository.findAll());
-    }
-
-    @Override
-    public List<CustomerTo> findAllWithFilters(String name, Integer phone, String email) {
-        return List.of();
-    }
-
-    @Override
     public PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable) {
 
 
