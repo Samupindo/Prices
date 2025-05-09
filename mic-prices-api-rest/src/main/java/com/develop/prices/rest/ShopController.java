@@ -9,7 +9,6 @@ import com.develop.prices.dto.ProductInShopPatchDTO;
 import com.develop.prices.dto.AddProductShopDTO;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.ShopRestMapper;
-import com.develop.prices.service.ProductService;
 import com.develop.prices.service.ShopService;
 import com.develop.prices.to.ShopTo;
 import com.develop.prices.to.ShopAddTo;
