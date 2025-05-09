@@ -1,7 +1,9 @@
 package com.develop.prices.to;
 
 
-public class CreateCustomerTo {
+import java.io.Serializable;
+
+public class CreateCustomerTo implements Serializable {
 
         private String name;
         private Integer phone;

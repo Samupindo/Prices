@@ -1,13 +1,8 @@
 package com.develop.prices.mapper;
 
 import com.develop.prices.dto.ProductInShopDTO;
-import com.develop.prices.dto.ProductInShopPatchDTO;
-import com.develop.prices.dto.ShopInfoDTO;
-import com.develop.prices.to.ProductInShopPatchTo;
 import com.develop.prices.to.ProductInShopTo;
-import com.develop.prices.to.ShopInfoTo;
 import org.mapstruct.Mapper;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring")

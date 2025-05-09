@@ -1,6 +1,8 @@
 package com.develop.prices.dto;
 
-public class ProductDTO {
+import java.io.Serializable;
+
+public class ProductDTO implements Serializable {
     private Integer productId;
     private String name;
 

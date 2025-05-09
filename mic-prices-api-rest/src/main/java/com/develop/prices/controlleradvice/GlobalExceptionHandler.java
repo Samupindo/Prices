@@ -1,7 +1,5 @@
 package com.develop.prices.controlleradvice;
 
-
-
 import com.develop.prices.exception.BusinessException;
 import com.develop.prices.exception.ConflictException;
 import com.develop.prices.exception.InstanceNotFoundException;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
 import java.util.Map;

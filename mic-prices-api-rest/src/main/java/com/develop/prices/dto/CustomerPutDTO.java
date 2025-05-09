@@ -1,18 +1,20 @@
 package com.develop.prices.dto;
 
 import com.develop.prices.validation.PatchPutNotBlank;
-import com.develop.prices.validation.PatchPutNotNull;
+import com.develop.prices.validation.PhoneNotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class CustomerPutDTO {
+import java.io.Serializable;
+
+public class CustomerPutDTO implements Serializable {
 
     @Size(max = 100, message = "The name can only have 100 characteres")
     @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
     @PatchPutNotBlank
     private String name;
 
-    @PatchPutNotNull
+    @PhoneNotNull
     private Integer phone;
 
     @PatchPutNotBlank

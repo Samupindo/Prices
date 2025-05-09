@@ -1,7 +1,9 @@
 package com.develop.prices.dto;
 
 
-public class CustomerDTO {
+import java.io.Serializable;
+
+public class CustomerDTO implements Serializable {
     private Integer customerId;
     private String name;
     private Integer phone;

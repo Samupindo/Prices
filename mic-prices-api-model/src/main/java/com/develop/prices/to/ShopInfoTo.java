@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShopInfoTo {
+public class ShopInfoTo implements Serializable {
     private Integer productInShopId;
     private Integer shopId;
     private BigDecimal price;

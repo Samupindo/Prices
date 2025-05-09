@@ -3,7 +3,7 @@ package com.develop.prices.validation;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class PatchPutNotNullValidator implements ConstraintValidator<PatchPutNotNull, Integer> {
+public class PhoneNotNullValidator implements ConstraintValidator<PhoneNotNull, Integer> {
 
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext constraintValidatorContext) {

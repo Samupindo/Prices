@@ -1,12 +1,12 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ShopModel;
-import com.develop.prices.to.*;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.ShopInfoTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface ShopModelMapper {

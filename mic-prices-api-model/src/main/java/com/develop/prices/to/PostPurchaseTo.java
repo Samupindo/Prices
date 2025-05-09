@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
 
+import java.io.Serializable;
 
-public class PostPurchaseTo {
+public class PostPurchaseTo implements Serializable {
     private Integer customerId;
 
     public PostPurchaseTo() {

@@ -1,9 +1,14 @@
 package com.develop.prices.service;
 
-import com.develop.prices.to.*;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.UpdateShopTo;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.AddProductShopTo;
+import com.develop.prices.to.ProductInShopPatchTo;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface ShopService {
 

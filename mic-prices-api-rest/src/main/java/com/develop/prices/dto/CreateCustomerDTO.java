@@ -1,13 +1,15 @@
 package com.develop.prices.dto;
 
 import com.develop.prices.validation.PatchPutNotBlank;
-import com.develop.prices.validation.PatchPutNotNull;
+import com.develop.prices.validation.PhoneNotNull;
 
-public class CreateCustomerDTO {
+import java.io.Serializable;
+
+public class CreateCustomerDTO implements Serializable {
 
     @PatchPutNotBlank
     private String name;
-    @PatchPutNotNull
+    @PhoneNotNull
     private Integer phone;
     @PatchPutNotBlank
     private String email;

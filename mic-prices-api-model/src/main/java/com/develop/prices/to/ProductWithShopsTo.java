@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductWithShopsTo {
+public class ProductWithShopsTo implements Serializable {
     private Integer productId;
     private String name;
     private List<ShopInfoTo> shop;

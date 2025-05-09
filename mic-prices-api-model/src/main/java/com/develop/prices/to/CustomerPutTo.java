@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
 
+import java.io.Serializable;
 
-public class CustomerPutTo {
+public class CustomerPutTo implements Serializable {
 
     private String name;
 

@@ -1,8 +1,9 @@
 package com.develop.prices.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProductWithShopsDTO {
+public class ProductWithShopsDTO implements Serializable {
     private Integer productId;
     private String name;
     private List<ShopInfoDTO> shop;

@@ -7,8 +7,6 @@ import com.develop.prices.to.PurchaseTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", uses = {ProductInShopRestMapper.class})
 public interface PurchaseRestMapper {
 

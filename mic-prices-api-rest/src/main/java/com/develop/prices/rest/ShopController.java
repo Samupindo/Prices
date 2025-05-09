@@ -1,12 +1,22 @@
 package com.develop.prices.rest;
 
 
-import com.develop.prices.dto.*;
+import com.develop.prices.dto.ShopDTO;
+import com.develop.prices.dto.ShopAddDTO;
+import com.develop.prices.dto.ProductInShopDTO;
+import com.develop.prices.dto.UpdateShopDTO;
+import com.develop.prices.dto.ProductInShopPatchDTO;
+import com.develop.prices.dto.AddProductShopDTO;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.ShopRestMapper;
 import com.develop.prices.service.ProductService;
 import com.develop.prices.service.ShopService;
-import com.develop.prices.to.*;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.AddProductShopTo;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.UpdateShopTo;
+import com.develop.prices.to.ProductInShopPatchTo;
 import com.develop.prices.to.PageResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -19,24 +29,29 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/shops")
 public class ShopController {
     private final ShopService shopService;
     private final ShopRestMapper shopRestMapper;
-    private final ProductService productService;
     private final ProductRestMapper productRestMapper;
 
     @Autowired
-    public ShopController(ShopService shopService, ProductService productService, ShopRestMapper shopRestMapper, ProductRestMapper productRestMapper) {
+    public ShopController(ShopService shopService, ShopRestMapper shopRestMapper, ProductRestMapper productRestMapper) {
         this.shopService = shopService;
-        this.productService = productService;
         this.shopRestMapper = shopRestMapper;
         this.productRestMapper = productRestMapper;
     }
@@ -120,50 +135,50 @@ public class ShopController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(shopDTO);
     }
-//
-//
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "200",
-//                    description = "Product added to shop",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"productId\": 1, \"shopId\": 2, \"price\": 15.99 }"
-//                            )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "400",
-//                    description = "Invalid price provided",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Price must be greater than or equal to 0\" }"
-//                            )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "404",
-//                    description = "Shop or product not found",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Product or shop not found\" }"
-//                            )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "409",
-//                    description = "Product already exists in shop",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"This product is already registered in this shop\" }"
-//                            )
-//                    )
-//            )
-//    })
+
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Product added to shop",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"productId\": 1, \"shopId\": 2, \"price\": 15.99 }"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid price provided",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Price must be greater than or equal to 0\" }"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop or product not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Product or shop not found\" }"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Product already exists in shop",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"This product is already registered in this shop\" }"
+                            )
+                    )
+            )
+    })
     @PostMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductInShopDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
 
@@ -184,7 +199,7 @@ public class ShopController {
 
         return ResponseEntity.ok(shopRestMapper.toShopDTO(shopTo));
     }
-//
+
     @PatchMapping("/{shopId}")
     public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
 
@@ -208,24 +223,24 @@ public class ShopController {
 
         return ResponseEntity.ok(productRestMapper.toProductInShopDTO(productInShopTo));
     }
-//
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "204",
-//                    description = "The shop has been deleted successfully"
-//            ),
-//            @ApiResponse(
-//                    responseCode = "404",
-//                    description = "Shop not found",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Shop not found\" }"
-//                            )
-//                    )
-//            ),
-//    })
-//
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop not found\" }"
+                            )
+                    )
+            ),
+    })
+
     @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
         if (shopService.findShopById(shopId) == null) {
@@ -235,24 +250,24 @@ public class ShopController {
 
         return ResponseEntity.ok().build();
     }
-//
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "204",
-//                    description = "The shop has been deleted successfully"
-//            ),
-//            @ApiResponse(
-//                    responseCode = "404",
-//                    description = "Shop not found",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Shop not found\" }"
-//                            )
-//                    )
-//            ),
-//    })
-//
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "The shop has been deleted successfully"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Shop not found",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop not found\" }"
+                            )
+                    )
+            ),
+    })
+
     @DeleteMapping("/{shopId}/products/{productId}")
     public ResponseEntity<ProductInShopDTO> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
 
@@ -260,14 +275,6 @@ public class ShopController {
 
         return ResponseEntity.ok().build();
     }
-//
-//    private ProductInShopModel buildProductInShopModel(ProductModel product, ShopModel shop, BigDecimal price) {
-//        ProductInShopModel productInShopModel = new ProductInShopModel();
-//        productInShopModel.setProduct(product);
-//        productInShopModel.setShop(shop);
-//        productInShopModel.setPrice(price);
-//
-//        return productInShopModel;
-//    }
+
 
 }

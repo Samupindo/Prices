@@ -1,7 +1,9 @@
 package com.develop.prices.dto;
 
 
-public class ShopDTO {
+import java.io.Serializable;
+
+public class ShopDTO implements Serializable {
 
 
     private Integer shopId;

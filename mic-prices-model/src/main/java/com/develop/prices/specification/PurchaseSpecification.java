@@ -9,7 +9,6 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
-
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -1,8 +1,9 @@
 package com.develop.prices.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShopInfoDTO {
+public class ShopInfoDTO implements Serializable {
     private Integer productInShopId;
     private Integer shopId;
     private BigDecimal price;

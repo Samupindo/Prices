@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
 
-//@JsonIgnoreProperties(ignoreUnknown = false)
-public class UpdateShopTo {
+import java.io.Serializable;
+
+public class UpdateShopTo implements Serializable {
     private String country;
     private String city;
     private String address;

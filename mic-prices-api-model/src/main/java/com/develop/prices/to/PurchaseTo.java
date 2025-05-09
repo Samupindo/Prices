@@ -1,9 +1,10 @@
 package com.develop.prices.to;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PurchaseTo {
+public class PurchaseTo implements Serializable {
 
     private Integer purchaseId;
     private CustomerTo customer;

@@ -2,8 +2,9 @@ package com.develop.prices.dto;
 
 import com.develop.prices.validation.PatchPutNotBlank;
 
-//@JsonIgnoreProperties(ignoreUnknown = false)
-public class UpdateShopDTO {
+import java.io.Serializable;
+
+public class UpdateShopDTO implements Serializable {
     @PatchPutNotBlank
     private String country;
     @PatchPutNotBlank

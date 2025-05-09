@@ -1,6 +1,8 @@
 package com.develop.prices.to;
 
-public class ProductTo {
+import java.io.Serializable;
+
+public class ProductTo implements Serializable {
     private Integer productId;
     private String name;
 

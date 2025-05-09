@@ -1,8 +1,9 @@
 package com.develop.prices.to;
 
 
+import java.io.Serializable;
 
-public class ShopAddTo {
+public class ShopAddTo implements Serializable {
 
     private String country;
     private String city;

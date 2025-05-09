@@ -1,12 +1,19 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.*;
-import com.develop.prices.to.*;
+import com.develop.prices.dto.ProductDTO;
+import com.develop.prices.dto.ProductNameDTO;
+import com.develop.prices.dto.ProductWithShopsDTO;
+import com.develop.prices.dto.AddProductShopDTO;
+import com.develop.prices.dto.ProductInShopPatchDTO;
+import com.develop.prices.dto.ProductInShopDTO;
+import com.develop.prices.to.ProductTo;
+import com.develop.prices.to.ProductNameTo;
+import com.develop.prices.to.ProductWithShopsTo;
+import com.develop.prices.to.ProductInShopPatchTo;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.AddProductShopTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.List;
-
 
 @Mapper(componentModel = "spring")
 public interface ProductRestMapper {

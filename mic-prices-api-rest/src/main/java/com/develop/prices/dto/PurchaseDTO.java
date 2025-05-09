@@ -1,9 +1,10 @@
 package com.develop.prices.dto;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PurchaseDTO {
+public class PurchaseDTO implements Serializable {
 
     private Integer purchaseId;
     private CustomerDTO customer;

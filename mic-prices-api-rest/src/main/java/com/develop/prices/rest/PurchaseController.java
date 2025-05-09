@@ -1,15 +1,9 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.mapper.CustomerRestMapper;
-import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponse;
 import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.ProductInShopDTO;
 import com.develop.prices.dto.PurchaseDTO;
-
-import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.PurchaseRestMapper;
-import com.develop.prices.service.ProductService;
 import com.develop.prices.service.PurchaseService;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
@@ -19,20 +13,22 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/purchases")
