@@ -8,7 +8,10 @@ import com.develop.prices.specification.CustomerSpecification;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
+import com.develop.prices.to.PageResponse;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +39,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerTo> findAllWithFilters(String name, Integer phone, String email) {
+        return List.of();
+    }
+
+    @Override
+    public PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable) {
+
+
         Specification<CustomerModel> spec = Specification.where(null);
 
 
@@ -51,15 +61,29 @@ public class CustomerServiceImpl implements CustomerService {
             spec = spec.and(CustomerSpecification.hasEmail(email));
         }
 
-        List<CustomerModel> customerModels = customerRepository.findAll(spec);
+        Page<CustomerModel> customerModels = customerRepository.findAll(spec,pageable);
+        List<CustomerTo> customerTos = customerModels.getContent().stream().map(customerModelMapper::toCustomerTo).toList();
+        
+        
+        PageResponse<CustomerTo> pageResponse = new PageResponse<>(
+                customerTos,
+                customerModels.getTotalElements(),
+                customerModels.getTotalPages()
+        );
+        return customerModelMapper.toCustomerTo(pageResponse);
 
-        return customerModelMapper.toCustomerTo(customerModels);
+        
     }
 
+
     @Override
-    public CustomerTo findByCustomerId(Integer customerId) {
+    public Optional<CustomerTo> findByCustomerId(Integer customerId) {
         CustomerModel customerModel = customerRepository.findById(customerId).orElse(null);
-        return customerModelMapper.toCustomerTo(customerModel);
+        if (customerModel == null) {
+            throw new InstanceNotFoundException();
+        }
+
+        return Optional.of(customerModelMapper.toCustomerTo(customerModel));
     }
 
     @Override

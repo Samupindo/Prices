@@ -67,6 +67,10 @@ public class ProductController {
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductWithShopsTo productWithShopsTo = productService.findByProductById(productId);
 
+        if (productWithShopsTo == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         return ResponseEntity.ok(productRestMapper.toProductWithShopsDTO(productWithShopsTo));
     }
 

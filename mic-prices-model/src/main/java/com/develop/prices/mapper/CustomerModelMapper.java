@@ -4,10 +4,12 @@ import com.develop.prices.entity.CustomerModel;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
+import com.develop.prices.to.PageResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Mapper(componentModel = "spring")
@@ -15,8 +17,13 @@ public interface CustomerModelMapper {
 
     CustomerTo toCustomerTo(CustomerModel customerModel);
 
+
     List<CustomerTo> toCustomerTo(List<CustomerModel> customerModels);
 
+    PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
+
+
+    CustomerTo dtoCustomerTo(CreateCustomerTo createCustomerTo);
     @Mapping(target = "customerId", ignore = true)
     @Mapping(target = "purchases", ignore = true)
     CustomerModel toCustomerModel(CreateCustomerTo createCustomerTo);
@@ -29,13 +36,7 @@ public interface CustomerModelMapper {
     CustomerModel toCustomerModel(CustomerTo customerTo);
 
     default CustomerModel map(Integer customerId) {
-        if (customerId == null) {
-            return null;
-        }
-
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(customerId);
-        return customerModel;
+        return null;
     }
 
 }
