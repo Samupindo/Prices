@@ -17,9 +17,6 @@ public interface CustomerModelMapper {
 
     CustomerTo toCustomerTo(CustomerModel customerModel);
 
-
-    List<CustomerTo> toCustomerTo(List<CustomerModel> customerModels);
-
     PageResponse<CustomerTo> toCustomerTo(PageResponse<CustomerTo> pageResponse);
 
     @Mapping(target = "customerId", ignore = true)
