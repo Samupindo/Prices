@@ -1,10 +1,19 @@
 package com.develop.prices.rest;
 
+import com.develop.prices.dto.ProductDTO;
+import com.develop.prices.dto.ProductNameDTO;
 import com.develop.prices.dto.ProductWithShopsDTO;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.service.ProductService;
 import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.ProductNameTo;
+import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -30,27 +39,6 @@ public class ProductController {
         this.productRestMapper = productRestMapper;
     }
 
-//    @GetMapping("")
-//    public ResponseEntity<PageResponse<ProductDTO>> getProductsWithFilters(
-//            @RequestParam(required = false) String name,
-//            @RequestParam(required = false) BigDecimal priceMin,
-//            @RequestParam(required = false) BigDecimal priceMax,
-//            @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
-//
-//        List<ProductTo> productTos = productService.findAllWithFilters(name,priceMin,priceMax);
-//        List<ProductDTO> productDTOS = productTos.stream()
-//                .map(productRestMapper::toProductDTO)
-//                .toList();
-//
-//        PageResponse<ProductDTO> response = new PageResponse<>(
-//                productDTOS,
-//                productDTOS.size(),
-//                1
-//        );
-//
-//        return ResponseEntity.ok(response);
-//
-//    }
 
     @GetMapping("")
     public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
@@ -79,62 +67,53 @@ public class ProductController {
     public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
         ProductWithShopsTo productWithShopsTo = productService.findByProductById(productId);
 
-        if (productWithShopsTo == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
         return ResponseEntity.ok(productRestMapper.toProductWithShopsDTO(productWithShopsTo));
     }
-//
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "201",
-//                    description = "Created",
-//                    content = @Content(mediaType = "application/json")
-//            ),
-//            @ApiResponse(
-//                    responseCode = "400",
-//                    description = "Invalid input",
-//                    content = @Content(mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Missing required field: name\" }"
-//                            )
-//                    )
-//            )
-//    })
-//    @PostMapping("")
-//    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductNameDTO productNameDTO) {
-//        // Crear nuevo producto
-//        ProductModel productModel = new ProductModel();
-//        productModel.setName(productNameDTO.getName());
-//
-//        // Guardar en base de datos
-//        ProductModel savedProduct = productRepository.save(productModel);
-//
-//        // Devolver DTO como respuesta
-//        return ResponseEntity.status(HttpStatus.CREATED).body(productMapper.toProductDTO(savedProduct));
-//    }
-//
-//    @PutMapping("/{productId}")
-//    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
-//        ProductModel productModel = productRepository.findById(productId).orElse(null);
-//        if (productModel == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//        productModel.setName(productNameDTO.getName());
-//        return ResponseEntity.ok(productMapper.toProductDTO(productModel));
-//    }
-//
-//
-//    @DeleteMapping("/{productId}")
-//    public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
-//        if (productRepository.existsById(productId)) {
-//            productRepository.deleteById(productId);
-//            return ResponseEntity.ok().build();
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created",
+                    content = @Content(mediaType = "application/json")
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid input",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Missing required field: name\" }"
+                            )
+                    )
+            )
+    })
+    @PostMapping("")
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductNameDTO productNameDTO) {
+        ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDTO);
+
+        ProductTo savedProduct = productService.saveProduct(productNameTo);
+
+        ProductDTO productDTO = productRestMapper.toProductDTO(savedProduct);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
+    }
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
+        ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDTO);
+
+        ProductTo updateProductTo = productService.updateProduct(productId, productNameTo);
+
+        ProductDTO updateProductDTO = productRestMapper.toProductDTO(updateProductTo);
+
+        return ResponseEntity.ok(updateProductDTO);
+    }
+
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Integer productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok().build();
+    }
 
 
 }

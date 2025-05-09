@@ -33,13 +33,6 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
-    /**
-     * AÑADIR LA EXCEPCION CREADA EN LA CAPA API-MODEL
-     **/
-    @Override
-    public List<ProductTo> findAllProduct() {
-        return productModelMapper.toProductTo(productRepository.findAll());
-    }
 
     @Override
     public PageResponse<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable) {
@@ -80,14 +73,12 @@ public class ProductServiceImpl implements ProductService {
             ));
         }
 
-        PageResponse<ProductWithShopsTo> pageResponse = new PageResponse<>(
+
+
+        return new PageResponse<>(
                 productWithShopsTos,
                 productModels.getTotalElements(),
-                productModels.getTotalPages()
-        );
-
-
-        return productModelMapper.toProductModelTo(pageResponse);
+                productModels.getTotalPages());
     }
 
     @Override

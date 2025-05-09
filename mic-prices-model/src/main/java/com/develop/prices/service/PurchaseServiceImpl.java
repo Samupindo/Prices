@@ -12,14 +12,17 @@ import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
+import com.develop.prices.to.PageResponse;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.ProductInShopTo;
 import com.develop.prices.to.PurchaseTo;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -48,13 +51,9 @@ public class PurchaseServiceImpl implements PurchaseService {
         this.customerRepository = customerRepository;
     }
 
-    @Override
-    public List<PurchaseTo> findAllPurchase() {
-        return purchaseModelMapper.toPurchaseTo(purchaseRepository.findAll());
-    }
 
     @Override
-    public List<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping) {
+    public PageResponse<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping, Pageable pageable) {
 
         Specification<PurchaseModel> spec = Specification.where(null);
 
@@ -78,28 +77,46 @@ public class PurchaseServiceImpl implements PurchaseService {
             spec = spec.and(PurchaseSpecification.hasShoppingStatus(shopping));
         }
 
-        List<PurchaseModel> purchaseModels = purchaseRepository.findAll(spec);
+        Page<PurchaseModel> purchaseModels = purchaseRepository.findAll(spec,pageable);
+
+        List<PurchaseTo> purchaseToList = purchaseModels.getContent()
+                .stream()
+                .map(purchaseModel -> {
+                    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+                    List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels()
+                            .stream().map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
+                            .collect(Collectors.toList());
+                    purchaseTo.setProducts(productInShopTos);
+                    return purchaseTo;
+                })
+                .collect(Collectors.toList());
 
 
-        return purchaseModelMapper.toPurchaseTo(purchaseModels);
+        return new PageResponse<>(
+                purchaseToList,
+                purchaseModels.getTotalElements(),
+                purchaseModels.getTotalPages()
+        );
     }
 
     @Override
-    public Optional<PurchaseTo> findPurchaseById(Integer purchaseId) {
+    public PurchaseTo findPurchaseById(Integer purchaseId) {
         Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
 
         if (optionalPurchaseModel.isEmpty()) {
             throw new InstanceNotFoundException();
         }
 
-        return optionalPurchaseModel.map(purchaseModel -> {
-            PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
-            List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels().stream()
-                    .map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
-                    .collect(Collectors.toList());
-            purchaseTo.setProducts(productInShopTos);
-            return purchaseTo;
-        });
+        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+        PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+
+        List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels().stream()
+                .map(p -> productInShopModelMapper.toPurchaseTo(p.getProductInShop()))
+                .collect(Collectors.toList());
+        purchaseTo.setProducts(productInShopTos);
+
+        return purchaseTo;
     }
 
     @Override

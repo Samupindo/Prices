@@ -11,5 +11,9 @@ public interface ProductInShopModelMapper {
     @Mapping(target = "shopId", source = "shop.shopId")
     ProductInShopTo toProductInShopTo(ProductInShopModel productInShopModel);
 
-
+    @Mapping(target = "productInShopId", source = "productInShopId")
+    @Mapping(target = "productId", source = "product.productId")
+    @Mapping(target = "shopId", source = "shop.shopId")
+    @Mapping(target = "price", source = "price")
+    ProductInShopTo toPurchaseTo(ProductInShopModel productInShopModel);
 }

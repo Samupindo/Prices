@@ -1,7 +1,5 @@
 package com.develop.prices.to;
 
-import com.develop.prices.validation.PatchPutNotBlank;
-import com.develop.prices.validation.PatchPutNotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 

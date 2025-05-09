@@ -19,7 +19,7 @@ public interface ProductModelMapper {
 
     List<ProductWithShopsTo> toProductModelTo(List<ProductModel> productModels);
 
-    PageResponse<ProductWithShopsTo> toProductModelTo(PageResponse<ProductWithShopsTo> productModels);
+    PageResponse<ProductTo> toProductModelTo(PageResponse<ProductWithShopsTo> productModels);
 
     @Mapping(target = "productId", ignore = true)
     @Mapping(target = "prices", ignore = true)

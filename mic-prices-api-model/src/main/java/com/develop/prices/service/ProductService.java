@@ -11,10 +11,6 @@ import java.util.List;
 
 public interface ProductService {
 
-    List<ProductTo> findAllProduct();
-
-    //PageResponse<ProductWithShopsTo> findAllWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable);
-
     PageResponse<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable);
 
     ProductWithShopsTo findByProductById(Integer productId);

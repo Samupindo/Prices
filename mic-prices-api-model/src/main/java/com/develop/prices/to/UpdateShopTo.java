@@ -1,6 +1,5 @@
 package com.develop.prices.to;
 
-import com.develop.prices.validation.PatchPutNotBlank;
 
 //@JsonIgnoreProperties(ignoreUnknown = false)
 public class UpdateShopTo {
