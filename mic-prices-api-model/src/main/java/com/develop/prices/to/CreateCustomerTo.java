@@ -1,8 +1,5 @@
 package com.develop.prices.to;
 
-import com.develop.prices.validation.PatchPutNotBlank;
-import com.develop.prices.validation.PatchPutNotNull;
-
 public class CreateCustomerTo {
 
         private String name;

@@ -1,117 +1,86 @@
-//package com.develop.prices.rest;
-//
-//
-//import com.develop.prices.dto.*;
-//import com.develop.prices.mapper.ProductInShopMapper;
-//import com.develop.prices.mapper.ShopMapper;
-//import com.develop.prices.model.ProductInShopModel;
-//import com.develop.prices.model.ProductModel;
-//import com.develop.prices.model.ShopModel;
-//import com.develop.prices.dto.ProductInShopDTO;
-//import com.develop.prices.repository.ShopLocationRepository;
-//import com.develop.prices.repository.ProductInShopRepository;
-//import com.develop.prices.repository.ProductRepository;
-//import com.develop.prices.specification.ShopsSpecification;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.ExampleObject;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import jakarta.validation.Valid;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.data.jpa.domain.Specification;
-//import org.springframework.data.web.PageableDefault;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.PatchMapping;
-//import java.math.BigDecimal;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@RestController
-//@Transactional
-//@RequestMapping("/shops")
-//public class ShopController {
-//
-//    private final ShopLocationRepository shopLocationRepository;
-//    private final ProductRepository productRepository;
-//    private final ProductInShopRepository productInShopRepository;
-//    private final ShopMapper shopMapper;
-//    private final ProductInShopMapper productInShopMapper;
-//
-//    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductInShopRepository productInShopRepository, ShopMapper shopMapper, ProductInShopMapper productInShopMapper) {
-//        this.shopLocationRepository = shopLocationRepository;
-//        this.productRepository = productRepository;
-//        this.productInShopRepository = productInShopRepository;
-//        this.shopMapper = shopMapper;
-//        this.productInShopMapper = productInShopMapper;
-//    }
-//
-//    @GetMapping("")
-//    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
-//            @RequestParam(required = false) String country,
-//            @RequestParam(required = false) String city,
-//            @RequestParam(required = false) String address,
-//            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
-//
-//        Specification<ShopModel> spec = Specification.where(null);
-//
-//        if(country!=null){
-//            spec = spec.and(ShopsSpecification.findByCountry(country));
-//        }
-//
-//        if(city!=null){
-//            spec = spec.and(ShopsSpecification.findByCity(city));
-//        }
-//
-//        if(address!=null){
-//            spec = spec.and(ShopsSpecification.findByAddress(address));
-//        }
-//
-//
-//        Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
-//        List<ShopDTO> shopDTOList = shopModelPage.getContent()
-//                .stream()
-//                //.map(s -> toShopDTO(s))
-//                .map(shopMapper::shopModelToShopDTO)
-//                .toList();
-//
-//        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
-//                shopDTOList,
-//                shopModelPage.getTotalElements(),
-//                shopModelPage.getTotalPages()
-//        );
-//
-//        return ResponseEntity.ok(shopDTOPageResponse);
-//
-//    }
-//
-//    @GetMapping("/{shopId}")
-//    public ResponseEntity<ShopDTO> getShopById(@PathVariable(required = false) Integer shopId){
-//
-//        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-//
-//        if(optionalShopModel.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        ShopModel shopModel = optionalShopModel.get();
-//        ShopDTO shopDTO = shopMapper.shopModelToShopDTO(shopModel);
-//
-//        return ResponseEntity.ok(shopDTO);
-//    }
-//
+package com.develop.prices.rest;
+
+
+import com.develop.prices.dto.*;
+import com.develop.prices.mapper.ProductInShopRestMapper;
+import com.develop.prices.mapper.ShopRestMapper;
+import com.develop.prices.dto.ProductInShopDTO;
+import com.develop.prices.service.ShopService;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.PageResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import com.develop.prices.service.ShopService;
+import com.develop.prices.mapper.ShopRestMapper;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/shops")
+public class ShopController {
+    private final ShopService shopService;
+
+    private final ShopRestMapper shopRestMapper;
+
+    @Autowired
+    public ShopController(ShopService shopService, ShopRestMapper shopRestMapper) {
+        this.shopService = shopService;
+        this.shopRestMapper = shopRestMapper;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String address,
+            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        PageResponse<ShopTo> shopTo = shopService.findAllShopWithFilters(country, city, address, pageable);
+
+        List<ShopDTO> shopDTOList = shopTo.getContent()
+                .stream()
+                .map(shopRestMapper::toShopDTO)
+                .toList();
+
+        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
+                shopDTOList,
+                shopTo.getTotalElements(),
+                shopTo.getTotalPages()
+        );
+
+        return ResponseEntity.ok(shopDTOPageResponse);
+
+    }
+
+    @GetMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> getShopById(@PathVariable(required = false) Integer shopId){
+        ShopTo shopTo = shopService.findShopById(shopId);
+
+        if(shopTo == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ShopDTO shopDTO = shopRestMapper.toShopDTO(shopTo);
+
+        return ResponseEntity.ok(shopDTO);
+    }
+
 //    @ApiResponses(value = {
 //            @ApiResponse(
 //                    responseCode = "201",
@@ -354,5 +323,5 @@
 //
 //        return productInShopModel;
 //    }
-//
-//}
+
+}

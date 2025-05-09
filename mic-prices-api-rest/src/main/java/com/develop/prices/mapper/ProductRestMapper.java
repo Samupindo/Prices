@@ -21,8 +21,6 @@ public interface ProductRestMapper {
 
     List<ProductDTO> toListProductDTO(List<ProductTo> productTo);
 
-
-
     ProductNameTo toProductNameTo(ProductNameDTO productNameDTO);
 
     ProductWithShopsTo toProductWithShopsTo(ProductWithShopsDTO productWithShopsDTO);

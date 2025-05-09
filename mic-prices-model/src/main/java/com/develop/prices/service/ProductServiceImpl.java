@@ -33,9 +33,6 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
-    /**
-     * AÑADIR LA EXCEPCION CREADA EN LA CAPA API-MODEL
-     **/
     @Override
     public List<ProductTo> findAllProduct() {
         return productModelMapper.toProductTo(productRepository.findAll());
