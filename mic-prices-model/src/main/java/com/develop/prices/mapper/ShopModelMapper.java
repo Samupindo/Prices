@@ -2,10 +2,7 @@ package com.develop.prices.mapper;
 
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ShopModel;
-import com.develop.prices.to.ShopAddTo;
-import com.develop.prices.to.ShopInfoTo;
-import com.develop.prices.to.ShopTo;
-import com.develop.prices.to.UpdateShopTo;
+import com.develop.prices.to.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,7 +13,7 @@ public interface ShopModelMapper {
 
     ShopTo toShopTo(ShopModel shopModel);
 
-    List<ShopTo> toShopTos(List<ShopModel> shopModels);
+    PageResponse<ShopTo> toShopTos(PageResponse<ShopModel> shopModels);
 
     @Mapping(target = "shopId", ignore = true)
     @Mapping(target = "city", ignore = true)

@@ -1,14 +1,13 @@
 package com.develop.prices.service;
 
 import com.develop.prices.to.*;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ShopService {
 
-    List<ShopTo> findAllShops();
-
-    List<ShopTo> findAllShopWithFilters(String country, String city, String address);
+    PageResponse<ShopTo> findAllShopWithFilters(String country, String city, String address, Pageable pageable);
 
     ShopTo findShopById(Integer shopId);
 

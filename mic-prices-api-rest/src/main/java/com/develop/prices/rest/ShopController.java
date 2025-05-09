@@ -1,162 +1,125 @@
-//package com.develop.prices.rest;
-//
-//
-//import com.develop.prices.dto.*;
-//import com.develop.prices.mapper.ProductInShopMapper;
-//import com.develop.prices.mapper.ShopMapper;
-//import com.develop.prices.model.ProductInShopModel;
-//import com.develop.prices.model.ProductModel;
-//import com.develop.prices.model.ShopModel;
-//import com.develop.prices.dto.ProductInShopDTO;
-//import com.develop.prices.repository.ShopLocationRepository;
-//import com.develop.prices.repository.ProductInShopRepository;
-//import com.develop.prices.repository.ProductRepository;
-//import com.develop.prices.specification.ShopsSpecification;
-//import io.swagger.v3.oas.annotations.media.Content;
-//import io.swagger.v3.oas.annotations.media.ExampleObject;
-//import io.swagger.v3.oas.annotations.responses.ApiResponse;
-//import io.swagger.v3.oas.annotations.responses.ApiResponses;
-//import jakarta.validation.Valid;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.data.jpa.domain.Specification;
-//import org.springframework.data.web.PageableDefault;
-//import org.springframework.http.HttpStatus;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.transaction.annotation.Transactional;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-//import org.springframework.web.bind.annotation.PatchMapping;
-//import java.math.BigDecimal;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@RestController
-//@Transactional
-//@RequestMapping("/shops")
-//public class ShopController {
-//
-//    private final ShopLocationRepository shopLocationRepository;
-//    private final ProductRepository productRepository;
-//    private final ProductInShopRepository productInShopRepository;
-//    private final ShopMapper shopMapper;
-//    private final ProductInShopMapper productInShopMapper;
-//
-//    public ShopController(ShopLocationRepository shopLocationRepository, ProductRepository productRepository, ProductInShopRepository productInShopRepository, ShopMapper shopMapper, ProductInShopMapper productInShopMapper) {
-//        this.shopLocationRepository = shopLocationRepository;
-//        this.productRepository = productRepository;
-//        this.productInShopRepository = productInShopRepository;
-//        this.shopMapper = shopMapper;
-//        this.productInShopMapper = productInShopMapper;
-//    }
-//
-//    @GetMapping("")
-//    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
-//            @RequestParam(required = false) String country,
-//            @RequestParam(required = false) String city,
-//            @RequestParam(required = false) String address,
-//            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
-//
-//        Specification<ShopModel> spec = Specification.where(null);
-//
-//        if(country!=null){
-//            spec = spec.and(ShopsSpecification.findByCountry(country));
-//        }
-//
-//        if(city!=null){
-//            spec = spec.and(ShopsSpecification.findByCity(city));
-//        }
-//
-//        if(address!=null){
-//            spec = spec.and(ShopsSpecification.findByAddress(address));
-//        }
-//
-//
-//        Page<ShopModel> shopModelPage = shopLocationRepository.findAll(spec, pageable);
-//        List<ShopDTO> shopDTOList = shopModelPage.getContent()
-//                .stream()
-//                //.map(s -> toShopDTO(s))
-//                .map(shopMapper::shopModelToShopDTO)
-//                .toList();
-//
-//        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
-//                shopDTOList,
-//                shopModelPage.getTotalElements(),
-//                shopModelPage.getTotalPages()
-//        );
-//
-//        return ResponseEntity.ok(shopDTOPageResponse);
-//
-//    }
-//
-//    @GetMapping("/{shopId}")
-//    public ResponseEntity<ShopDTO> getShopById(@PathVariable(required = false) Integer shopId){
-//
-//        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-//
-//        if(optionalShopModel.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        ShopModel shopModel = optionalShopModel.get();
-//        ShopDTO shopDTO = shopMapper.shopModelToShopDTO(shopModel);
-//
-//        return ResponseEntity.ok(shopDTO);
-//    }
-//
-//    @ApiResponses(value = {
-//            @ApiResponse(
-//                    responseCode = "201",
-//                    description = "Created",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"shopId\": 4, \"country\": \"España\", \"city\": \"Coruña\", \"address\": \"Os Mallos 10\" }"
-//                            )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "400",
-//                    description = "Missing or invalid fields",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Missing required field: city\" }"
-//                            )
-//                    )
-//            ),
-//            @ApiResponse(
-//                    responseCode = "409",
-//                    description = "Shop already exists",
-//                    content = @Content(
-//                            mediaType = "application/json",
-//                            examples = @ExampleObject(
-//                                    value = "{ \"error\": \"Shop already exists at this address in this city and country\" }"
-//                            )
-//                    )
-//            )
-//    })
-//    @PostMapping("")
-//    public ResponseEntity<ShopDTO> addShop(@Valid @RequestBody ShopAddDTO shopAddDTO) {
-//
-//        ShopModel newShopModel = new ShopModel();
-//
-//        newShopModel.setCountry(shopAddDTO.getCountry());
-//        newShopModel.setCity(shopAddDTO.getCity());
-//        newShopModel.setAddress(shopAddDTO.getAddress());
-//
-//        ShopModel shopModel = shopLocationRepository.save(newShopModel);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED).body(shopMapper.shopModelToShopDTO(shopModel));
-//    }
+package com.develop.prices.rest;
+
+
+import com.develop.prices.dto.*;
+import com.develop.prices.mapper.ProductRestMapper;
+import com.develop.prices.mapper.ShopRestMapper;
+import com.develop.prices.service.ProductService;
+import com.develop.prices.service.ShopService;
+import com.develop.prices.to.*;
+import com.develop.prices.to.PageResponse;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/shops")
+public class ShopController {
+    private final ShopService shopService;
+    private final ShopRestMapper shopRestMapper;
+    private final ProductService productService;
+    private final ProductRestMapper productRestMapper;
+
+    @Autowired
+    public ShopController(ShopService shopService, ProductService productService, ShopRestMapper shopRestMapper, ProductRestMapper productRestMapper) {
+        this.shopService = shopService;
+        this.productService = productService;
+        this.shopRestMapper = shopRestMapper;
+        this.productRestMapper = productRestMapper;
+    }
+
+    @GetMapping("")
+    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String address,
+            @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        PageResponse<ShopTo> shopTo = shopService.findAllShopWithFilters(country, city, address, pageable);
+
+        List<ShopDTO> shopDTOList = shopTo.getContent()
+                .stream()
+                .map(shopRestMapper::toShopDTO)
+                .toList();
+
+        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
+                shopDTOList,
+                shopTo.getTotalElements(),
+                shopTo.getTotalPages()
+        );
+
+        return ResponseEntity.ok(shopDTOPageResponse);
+
+    }
+
+    @GetMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> getShopById(@PathVariable(required = false) Integer shopId){
+        ShopTo shopTo = shopService.findShopById(shopId);
+
+        if(shopTo == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        ShopDTO shopDTO = shopRestMapper.toShopDTO(shopTo);
+
+        return ResponseEntity.ok(shopDTO);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Created",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"shopId\": 4, \"country\": \"España\", \"city\": \"Coruña\", \"address\": \"Os Mallos 10\" }"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Missing or invalid fields",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Missing required field: city\" }"
+                            )
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Shop already exists",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    value = "{ \"error\": \"Shop already exists at this address in this city and country\" }"
+                            )
+                    )
+            )
+    })
+    @PostMapping("")
+    public ResponseEntity<ShopDTO> addShop(@Valid @RequestBody ShopAddDTO shopAddDTO) {
+        ShopAddTo shopAddTo = shopRestMapper.toShopAddTo(shopAddDTO);
+
+        ShopTo shopTo = shopService.saveShop(shopAddTo);
+
+        ShopDTO shopDTO = shopRestMapper.toShopDTO(shopTo);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(shopDTO);
+    }
 //
 //
 //    @ApiResponses(value = {
@@ -201,94 +164,50 @@
 //                    )
 //            )
 //    })
-//    @PostMapping("/{shopId}/products/{productId}")
-//    public ResponseEntity<ProductInShopDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
+    @PostMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductInShopDTO> addProductShop(@PathVariable Integer productId, @PathVariable Integer shopId, @Valid @RequestBody AddProductShopDTO addProductShopDTO) {
+
+        AddProductShopTo addProductShopTo = productRestMapper.toAddProductShopTo(addProductShopDTO);
+
+        ProductInShopTo productInShopTo = shopService.addProductToShop(productId, shopId, addProductShopTo);
+
+        return ResponseEntity.ok(productRestMapper.toProductInShopDTO(productInShopTo));
+
+    }
+
+    @PutMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
+
+        UpdateShopTo updateShopTo = shopRestMapper.toUpdateShopTo(updateShopDTO);
+
+        ShopTo shopTo = shopService.updateShop(shopId, updateShopTo);
+
+        return ResponseEntity.ok(shopRestMapper.toShopDTO(shopTo));
+    }
 //
-//        Optional<ProductModel> optionalProductModel = productRepository.findById(productId);
-//        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-//
-//        if (optionalProductModel.isEmpty() || optionalShopModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        if (productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//        }
-//
-//        BigDecimal price = addProductShopDTO.getPrice();
-//
-//        ProductInShopModel productInShopModel = buildProductInShopModel(optionalProductModel.get(), optionalShopModel.get(), price);
-//
-//
-//        ProductInShopModel productInShopModelDB = productInShopRepository.save(productInShopModel);
-//
-//
-//        return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(productInShopModelDB));
-//
-//    }
-//    @PutMapping("/{shopId}")
-//    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
-//
-//        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-//        if (optionalShopModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        ShopModel shopModel = optionalShopModel.get();
-//        shopModel.setCountry(updateShopDTO.getCountry());
-//        shopModel.setCity(updateShopDTO.getCity());
-//        shopModel.setAddress(updateShopDTO.getAddress());
-//
-//        ShopModel saveShopModel = shopLocationRepository.save(shopModel);
-//
-//        return ResponseEntity.ok(shopMapper.shopModelToShopDTO(saveShopModel));
-//    }
-//
-//    @PatchMapping("/{shopId}")
-//    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
-//        // Primero verificar si la tienda existe
-//        Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
-//        if (optionalShopModel.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//
-//        ShopModel shopModel = optionalShopModel.get();
-//
-//
-//        if (updateShopDTO.getCountry() != null) {
-//            shopModel.setCountry(updateShopDTO.getCountry());
-//        }
-//
-//        if (updateShopDTO.getCity() != null) {
-//
-//            shopModel.setCity(updateShopDTO.getCity());
-//        }
-//
-//        if (updateShopDTO.getAddress() != null) {
-//
-//            shopModel.setAddress(updateShopDTO.getAddress());
-//        }
-//
-//
-//        ShopModel saveShopModel = shopLocationRepository.save(shopModel);
-//        return ResponseEntity.ok(shopMapper.shopModelToShopDTO(saveShopModel));
-//    }
-//
-//    @PatchMapping("/{shopId}/products/{productId}")
-//    public ResponseEntity<ProductInShopDTO> updateProductInShop(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ProductInShopPatchDTO productInShopPatchDTO) {
-//
-//        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-//        if(productInShopModel == null){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//        BigDecimal price = productInShopPatchDTO.getPrice();
-//
-//        productInShopModel.setPrice(price);
-//
-//        ProductInShopModel savePriceModel = productInShopRepository.save(productInShopModel);
-//
-//        return ResponseEntity.ok(productInShopMapper.productInShopModelToProductInShopDTO(savePriceModel));
-//    }
+    @PatchMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> partialUpdateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
+
+        UpdateShopTo updateShopTo = shopRestMapper.toUpdateShopTo(updateShopDTO);
+
+        ShopTo shopTo = shopService.partialUpdateShop(shopId, updateShopTo);
+
+        return ResponseEntity.ok(shopRestMapper.toShopDTO(shopTo));
+    }
+
+    @PatchMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductInShopDTO> updateProductInShop(@PathVariable Integer shopId, @PathVariable Integer productId, @Valid @RequestBody ProductInShopPatchDTO productInShopPatchDTO) {
+
+        BigDecimal price = productInShopPatchDTO.getPrice();
+
+        ProductInShopPatchTo productInShopPatchTo = productRestMapper.toProductInShopPatchTo(productInShopPatchDTO);
+
+        productInShopPatchTo.setPrice(price);
+
+        ProductInShopTo productInShopTo = shopService.updateProductPriceInShop(shopId, productId, productInShopPatchTo);
+
+        return ResponseEntity.ok(productRestMapper.toProductInShopDTO(productInShopTo));
+    }
 //
 //    @ApiResponses(value = {
 //            @ApiResponse(
@@ -307,15 +226,15 @@
 //            ),
 //    })
 //
-//    @DeleteMapping("/{shopId}")
-//    public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
-//        if (shopLocationRepository.findById(shopId).isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//        shopLocationRepository.deleteById(shopId);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{shopId}")
+    public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
+        if (shopService.findShopById(shopId) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        shopService.deleteShop(shopId);
+
+        return ResponseEntity.ok().build();
+    }
 //
 //    @ApiResponses(value = {
 //            @ApiResponse(
@@ -334,17 +253,13 @@
 //            ),
 //    })
 //
-//    @DeleteMapping("/{shopId}/products/{productId}")
-//    public ResponseEntity<ProductInShopModel> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
-//
-//        ProductInShopModel productInShopModel = productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).orElse(null);
-//        if (productInShopModel == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-//        shopLocationRepository.deleteById(shopId);
-//
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{shopId}/products/{productId}")
+    public ResponseEntity<ProductInShopDTO> deleteProductFromShop(@PathVariable Integer productId, @PathVariable Integer shopId) {
+
+        shopService.deleteProductFromShop(shopId, productId);
+
+        return ResponseEntity.ok().build();
+    }
 //
 //    private ProductInShopModel buildProductInShopModel(ProductModel product, ShopModel shop, BigDecimal price) {
 //        ProductInShopModel productInShopModel = new ProductInShopModel();
@@ -354,5 +269,5 @@
 //
 //        return productInShopModel;
 //    }
-//
-//}
+
+}

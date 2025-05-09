@@ -13,6 +13,8 @@ import com.develop.prices.repository.ShopLocationRepository;
 import com.develop.prices.specification.ShopsSpecification;
 import com.develop.prices.to.*;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -42,16 +44,8 @@ public class ShopServiceImpl implements ShopService {
         this.productRepository = productRepository;
     }
 
-    /**
-     * REVISAR PARA QUE FUNCIONE LA EXCEPTION CREADA EN LA CAPA DE API-MODEL
-     **/
     @Override
-    public List<ShopTo> findAllShops() {
-        return shopModelMapper.toShopTos(shopLocationRepository.findAll());
-    }
-
-    @Override
-    public List<ShopTo> findAllShopWithFilters(String country, String city, String address) {
+    public PageResponse<ShopTo> findAllShopWithFilters(String country, String city, String address, Pageable pageable) {
         Specification<ShopModel> spec = Specification.where(null);
 
         if (country != null) {
@@ -65,9 +59,15 @@ public class ShopServiceImpl implements ShopService {
         if (address != null) {
             spec = spec.and(ShopsSpecification.findByAddress(address));
         }
-        List<ShopModel> shopModels = shopLocationRepository.findAll(spec);
+        Page<ShopModel> shopModels = shopLocationRepository.findAll(spec, pageable);
 
-        return shopModelMapper.toShopTos(shopModels);
+        List<ShopTo> shopTo = shopModels.getContent().stream().map(shopModelMapper::toShopTo).toList();
+
+        return new PageResponse<>(
+                shopTo,
+                shopModels.getTotalElements(),
+                shopModels.getTotalPages()
+        );
     }
 
     @Override
