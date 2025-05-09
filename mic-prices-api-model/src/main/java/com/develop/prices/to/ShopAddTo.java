@@ -1,20 +1,11 @@
 package com.develop.prices.to;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+
 
 public class ShopAddTo {
 
-    @Size(min = 3, max = 100)
-    @NotBlank
     private String country;
-
-    @Size(min = 3,max = 100)
-    @NotBlank
     private String city;
-
-    @Size(max = 100)
-    @NotBlank
     private String address;
 
     public ShopAddTo() {

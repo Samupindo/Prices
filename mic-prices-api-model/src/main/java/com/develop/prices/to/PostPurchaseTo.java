@@ -1,10 +1,8 @@
 package com.develop.prices.to;
 
-import jakarta.validation.constraints.NotNull;
 
 
 public class PostPurchaseTo {
-    @NotNull
     private Integer customerId;
 
     public PostPurchaseTo() {

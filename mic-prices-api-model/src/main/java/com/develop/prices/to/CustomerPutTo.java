@@ -1,12 +1,9 @@
 package com.develop.prices.to;
 
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
 
 public class CustomerPutTo {
 
-    @Size(max = 100, message = "The name can only have 100 characteres")
-    @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
     private String name;
 
     private Integer phone;
