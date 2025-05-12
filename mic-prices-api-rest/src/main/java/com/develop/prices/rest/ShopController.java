@@ -242,9 +242,6 @@ public class ShopController {
 
     @DeleteMapping("/{shopId}")
     public ResponseEntity<ShopDTO> deleteShop(@PathVariable Integer shopId) {
-        if (shopService.findShopById(shopId) == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         shopService.deleteShop(shopId);
 
         return ResponseEntity.ok().build();
