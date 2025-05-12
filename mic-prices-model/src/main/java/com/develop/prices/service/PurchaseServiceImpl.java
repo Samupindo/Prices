@@ -4,7 +4,7 @@ import com.develop.prices.entity.CustomerModel;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.PurchaseLineModel;
 import com.develop.prices.entity.PurchaseModel;
-import com.develop.prices.exception.ConflictException;
+import com.develop.prices.exception.BadRequestException;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductInShopModelMapper;
 import com.develop.prices.mapper.PurchaseModelMapper;
@@ -151,7 +151,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
         if (!purchaseModel.isShopping()) {
-            throw new ConflictException();
+            throw new BadRequestException();
         }
 
         ProductInShopModel productInShopModel = optionalProductInShopModel.get();
@@ -182,7 +182,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
         PurchaseModel purchaseModel = optionalPurchaseModel.get();
         if (!purchaseModel.isShopping()) {
-            throw new ConflictException();
+            throw new BadRequestException();
         }
 
         purchaseModel.setShopping(false);
@@ -223,7 +223,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
         if (!purchaseModel.isShopping()) {
-            throw new ConflictException();
+            throw new BadRequestException();
         }
 
         boolean productoExiste = purchaseModel.getPurchaseLineModels().stream()
