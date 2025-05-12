@@ -1,18 +1,17 @@
-package com.develop.prices.dto;
+package com.develop.prices.to;
 
-import com.develop.prices.validation.StringNotBlank;
 
 import java.io.Serializable;
 
-public class UpdateShopDTO implements Serializable {
+public class ShopPutTo implements Serializable {
     private String country;
     private String city;
     private String address;
 
-    public UpdateShopDTO() {
+    public ShopPutTo() {
     }
 
-    public UpdateShopDTO(String country, String city, String address) {
+    public ShopPutTo(String country, String city, String address) {
         this.country = country;
         this.city = city;
         this.address = address;

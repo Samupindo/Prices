@@ -1,11 +1,12 @@
 package com.develop.prices.rest;
 
+import com.develop.prices.dto.PageResponseDTO;
 import com.develop.prices.dto.ProductDTO;
 import com.develop.prices.dto.ProductNameDTO;
 import com.develop.prices.dto.ProductWithShopsDTO;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.service.ProductService;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;
@@ -48,19 +49,19 @@ public class ProductController {
 
 
     @GetMapping("")
-    public ResponseEntity<PageResponse<ProductWithShopsDTO>> getProductsWithFilters(
+    public ResponseEntity<PageResponseDTO<ProductWithShopsDTO>> getProductsWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) BigDecimal priceMin,
             @RequestParam(required = false) BigDecimal priceMax,
             @PageableDefault(sort = "productId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        PageResponse<ProductWithShopsTo> productTos = productService.findAllProductsWithFilters(name, priceMin, priceMax, pageable);
+        PageResponseTo<ProductWithShopsTo> productTos = productService.findAllProductsWithFilters(name, priceMin, priceMax, pageable);
 
         List<ProductWithShopsDTO> productDTOS = productTos.getContent().stream()
                 .map(productRestMapper::toProductWithShopsDTO)
                 .toList();
 
-        PageResponse<ProductWithShopsDTO> response = new PageResponse<>(
+        PageResponseDTO<ProductWithShopsDTO> response = new PageResponseDTO<>(
                 productDTOS,
                 productDTOS.size(),
                 1

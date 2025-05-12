@@ -1,6 +1,6 @@
 package com.develop.prices.service;
 
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
 import org.springframework.data.domain.Pageable;
@@ -10,9 +10,9 @@ import java.util.List;
 public interface PurchaseService {
 
 
-    PageResponse<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
-                                                BigDecimal totalPriceMax, BigDecimal totalPriceMin,
-                                                Boolean shopping, Pageable pageable);
+    PageResponseTo<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop,
+                                                  BigDecimal totalPriceMax, BigDecimal totalPriceMin,
+                                                  Boolean shopping, Pageable pageable);
 
 
     PurchaseTo findPurchaseById(Integer purchaseId);

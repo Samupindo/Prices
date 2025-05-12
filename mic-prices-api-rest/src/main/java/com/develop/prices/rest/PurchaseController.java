@@ -1,6 +1,7 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.dto.PageResponseDTO;
+import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.dto.PostPurchaseDTO;
 import com.develop.prices.dto.PurchaseDTO;
 import com.develop.prices.mapper.PurchaseRestMapper;
@@ -46,7 +47,7 @@ public class PurchaseController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse<PurchaseDTO>> getPurchasesWithFilters(
+    public ResponseEntity<PageResponseDTO<PurchaseDTO>> getPurchasesWithFilters(
             @RequestParam(required = false) Integer customerId,
             @RequestParam(required = false) List<Integer> productInShop,
             @RequestParam(required = false) BigDecimal totalPriceMax,
@@ -55,13 +56,13 @@ public class PurchaseController {
             @PageableDefault(sort = "purchaseId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
-        PageResponse<PurchaseTo> purchaseToPageResponse = purchaseService.findAllWithFilters(customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
+        PageResponseTo<PurchaseTo> purchaseToPageResponseTo = purchaseService.findAllWithFilters(customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
-        List<PurchaseDTO> purchaseToList = purchaseToPageResponse.getContent().stream()
+        List<PurchaseDTO> purchaseToList = purchaseToPageResponseTo.getContent().stream()
                 .map(purchaseRestMapper::toPurchaseDTO)
                 .toList();
 
-        PageResponse<PurchaseDTO> response = new PageResponse<>(
+        PageResponseDTO<PurchaseDTO> response = new PageResponseDTO<>(
                 purchaseToList,
                 purchaseToList.size(),
                 1

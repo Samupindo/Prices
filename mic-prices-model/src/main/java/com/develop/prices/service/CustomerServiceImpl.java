@@ -8,7 +8,7 @@ import com.develop.prices.specification.CustomerSpecification;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable) {
+    public PageResponseTo<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable) {
 
 
         Specification<CustomerModel> spec = Specification.where(null);
@@ -54,12 +54,12 @@ public class CustomerServiceImpl implements CustomerService {
         List<CustomerTo> customerTos = customerModels.getContent().stream().map(customerModelMapper::toCustomerTo).toList();
         
         
-        PageResponse<CustomerTo> pageResponse = new PageResponse<>(
+        PageResponseTo<CustomerTo> pageResponseTo = new PageResponseTo<>(
                 customerTos,
                 customerModels.getTotalElements(),
                 customerModels.getTotalPages()
         );
-        return customerModelMapper.toCustomerTo(pageResponse);
+        return customerModelMapper.toCustomerTo(pageResponseTo);
 
         
     }

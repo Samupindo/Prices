@@ -3,12 +3,13 @@ package com.develop.prices.rest;
 import com.develop.prices.dto.CreateCustomerDTO;
 import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.CustomerPutDTO;
+import com.develop.prices.dto.PageResponseDTO;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,26 +45,26 @@ public class CustomerController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse<CustomerDTO>> getCustomersWithFilters(
+    public ResponseEntity<PageResponseDTO<CustomerDTO>> getCustomersWithFilters(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer phone,
             @RequestParam(required = false) String email,
             @PageableDefault(sort = "customerId", direction = Sort.Direction.ASC) Pageable pageable) {
 
 
-        PageResponse<CustomerTo> customerPage = customerService.findAllWithFilters(name, phone, email, pageable);
+        PageResponseTo<CustomerTo> customerPage = customerService.findAllWithFilters(name, phone, email, pageable);
 
         List<CustomerDTO> customerDTOList = customerPage.getContent()
                 .stream()
                 .map(customerRestMapper::toCustomerDTO)
                 .toList();
 
-        PageResponse<CustomerDTO> pageResponse = new PageResponse<>(
+        PageResponseDTO<CustomerDTO> pageResponseDTO = new PageResponseDTO<>(
                 customerDTOList,
                 customerPage.getTotalElements(),
                 customerPage.getTotalPages()
         );
-        return ResponseEntity.ok(pageResponse);
+        return ResponseEntity.ok(pageResponseDTO);
 
     }
 
@@ -124,9 +125,6 @@ public class CustomerController {
 
         return ResponseEntity.ok().body(customerDTO);
     }
-
-
-
 
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Integer customerId) {

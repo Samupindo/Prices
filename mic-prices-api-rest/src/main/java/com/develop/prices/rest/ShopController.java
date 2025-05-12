@@ -1,22 +1,12 @@
 package com.develop.prices.rest;
 
 
-import com.develop.prices.dto.ShopDTO;
-import com.develop.prices.dto.ShopAddDTO;
-import com.develop.prices.dto.ProductInShopDTO;
-import com.develop.prices.dto.UpdateShopDTO;
-import com.develop.prices.dto.ProductInShopPatchDTO;
-import com.develop.prices.dto.AddProductShopDTO;
+import com.develop.prices.dto.*;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.ShopRestMapper;
 import com.develop.prices.service.ShopService;
-import com.develop.prices.to.ShopTo;
-import com.develop.prices.to.ShopAddTo;
-import com.develop.prices.to.AddProductShopTo;
-import com.develop.prices.to.ProductInShopTo;
-import com.develop.prices.to.UpdateShopTo;
-import com.develop.prices.to.ProductInShopPatchTo;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.*;
+import com.develop.prices.to.PageResponseTo;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,26 +46,26 @@ public class ShopController {
     }
 
     @GetMapping("")
-    public ResponseEntity<PageResponse<ShopDTO>> getShopLocationWithFilters(
+    public ResponseEntity<PageResponseDTO<ShopDTO>> getShopLocationWithFilters(
             @RequestParam(required = false) String country,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String address,
             @PageableDefault(sort = "shopId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        PageResponse<ShopTo> shopTo = shopService.findAllShopWithFilters(country, city, address, pageable);
+        PageResponseTo<ShopTo> shopTo = shopService.findAllShopWithFilters(country, city, address, pageable);
 
         List<ShopDTO> shopDTOList = shopTo.getContent()
                 .stream()
                 .map(shopRestMapper::toShopDTO)
                 .toList();
 
-        PageResponse<ShopDTO> shopDTOPageResponse = new PageResponse<>(
+        PageResponseDTO<ShopDTO> shopDTOPageResponseDTO = new PageResponseDTO<>(
                 shopDTOList,
                 shopTo.getTotalElements(),
                 shopTo.getTotalPages()
         );
 
-        return ResponseEntity.ok(shopDTOPageResponse);
+        return ResponseEntity.ok(shopDTOPageResponseDTO);
 
     }
 
@@ -190,11 +180,11 @@ public class ShopController {
     }
 
     @PutMapping("/{shopId}")
-    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody UpdateShopDTO updateShopDTO) {
+    public ResponseEntity<ShopDTO> updateShop(@PathVariable Integer shopId, @Valid @RequestBody ShopPutDTO shopPutDTO) {
 
-        UpdateShopTo updateShopTo = shopRestMapper.toUpdateShopTo(updateShopDTO);
+        ShopPutTo shopPutTo = shopRestMapper.toShopPutTo(shopPutDTO);
 
-        ShopTo shopTo = shopService.updateShop(shopId, updateShopTo);
+        ShopTo shopTo = shopService.updateShop(shopId, shopPutTo);
 
         return ResponseEntity.ok(shopRestMapper.toShopDTO(shopTo));
     }

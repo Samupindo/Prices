@@ -3,13 +3,13 @@ package com.develop.prices.service;
 import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface CustomerService {
 
-    PageResponse<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
+    PageResponseTo<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
 
     Optional<CustomerTo> findByCustomerId(Integer customerId);
 

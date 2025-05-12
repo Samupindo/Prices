@@ -6,11 +6,8 @@ import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductModelMapper;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.specification.ProductInShopSpecification;
-import com.develop.prices.to.ProductWithShopsTo;
-import com.develop.prices.to.PageResponse;
-import com.develop.prices.to.ShopInfoTo;
-import com.develop.prices.to.ProductTo;
-import com.develop.prices.to.ProductNameTo;
+import com.develop.prices.to.*;
+import com.develop.prices.to.PageResponseTo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public PageResponse<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable) {
+    public PageResponseTo<ProductWithShopsTo> findAllProductsWithFilters(String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable) {
 
         Specification<ProductModel> spec = Specification.where(null);
 
@@ -77,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-        return new PageResponse<>(
+        return new PageResponseTo<>(
                 productWithShopsTos,
                 productModels.getTotalElements(),
                 productModels.getTotalPages());

@@ -11,13 +11,8 @@ import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.repository.ShopLocationRepository;
 import com.develop.prices.specification.ShopsSpecification;
-import com.develop.prices.to.ShopTo;
-import com.develop.prices.to.PageResponse;
-import com.develop.prices.to.ShopAddTo;
-import com.develop.prices.to.ProductInShopTo;
-import com.develop.prices.to.AddProductShopTo;
-import com.develop.prices.to.UpdateShopTo;
-import com.develop.prices.to.ProductInShopPatchTo;
+import com.develop.prices.to.*;
+import com.develop.prices.to.PageResponseTo;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +45,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public PageResponse<ShopTo> findAllShopWithFilters(String country, String city, String address, Pageable pageable) {
+    public PageResponseTo<ShopTo> findAllShopWithFilters(String country, String city, String address, Pageable pageable) {
         Specification<ShopModel> spec = Specification.where(null);
 
         if (country != null) {
@@ -68,7 +63,7 @@ public class ShopServiceImpl implements ShopService {
 
         List<ShopTo> shopTo = shopModels.getContent().stream().map(shopModelMapper::toShopTo).toList();
 
-        return new PageResponse<>(
+        return new PageResponseTo<>(
                 shopTo,
                 shopModels.getTotalElements(),
                 shopModels.getTotalPages()
@@ -120,17 +115,17 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public ShopTo updateShop(Integer shopId, UpdateShopTo updateShopTo) {
+    public ShopTo updateShop(Integer shopId, ShopPutTo shopPutTo) {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
         if (optionalShopModel.isEmpty()) {
-            return null;
+            throw new InstanceNotFoundException();
         }
 
         ShopModel shopModel = optionalShopModel.get();
-        shopModel.setCountry(updateShopTo.getCountry());
-        shopModel.setCity(updateShopTo.getCity());
-        shopModel.setAddress(updateShopTo.getAddress());
+        shopModel.setCountry(shopPutTo.getCountry());
+        shopModel.setCity(shopPutTo.getCity());
+        shopModel.setAddress(shopPutTo.getAddress());
 
         ShopModel savedShopModel = shopLocationRepository.save(shopModel);
 
@@ -143,7 +138,7 @@ public class ShopServiceImpl implements ShopService {
         Optional<ShopModel> optionalShopModel = shopLocationRepository.findById(shopId);
 
         if (optionalShopModel.isEmpty()) {
-            return null;
+            throw new InstanceNotFoundException();
         }
         ShopModel shopModel = optionalShopModel.get();
 

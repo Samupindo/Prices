@@ -12,7 +12,7 @@ import com.develop.prices.repository.CustomerRepository;
 import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.specification.PurchaseSpecification;
-import com.develop.prices.to.PageResponse;
+import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.ProductInShopTo;
 import com.develop.prices.to.PurchaseTo;
@@ -51,7 +51,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 
 
     @Override
-    public PageResponse<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping, Pageable pageable) {
+    public PageResponseTo<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping, Pageable pageable) {
 
         Specification<PurchaseModel> spec = Specification.where(null);
 
@@ -90,7 +90,7 @@ public class PurchaseServiceImpl implements PurchaseService {
                 .collect(Collectors.toList());
 
 
-        return new PageResponse<>(
+        return new PageResponseTo<>(
                 purchaseToList,
                 purchaseModels.getTotalElements(),
                 purchaseModels.getTotalPages()
