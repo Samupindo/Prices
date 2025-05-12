@@ -71,9 +71,8 @@ public class CustomerController {
     @GetMapping("/{customerId}")
     public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
 
-        Optional<CustomerTo> optionalCustomerTo = customerService.findByCustomerId(customerId);
+        CustomerTo customerTo = customerService.findByCustomerId(customerId);
 
-        CustomerTo customerTo = optionalCustomerTo.get();
 
         return ResponseEntity.ok(customerRestMapper.toCustomerDTO(customerTo));
     }

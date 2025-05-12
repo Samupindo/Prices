@@ -7,11 +7,11 @@ import java.io.Serializable;
 
 public class CreateCustomerDTO implements Serializable {
 
-    @StringNotBlank
+
     private String name;
-    @PhoneNotNull
+
     private Integer phone;
-    @StringNotBlank
+
     private String email;
 
     public CreateCustomerDTO() {

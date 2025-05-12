@@ -27,6 +27,10 @@ public class CustomerModel {
     public CustomerModel() {
     }
 
+    public CustomerModel(Integer customerId) {
+        this.customerId = customerId;
+    }
+
     public CustomerModel(String name, Integer phone, String email) {
         this.name = name;
         this.phone = phone;
