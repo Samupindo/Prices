@@ -5,8 +5,6 @@ import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponse;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
