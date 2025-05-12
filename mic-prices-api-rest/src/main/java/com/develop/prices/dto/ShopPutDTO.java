@@ -1,15 +1,16 @@
 package com.develop.prices.dto;
 
 import com.develop.prices.validation.StringNotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
 
 public class ShopPutDTO implements Serializable {
-    @StringNotBlank
+    @NotBlank
     private String country;
-    @StringNotBlank
+    @NotBlank
     private String city;
-    @StringNotBlank
+    @NotBlank
     private String address;
 
     public ShopPutDTO() {
