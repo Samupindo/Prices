@@ -7,7 +7,6 @@ import com.develop.prices.entity.ShopModel;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductModelMapper;
 import com.develop.prices.repository.ProductRepository;
-import com.develop.prices.specification.ProductInShopSpecification;
 import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.ProductWithShopsTo;
 import com.develop.prices.to.ProductNameTo;
@@ -15,6 +14,7 @@ import com.develop.prices.to.ProductTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,8 +30,12 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -39,14 +43,11 @@ class ProductServiceImplTest {
     @Mock
     private ProductRepository productRepository;
 
-    @Mock
-    private ProductModelMapper productModelMapper;
-
     private ProductServiceImpl productService;
 
     @BeforeEach
     void setUp() {
-        productService = new ProductServiceImpl(productRepository, productModelMapper);
+        productService = new ProductServiceImpl(productRepository, Mappers.getMapper(ProductModelMapper.class));
     }
 
     @Test
@@ -93,7 +94,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findAllProductsWithFiltersPrice() {
+    void testFindAllProductsWithFiltersPrice() {
         Pageable pageable = PageRequest.of(0, 10);
         BigDecimal precioMin = new BigDecimal("15.00");
         BigDecimal precioMax = new BigDecimal("25.00");
@@ -116,7 +117,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findByProductById() {
+    void testFindByProductById() {
         Integer productId = 1;
         ProductModel product = CreateProductWithShops(productId, "Producto 1",
                 List.of(createProductInShop(1, 1, new BigDecimal("10.00"))));
@@ -132,7 +133,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findByProductByIdNotFound() {
+    void testFindByProductByIdNotFound() {
         Integer productId = 99;
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
@@ -142,41 +143,35 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void saveProduct() {
-        ProductNameTo productNameTo = new ProductNameTo("Nuevo Producto");
-        ProductModel productModel = new ProductModel("Nuevo Producto");
-        productModel.setProductId(1);
+    void testSaveProduct() {
+        Integer productId = 1;
 
-        ProductTo expectedProductTo = new ProductTo(
-                productModel.getProductId(),
-                productModel.getName());
+        ProductNameTo productNameTo = new ProductNameTo();
+        productNameTo.setName("Nuevo Producto");
 
-        when(productModelMapper.toProductModel(any(ProductNameTo.class))).thenReturn(productModel);
+        ProductModel productModel = new ProductModel();
+        productModel.setProductId(productId);
+        productModel.setName(productNameTo.getName());
+
         when(productRepository.save(any(ProductModel.class))).thenReturn(productModel);
-        when(productModelMapper.toProductTo(any(ProductModel.class))).thenReturn(expectedProductTo);
 
         ProductTo result = productService.saveProduct(productNameTo);
 
-        assertEquals(expectedProductTo.getProductId(), result.getProductId());
-        assertEquals(expectedProductTo.getName(), result.getName());
+        assertEquals(productId, result.getProductId() );
+        assertEquals("Nuevo Producto", result.getName());
 
-        verify(productModelMapper).toProductModel(productNameTo);
-        verify(productRepository).save(productModel);
-        verify(productModelMapper).toProductTo(productModel);
+        verify(productRepository).save(any(ProductModel.class));
     }
 
     @Test
-    void updateProduct() {
+    void testUpdateProduct() {
         Integer productId = 1;
         ProductNameTo productNameTo = new ProductNameTo("Producto Actualizado");
 
         ProductModel productModel = new ProductModel("Producto Original");
         productModel.setProductId(productId);
 
-        ProductTo expectedProductTo = new ProductTo(productId, "Producto Actualizado");
-
         when(productRepository.findById(productId)).thenReturn(Optional.of(productModel));
-        when(productModelMapper.toProductTo(any(ProductModel.class))).thenReturn(expectedProductTo);
 
         ProductTo result = productService.updateProduct(productId, productNameTo);
 
@@ -184,15 +179,12 @@ class ProductServiceImplTest {
         assertEquals("Producto Actualizado", result.getName());
 
         verify(productRepository).findById(productId);
-        verify(productModelMapper).toProductTo(productModel);
 
-        ArgumentCaptor<ProductModel> modelCaptor = ArgumentCaptor.forClass(ProductModel.class);
-        verify(productModelMapper).toProductTo(modelCaptor.capture());
-        assertEquals("Producto Actualizado", modelCaptor.getValue().getName());
+        assertEquals("Producto Actualizado", result.getName());
     }
 
     @Test
-    void updateProductNotFound() {
+    void testUpdateProductNotFound() {
         Integer productId = 99;
         ProductNameTo productNameTo = new ProductNameTo("Producto Actualizado");
 
@@ -204,7 +196,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void deleteProduct() {
+    void testDeleteProduct() {
         Integer productId = 1;
         ProductModel productModel = new ProductModel("Producto a Eliminar");
         productModel.setProductId(productId);
@@ -217,7 +209,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void deleteProductNotFound() {
+    void testDeleteProductNotFound() {
         Integer productId = 99;
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 

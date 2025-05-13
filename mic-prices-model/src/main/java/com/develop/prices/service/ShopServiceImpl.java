@@ -3,7 +3,7 @@ package com.develop.prices.service;
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.entity.ShopModel;
-import com.develop.prices.exception.BusinessException;
+import com.develop.prices.exception.ConflictException;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductInShopModelMapper;
 import com.develop.prices.mapper.ShopModelMapper;
@@ -99,7 +99,7 @@ public class ShopServiceImpl implements ShopService {
             throw new InstanceNotFoundException();
         }
         if (productInShopRepository.findByShop_ShopIdAndProduct_ProductId(shopId, productId).isPresent()) {
-            throw new BusinessException();
+            throw new ConflictException();
         }
 
         BigDecimal price = addProductShopTo.getPrice();

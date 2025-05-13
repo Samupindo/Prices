@@ -1,6 +1,6 @@
 package com.develop.prices.controlleradvice;
 
-import com.develop.prices.exception.BusinessException;
+import com.develop.prices.exception.ConflictException;
 import com.develop.prices.exception.BadRequestException;
 import com.develop.prices.exception.InstanceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -60,8 +60,8 @@ public class GlobalExceptionHandler{
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<String> handleBusinessException(BusinessException ex) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<String> handleBusinessException(ConflictException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).build();
     }
 
