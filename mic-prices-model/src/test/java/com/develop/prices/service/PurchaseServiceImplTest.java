@@ -50,18 +50,12 @@ class PurchaseServiceImplTest {
     @Mock
     private CustomerRepository customerRepository;
 
-    private PurchaseServiceImpl purchaseService;
 
-    private PurchaseTo mockPurchaseTo;
-    private ProductInShopTo mockProductInShopTo;
+    private PurchaseServiceImpl purchaseService;
 
     @BeforeEach
     void setUp() {
-        // Configuración común de los objetos mapeados
-        purchaseService = new PurchaseServiceImpl(purchaseRepository, Mappers.getMapper(PurchaseModelMapper.class), productInShopRepository, Mappers.getMapper(ProductInShopModelMapper.class), customerRepository);
-
-        mockProductInShopTo = new ProductInShopTo();
-        mockProductInShopTo.setProductInShopId(1);
+        purchaseService = new PurchaseServiceImpl(Mappers.getMapper(PurchaseModelMapper.class),Mappers.getMapper(ProductInShopModelMapper.class),purchaseRepository,  productInShopRepository,  customerRepository);
     }
 
     @Test
@@ -107,7 +101,7 @@ class PurchaseServiceImplTest {
     }
 
     @Test
-    void findAllWithNoFilters() {
+    void findWithOutFilters() {
 
         CustomerModel customerModel = new CustomerModel();
         customerModel.setCustomerId(1);

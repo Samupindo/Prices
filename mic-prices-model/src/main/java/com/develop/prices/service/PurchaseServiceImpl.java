@@ -30,22 +30,23 @@ import java.util.stream.Collectors;
 @Transactional
 public class PurchaseServiceImpl implements PurchaseService {
 
-    private final PurchaseRepository purchaseRepository;
 
     private final PurchaseModelMapper purchaseModelMapper;
 
-    private final ProductInShopRepository productInShopRepository;
-
     private final ProductInShopModelMapper productInShopModelMapper;
+
+    private final PurchaseRepository purchaseRepository;
+
+    private final ProductInShopRepository productInShopRepository;
 
     private final CustomerRepository customerRepository;
 
 
-    public PurchaseServiceImpl(PurchaseRepository purchaseRepository, PurchaseModelMapper purchaseModelMapper, ProductInShopRepository productInShopRepository, ProductInShopModelMapper productInShopModelMapper, CustomerRepository customerRepository) {
-        this.purchaseRepository = purchaseRepository;
+    public PurchaseServiceImpl(PurchaseModelMapper purchaseModelMapper,ProductInShopModelMapper productInShopModelMapper,PurchaseRepository purchaseRepository , ProductInShopRepository productInShopRepository, CustomerRepository customerRepository) {
         this.purchaseModelMapper = purchaseModelMapper;
-        this.productInShopRepository = productInShopRepository;
         this.productInShopModelMapper = productInShopModelMapper;
+        this.purchaseRepository = purchaseRepository;
+        this.productInShopRepository = productInShopRepository;
         this.customerRepository = customerRepository;
     }
 
