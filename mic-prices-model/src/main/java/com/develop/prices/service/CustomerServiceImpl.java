@@ -79,6 +79,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerTo saveCustomer(CreateCustomerTo createCustomerTo) {
+
+//        CreateCustomerTo createCustomerTo1 = new CreateCustomerTo( createCustomerTo.getName(), createCustomerTo.getPhone(), createCustomerTo.getEmail());
+
         CustomerModel customerModel = customerModelMapper.toCustomerModel(createCustomerTo);
         customerModel.setName(createCustomerTo.getName());
         customerModel.setPhone(createCustomerTo.getPhone());
