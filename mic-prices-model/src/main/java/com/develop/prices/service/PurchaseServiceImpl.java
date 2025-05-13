@@ -186,7 +186,7 @@ public class PurchaseServiceImpl implements PurchaseService {
         }
 
         purchaseModel.setShopping(false);
-
+        purchaseRepository.save(purchaseModel);
         PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
 
         List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels().stream()
