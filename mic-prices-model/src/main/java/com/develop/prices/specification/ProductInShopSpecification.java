@@ -28,12 +28,5 @@ public class ProductInShopSpecification {
         };
     }
 
-    public static Specification<ProductModel> hasProductId(Integer productId) {
-        return (root, query, criteriaBuilder) -> {
-            return criteriaBuilder.equal(root.get("productId"), productId);
-        };
-    }
-
-
 }
 

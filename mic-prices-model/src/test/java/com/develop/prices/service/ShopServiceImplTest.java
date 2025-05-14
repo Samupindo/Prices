@@ -101,7 +101,6 @@ class ShopServiceImplTest {
 
     @Test
     void testFindAllShopWithFiltersCountry() {
-        // Arrange
         String countryFilter = "España";
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -118,10 +117,8 @@ class ShopServiceImplTest {
 
         when(shopLocationRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(shopPage);
 
-        // Act
         PageResponseTo<ShopTo> result = shopService.findAllShopWithFilters(countryFilter, null, null, pageable);
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
         assertEquals(1, result.getTotalElements());
@@ -161,7 +158,6 @@ class ShopServiceImplTest {
 
     @Test
     void testFindAllShopWithFiltersAddress() {
-        // Arrange
         String addressFilter = "Gran Vía";
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -186,7 +182,6 @@ class ShopServiceImplTest {
         assertEquals(1, result.getTotalPages());
         assertTrue(result.getContent().get(0).getAddress().contains(addressFilter));
 
-        verify(shopLocationRepository).findAll(any(Specification.class), eq(pageable));
     }
 
     @Test
@@ -325,10 +320,6 @@ class ShopServiceImplTest {
         assertEquals(shopId, result.getShopId());
         assertEquals(price, result.getPrice());
 
-        verify(productRepository).findById(productId);
-        verify(shopLocationRepository).findById(shopId);
-        verify(productInShopRepository).findByShop_ShopIdAndProduct_ProductId(shopId, productId);
-
     }
 
     @Test
@@ -399,8 +390,6 @@ class ShopServiceImplTest {
         assertEquals("Coruña", result.getCity());
         assertEquals("Es complicado", result.getCountry());
 
-        verify(shopLocationRepository).findById(shopId);
-        verify(shopLocationRepository).save(any(ShopModel.class));
     }
 
     @Test

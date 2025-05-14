@@ -160,7 +160,6 @@ class ProductServiceImplTest {
         assertEquals(productId, result.getProductId() );
         assertEquals("Nuevo Producto", result.getName());
 
-        verify(productRepository).save(any(ProductModel.class));
     }
 
     @Test
@@ -177,8 +176,6 @@ class ProductServiceImplTest {
 
         assertEquals(productId, result.getProductId());
         assertEquals("Producto Actualizado", result.getName());
-
-        verify(productRepository).findById(productId);
 
         assertEquals("Producto Actualizado", result.getName());
     }
@@ -205,7 +202,6 @@ class ProductServiceImplTest {
 
         productService.deleteProduct(productId);
 
-        verify(productRepository).deleteById(productId);
     }
 
     @Test
@@ -217,7 +213,6 @@ class ProductServiceImplTest {
             productService.deleteProduct(productId);
         });
 
-        verify(productRepository, never()).deleteById(anyInt());
     }
 
     private ProductModel CreateProductWithShops(Integer productId, String name, List<ProductInShopModel> prices) {

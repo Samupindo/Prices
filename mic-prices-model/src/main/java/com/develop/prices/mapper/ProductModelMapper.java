@@ -8,8 +8,6 @@ import com.develop.prices.to.ShopInfoTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
-
 @Mapper(componentModel = "spring")
 public interface ProductModelMapper {
 

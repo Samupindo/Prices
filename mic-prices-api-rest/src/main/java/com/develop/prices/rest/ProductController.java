@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import java.math.BigDecimal;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/products")
 public class ProductController {
