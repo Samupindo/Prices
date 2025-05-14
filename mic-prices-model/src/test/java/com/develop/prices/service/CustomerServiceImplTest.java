@@ -212,8 +212,6 @@ public class CustomerServiceImplTest {
         customerModel.setEmail("brais@example.com");
         customerModel.setPhone(999999999);
 
-        System.out.println(customerModel.getCustomerId());
-
         when(customerRepository.save(any(CustomerModel.class))).thenReturn(customerModel);
 
         CustomerTo customerTo = customerService.saveCustomer(createCustomerTo);
