@@ -13,7 +13,6 @@ import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.PurchaseRepository;
 import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
-import com.develop.prices.to.ProductInShopTo;
 import com.develop.prices.to.PurchaseTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +61,6 @@ class PurchaseServiceImplTest {
     void findAllWithFilters() {
 
         // Preparar datos específicos para este test
-        // Creaas cliente
         CustomerModel customerModel = new CustomerModel();
         customerModel.setCustomerId(1);
 
@@ -86,6 +84,7 @@ class PurchaseServiceImplTest {
         List<PurchaseModel> purchaseModelList = new ArrayList<>();
         purchaseModelList.add(purchaseModel);
 
+        //Creas la paginación
         Pageable pageable = PageRequest.of(0, 10);
         Page<PurchaseModel> mockPage = new PageImpl<>(purchaseModelList, pageable, purchaseModelList.size());
 
@@ -320,8 +319,15 @@ class PurchaseServiceImplTest {
         purchaseModel.setShopping(true);
         purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
+        PurchaseModel purchaseModelUpdated = new PurchaseModel();
+        purchaseModelUpdated.setPurchaseId(1);
+        purchaseModelUpdated.setCustomer(customerModel);
+        purchaseModelUpdated.setTotalPrice(new BigDecimal("100.00"));
+        purchaseModelUpdated.setShopping(false);
+        purchaseModelUpdated.setPurchaseLineModels(purchaseLineModelList);
+
         when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
-        when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModel);
+        when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModelUpdated);
 
         PurchaseTo result = purchaseService.updatePurchaseStatusToFinishes(1);
 
@@ -400,7 +406,7 @@ class PurchaseServiceImplTest {
 
     @Test
     void deleteProductToPurchase_shouldThrowExceptionWhenProductNotFound() {
-        // Preparar datos específicos para este test
+
         ProductInShopModel productInShopModel = new ProductInShopModel();
         productInShopModel.setProductInShopId(1);
 
