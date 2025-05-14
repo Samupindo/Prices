@@ -51,7 +51,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findAllProductsWithFiltersNoFilters() {
+    void testfindAllProductsWithFiltersNoFilters() {
         Pageable pageable = PageRequest.of(0, 10);
         ProductModel product1 = CreateProductWithShops(1, "Producto 1",
                 List.of(createProductInShop(1, 1, new BigDecimal("10.00"))));
@@ -74,7 +74,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findAllProductsWithFiltersName() {
+    void testfindAllProductsWithFiltersName() {
         String nombreFiltro = "Producto 1";
         Pageable pageable = PageRequest.of(0, 10);
         ProductModel product1 = CreateProductWithShops(1, "Producto 1",
