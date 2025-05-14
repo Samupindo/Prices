@@ -43,7 +43,7 @@ class ProductServiceImplTest {
     @Mock
     private ProductRepository productRepository;
 
-    private ProductServiceImpl productService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
