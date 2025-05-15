@@ -1,0 +1,223 @@
+openapi: 3.0.3
+info:
+  title: API de Clientes
+  description: API para la gestión de clientes
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor de desarrollo
+paths:
+  /customers/{customerId}:
+    get:
+      tags:
+        - customer-controller
+      operationId: getProductById
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+    put:
+      tags:
+        - customer-controller
+      operationId: updateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPutDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+    delete:
+      tags:
+        - customer-controller
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - customer-controller
+      operationId: partialUpdateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+  /customers:
+    get:
+      tags:
+        - customer-controller
+      operationId: getCustomersWithFilters
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: phone
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          description: Número de página (0-indexed)
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          description: Tamaño de página
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Criterio de ordenación (ej. "customerId,asc")
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseDTOCustomerDTO'
+    post:
+      tags:
+        - customer-controller
+      operationId: addCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDTO'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: name'
+components:
+  schemas:
+    PageResponseDTOCustomerDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerDTO'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        sort:
+          type: string
+    CustomerDTO:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+    CustomerPutDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+    CreateCustomerDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+      required:
+        - name

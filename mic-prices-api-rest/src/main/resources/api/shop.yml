@@ -1,0 +1,278 @@
+openapi: 3.0.3
+info:
+  title: API de Tiendas
+  description: API para la gestión de tiendas
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor de desarrollo
+paths:
+  /shops/{shopId}:
+    get:
+      tags:
+        - shop-controller
+      operationId: getShopById
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopDTO'
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              example:
+                error: Shop not found
+    put:
+      tags:
+        - shop-controller
+      operationId: updateShop
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopPutDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShopDTO'
+    delete:
+      tags:
+        - shop-controller
+      operationId: deleteShop
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: The shop has been deleted successfully
+        '404':
+          description: Shop not found
+          content:
+            application/json:
+              example:
+                error: Shop not found
+    patch:
+      tags:
+        - shop-controller
+      operationId: partialUpdateShop
+      parameters:
+        - name: shopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateShopDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ShopDTO'
+  /shops:
+    get:
+      tags:
+        - shop-controller
+      operationId: getShopLocationWithFilters
+      parameters:
+        - name: country
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: city
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: address
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageResponseDTOShopDTO'
+    post:
+      tags:
+        - shop-controller
+      operationId: addShop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShopAddDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              example:
+                shopId: 4
+                country: España
+                city: Coruña
+                address: Os Mallos 10
+        '400':
+          description: Missing or invalid fields
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: city'
+        '409':
+          description: Shop already exists
+          content:
+            application/json:
+              example:
+                error: Shop already exists at this address in this city and country
+    /shops/{shopId}/products/{productId}:
+      post:
+        tags:
+          - shop-controller
+        operationId: addProductShop
+        parameters:
+          - name: productId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+          - name: shopId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddProductShopDTO'
+          required: true
+        responses:
+          '200':
+            description: Product added to shop
+            content:
+              application/json:
+                example:
+                  productId: 1
+                  shopId: 2
+                  price: 15.99
+          '400':
+            description: Invalid price provided
+            content:
+              application/json:
+                example:
+                  error: Price must be greater than or equal to 0
+          '404':
+            description: Shop or product not found
+            content:
+              application/json:
+                example:
+                  error: Product or shop not found
+          '409':
+            description: Product already exists in shop
+            content:
+              application/json:
+                example:
+                  error: This product is already registered in this shop
+      delete:
+        tags:
+          - shop-controller
+        operationId: deleteProductFromShop
+        parameters:
+          - name: productId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+          - name: shopId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+        responses:
+          '204':
+            description: The shop has been deleted successfully
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ProductInShopDTO'
+          '404':
+            description: Shop not found
+            content:
+              application/json:
+                example:
+                  error: Shop not found
+      patch:
+        tags:
+          - shop-controller
+        operationId: updateProductInShop
+        parameters:
+          - name: shopId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+          - name: productId
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int32
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInShopPatchDTO'
+          required: true
+        responses:
+          '200':
+            description: OK
+            content:
+              '*/*':
+                schema:
+                  $ref: '#/components/schemas/ProductInShopDTO'
