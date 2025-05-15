@@ -237,7 +237,7 @@ class PurchaseControllerTest {
         when(purchaseRestMapper.toPostPurchaseTo(eq(postPurchaseDTO))).thenReturn(postPurchaseTo);
         when(purchaseService.savePurchase(eq(postPurchaseTo))).thenThrow(new InstanceNotFoundException());
 
-        // Verificar que se lanza la excepción
+        //verifica que se lanza la excepción
         assertThrows(InstanceNotFoundException.class, () -> {
             purchaseController.postPurchase(postPurchaseDTO);
         });

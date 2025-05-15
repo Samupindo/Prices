@@ -268,7 +268,7 @@ class ProductControllerTest {
     @Test
     void updateProductWithInvalidName() {
         Integer productId = 1;
-        String invalidName = ""; //
+        String invalidName = "";
 
         ProductNameDTO invalidProductNameDTO = new ProductNameDTO();
         invalidProductNameDTO.setName(invalidName);
