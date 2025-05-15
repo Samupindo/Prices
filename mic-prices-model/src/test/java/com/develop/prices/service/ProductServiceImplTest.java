@@ -74,7 +74,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void testfindAllProductsWithFiltersName() {
+    void testFindAllProductsWithFiltersName() {
         String nombreFiltro = "Producto 1";
         Pageable pageable = PageRequest.of(0, 10);
         ProductModel product1 = CreateProductWithShops(1, "Producto 1",
