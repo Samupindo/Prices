@@ -1,0 +1,188 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /products/{productId}:
+    get:
+      tags:
+        - product-controller
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductWithShopsDTO'
+    put:
+      tags:
+        - product-controller
+      operationId: updateProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductNameDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ProductDTO'
+    delete:
+      tags:
+        - product-controller
+      operationId: deleteProduct
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+  /products:
+    get:
+      tags:
+        - product-controller
+      operationId: getProductsWithFilters
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: priceMin
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: priceMax
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageResponseDTOProductWithShopsDTO'
+    post:
+      tags:
+        - product-controller
+      operationId: addProduct
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductNameDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json: { }
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: name'
+components:
+  schemas:
+    ProductNameDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          minLength: 0
+          pattern: "^\\p{L}[\\p{L}\\s]+$"
+    ProductDTO:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int32
+        name:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    PageResponseDTOProductWithShopsDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductWithShopsDTO'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    ProductWithShopsDTO:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        shop:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShopInfoDTO'
+    ShopInfoDTO:
+      type: object
+      properties:
+        productInShopId:
+          type: integer
+          format: int32
+        shopId:
+          type: integer
+          format: int32
+        price:
+          type: number
