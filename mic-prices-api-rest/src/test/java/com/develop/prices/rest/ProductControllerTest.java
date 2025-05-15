@@ -308,8 +308,6 @@ class ProductControllerTest {
         doThrow(new InstanceNotFoundException())
                 .when(productService).deleteProduct(eq(productId));
 
-
-
         assertThrows(InstanceNotFoundException.class, () -> {
             productController.deleteProduct(productId);
         });
