@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 public class ShopDTO implements Serializable {
 
-
     private Integer shopId;
     private String country;
     private String city;
