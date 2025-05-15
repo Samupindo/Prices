@@ -1,0 +1,262 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /purchases:
+    get:
+      tags:
+        - purchase-controller
+      operationId: getPurchasesWithFilters
+      parameters:
+        - name: customerId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: productInShop
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        - name: totalPriceMax
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: totalPriceMin
+          in: query
+          required: false
+          schema:
+            type: number
+        - name: shopping
+          in: query
+          required: false
+          schema:
+            type: boolean
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageResponseDTOPurchaseDTO'
+    post:
+      tags:
+        - purchase-controller
+      operationId: postPurchase
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseDTO'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json: {}
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: name'
+  /purchases/{purchaseId}/productInShop/{productInShopId}:
+    post:
+      tags:
+        - purchase-controller
+      operationId: addProductPurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: productInShopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json: {}
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: name'
+    delete:
+      tags:
+        - purchase-controller
+      operationId: deleteProductPurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: productInShopId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+
+  /purchases/{purchaseId}/finish:
+    patch:
+      tags:
+        - purchase-controller
+      operationId: finishPurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PurchaseDTO'
+  /purchases/{purchaseId}:
+    get:
+      tags:
+        - purchase-controller
+      operationId: getPurchaseById
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PurchaseDTO'
+    delete:
+      tags:
+        - purchase-controller
+      operationId: deletePurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+
+    CustomerDTO:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+
+    PostPurchaseDTO:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int32
+
+    ProductInShopDTO:
+      type: object
+      properties:
+        productInShopId:
+          type: integer
+          format: int32
+        productId:
+          type: integer
+          format: int32
+        shopId:
+          type: integer
+          format: int32
+        price:
+          type: number
+
+    PurchaseDTO:
+      type: object
+      properties:
+        purchaseId:
+          type: integer
+          format: int32
+        customer:
+          $ref: '#/components/schemas/CustomerDTO'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInShopDTO'
+        totalPrice:
+          type: number
+        shopping:
+          type: boolean
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+        size:
+          type: integer
+          format: int32
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+
+    PageResponseDTOPurchaseDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseDTO'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
