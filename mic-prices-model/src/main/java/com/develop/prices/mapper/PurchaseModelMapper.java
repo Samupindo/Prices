@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(uses = {PurchaseLineModelMapper.class})
 public interface PurchaseModelMapper {
 
     @Mapping(target = "products", source = "purchaseLineModels")
