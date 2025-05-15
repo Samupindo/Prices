@@ -43,7 +43,7 @@ class ProductServiceImplTest {
     @Mock
     private ProductRepository productRepository;
 
-    private ProductServiceImpl productService;
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +51,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void testfindAllProductsWithFiltersNoFilters() {
+    void testFindAllProductsWithFiltersNoFilters() {
         Pageable pageable = PageRequest.of(0, 10);
         ProductModel product1 = CreateProductWithShops(1, "Producto 1",
                 List.of(createProductInShop(1, 1, new BigDecimal("10.00"))));
