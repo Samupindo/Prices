@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
@@ -69,10 +68,9 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<CustomerDTO> getProductById(@PathVariable Integer customerId) {
+    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Integer customerId) {
 
         CustomerTo customerTo = customerService.findByCustomerId(customerId);
-
 
         return ResponseEntity.ok(customerRestMapper.toCustomerDTO(customerTo));
     }

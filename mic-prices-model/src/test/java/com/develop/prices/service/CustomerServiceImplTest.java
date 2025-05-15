@@ -34,7 +34,7 @@ public class CustomerServiceImplTest {
     private CustomerRepository customerRepository;
 
 
-    private CustomerServiceImpl customerService;
+    private CustomerService customerService;
 
     @BeforeEach
     void setUp() {

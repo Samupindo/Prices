@@ -50,7 +50,7 @@ class PurchaseServiceImplTest {
     private CustomerRepository customerRepository;
 
 
-    private PurchaseServiceImpl purchaseService;
+    private PurchaseService purchaseService;
 
     @BeforeEach
     void setUp() {

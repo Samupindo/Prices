@@ -14,7 +14,6 @@ import org.mapstruct.Mapper;
 public interface ShopRestMapper {
     ShopDTO toShopDTO(ShopTo shopTo);
 
-
     ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
 
     UpdateShopTo toUpdateShopTo(UpdateShopDTO updateShopDTO);

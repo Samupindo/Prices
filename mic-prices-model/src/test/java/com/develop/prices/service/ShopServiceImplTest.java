@@ -55,7 +55,7 @@ class ShopServiceImplTest {
     @Mock
     private ProductRepository productRepository;
 
-    private ShopServiceImpl shopService;
+    private ShopService shopService;
 
     @BeforeEach
     void setUp() {
