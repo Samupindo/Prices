@@ -39,391 +39,408 @@ import org.springframework.data.jpa.domain.Specification;
 @ExtendWith(MockitoExtension.class)
 class PurchaseServiceImplTest {
 
-    @Mock
-    private PurchaseRepository purchaseRepository;
+  @Mock private PurchaseRepository purchaseRepository;
 
-    @Mock
-    private ProductInShopRepository productInShopRepository;
+  @Mock private ProductInShopRepository productInShopRepository;
 
-    @Mock
-    private CustomerRepository customerRepository;
+  @Mock private CustomerRepository customerRepository;
 
+  private PurchaseService purchaseService;
 
-    private PurchaseService purchaseService;
+  @BeforeEach
+  void setUp() {
+    purchaseService =
+        new PurchaseServiceImpl(
+            Mappers.getMapper(PurchaseModelMapper.class),
+            Mappers.getMapper(ProductInShopModelMapper.class),
+            purchaseRepository,
+            productInShopRepository,
+            customerRepository);
+  }
 
-    @BeforeEach
-    void setUp() {
-        purchaseService = new PurchaseServiceImpl(Mappers.getMapper(PurchaseModelMapper.class),Mappers.getMapper(ProductInShopModelMapper.class),purchaseRepository,  productInShopRepository,  customerRepository);
-    }
+  @Test
+  void findAllWithFilters() {
 
-    @Test
-    void findAllWithFilters() {
+    // Preparar datos específicos para este test
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-        // Preparar datos específicos para este test
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseModel> purchaseModelList = new ArrayList<>();
+    purchaseModelList.add(purchaseModel);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    // Creas la paginación
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<PurchaseModel> mockPage =
+        new PageImpl<>(purchaseModelList, pageable, purchaseModelList.size());
 
-        List<PurchaseModel> purchaseModelList = new ArrayList<>();
-        purchaseModelList.add(purchaseModel);
+    when(purchaseRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(mockPage);
 
-        //Creas la paginación
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<PurchaseModel> mockPage = new PageImpl<>(purchaseModelList, pageable, purchaseModelList.size());
+    PageResponseTo<PurchaseTo> result =
+        purchaseService.findAllWithFilters(
+            1, List.of(1), new BigDecimal("200.00"), new BigDecimal("50.00"), true, pageable);
 
-        when(purchaseRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(mockPage);
+    assertNotNull(result);
+    assertEquals(1, result.getContent().size());
+    assertEquals(1, result.getTotalElements());
+    verify(purchaseRepository).findAll(any(Specification.class), eq(pageable));
+  }
 
-        PageResponseTo<PurchaseTo> result = purchaseService.findAllWithFilters(1, List.of(1),
-                new BigDecimal("200.00"), new BigDecimal("50.00"), true, pageable);
+  @Test
+  void findWithOutFilters() {
 
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals(1, result.getTotalElements());
-        verify(purchaseRepository).findAll(any(Specification.class), eq(pageable));
-    }
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-    @Test
-    void findWithOutFilters() {
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseModel> purchaseModelList = new ArrayList<>();
+    purchaseModelList.add(purchaseModel);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    Pageable pageable = PageRequest.of(0, 10);
+    Page<PurchaseModel> mockPage =
+        new PageImpl<>(purchaseModelList, pageable, purchaseModelList.size());
 
-        List<PurchaseModel> purchaseModelList = new ArrayList<>();
-        purchaseModelList.add(purchaseModel);
+    when(purchaseRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(mockPage);
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<PurchaseModel> mockPage = new PageImpl<>(purchaseModelList, pageable, purchaseModelList.size());
+    PageResponseTo<PurchaseTo> result =
+        purchaseService.findAllWithFilters(null, null, null, null, null, pageable);
 
-        when(purchaseRepository.findAll(any(Specification.class), eq(pageable))).thenReturn(mockPage);
+    assertNotNull(result);
+    assertEquals(1, result.getContent().size());
+    assertEquals(1, result.getTotalElements());
+    verify(purchaseRepository).findAll(any(Specification.class), eq(pageable));
+  }
 
-        PageResponseTo<PurchaseTo> result = purchaseService.findAllWithFilters(
-                null,
-                null,
-                null,
-                null,
-                null,
-                pageable);
+  @Test
+  void findPurchaseById() {
+    // Preparar datos específicos para este test
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-        assertNotNull(result);
-        assertEquals(1, result.getContent().size());
-        assertEquals(1, result.getTotalElements());
-        verify(purchaseRepository).findAll(any(Specification.class), eq(pageable));
-    }
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-    @Test
-    void findPurchaseById() {
-        // Preparar datos específicos para este test
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseTo result = purchaseService.findPurchaseById(1);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    assertNotNull(result);
+    assertEquals(1, result.getPurchaseId());
+    verify(purchaseRepository).findById(1);
+  }
 
-        PurchaseTo result = purchaseService.findPurchaseById(1);
+  @Test
+  void findPurchaseById_shouldThrowExceptionWhenNotFound() {
+    when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertNotNull(result);
-        assertEquals(1, result.getPurchaseId());
-        verify(purchaseRepository).findById(1);
-    }
-
-    @Test
-    void findPurchaseById_shouldThrowExceptionWhenNotFound() {
-        when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.findPurchaseById(999);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.findPurchaseById(999);
         });
-    }
+  }
 
-    @Test
-    void savePurchase() {
-        // Preparar datos específicos para este test
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+  @Test
+  void savePurchase() {
+    // Preparar datos específicos para este test
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
 
-        PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
-        postPurchaseTo.setCustomerId(1);
+    PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
+    postPurchaseTo.setCustomerId(1);
 
-        when(customerRepository.findById(1)).thenReturn(Optional.of(customerModel));
-        when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModel);
+    when(customerRepository.findById(1)).thenReturn(Optional.of(customerModel));
+    when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModel);
 
-        PurchaseTo result = purchaseService.savePurchase(postPurchaseTo);
+    PurchaseTo result = purchaseService.savePurchase(postPurchaseTo);
 
-        assertNotNull(result);
-        assertEquals(1, result.getPurchaseId());
-        verify(customerRepository).findById(1);
-        verify(purchaseRepository).save(any(PurchaseModel.class));
-    }
+    assertNotNull(result);
+    assertEquals(1, result.getPurchaseId());
+    verify(customerRepository).findById(1);
+    verify(purchaseRepository).save(any(PurchaseModel.class));
+  }
 
-    @Test
-    void savePurchase_shouldThrowExceptionWhenCustomerNotFound() {
-        PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
-        postPurchaseTo.setCustomerId(999);
+  @Test
+  void savePurchase_shouldThrowExceptionWhenCustomerNotFound() {
+    PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
+    postPurchaseTo.setCustomerId(999);
 
-        when(customerRepository.findById(999)).thenReturn(Optional.empty());
+    when(customerRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.savePurchase(postPurchaseTo);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.savePurchase(postPurchaseTo);
         });
-    }
+  }
 
-    @Test
-    void savePurchaseAndPurchaseLine() {
-        // Preparar datos específicos para este test
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+  @Test
+  void savePurchaseAndPurchaseLine() {
+    // Preparar datos específicos para este test
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
-        when(productInShopRepository.findById(1)).thenReturn(Optional.of(productInShopModel));
-        when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModel);
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    when(productInShopRepository.findById(1)).thenReturn(Optional.of(productInShopModel));
+    when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModel);
 
-        PurchaseTo result = purchaseService.savePurchaseAndPurchaseLine(1, 1);
+    PurchaseTo result = purchaseService.savePurchaseAndPurchaseLine(1, 1);
 
-        assertNotNull(result);
-        verify(purchaseRepository).findById(1);
-        verify(productInShopRepository).findById(1);
-        verify(purchaseRepository).save(any(PurchaseModel.class));
-    }
+    assertNotNull(result);
+    verify(purchaseRepository).findById(1);
+    verify(productInShopRepository).findById(1);
+    verify(purchaseRepository).save(any(PurchaseModel.class));
+  }
 
-    @Test
-    void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenPurchaseNotFound() {
-        when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
+  @Test
+  void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenPurchaseNotFound() {
+    when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.savePurchaseAndPurchaseLine(999, 1);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.savePurchaseAndPurchaseLine(999, 1);
         });
-    }
+  }
 
-    @Test
-    void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenProductNotFound() {
-        // Preparar datos específicos para este test
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setShopping(true);
+  @Test
+  void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenProductNotFound() {
+    // Preparar datos específicos para este test
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setShopping(true);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
-        when(productInShopRepository.findById(999)).thenReturn(Optional.empty());
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    when(productInShopRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.savePurchaseAndPurchaseLine(1, 999);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.savePurchaseAndPurchaseLine(1, 999);
         });
-    }
+  }
 
-    @Test
-    void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenPurchaseNotShopping() {
-        // Preparar datos específicos para este test
-        PurchaseModel notShoppingPurchase = new PurchaseModel();
-        notShoppingPurchase.setPurchaseId(1);
-        notShoppingPurchase.setShopping(false);
+  @Test
+  void savePurchaseAndPurchaseLine_shouldThrowExceptionWhenPurchaseNotShopping() {
+    // Preparar datos específicos para este test
+    PurchaseModel notShoppingPurchase = new PurchaseModel();
+    notShoppingPurchase.setPurchaseId(1);
+    notShoppingPurchase.setShopping(false);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(notShoppingPurchase));
-        when(productInShopRepository.findById(1)).thenReturn(Optional.of(productInShopModel));
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(notShoppingPurchase));
+    when(productInShopRepository.findById(1)).thenReturn(Optional.of(productInShopModel));
 
-        assertThrows(BadRequestException.class, () -> {
-            purchaseService.savePurchaseAndPurchaseLine(1, 1);
+    assertThrows(
+        BadRequestException.class,
+        () -> {
+          purchaseService.savePurchaseAndPurchaseLine(1, 1);
         });
-    }
+  }
 
-    @Test
-    void updatePurchaseStatusToFinishes() {
-        // Preparar datos específicos para este test
-        CustomerModel customerModel = new CustomerModel();
-        customerModel.setCustomerId(1);
+  @Test
+  void updatePurchaseStatusToFinishes() {
+    // Preparar datos específicos para este test
+    CustomerModel customerModel = new CustomerModel();
+    customerModel.setCustomerId(1);
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        PurchaseModel purchaseModelUpdated = new PurchaseModel();
-        purchaseModelUpdated.setPurchaseId(1);
-        purchaseModelUpdated.setCustomer(customerModel);
-        purchaseModelUpdated.setTotalPrice(new BigDecimal("100.00"));
-        purchaseModelUpdated.setShopping(false);
-        purchaseModelUpdated.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseModel purchaseModelUpdated = new PurchaseModel();
+    purchaseModelUpdated.setPurchaseId(1);
+    purchaseModelUpdated.setCustomer(customerModel);
+    purchaseModelUpdated.setTotalPrice(new BigDecimal("100.00"));
+    purchaseModelUpdated.setShopping(false);
+    purchaseModelUpdated.setPurchaseLineModels(purchaseLineModelList);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
-        when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModelUpdated);
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    when(purchaseRepository.save(any(PurchaseModel.class))).thenReturn(purchaseModelUpdated);
 
-        PurchaseTo result = purchaseService.updatePurchaseStatusToFinishes(1);
+    PurchaseTo result = purchaseService.updatePurchaseStatusToFinishes(1);
 
-        assertNotNull(result);
-        verify(purchaseRepository).findById(1);
-        assertFalse(result.isShopping());
-        
-        // Añadir verificación de que se llamó a save con el modelo actualizado
-        verify(purchaseRepository).save(any(PurchaseModel.class));
-    }
+    assertNotNull(result);
+    verify(purchaseRepository).findById(1);
+    assertFalse(result.isShopping());
 
-    @Test
-    void updatePurchaseStatusToFinishes_shouldThrowExceptionWhenNotFound() {
-        when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
+    // Añadir verificación de que se llamó a save con el modelo actualizado
+    verify(purchaseRepository).save(any(PurchaseModel.class));
+  }
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.updatePurchaseStatusToFinishes(999);
+  @Test
+  void updatePurchaseStatusToFinishes_shouldThrowExceptionWhenNotFound() {
+    when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
+
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.updatePurchaseStatusToFinishes(999);
         });
-    }
+  }
 
-    @Test
-    void deletePurchase() {
-        // Preparar datos específicos para este test
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
+  @Test
+  void deletePurchase() {
+    // Preparar datos específicos para este test
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
 
-        assertDoesNotThrow(() -> purchaseService.deletePurchase(1));
+    assertDoesNotThrow(() -> purchaseService.deletePurchase(1));
 
-        verify(purchaseRepository).findById(1);
-        verify(purchaseRepository).delete(purchaseModel);
-    }
+    verify(purchaseRepository).findById(1);
+    verify(purchaseRepository).delete(purchaseModel);
+  }
 
-    @Test
-    void deletePurchase_shouldThrowExceptionWhenNotFound() {
-        when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
+  @Test
+  void deletePurchase_shouldThrowExceptionWhenNotFound() {
+    when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.deletePurchase(999);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.deletePurchase(999);
         });
-    }
+  }
 
-    @Test
-    void deleteProductToPurchase() {
-        // Preparar datos específicos para este test
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+  @Test
+  void deleteProductToPurchase() {
+    // Preparar datos específicos para este test
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
-        purchaseModel.setPurchaseId(1);
-        purchaseModel.setShopping(true);
-        purchaseModel.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseModel purchaseModel = new PurchaseModel();
+    purchaseModel.setPurchaseId(1);
+    purchaseModel.setShopping(true);
+    purchaseModel.setPurchaseLineModels(purchaseLineModelList);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseModel));
 
-        purchaseService.deleteProductToPurchase(1, 1);
+    purchaseService.deleteProductToPurchase(1, 1);
 
-        verify(purchaseRepository).save(purchaseModel);
-    }
+    verify(purchaseRepository).save(purchaseModel);
+  }
 
-    @Test
-    void deleteProductToPurchase_shouldThrowExceptionWhenPurchaseNotFound() {
-        when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
+  @Test
+  void deleteProductToPurchase_shouldThrowExceptionWhenPurchaseNotFound() {
+    when(purchaseRepository.findById(999)).thenReturn(Optional.empty());
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.deleteProductToPurchase(999, 1);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.deleteProductToPurchase(999, 1);
         });
-    }
+  }
 
-    @Test
-    void deleteProductToPurchase_shouldThrowExceptionWhenProductNotFound() {
+  @Test
+  void deleteProductToPurchase_shouldThrowExceptionWhenProductNotFound() {
 
-        ProductInShopModel productInShopModel = new ProductInShopModel();
-        productInShopModel.setProductInShopId(1);
+    ProductInShopModel productInShopModel = new ProductInShopModel();
+    productInShopModel.setProductInShopId(1);
 
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setProductInShop(productInShopModel);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setProductInShop(productInShopModel);
 
-        List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
-        purchaseLineModelList.add(purchaseLineModel);
+    List<PurchaseLineModel> purchaseLineModelList = new ArrayList<>();
+    purchaseLineModelList.add(purchaseLineModel);
 
-        PurchaseModel purchaseWithoutProduct = new PurchaseModel();
-        purchaseWithoutProduct.setPurchaseId(1);
-        purchaseWithoutProduct.setShopping(true);
-        purchaseWithoutProduct.setPurchaseLineModels(purchaseLineModelList);
+    PurchaseModel purchaseWithoutProduct = new PurchaseModel();
+    purchaseWithoutProduct.setPurchaseId(1);
+    purchaseWithoutProduct.setShopping(true);
+    purchaseWithoutProduct.setPurchaseLineModels(purchaseLineModelList);
 
-        when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseWithoutProduct));
+    when(purchaseRepository.findById(1)).thenReturn(Optional.of(purchaseWithoutProduct));
 
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseService.deleteProductToPurchase(1, 999);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseService.deleteProductToPurchase(1, 999);
         });
-    }
+  }
 }

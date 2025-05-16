@@ -1,8 +1,8 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.dto.PageResponseDTO;
-import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.PurchaseDTO;
+import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.PostPurchaseDto;
+import com.develop.prices.dto.PurchaseDto;
 import com.develop.prices.mapper.PurchaseRestMapper;
 import com.develop.prices.service.PurchaseService;
 import com.develop.prices.to.PageResponseTo;
@@ -47,7 +47,7 @@ public class PurchaseController {
   }
 
   @GetMapping("")
-  public ResponseEntity<PageResponseDTO<PurchaseDTO>> getPurchasesWithFilters(
+  public ResponseEntity<PageResponseDto<PurchaseDto>> getPurchasesWithFilters(
       @RequestParam(required = false) Integer customerId,
       @RequestParam(required = false) List<Integer> productInShop,
       @RequestParam(required = false) BigDecimal totalPriceMax,
@@ -59,21 +59,21 @@ public class PurchaseController {
         purchaseService.findAllWithFilters(
             customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
-    List<PurchaseDTO> purchaseToList =
+    List<PurchaseDto> purchaseToList =
         purchaseToPageResponseTo.getContent().stream()
-            .map(purchaseRestMapper::toPurchaseDTO)
+            .map(purchaseRestMapper::toPurchaseDto)
             .toList();
 
-    PageResponseDTO<PurchaseDTO> response =
-        new PageResponseDTO<>(purchaseToList, purchaseToList.size(), 1);
+    PageResponseDto<PurchaseDto> response =
+        new PageResponseDto<>(purchaseToList, purchaseToList.size(), 1);
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{purchaseId}")
-  public ResponseEntity<PurchaseDTO> getPurchaseById(@PathVariable Integer purchaseId) {
+  public ResponseEntity<PurchaseDto> getPurchaseById(@PathVariable Integer purchaseId) {
     PurchaseTo purchaseTo = purchaseService.findPurchaseById(purchaseId);
 
-    return ResponseEntity.ok(purchaseRestMapper.toPurchaseDTO(purchaseTo));
+    return ResponseEntity.ok(purchaseRestMapper.toPurchaseDto(purchaseTo));
   }
 
   @ApiResponses(
@@ -92,15 +92,15 @@ public class PurchaseController {
                         @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
       })
   @PostMapping("")
-  public ResponseEntity<PurchaseDTO> postPurchase(
-      @Valid @RequestBody PostPurchaseDTO postPurchaseDTO) {
-    PostPurchaseTo postPurchaseTo = purchaseRestMapper.toPostPurchaseTo(postPurchaseDTO);
+  public ResponseEntity<PurchaseDto> postPurchase(
+      @Valid @RequestBody PostPurchaseDto postPurchaseDto) {
+    PostPurchaseTo postPurchaseTo = purchaseRestMapper.toPostPurchaseTo(postPurchaseDto);
 
     PurchaseTo purchaseTo = purchaseService.savePurchase(postPurchaseTo);
 
-    PurchaseDTO purchaseDTO = purchaseRestMapper.toPurchaseDTO(purchaseTo);
+    PurchaseDto purchaseDto = purchaseRestMapper.toPurchaseDto(purchaseTo);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDto);
   }
 
   @ApiResponses(
@@ -119,22 +119,22 @@ public class PurchaseController {
                         @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
       })
   @PostMapping("/{purchaseId}/productInShop/{productInShopId}")
-  public ResponseEntity<PurchaseDTO> addProductPurchase(
+  public ResponseEntity<PurchaseDto> addProductPurchase(
       @PathVariable Integer purchaseId, @PathVariable Integer productInShopId) {
     PurchaseTo purchaseTo =
         purchaseService.savePurchaseAndPurchaseLine(purchaseId, productInShopId);
-    PurchaseDTO purchaseDTO = purchaseRestMapper.toPurchaseDTO(purchaseTo);
+    PurchaseDto purchaseDto = purchaseRestMapper.toPurchaseDto(purchaseTo);
 
-    return ResponseEntity.ok(purchaseDTO);
+    return ResponseEntity.ok(purchaseDto);
   }
 
   @PatchMapping("/{purchaseId}/finish")
-  public ResponseEntity<PurchaseDTO> finishPurchase(@PathVariable Integer purchaseId) {
+  public ResponseEntity<PurchaseDto> finishPurchase(@PathVariable Integer purchaseId) {
     PurchaseTo purchaseTo = purchaseService.updatePurchaseStatusToFinishes(purchaseId);
 
-    PurchaseDTO purchaseDTO = purchaseRestMapper.toPurchaseDTO(purchaseTo);
+    PurchaseDto purchaseDto = purchaseRestMapper.toPurchaseDto(purchaseTo);
 
-    return ResponseEntity.ok(purchaseDTO);
+    return ResponseEntity.ok(purchaseDto);
   }
 
   @DeleteMapping("{purchaseId}")

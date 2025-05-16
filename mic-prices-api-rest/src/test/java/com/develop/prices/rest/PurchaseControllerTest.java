@@ -5,9 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.develop.prices.dto.PageResponseDTO;
-import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.PurchaseDTO;
+import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.PostPurchaseDto;
+import com.develop.prices.dto.PurchaseDto;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.PurchaseRestMapper;
 import com.develop.prices.service.PurchaseService;
@@ -31,378 +31,386 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 class PurchaseControllerTest {
 
+  @Mock private PurchaseService purchaseService;
 
-    @Mock
-    private PurchaseService purchaseService;
+  @Mock private PurchaseRestMapper purchaseRestMapper;
 
-    @Mock
-    private PurchaseRestMapper purchaseRestMapper;
+  private PurchaseController purchaseController;
 
-    private PurchaseController purchaseController;
+  @BeforeEach
+  void setUp() {
+    purchaseController = new PurchaseController(purchaseService, purchaseRestMapper);
+  }
 
-    @BeforeEach
-    void setUp() {
-        purchaseController = new PurchaseController(purchaseService, purchaseRestMapper);
-    }
+  @Test
+  void getPurchasesWithFilters() {
 
-    @Test
-    void getPurchasesWithFilters() {
+    Integer customerId = 1;
+    List<Integer> productInShop = List.of(1);
+    BigDecimal totalPriceMax = new BigDecimal("200.00");
+    BigDecimal totalPriceMin = new BigDecimal("50.00");
+    Boolean shopping = true;
 
-        Integer customerId = 1;
-        List<Integer> productInShop = List.of(1);
-        BigDecimal totalPriceMax = new BigDecimal("200.00");
-        BigDecimal totalPriceMin = new BigDecimal("50.00");
-        Boolean shopping = true;
+    Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(1);
 
+    List<PurchaseTo> purchaseToList = new ArrayList<>();
+    purchaseToList.add(purchaseTo);
 
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(1);
+    PageResponseTo<PurchaseTo> pageResponseTo =
+        new PageResponseTo<>(purchaseToList, purchaseToList.size(), 1);
 
-        List<PurchaseTo> purchaseToList = new ArrayList<>();
-        purchaseToList.add(purchaseTo);
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(1);
 
+    when(purchaseService.findAllWithFilters(
+            eq(customerId),
+            eq(productInShop),
+            eq(totalPriceMax),
+            eq(totalPriceMin),
+            eq(shopping),
+            eq(pageable)))
+        .thenReturn(pageResponseTo);
 
-        PageResponseTo<PurchaseTo> pageResponseTo = new PageResponseTo<>(
-                purchaseToList,
-                purchaseToList.size(),
-                1
-        );
+    when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(1);
+    ResponseEntity<PageResponseDto<PurchaseDto>> response =
+        purchaseController.getPurchasesWithFilters(
+            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
-        when(purchaseService.findAllWithFilters(eq(customerId), eq(productInShop),
-                eq(totalPriceMax), eq(totalPriceMin), eq(shopping), eq(pageable)))
-                .thenReturn(pageResponseTo);
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
+    PageResponseDto<PurchaseDto> body = response.getBody();
+    assertNotNull(body);
 
-        when(purchaseRestMapper.toPurchaseDTO(any(PurchaseTo.class))).thenReturn(purchaseDTO);
+    assertEquals(1, response.getBody().getContent().size());
+    assertEquals(1, response.getBody().getTotalElements());
 
+    verify(purchaseService)
+        .findAllWithFilters(
+            eq(customerId),
+            eq(productInShop),
+            eq(totalPriceMax),
+            eq(totalPriceMin),
+            eq(shopping),
+            eq(pageable));
+  }
 
-        ResponseEntity<PageResponseDTO<PurchaseDTO>> response = purchaseController.getPurchasesWithFilters(
-                customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
+  @Test
+  void getPurchasesWithNoFilters() {
+    Integer customerId = null;
+    List<Integer> productInShop = null;
+    BigDecimal totalPriceMax = null;
+    BigDecimal totalPriceMin = null;
+    Boolean shopping = null;
 
+    Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(1);
 
-        PageResponseDTO<PurchaseDTO> body = response.getBody();
-        assertNotNull(body);
+    List<PurchaseTo> purchaseToList = new ArrayList<>();
+    purchaseToList.add(purchaseTo);
 
-        assertEquals(1, response.getBody().getContent().size());
-        assertEquals(1, response.getBody().getTotalElements());
+    PageResponseTo<PurchaseTo> pageResponseTo =
+        new PageResponseTo<>(purchaseToList, purchaseToList.size(), 1);
 
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(1);
 
-        verify(purchaseService).findAllWithFilters(eq(customerId), eq(productInShop),
-                eq(totalPriceMax), eq(totalPriceMin), eq(shopping), eq(pageable));
+    when(purchaseService.findAllWithFilters(
+            eq(customerId),
+            eq(productInShop),
+            eq(totalPriceMax),
+            eq(totalPriceMin),
+            eq(shopping),
+            eq(pageable)))
+        .thenReturn(pageResponseTo);
 
-    }
+    when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
-    @Test
-    void getPurchasesWithNoFilters() {
-        Integer customerId = null;
-        List<Integer> productInShop = null;
-        BigDecimal totalPriceMax = null;
-        BigDecimal totalPriceMin = null;
-        Boolean shopping = null;
+    ResponseEntity<PageResponseDto<PurchaseDto>> response =
+        purchaseController.getPurchasesWithFilters(
+            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
+    PageResponseDto<PurchaseDto> body = response.getBody();
+    assertNotNull(body);
 
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(1);
+    verify(purchaseService)
+        .findAllWithFilters(
+            eq(customerId),
+            eq(productInShop),
+            eq(totalPriceMax),
+            eq(totalPriceMin),
+            eq(shopping),
+            eq(pageable));
+  }
 
-        List<PurchaseTo> purchaseToList = new ArrayList<>();
-        purchaseToList.add(purchaseTo);
+  @Test
+  void getPurchaseById() {
+    Integer purchaseId = 1;
 
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(1);
 
-        PageResponseTo<PurchaseTo> pageResponseTo = new PageResponseTo<>(
-                purchaseToList,
-                purchaseToList.size(),
-                1
-        );
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(1);
 
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(1);
+    when(purchaseService.findPurchaseById(eq(purchaseId))).thenReturn(purchaseTo);
+    when(purchaseRestMapper.toPurchaseDto(purchaseTo)).thenReturn(purchaseDTO);
 
-        when(purchaseService.findAllWithFilters(eq(customerId), eq(productInShop),
-                eq(totalPriceMax), eq(totalPriceMin), eq(shopping), eq(pageable)))
-                .thenReturn(pageResponseTo);
+    ResponseEntity<PurchaseDto> response = purchaseController.getPurchaseById(purchaseId);
 
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    PurchaseDto body = response.getBody();
+    assertNotNull(body);
+    assertEquals(purchaseId, body.getPurchaseId());
 
-        when(purchaseRestMapper.toPurchaseDTO(any(PurchaseTo.class))).thenReturn(purchaseDTO);
+    verify(purchaseService).findPurchaseById(eq(purchaseId));
+    verify(purchaseRestMapper).toPurchaseDto(purchaseTo);
+  }
 
-        ResponseEntity<PageResponseDTO<PurchaseDTO>> response = purchaseController.getPurchasesWithFilters(
-                customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
+  @Test
+  void getPurchaseByIdNotFound() {
+    Integer purchaseId = 99;
 
+    when(purchaseService.findPurchaseById(eq(purchaseId)))
+        .thenThrow(new InstanceNotFoundException());
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        PageResponseDTO<PurchaseDTO> body = response.getBody();
-        assertNotNull(body);
-
-        verify(purchaseService).findAllWithFilters(eq(customerId), eq(productInShop),
-                eq(totalPriceMax), eq(totalPriceMin), eq(shopping), eq(pageable));
-    }
-
-
-    @Test
-    void getPurchaseById() {
-        Integer purchaseId = 1;
-
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(1);
-
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(1);
-
-        when(purchaseService.findPurchaseById(eq(purchaseId))).thenReturn(purchaseTo);
-        when(purchaseRestMapper.toPurchaseDTO(purchaseTo)).thenReturn(purchaseDTO);
-
-        ResponseEntity<PurchaseDTO> response = purchaseController.getPurchaseById(purchaseId);
-
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        PurchaseDTO body = response.getBody();
-        assertNotNull(body);
-        assertEquals(purchaseId, body.getPurchaseId());
-
-
-        verify(purchaseService).findPurchaseById(eq(purchaseId));
-        verify(purchaseRestMapper).toPurchaseDTO(purchaseTo);
-
-    }
-
-    @Test
-    void getPurchaseByIdNotFound() {
-        Integer purchaseId = 99;
-
-        when(purchaseService.findPurchaseById(eq(purchaseId))).thenThrow(new InstanceNotFoundException());
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.getPurchaseById(purchaseId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.getPurchaseById(purchaseId);
         });
 
-        verify(purchaseService).findPurchaseById(eq(purchaseId));
-    }
+    verify(purchaseService).findPurchaseById(eq(purchaseId));
+  }
 
-    @Test
-    void postPurchase() {
-        PostPurchaseDTO postPurchaseDTO = new PostPurchaseDTO();
-        postPurchaseDTO.setCustomerId(1);
+  @Test
+  void postPurchase() {
+    PostPurchaseDto postPurchaseDTO = new PostPurchaseDto();
+    postPurchaseDTO.setCustomerId(1);
 
-        PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
-        postPurchaseTo.setCustomerId(1);
+    PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
+    postPurchaseTo.setCustomerId(1);
 
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(1);
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(1);
 
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(1);
 
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(1);
+    when(purchaseRestMapper.toPostPurchaseTo(eq(postPurchaseDTO))).thenReturn(postPurchaseTo);
+    when(purchaseService.savePurchase(eq(postPurchaseTo))).thenReturn(purchaseTo);
+    when(purchaseRestMapper.toPurchaseDto(eq(purchaseTo))).thenReturn(purchaseDTO);
 
-        when(purchaseRestMapper.toPostPurchaseTo(eq(postPurchaseDTO))).thenReturn(postPurchaseTo);
-        when(purchaseService.savePurchase(eq(postPurchaseTo))).thenReturn(purchaseTo);
-        when(purchaseRestMapper.toPurchaseDTO(eq(purchaseTo))).thenReturn(purchaseDTO);
+    ResponseEntity<PurchaseDto> response = purchaseController.postPurchase(postPurchaseDTO);
 
+    assertNotNull(response);
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-        ResponseEntity<PurchaseDTO> response = purchaseController.postPurchase(postPurchaseDTO);
+    PurchaseDto body = response.getBody();
+    assertNotNull(body);
+    assertEquals(1, body.getPurchaseId());
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+    verify(purchaseRestMapper).toPostPurchaseTo(postPurchaseDTO);
+    verify(purchaseService).savePurchase(postPurchaseTo);
+    verify(purchaseRestMapper).toPurchaseDto(purchaseTo);
+  }
 
-        PurchaseDTO body = response.getBody();
-        assertNotNull(body);
-        assertEquals(1, body.getPurchaseId());
+  @Test
+  void postPurchaseWithInvalidCustomer() {
+    PostPurchaseDto postPurchaseDTO = new PostPurchaseDto();
+    postPurchaseDTO.setCustomerId(99);
 
-        verify(purchaseRestMapper).toPostPurchaseTo(postPurchaseDTO);
-        verify(purchaseService).savePurchase(postPurchaseTo);
-        verify(purchaseRestMapper).toPurchaseDTO(purchaseTo);
+    PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
+    postPurchaseTo.setCustomerId(99);
 
-    }
+    when(purchaseRestMapper.toPostPurchaseTo(eq(postPurchaseDTO))).thenReturn(postPurchaseTo);
+    when(purchaseService.savePurchase(eq(postPurchaseTo)))
+        .thenThrow(new InstanceNotFoundException());
 
-    @Test
-    void postPurchaseWithInvalidCustomer() {
-        PostPurchaseDTO postPurchaseDTO = new PostPurchaseDTO();
-        postPurchaseDTO.setCustomerId(99);
-
-        PostPurchaseTo postPurchaseTo = new PostPurchaseTo();
-        postPurchaseTo.setCustomerId(99);
-
-        when(purchaseRestMapper.toPostPurchaseTo(eq(postPurchaseDTO))).thenReturn(postPurchaseTo);
-        when(purchaseService.savePurchase(eq(postPurchaseTo))).thenThrow(new InstanceNotFoundException());
-
-        //verifica que se lanza la excepción
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.postPurchase(postPurchaseDTO);
+    // verifica que se lanza la excepción
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.postPurchase(postPurchaseDTO);
         });
 
-        verify(purchaseRestMapper).toPostPurchaseTo(postPurchaseDTO);
-        verify(purchaseService).savePurchase(postPurchaseTo);
-    }
+    verify(purchaseRestMapper).toPostPurchaseTo(postPurchaseDTO);
+    verify(purchaseService).savePurchase(postPurchaseTo);
+  }
 
-    @Test
-    void addProductPurchase() {
-        Integer purchaseId = 1;
-        Integer productInShopId = 1;
+  @Test
+  void addProductPurchase() {
+    Integer purchaseId = 1;
+    Integer productInShopId = 1;
 
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(1);
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(1);
 
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(1);
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(1);
 
-        when(purchaseService.savePurchaseAndPurchaseLine(purchaseId, productInShopId)).thenReturn(purchaseTo);
-        when(purchaseRestMapper.toPurchaseDTO(purchaseTo)).thenReturn(purchaseDTO);
+    when(purchaseService.savePurchaseAndPurchaseLine(purchaseId, productInShopId))
+        .thenReturn(purchaseTo);
+    when(purchaseRestMapper.toPurchaseDto(purchaseTo)).thenReturn(purchaseDTO);
 
-        ResponseEntity<PurchaseDTO> response = purchaseController.addProductPurchase(purchaseId, productInShopId);
+    ResponseEntity<PurchaseDto> response =
+        purchaseController.addProductPurchase(purchaseId, productInShopId);
 
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    PurchaseDto body = response.getBody();
+    assertNotNull(body);
+    assertEquals(1, body.getPurchaseId());
 
-        PurchaseDTO body = response.getBody();
-        assertNotNull(body);
-        assertEquals(1, body.getPurchaseId());
+    verify(purchaseService).savePurchaseAndPurchaseLine(purchaseId, productInShopId);
+    verify(purchaseRestMapper).toPurchaseDto(purchaseTo);
+  }
 
+  @Test
+  void addProductPurchaseWithNonExistentProduct() {
+    Integer purchaseId = 1;
+    Integer productInShopId = 999;
 
-        verify(purchaseService).savePurchaseAndPurchaseLine(purchaseId, productInShopId);
-        verify(purchaseRestMapper).toPurchaseDTO(purchaseTo);
+    when(purchaseService.savePurchaseAndPurchaseLine(eq(purchaseId), eq(productInShopId)))
+        .thenThrow(new InstanceNotFoundException());
 
-    }
-
-    @Test
-    void addProductPurchaseWithNonExistentProduct() {
-        Integer purchaseId = 1;
-        Integer productInShopId = 999;
-
-        when(purchaseService.savePurchaseAndPurchaseLine(eq(purchaseId), eq(productInShopId)))
-                .thenThrow(new InstanceNotFoundException());
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.addProductPurchase(purchaseId, productInShopId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.addProductPurchase(purchaseId, productInShopId);
         });
 
-        verify(purchaseService).savePurchaseAndPurchaseLine(purchaseId, productInShopId);
-    }
+    verify(purchaseService).savePurchaseAndPurchaseLine(purchaseId, productInShopId);
+  }
 
+  @Test
+  void finishPurchase() {
+    Integer purchaseId = 1;
 
-    @Test
-    void finishPurchase() {
-        Integer purchaseId = 1;
+    PurchaseTo purchaseTo = new PurchaseTo();
+    purchaseTo.setPurchaseId(purchaseId);
+    purchaseTo.setShopping(false);
 
-        PurchaseTo purchaseTo = new PurchaseTo();
-        purchaseTo.setPurchaseId(purchaseId);
-        purchaseTo.setShopping(false);
+    PurchaseDto purchaseDTO = new PurchaseDto();
+    purchaseDTO.setPurchaseId(purchaseId);
+    purchaseDTO.setShopping(false);
 
+    when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId))).thenReturn(purchaseTo);
+    when(purchaseRestMapper.toPurchaseDto(purchaseTo)).thenReturn(purchaseDTO);
 
-        PurchaseDTO purchaseDTO = new PurchaseDTO();
-        purchaseDTO.setPurchaseId(purchaseId);
-        purchaseDTO.setShopping(false);
+    ResponseEntity<PurchaseDto> response = purchaseController.finishPurchase(purchaseId);
 
-        when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId))).thenReturn(purchaseTo);
-        when(purchaseRestMapper.toPurchaseDTO(purchaseTo)).thenReturn(purchaseDTO);
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        ResponseEntity<PurchaseDTO> response = purchaseController.finishPurchase(purchaseId);
+    PurchaseDto body = response.getBody();
+    assertNotNull(body);
+    assertEquals(purchaseId, body.getPurchaseId());
+    assertFalse(body.isShopping());
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    verify(purchaseService).updatePurchaseStatusToFinishes(eq(purchaseId));
+    verify(purchaseRestMapper).toPurchaseDto(purchaseTo);
+  }
 
-        PurchaseDTO body = response.getBody();
-        assertNotNull(body);
-        assertEquals(purchaseId, body.getPurchaseId());
-        assertFalse(body.isShopping());
+  @Test
+  void finishPurchaseNotFound() {
+    Integer purchaseId = 999;
 
-        verify(purchaseService).updatePurchaseStatusToFinishes(eq(purchaseId));
-        verify(purchaseRestMapper).toPurchaseDTO(purchaseTo);
-    }
+    when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId)))
+        .thenThrow(new InstanceNotFoundException());
 
-    @Test
-    void finishPurchaseNotFound() {
-        Integer purchaseId = 999;
-
-        when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId)))
-                .thenThrow(new InstanceNotFoundException());
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.finishPurchase(purchaseId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.finishPurchase(purchaseId);
         });
 
-        verify(purchaseService).updatePurchaseStatusToFinishes(purchaseId);
-    }
+    verify(purchaseService).updatePurchaseStatusToFinishes(purchaseId);
+  }
 
-    @Test
-    void finishPurchaseAlreadyFinished() {
-        Integer purchaseId = 1;
+  @Test
+  void finishPurchaseAlreadyFinished() {
+    Integer purchaseId = 1;
 
-        when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId)))
-                .thenThrow(new IllegalStateException());
+    when(purchaseService.updatePurchaseStatusToFinishes(eq(purchaseId)))
+        .thenThrow(new IllegalStateException());
 
-        assertThrows(IllegalStateException.class, () -> {
-            purchaseController.finishPurchase(purchaseId);
+    assertThrows(
+        IllegalStateException.class,
+        () -> {
+          purchaseController.finishPurchase(purchaseId);
         });
 
-        verify(purchaseService).updatePurchaseStatusToFinishes(purchaseId);
-    }
+    verify(purchaseService).updatePurchaseStatusToFinishes(purchaseId);
+  }
 
-    @Test
-    void deletePurchase() {
-        Integer purchaseId = 1;
+  @Test
+  void deletePurchase() {
+    Integer purchaseId = 1;
 
-        ResponseEntity<Void> response = purchaseController.deletePurchase(purchaseId);
+    ResponseEntity<Void> response = purchaseController.deletePurchase(purchaseId);
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        verify(purchaseService).deletePurchase(eq(purchaseId));
+    verify(purchaseService).deletePurchase(eq(purchaseId));
+  }
 
+  @Test
+  void deletePurchaseNotFound() {
+    Integer purchaseId = 999;
 
-    }
+    doThrow(new InstanceNotFoundException()).when(purchaseService).deletePurchase(eq(purchaseId));
 
-    @Test
-    void deletePurchaseNotFound() {
-        Integer purchaseId = 999;
-
-        doThrow(new InstanceNotFoundException()).when(purchaseService).deletePurchase(eq(purchaseId));
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.deletePurchase(purchaseId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.deletePurchase(purchaseId);
         });
 
-        verify(purchaseService).deletePurchase(purchaseId);
-    }
+    verify(purchaseService).deletePurchase(purchaseId);
+  }
 
-    @Test
-    void deleteProductPurchase() {
-        Integer purchaseId = 1;
-        Integer productInShopId = 1;
+  @Test
+  void deleteProductPurchase() {
+    Integer purchaseId = 1;
+    Integer productInShopId = 1;
 
-        ResponseEntity<Void> response = purchaseController.deleteProductPurchase(purchaseId, productInShopId);
+    ResponseEntity<Void> response =
+        purchaseController.deleteProductPurchase(purchaseId, productInShopId);
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        verify(purchaseService).deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
-    }
+    verify(purchaseService).deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
+  }
 
+  @Test
+  void deleteProductPurchaseNotFound() {
+    Integer purchaseId = 999;
+    Integer productInShopId = 999;
 
-    @Test
-    void deleteProductPurchaseNotFound() {
-        Integer purchaseId = 999;
-        Integer productInShopId = 999;
+    doThrow(new InstanceNotFoundException())
+        .when(purchaseService)
+        .deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
 
-        doThrow(new InstanceNotFoundException()).when(purchaseService).deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
-
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            purchaseController.deleteProductPurchase(purchaseId, productInShopId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          purchaseController.deleteProductPurchase(purchaseId, productInShopId);
         });
 
-        verify(purchaseService).deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
-
-    }
+    verify(purchaseService).deleteProductToPurchase(eq(purchaseId), eq(productInShopId));
+  }
 }

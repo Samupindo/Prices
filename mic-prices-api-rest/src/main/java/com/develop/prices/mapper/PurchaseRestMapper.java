@@ -1,7 +1,7 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.PostPurchaseDTO;
-import com.develop.prices.dto.PurchaseDTO;
+import com.develop.prices.dto.PostPurchaseDto;
+import com.develop.prices.dto.PurchaseDto;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
 import org.mapstruct.Mapper;
@@ -12,8 +12,8 @@ import org.mapstruct.Mapping;
     uses = {ProductInShopRestMapper.class})
 public interface PurchaseRestMapper {
 
-  PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
+  PurchaseDto toPurchaseDto(PurchaseTo purchaseTo);
 
   @Mapping(target = "customerId", source = "customerId")
-  PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
+  PostPurchaseTo toPostPurchaseTo(PostPurchaseDto postPurchaseDto);
 }

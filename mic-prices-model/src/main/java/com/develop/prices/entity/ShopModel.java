@@ -13,57 +13,59 @@ import java.util.List;
 @Entity
 @Table(name = "shops")
 public class ShopModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer shopId;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer shopId;
 
-    private String country;
-    private String city;
-    private String address;
+  private String country;
+  private String city;
+  private String address;
 
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<ProductInShopModel> prices;
+  @OneToMany(
+      mappedBy = "shop",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.LAZY)
+  private List<ProductInShopModel> prices;
 
+  public ShopModel() {}
 
-    public ShopModel() {
-    }
+  public ShopModel(String country, String city, String address) {
+    this.country = country;
+    this.city = city;
+    this.address = address;
+  }
 
-    public ShopModel(String country, String city, String address) {
-        this.country = country;
-        this.city = city;
-        this.address = address;
-    }
+  // Getters y Setters
+  public Integer getShopId() {
+    return shopId;
+  }
 
-    // Getters y Setters
-    public Integer getShopId() {
-        return shopId;
-    }
+  public void setShopId(Integer shopId) {
+    this.shopId = shopId;
+  }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
-    }
+  public String getCountry() {
+    return country;
+  }
 
-    public String getCountry() {
-        return country;
-    }
+  public void setCountry(String country) {
+    this.country = country;
+  }
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+  public String getCity() {
+    return city;
+  }
 
-    public String getCity() {
-        return city;
-    }
+  public void setCity(String city) {
+    this.city = city;
+  }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+  public String getAddress() {
+    return address;
+  }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }

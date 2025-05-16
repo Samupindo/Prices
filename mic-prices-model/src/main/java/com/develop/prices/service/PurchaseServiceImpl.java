@@ -30,216 +30,230 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class PurchaseServiceImpl implements PurchaseService {
 
+  private final PurchaseModelMapper purchaseModelMapper;
 
-    private final PurchaseModelMapper purchaseModelMapper;
+  private final ProductInShopModelMapper productInShopModelMapper;
 
-    private final ProductInShopModelMapper productInShopModelMapper;
+  private final PurchaseRepository purchaseRepository;
 
-    private final PurchaseRepository purchaseRepository;
+  private final ProductInShopRepository productInShopRepository;
 
-    private final ProductInShopRepository productInShopRepository;
+  private final CustomerRepository customerRepository;
 
-    private final CustomerRepository customerRepository;
+  public PurchaseServiceImpl(
+      PurchaseModelMapper purchaseModelMapper,
+      ProductInShopModelMapper productInShopModelMapper,
+      PurchaseRepository purchaseRepository,
+      ProductInShopRepository productInShopRepository,
+      CustomerRepository customerRepository) {
+    this.purchaseModelMapper = purchaseModelMapper;
+    this.productInShopModelMapper = productInShopModelMapper;
+    this.purchaseRepository = purchaseRepository;
+    this.productInShopRepository = productInShopRepository;
+    this.customerRepository = customerRepository;
+  }
 
+  @Override
+  public PageResponseTo<PurchaseTo> findAllWithFilters(
+      Integer customerId,
+      List<Integer> productInShop,
+      BigDecimal totalPriceMax,
+      BigDecimal totalPriceMin,
+      Boolean shopping,
+      Pageable pageable) {
 
-    public PurchaseServiceImpl(PurchaseModelMapper purchaseModelMapper,ProductInShopModelMapper productInShopModelMapper,PurchaseRepository purchaseRepository , ProductInShopRepository productInShopRepository, CustomerRepository customerRepository) {
-        this.purchaseModelMapper = purchaseModelMapper;
-        this.productInShopModelMapper = productInShopModelMapper;
-        this.purchaseRepository = purchaseRepository;
-        this.productInShopRepository = productInShopRepository;
-        this.customerRepository = customerRepository;
+    Specification<PurchaseModel> spec = Specification.where(null);
+
+    if (customerId != null) {
+      spec = spec.and(PurchaseSpecification.hasCustomer(customerId));
     }
 
+    if (productInShop != null && !productInShop.isEmpty()) {
+      spec = spec.and(PurchaseSpecification.hasProductInShop(productInShop));
+    }
+    if (totalPriceMax != null) {
+      spec = spec.and(PurchaseSpecification.hasPriceMax(totalPriceMax));
+    }
 
-    @Override
-    public PageResponseTo<PurchaseTo> findAllWithFilters(Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax, BigDecimal totalPriceMin, Boolean shopping, Pageable pageable) {
+    if (totalPriceMin != null) {
+      spec = spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
+    }
 
-        Specification<PurchaseModel> spec = Specification.where(null);
+    if (shopping != null) {
+      spec = spec.and(PurchaseSpecification.hasShoppingStatus(shopping));
+    }
 
-        if (customerId != null) {
-            spec = spec.and(PurchaseSpecification.hasCustomer(customerId));
-        }
+    Page<PurchaseModel> purchaseModels = purchaseRepository.findAll(spec, pageable);
 
-        if (productInShop != null && !productInShop.isEmpty()) {
-            spec = spec.and(PurchaseSpecification.hasProductInShop(productInShop));
-
-        }
-        if (totalPriceMax != null) {
-            spec = spec.and(PurchaseSpecification.hasPriceMax(totalPriceMax));
-        }
-
-        if (totalPriceMin != null) {
-            spec = spec.and(PurchaseSpecification.hasPriceMin(totalPriceMin));
-        }
-
-        if (shopping != null) {
-            spec = spec.and(PurchaseSpecification.hasShoppingStatus(shopping));
-        }
-
-        Page<PurchaseModel> purchaseModels = purchaseRepository.findAll(spec,pageable);
-
-        List<PurchaseTo> purchaseToList = purchaseModels.getContent()
-                .stream()
-                .map(purchaseModel -> {
-                    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
-                    List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels()
-                            .stream().map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
-                            .collect(Collectors.toList());
-                    purchaseTo.setProducts(productInShopTos);
-                    return purchaseTo;
+    List<PurchaseTo> purchaseToList =
+        purchaseModels.getContent().stream()
+            .map(
+                purchaseModel -> {
+                  PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+                  List<ProductInShopTo> productInShopTos =
+                      purchaseModel.getPurchaseLineModels().stream()
+                          .map(
+                              p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
+                          .collect(Collectors.toList());
+                  purchaseTo.setProducts(productInShopTos);
+                  return purchaseTo;
                 })
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
 
+    return new PageResponseTo<>(
+        purchaseToList, purchaseModels.getTotalElements(), purchaseModels.getTotalPages());
+  }
 
-        return new PageResponseTo<>(
-                purchaseToList,
-                purchaseModels.getTotalElements(),
-                purchaseModels.getTotalPages()
-        );
+  @Override
+  public PurchaseTo findPurchaseById(Integer purchaseId) {
+    Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+
+    if (optionalPurchaseModel.isEmpty()) {
+      throw new InstanceNotFoundException();
     }
 
-    @Override
-    public PurchaseTo findPurchaseById(Integer purchaseId) {
-        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+    PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
-        if (optionalPurchaseModel.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
+    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
 
-        PurchaseModel purchaseModel = optionalPurchaseModel.get();
+    List<ProductInShopTo> productInShopTos =
+        purchaseModel.getPurchaseLineModels().stream()
+            .map(p -> productInShopModelMapper.toPurchaseTo(p.getProductInShop()))
+            .collect(Collectors.toList());
+    purchaseTo.setProducts(productInShopTos);
 
-        PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+    return purchaseTo;
+  }
 
-        List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels().stream()
-                .map(p -> productInShopModelMapper.toPurchaseTo(p.getProductInShop()))
-                .collect(Collectors.toList());
-        purchaseTo.setProducts(productInShopTos);
+  @Override
+  public PurchaseTo savePurchase(PostPurchaseTo postPurchaseTo) {
+    CustomerModel customerModel =
+        customerRepository.findById(postPurchaseTo.getCustomerId()).orElse(null);
 
-        return purchaseTo;
+    if (customerModel == null) {
+      throw new InstanceNotFoundException();
     }
 
-    @Override
-    public PurchaseTo savePurchase(PostPurchaseTo postPurchaseTo) {
-        CustomerModel customerModel = customerRepository.findById(postPurchaseTo.getCustomerId()).orElse(null);
+    PurchaseModel purchaseModel = new PurchaseModel();
 
-        if (customerModel == null) {
-            throw new InstanceNotFoundException();
-        }
+    purchaseModel.setCustomer(customerModel);
+    purchaseModel.setTotalPrice(BigDecimal.ZERO);
+    purchaseModel.setShopping(true);
 
-        PurchaseModel purchaseModel = new PurchaseModel();
+    PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
 
-        purchaseModel.setCustomer(customerModel);
-        purchaseModel.setTotalPrice(BigDecimal.ZERO);
-        purchaseModel.setShopping(true);
+    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(savedPurchaseModel);
+    purchaseTo.setProducts(List.of());
 
-        PurchaseModel savedPurchaseModel = purchaseRepository.save(purchaseModel);
+    return purchaseTo;
+  }
 
-        PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(savedPurchaseModel);
-        purchaseTo.setProducts(List.of());
+  @Override
+  public PurchaseTo savePurchaseAndPurchaseLine(Integer purchaseId, Integer productInShopId) {
+    Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+    Optional<ProductInShopModel> optionalProductInShopModel =
+        productInShopRepository.findById(productInShopId);
 
-        return purchaseTo;
+    if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
+      throw new InstanceNotFoundException();
     }
 
-    @Override
-    public PurchaseTo savePurchaseAndPurchaseLine(Integer purchaseId, Integer productInShopId) {
-        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        Optional<ProductInShopModel> optionalProductInShopModel = productInShopRepository.findById(productInShopId);
+    PurchaseModel purchaseModel = optionalPurchaseModel.get();
 
-        if (optionalPurchaseModel.isEmpty() || optionalProductInShopModel.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
-
-        PurchaseModel purchaseModel = optionalPurchaseModel.get();
-
-        if (!purchaseModel.isShopping()) {
-            throw new BadRequestException();
-        }
-
-        ProductInShopModel productInShopModel = optionalProductInShopModel.get();
-
-        PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
-        purchaseLineModel.setPurchase(purchaseModel);
-        purchaseLineModel.setProductInShop(productInShopModel);
-        purchaseModel.getPurchaseLineModels().add(purchaseLineModel);
-
-        purchaseModel.setTotalPrice(purchaseModel.getTotalPrice());
-
-        PurchaseModel purchaseModelDB = purchaseRepository.save(purchaseModel);
-
-        PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
-
-        List<ProductInShopTo> productInShopTos = purchaseModelDB.getPurchaseLineModels().stream()
-                .map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
-                .collect(Collectors.toList());
-        purchaseTo.setProducts(productInShopTos);
-        return purchaseTo;
+    if (!purchaseModel.isShopping()) {
+      throw new BadRequestException();
     }
 
-    @Override
-    public PurchaseTo updatePurchaseStatusToFinishes(Integer purchaseId) {
-        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
-        if (optionalPurchaseModel.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
-        PurchaseModel purchaseModel = optionalPurchaseModel.get();
-        if (!purchaseModel.isShopping()) {
-            throw new BadRequestException();
-        }
+    ProductInShopModel productInShopModel = optionalProductInShopModel.get();
 
-        purchaseModel.setShopping(false);
-        purchaseRepository.save(purchaseModel);
-        PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+    PurchaseLineModel purchaseLineModel = new PurchaseLineModel();
+    purchaseLineModel.setPurchase(purchaseModel);
+    purchaseLineModel.setProductInShop(productInShopModel);
+    purchaseModel.getPurchaseLineModels().add(purchaseLineModel);
 
-        List<ProductInShopTo> productInShopTos = purchaseModel.getPurchaseLineModels().stream()
-                .map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
-                .collect(Collectors.toList());
-        purchaseTo.setProducts(productInShopTos);
+    purchaseModel.setTotalPrice(purchaseModel.getTotalPrice());
 
-        return purchaseTo;
+    PurchaseModel purchaseModelDb = purchaseRepository.save(purchaseModel);
+
+    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
+
+    List<ProductInShopTo> productInShopTos =
+        purchaseModelDb.getPurchaseLineModels().stream()
+            .map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
+            .collect(Collectors.toList());
+    purchaseTo.setProducts(productInShopTos);
+    return purchaseTo;
+  }
+
+  @Override
+  public PurchaseTo updatePurchaseStatusToFinishes(Integer purchaseId) {
+    Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+    if (optionalPurchaseModel.isEmpty()) {
+      throw new InstanceNotFoundException();
+    }
+    PurchaseModel purchaseModel = optionalPurchaseModel.get();
+    if (!purchaseModel.isShopping()) {
+      throw new BadRequestException();
     }
 
-    @Override
-    public void deletePurchase(Integer purchaseId) {
-        PurchaseModel purchaseModel = purchaseRepository.findById(purchaseId).orElse(null);
-        if (purchaseModel == null) {
-            throw new InstanceNotFoundException();
-        }
+    purchaseModel.setShopping(false);
+    purchaseRepository.save(purchaseModel);
+    PurchaseTo purchaseTo = purchaseModelMapper.toPurchaseTo(purchaseModel);
 
-        purchaseRepository.delete(purchaseModel);
+    List<ProductInShopTo> productInShopTos =
+        purchaseModel.getPurchaseLineModels().stream()
+            .map(p -> productInShopModelMapper.toProductInShopTo(p.getProductInShop()))
+            .collect(Collectors.toList());
+    purchaseTo.setProducts(productInShopTos);
+
+    return purchaseTo;
+  }
+
+  @Override
+  public void deletePurchase(Integer purchaseId) {
+    PurchaseModel purchaseModel = purchaseRepository.findById(purchaseId).orElse(null);
+    if (purchaseModel == null) {
+      throw new InstanceNotFoundException();
     }
 
-    @Override
-    public void deleteProductToPurchase(Integer purchaseId, Integer productInShopId) {
-        Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
+    purchaseRepository.delete(purchaseModel);
+  }
 
-        if (optionalPurchaseModel.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
+  @Override
+  public void deleteProductToPurchase(Integer purchaseId, Integer productInShopId) {
+    Optional<PurchaseModel> optionalPurchaseModel = purchaseRepository.findById(purchaseId);
 
-        PurchaseModel purchaseModel = optionalPurchaseModel.get();
-
-        List<PurchaseLineModel> purchaseLineModels = purchaseModel.getPurchaseLineModels();
-        if (purchaseLineModels.isEmpty()) {
-            throw new InstanceNotFoundException();
-        }
-
-        if (!purchaseModel.isShopping()) {
-            throw new BadRequestException();
-        }
-
-        boolean productoExiste = purchaseModel.getPurchaseLineModels().stream()
-                .anyMatch(purchaseLine ->
-                        purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
-                );
-
-        if (!productoExiste) {
-            throw new InstanceNotFoundException();
-        }
-
-        purchaseModel.getPurchaseLineModels().removeIf(purchaseLine ->
-                purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId)
-        );
-
-        purchaseRepository.save(purchaseModel);
+    if (optionalPurchaseModel.isEmpty()) {
+      throw new InstanceNotFoundException();
     }
+
+    PurchaseModel purchaseModel = optionalPurchaseModel.get();
+
+    List<PurchaseLineModel> purchaseLineModels = purchaseModel.getPurchaseLineModels();
+    if (purchaseLineModels.isEmpty()) {
+      throw new InstanceNotFoundException();
+    }
+
+    if (!purchaseModel.isShopping()) {
+      throw new BadRequestException();
+    }
+
+    boolean productoExiste =
+        purchaseModel.getPurchaseLineModels().stream()
+            .anyMatch(
+                purchaseLine ->
+                    purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId));
+
+    if (!productoExiste) {
+      throw new InstanceNotFoundException();
+    }
+
+    purchaseModel
+        .getPurchaseLineModels()
+        .removeIf(
+            purchaseLine ->
+                purchaseLine.getProductInShop().getProductInShopId().equals(productInShopId));
+
+    purchaseRepository.save(purchaseModel);
+  }
 }

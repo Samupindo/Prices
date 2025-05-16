@@ -3,20 +3,20 @@ package com.develop.prices.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ShopInfoDTO implements Serializable {
+public class ShopInfoDto implements Serializable {
   private Integer productInShopId;
   private Integer shopId;
   private BigDecimal price;
 
-  public ShopInfoDTO() {}
+  public ShopInfoDto() {}
 
-  public ShopInfoDTO(Integer productInShopId, Integer shopId, BigDecimal price) {
+  public ShopInfoDto(Integer productInShopId, Integer shopId, BigDecimal price) {
     this.productInShopId = productInShopId;
     this.shopId = shopId;
     this.price = price;
   }
 
-  public ShopInfoDTO(Integer shopId, BigDecimal price) {
+  public ShopInfoDto(Integer shopId, BigDecimal price) {
     this.shopId = shopId;
     this.price = price;
   }

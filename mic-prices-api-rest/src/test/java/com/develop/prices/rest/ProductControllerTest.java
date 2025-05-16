@@ -5,10 +5,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
-import com.develop.prices.dto.PageResponseDTO;
-import com.develop.prices.dto.ProductDTO;
-import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.dto.ProductWithShopsDTO;
+import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.ProductDto;
+import com.develop.prices.dto.ProductNameDto;
+import com.develop.prices.dto.ProductWithShopsDto;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.service.ProductService;
@@ -33,284 +33,268 @@ import org.springframework.http.ResponseEntity;
 @ExtendWith(MockitoExtension.class)
 class ProductControllerTest {
 
-    @Mock
-    private ProductService productService;
+  @Mock private ProductService productService;
 
-    @Mock
-    private ProductRestMapper productRestMapper;
+  @Mock private ProductRestMapper productRestMapper;
 
-    private ProductController productController;
+  private ProductController productController;
 
-    @BeforeEach
-    void setUp() {
-        productController = new ProductController(productService, productRestMapper);
-    }
+  @BeforeEach
+  void setUp() {
+    productController = new ProductController(productService, productRestMapper);
+  }
 
+  @Test
+  void getProductsWithFilters() {
+    Integer productId = 1;
+    String name = "name";
+    BigDecimal totalPriceMax = new BigDecimal("200.00");
+    BigDecimal totalPriceMin = new BigDecimal("50.00");
 
-    @Test
-    void getProductsWithFilters() {
-        Integer productId = 1;
-        String name = "name";
-        BigDecimal totalPriceMax = new BigDecimal("200.00");
-        BigDecimal totalPriceMin = new BigDecimal("50.00");
+    Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
+    ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
+    productWithShopsTo.setProductId(1);
+    productWithShopsTo.setName("name");
 
+    List<ProductWithShopsTo> productToList = new ArrayList<>();
+    productToList.add(productWithShopsTo);
 
-        ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
-        productWithShopsTo.setProductId(1);
-        productWithShopsTo.setName("name");
+    PageResponseTo<ProductWithShopsTo> pageResponseTo =
+        new PageResponseTo<>(productToList, productToList.size(), 1);
 
-        List<ProductWithShopsTo> productToList = new ArrayList<>();
-        productToList.add(productWithShopsTo);
+    ProductWithShopsDto productWithShopsDTO = new ProductWithShopsDto();
+    productWithShopsDTO.setProductId(1);
+    productWithShopsDTO.setName("name");
 
-        PageResponseTo<ProductWithShopsTo> pageResponseTo = new PageResponseTo<>(
-                productToList,
-                productToList.size(),
-                1
-        );
+    when(productService.findAllProductsWithFilters(
+            eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
+        .thenReturn(pageResponseTo);
+    when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
+        .thenReturn(productWithShopsDTO);
 
-        ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO();
-        productWithShopsDTO.setProductId(1);
-        productWithShopsDTO.setName("name");
+    ResponseEntity<PageResponseDto<ProductWithShopsDto>> response =
+        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
-        when(productService.findAllProductsWithFilters(eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
-                .thenReturn(pageResponseTo);
-        when(productRestMapper.toProductWithShopsDTO(any(ProductWithShopsTo.class))).thenReturn(productWithShopsDTO);
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        ResponseEntity<PageResponseDTO<ProductWithShopsDTO>> response = productController.getProductsWithFilters(
-                name, totalPriceMin, totalPriceMax, pageable);
+    PageResponseDto<ProductWithShopsDto> body = response.getBody();
+    assertNotNull(body);
+    assertEquals(1, body.getContent().size());
+  }
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+  @Test
+  void getProductsWithoutFilters() {
+    Integer productId = 1;
+    String name = null;
+    BigDecimal totalPriceMax = null;
+    BigDecimal totalPriceMin = null;
+    Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
 
-        PageResponseDTO<ProductWithShopsDTO> body = response.getBody();
-        assertNotNull(body);
-        assertEquals(1, body.getContent().size());
+    ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
+    productWithShopsTo.setProductId(1);
+    productWithShopsTo.setName("name");
 
-    }
+    List<ProductWithShopsTo> productToList = new ArrayList<>();
+    productToList.add(productWithShopsTo);
 
+    PageResponseTo<ProductWithShopsTo> pageResponseTo =
+        new PageResponseTo<>(productToList, productToList.size(), 1);
 
-    @Test
-    void getProductsWithoutFilters() {
-        Integer productId = 1;
-        String name = null;
-        BigDecimal totalPriceMax = null;
-        BigDecimal totalPriceMin = null;
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "purchaseId");
+    ProductWithShopsDto productWithShopsDTO = new ProductWithShopsDto();
+    productWithShopsDTO.setProductId(1);
+    productWithShopsDTO.setName("name");
 
-        ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
-        productWithShopsTo.setProductId(1);
-        productWithShopsTo.setName("name");
+    when(productService.findAllProductsWithFilters(
+            eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
+        .thenReturn(pageResponseTo);
+    when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
+        .thenReturn(productWithShopsDTO);
 
-        List<ProductWithShopsTo> productToList = new ArrayList<>();
-        productToList.add(productWithShopsTo);
+    ResponseEntity<PageResponseDto<ProductWithShopsDto>> response =
+        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
-        PageResponseTo<ProductWithShopsTo> pageResponseTo = new PageResponseTo<>(
-                productToList,
-                productToList.size(),
-                1
-        );
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        ProductWithShopsDTO productWithShopsDTO = new ProductWithShopsDTO();
-        productWithShopsDTO.setProductId(1);
-        productWithShopsDTO.setName("name");
+    PageResponseDto<ProductWithShopsDto> body = response.getBody();
+    assertNotNull(body);
+    assertEquals(1, body.getContent().size());
+  }
 
-        when(productService.findAllProductsWithFilters(eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
-                .thenReturn(pageResponseTo);
-        when(productRestMapper.toProductWithShopsDTO(any(ProductWithShopsTo.class))).thenReturn(productWithShopsDTO);
+  @Test
+  void getProductById() {
+    Integer productId = 1;
 
-        ResponseEntity<PageResponseDTO<ProductWithShopsDTO>> response = productController.getProductsWithFilters(
-                name, totalPriceMin, totalPriceMax, pageable);
+    ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
+    productWithShopsTo.setProductId(productId);
+    productWithShopsTo.setName("name");
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    ProductWithShopsDto productWithShopsDto = new ProductWithShopsDto();
+    productWithShopsDto.setProductId(productId);
+    productWithShopsDto.setName("name");
 
-        PageResponseDTO<ProductWithShopsDTO> body = response.getBody();
-        assertNotNull(body);
-        assertEquals(1, body.getContent().size());
+    when(productService.findByProductById(eq(productId))).thenReturn(productWithShopsTo);
+    when(productRestMapper.toProductWithShopsDto(productWithShopsTo))
+        .thenReturn(productWithShopsDto);
 
-    }
-    @Test
-    void getProductById() {
-        Integer productId = 1;
+    ResponseEntity<ProductWithShopsDto> response = productController.getProductById(productId);
+  }
 
-        ProductWithShopsTo productWithShopsTo = new ProductWithShopsTo();
-        productWithShopsTo.setProductId(productId);
-        productWithShopsTo.setName("name");
+  @Test
+  void getProductByIdNotFound() {
+    Integer productId = 99;
 
-        ProductWithShopsDTO productWithShopsDto = new ProductWithShopsDTO();
-        productWithShopsDto.setProductId(productId);
-        productWithShopsDto.setName("name");
+    when(productService.findByProductById(eq(productId)))
+        .thenThrow(new InstanceNotFoundException());
 
-
-        when(productService.findByProductById(eq(productId))).thenReturn(productWithShopsTo);
-        when(productRestMapper.toProductWithShopsDTO(productWithShopsTo)).thenReturn(productWithShopsDto);
-
-        ResponseEntity<ProductWithShopsDTO> response = productController.getProductById(productId);
-    }
-
-    @Test
-    void getProductByIdNotFound() {
-        Integer productId = 99;
-
-        when(productService.findByProductById(eq(productId))).thenThrow(new InstanceNotFoundException());
-
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            productController.getProductById(productId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          productController.getProductById(productId);
         });
 
-        verify(productService).findByProductById(eq(productId));
+    verify(productService).findByProductById(eq(productId));
+  }
 
-    }
+  @Test
+  void addProduct() {
+    String name = "name";
 
-    @Test
-    void addProduct() {
-        String name = "name";
+    ProductNameTo productNameTo = new ProductNameTo();
+    productNameTo.setName("name");
 
-        ProductNameTo productNameTo = new ProductNameTo();
-        productNameTo.setName("name");
+    ProductNameDto productNameDTO = new ProductNameDto();
+    productNameDTO.setName("name");
 
-        ProductNameDTO productNameDTO = new ProductNameDTO();
-        productNameDTO.setName("name");
+    ProductDto productDTO = new ProductDto();
+    productDTO.setProductId(1);
+    productDTO.setName("name");
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setProductId(1);
-        productDTO.setName("name");
+    ProductTo productTo = new ProductTo();
+    productTo.setProductId(1);
+    productTo.setName("name");
 
-        ProductTo productTo = new ProductTo();
-        productTo.setProductId(1);
-        productTo.setName("name");
+    when(productRestMapper.toProductNameTo(productNameDTO)).thenReturn(productNameTo);
 
-        when(productRestMapper.toProductNameTo(productNameDTO)).thenReturn(productNameTo);
+    when(productService.saveProduct(productNameTo)).thenReturn(productTo);
+    when(productRestMapper.toProductDto(productTo)).thenReturn(productDTO);
 
+    ResponseEntity<ProductDto> response = productController.addProduct(productNameDTO);
+  }
 
-        when(productService.saveProduct(productNameTo)).thenReturn(productTo);
-        when(productRestMapper.toProductDTO(productTo)).thenReturn(productDTO);
+  @Test
+  void addProductWithInvalidName() {
+    String invalidName = "";
 
-        ResponseEntity<ProductDTO> response = productController.addProduct(productNameDTO);
+    ProductNameDto invalidProductNameDto = new ProductNameDto();
+    invalidProductNameDto.setName(invalidName);
 
+    ProductNameTo productNameTo = new ProductNameTo();
+    productNameTo.setName(invalidName);
 
+    when(productRestMapper.toProductNameTo(eq(invalidProductNameDto))).thenReturn(productNameTo);
+    when(productService.saveProduct(eq(productNameTo))).thenThrow(new IllegalArgumentException());
 
-    }
-
-    @Test
-    void addProductWithInvalidName() {
-        String invalidName = "";
-
-        ProductNameDTO invalidProductNameDTO = new ProductNameDTO();
-        invalidProductNameDTO.setName(invalidName);
-
-
-        ProductNameTo productNameTo = new ProductNameTo();
-        productNameTo.setName(invalidName);
-
-        when(productRestMapper.toProductNameTo(eq(invalidProductNameDTO))).thenReturn(productNameTo);
-        when(productService.saveProduct(eq(productNameTo)))
-                .thenThrow(new IllegalArgumentException());
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            productController.addProduct(invalidProductNameDTO);
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          productController.addProduct(invalidProductNameDto);
         });
 
+    verify(productRestMapper).toProductNameTo(eq(invalidProductNameDto));
+    verify(productService).saveProduct(eq(productNameTo));
+  }
 
+  @Test
+  void updateProduct() {
+    Integer productId = 1;
 
-        verify(productRestMapper).toProductNameTo(eq(invalidProductNameDTO));
-        verify(productService).saveProduct(eq(productNameTo));
+    ProductNameDto productNameDTO = new ProductNameDto();
+    productNameDTO.setName("name");
 
+    ProductNameTo productNameTo = new ProductNameTo();
+    productNameTo.setName("name");
 
-    }
+    ProductTo productTo = new ProductTo();
+    productTo.setName("name");
 
-    @Test
-    void updateProduct() {
-        Integer productId = 1;
+    ProductTo updatedProductTo = new ProductTo();
+    updatedProductTo.setProductId(productId);
+    updatedProductTo.setName("Producto actualizado");
 
+    ProductDto updatedProductDto = new ProductDto();
+    updatedProductDto.setProductId(productId);
+    updatedProductDto.setName("Producto actualizado");
 
-        ProductNameDTO productNameDTO = new ProductNameDTO();
-        productNameDTO.setName("name");
+    when(productRestMapper.toProductNameTo(eq(productNameDTO))).thenReturn(productNameTo);
+    when(productService.updateProduct(eq(productId), eq(productNameTo)))
+        .thenReturn(updatedProductTo);
+    when(productRestMapper.toProductDto(eq(updatedProductTo))).thenReturn(updatedProductDto);
 
+    ResponseEntity<ProductDto> response =
+        productController.updateProduct(productId, productNameDTO);
 
-        ProductNameTo productNameTo = new ProductNameTo();
-        productNameTo.setName("name");
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
+    ProductDto body = response.getBody();
+    assertNotNull(body);
+    assertEquals(productId, body.getProductId());
+    assertEquals("Producto actualizado", body.getName());
+  }
 
-        ProductTo productTo = new ProductTo();
-        productTo.setName("name");
+  @Test
+  void updateProductWithInvalidName() {
+    Integer productId = 1;
+    String invalidName = "";
 
-        ProductTo updatedProductTo = new ProductTo();
-        updatedProductTo.setProductId(productId);
-        updatedProductTo.setName("Producto actualizado");
+    ProductNameDto invalidProductNameDto = new ProductNameDto();
+    invalidProductNameDto.setName(invalidName);
 
-        ProductDTO updatedProductDTO = new ProductDTO();
-        updatedProductDTO.setProductId(productId);
-        updatedProductDTO.setName("Producto actualizado");
+    ProductNameTo invalidProductNameTo = new ProductNameTo();
+    invalidProductNameTo.setName(invalidName);
 
-        when(productRestMapper.toProductNameTo(eq(productNameDTO))).thenReturn(productNameTo);
-        when(productService.updateProduct(eq(productId), eq(productNameTo))).thenReturn(updatedProductTo);
-        when(productRestMapper.toProductDTO(eq(updatedProductTo))).thenReturn(updatedProductDTO);
+    when(productRestMapper.toProductNameTo(eq(invalidProductNameDto)))
+        .thenReturn(invalidProductNameTo);
+    when(productService.updateProduct(eq(productId), eq(invalidProductNameTo)))
+        .thenThrow(new IllegalArgumentException());
 
+    Exception exception =
+        assertThrows(
+            IllegalArgumentException.class,
+            () -> {
+              productController.updateProduct(productId, invalidProductNameDto);
+            });
 
-        ResponseEntity<ProductDTO> response = productController.updateProduct(productId, productNameDTO);
+    verify(productRestMapper).toProductNameTo(eq(invalidProductNameDto));
+    verify(productService).updateProduct(eq(productId), eq(invalidProductNameTo));
+  }
 
+  @Test
+  void deleteProduct() {
+    Integer productId = 1;
 
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    ResponseEntity<Void> response = productController.deleteProduct(productId);
 
-        ProductDTO body = response.getBody();
-        assertNotNull(body);
-        assertEquals(productId, body.getProductId());
-        assertEquals("Producto actualizado", body.getName());
+    assertNotNull(response);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    }
+    verify(productService).deleteProduct(eq(productId));
+  }
 
+  @Test
+  void deleteProductNotFound() {
+    Integer productId = 99;
 
-    @Test
-    void updateProductWithInvalidName() {
-        Integer productId = 1;
-        String invalidName = "";
+    doThrow(new InstanceNotFoundException()).when(productService).deleteProduct(eq(productId));
 
-        ProductNameDTO invalidProductNameDTO = new ProductNameDTO();
-        invalidProductNameDTO.setName(invalidName);
-
-        ProductNameTo invalidProductNameTo = new ProductNameTo();
-        invalidProductNameTo.setName(invalidName);
-
-        when(productRestMapper.toProductNameTo(eq(invalidProductNameDTO))).thenReturn(invalidProductNameTo);
-        when(productService.updateProduct(eq(productId), eq(invalidProductNameTo)))
-                .thenThrow(new IllegalArgumentException());
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            productController.updateProduct(productId, invalidProductNameDTO);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          productController.deleteProduct(productId);
         });
-
-
-        verify(productRestMapper).toProductNameTo(eq(invalidProductNameDTO));
-        verify(productService).updateProduct(eq(productId), eq(invalidProductNameTo));
-    }
-
-    @Test
-    void deleteProduct() {
-        Integer productId = 1;
-
-        ResponseEntity<Void> response = productController.deleteProduct(productId);
-
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        verify(productService).deleteProduct(eq(productId));
-    }
-
-    @Test
-    void deleteProductNotFound() {
-        Integer productId = 99;
-
-        doThrow(new InstanceNotFoundException())
-                .when(productService).deleteProduct(eq(productId));
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            productController.deleteProduct(productId);
-        });
-        verify(productService).deleteProduct(eq(productId));
-    }
+    verify(productService).deleteProduct(eq(productId));
+  }
 }

@@ -2,34 +2,17 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 
-public class ShopDTO implements Serializable {
-
-  private Integer shopId;
+public class UpdateShopDto implements Serializable {
   private String country;
   private String city;
   private String address;
 
-  public ShopDTO() {}
+  public UpdateShopDto() {}
 
-  public ShopDTO(String country, String city, String address) {
+  public UpdateShopDto(String country, String city, String address) {
     this.country = country;
     this.city = city;
     this.address = address;
-  }
-
-  public ShopDTO(Integer shopId, String country, String city, String address) {
-    this.shopId = shopId;
-    this.country = country;
-    this.city = city;
-    this.address = address;
-  }
-
-  public Integer getShopId() {
-    return shopId;
-  }
-
-  public void setShopId(Integer shopId) {
-    this.shopId = shopId;
   }
 
   public String getCountry() {

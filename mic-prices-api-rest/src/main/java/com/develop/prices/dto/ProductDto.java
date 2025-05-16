@@ -2,13 +2,13 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 
-public class ProductDTO implements Serializable {
+public class ProductDto implements Serializable {
   private Integer productId;
   private String name;
 
-  public ProductDTO() {}
+  public ProductDto() {}
 
-  public ProductDTO(Integer productId, String name) {
+  public ProductDto(Integer productId, String name) {
     this.productId = productId;
     this.name = name;
   }

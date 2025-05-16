@@ -3,10 +3,10 @@ package com.develop.prices.rest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import com.develop.prices.dto.CreateCustomerDTO;
-import com.develop.prices.dto.CustomerDTO;
-import com.develop.prices.dto.CustomerPutDTO;
-import com.develop.prices.dto.PageResponseDTO;
+import com.develop.prices.dto.CreateCustomerDto;
+import com.develop.prices.dto.CustomerDto;
+import com.develop.prices.dto.CustomerPutDto;
+import com.develop.prices.dto.PageResponseDto;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
@@ -26,386 +26,394 @@ import org.springframework.http.ResponseEntity;
 
 public class CustomerControllerTest {
 
-    private final CustomerRestMapper customerRestMapper = Mappers.getMapper(CustomerRestMapper.class);
-    private CustomerController customerController;
-    private CustomerService customerService;
+  private final CustomerRestMapper customerRestMapper = Mappers.getMapper(CustomerRestMapper.class);
+  private CustomerController customerController;
+  private CustomerService customerService;
+
+  @BeforeEach
+  void init() {
+    customerService = mock(CustomerService.class);
+    customerController = new CustomerController(customerService, customerRestMapper);
+  }
+
+  @Test
+  void testGetCustomersWithFilters() {
+    String name = "Brais";
+    Integer phone = 999999999;
+    String email = "brais@example.com";
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Brais");
+    customerTo.setEmail("brais@example.com");
+    customerTo.setPhone(999999999);
+
+    List<CustomerTo> customerToList = List.of(customerTo);
+    PageResponseTo<CustomerTo> customerToPageResponseTo =
+        new PageResponseTo<>(customerToList, 1, 1);
+
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+        .thenReturn(customerToPageResponseTo);
+
+    ResponseEntity<PageResponseDto<CustomerDto>> response =
+        customerController.getCustomersWithFilters(name, phone, email, pageable);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    assertNotNull(response.getBody());
+
+    PageResponseDto<CustomerDto> body = response.getBody();
+    assertEquals(1, body.getTotalElements());
+    assertEquals(1, body.getTotalPages());
+    assertEquals(1, body.getContent().size());
+
+    CustomerDto resultDTO = body.getContent().getFirst();
+    assertEquals("Brais", resultDTO.getName());
+    assertEquals("brais@example.com", resultDTO.getEmail());
+    assertEquals(999999999, resultDTO.getPhone());
+  }
+
+  @Test
+  void testGetCustomersWithFiltersOnlyName() {
+    String name = "Brais";
+    Integer phone = null;
+    String email = null;
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Brais");
+    customerTo.setEmail("brais@example.com");
+    customerTo.setPhone(999999999);
+
+    List<CustomerTo> customerToList = List.of(customerTo);
+    PageResponseTo<CustomerTo> customerToPageResponseTo =
+        new PageResponseTo<>(customerToList, 1, 1);
+
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+        .thenReturn(customerToPageResponseTo);
+
+    ResponseEntity<PageResponseDto<CustomerDto>> response =
+        customerController.getCustomersWithFilters(name, phone, email, pageable);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+
+    assertNotNull(response.getBody());
+
+    PageResponseDto<CustomerDto> body = response.getBody();
+    assertEquals(1, body.getTotalElements());
+    assertEquals(1, body.getTotalPages());
+    assertEquals(1, body.getContent().size());
+
+    CustomerDto resultDTO = body.getContent().getFirst();
+    assertEquals("Brais", resultDTO.getName());
+    assertEquals("brais@example.com", resultDTO.getEmail());
+    assertEquals(999999999, resultDTO.getPhone());
+  }
+
+  @Test
+  void testGetCustomersWithFiltersOnlyEmail() {
+    String name = null;
+    Integer phone = null;
+    String email = "brais@example.com";
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Brais");
+    customerTo.setEmail("brais@example.com");
+    customerTo.setPhone(999999999);
+
+    List<CustomerTo> customerToList = List.of(customerTo);
+    PageResponseTo<CustomerTo> customerToPageResponseTo =
+        new PageResponseTo<>(customerToList, 1, 1);
+
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+        .thenReturn(customerToPageResponseTo);
+
+    ResponseEntity<PageResponseDto<CustomerDto>> response =
+        customerController.getCustomersWithFilters(name, phone, email, pageable);
 
-    @BeforeEach
-    void init() {
-        customerService = mock(CustomerService.class);
-        customerController = new CustomerController(customerService, customerRestMapper);
-    }
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    @Test
-    void testGetCustomersWithFilters() {
-        String name = "Brais";
-        Integer phone = 999999999;
-        String email = "brais@example.com";
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+    assertNotNull(response.getBody());
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Brais");
-        customerTo.setEmail("brais@example.com");
-        customerTo.setPhone(999999999);
+    PageResponseDto<CustomerDto> body = response.getBody();
+    assertEquals(1, body.getTotalElements());
+    assertEquals(1, body.getTotalPages());
+    assertEquals(1, body.getContent().size());
 
+    CustomerDto resultDTO = body.getContent().getFirst();
+    assertEquals("Brais", resultDTO.getName());
+    assertEquals("brais@example.com", resultDTO.getEmail());
+    assertEquals(999999999, resultDTO.getPhone());
+  }
 
-        List<CustomerTo> customerToList = List.of(customerTo);
-        PageResponseTo<CustomerTo> customerToPageResponseTo = new PageResponseTo<>(customerToList, 1, 1);
+  @Test
+  void testGetCustomersWithFiltersOnlyPhone() {
+    String name = null;
+    Integer phone = 999999999;
+    String email = null;
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
 
-        when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class))).thenReturn(customerToPageResponseTo);
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Brais");
+    customerTo.setEmail("brais@example.com");
+    customerTo.setPhone(999999999);
 
+    List<CustomerTo> customerToList = List.of(customerTo);
+    PageResponseTo<CustomerTo> customerToPageResponseTo =
+        new PageResponseTo<>(customerToList, 1, 1);
 
-        ResponseEntity<PageResponseDTO<CustomerDTO>> response = customerController.getCustomersWithFilters(name, phone, email, pageable);
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+        .thenReturn(customerToPageResponseTo);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    ResponseEntity<PageResponseDto<CustomerDto>> response =
+        customerController.getCustomersWithFilters(name, phone, email, pageable);
 
-        assertNotNull(response.getBody());
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        PageResponseDTO<CustomerDTO> body = response.getBody();
-        assertEquals(1, body.getTotalElements());
-        assertEquals(1, body.getTotalPages());
-        assertEquals(1, body.getContent().size());
+    assertNotNull(response.getBody());
 
-        CustomerDTO resultDTO = body.getContent().getFirst();
-        assertEquals("Brais", resultDTO.getName());
-        assertEquals("brais@example.com", resultDTO.getEmail());
-        assertEquals(999999999, resultDTO.getPhone());
-    }
+    PageResponseDto<CustomerDto> body = response.getBody();
+    assertEquals(1, body.getTotalElements());
+    assertEquals(1, body.getTotalPages());
+    assertEquals(1, body.getContent().size());
 
-    @Test
-    void testGetCustomersWithFiltersOnlyName() {
-        String name = "Brais";
-        Integer phone = null;
-        String email = null;
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+    CustomerDto resultDTO = body.getContent().getFirst();
+    assertEquals("Brais", resultDTO.getName());
+    assertEquals("brais@example.com", resultDTO.getEmail());
+    assertEquals(999999999, resultDTO.getPhone());
+  }
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Brais");
-        customerTo.setEmail("brais@example.com");
-        customerTo.setPhone(999999999);
+  @Test
+  void testGetCustomersWithoutFilters() {
+    String name = null;
+    Integer phone = null;
+    String email = null;
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
 
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Brais");
+    customerTo.setEmail("brais@example.com");
+    customerTo.setPhone(999999999);
 
-        List<CustomerTo> customerToList = List.of(customerTo);
-        PageResponseTo<CustomerTo> customerToPageResponseTo = new PageResponseTo<>(customerToList, 1, 1);
+    List<CustomerTo> customerToList = List.of(customerTo);
+    PageResponseTo<CustomerTo> customerToPageResponseTo =
+        new PageResponseTo<>(customerToList, 1, 1);
 
-        when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class))).thenReturn(customerToPageResponseTo);
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+        .thenReturn(customerToPageResponseTo);
 
+    ResponseEntity<PageResponseDto<CustomerDto>> response =
+        customerController.getCustomersWithFilters(name, phone, email, pageable);
 
-        ResponseEntity<PageResponseDTO<CustomerDTO>> response = customerController.getCustomersWithFilters(name, phone, email, pageable);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
 
-        assertNotNull(response.getBody());
+    PageResponseDto<CustomerDto> body = response.getBody();
+    assertEquals(1, body.getTotalElements());
+    assertEquals(1, body.getTotalPages());
+    assertEquals(1, body.getContent().size());
 
-        PageResponseDTO<CustomerDTO> body = response.getBody();
-        assertEquals(1, body.getTotalElements());
-        assertEquals(1, body.getTotalPages());
-        assertEquals(1, body.getContent().size());
+    CustomerDto resultDTO = body.getContent().getFirst();
+    assertEquals("Brais", resultDTO.getName());
+    assertEquals("brais@example.com", resultDTO.getEmail());
+    assertEquals(999999999, resultDTO.getPhone());
+  }
 
-        CustomerDTO resultDTO = body.getContent().getFirst();
-        assertEquals("Brais", resultDTO.getName());
-        assertEquals("brais@example.com", resultDTO.getEmail());
-        assertEquals(999999999, resultDTO.getPhone());
-    }
-    @Test
-    void testGetCustomersWithFiltersOnlyEmail() {
-        String name = null;
-        Integer phone = null;
-        String email = "brais@example.com";
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
+  @Test
+  void testGetCustomerById() {
+    Integer customerId = 1;
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Brais");
-        customerTo.setEmail("brais@example.com");
-        customerTo.setPhone(999999999);
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(customerId);
 
+    when(customerService.findByCustomerId(customerId)).thenReturn(customerTo);
 
-        List<CustomerTo> customerToList = List.of(customerTo);
-        PageResponseTo<CustomerTo> customerToPageResponseTo = new PageResponseTo<>(customerToList, 1, 1);
+    ResponseEntity<CustomerDto> response =
+        customerController.getCustomerById(customerTo.getCustomerId());
 
-        when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class))).thenReturn(customerToPageResponseTo);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
+    CustomerDto customerDTO = response.getBody();
 
-        ResponseEntity<PageResponseDTO<CustomerDTO>> response = customerController.getCustomersWithFilters(name, phone, email, pageable);
+    assertNotNull(customerDTO);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
+  }
 
-        assertNotNull(response.getBody());
+  @Test
+  void testGetCustomerByIdNotFound() {
+    Integer customerId = 1;
 
-        PageResponseDTO<CustomerDTO> body = response.getBody();
-        assertEquals(1, body.getTotalElements());
-        assertEquals(1, body.getTotalPages());
-        assertEquals(1, body.getContent().size());
+    when(customerService.findByCustomerId(customerId)).thenThrow(new InstanceNotFoundException());
 
-        CustomerDTO resultDTO = body.getContent().getFirst();
-        assertEquals("Brais", resultDTO.getName());
-        assertEquals("brais@example.com", resultDTO.getEmail());
-        assertEquals(999999999, resultDTO.getPhone());
-    }
-
-    @Test
-    void testGetCustomersWithFiltersOnlyPhone() {
-        String name = null;
-        Integer phone = 999999999;
-        String email = null;
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
-
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Brais");
-        customerTo.setEmail("brais@example.com");
-        customerTo.setPhone(999999999);
-
-
-        List<CustomerTo> customerToList = List.of(customerTo);
-        PageResponseTo<CustomerTo> customerToPageResponseTo = new PageResponseTo<>(customerToList, 1, 1);
-
-        when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class))).thenReturn(customerToPageResponseTo);
-
-
-        ResponseEntity<PageResponseDTO<CustomerDTO>> response = customerController.getCustomersWithFilters(name, phone, email, pageable);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        assertNotNull(response.getBody());
-
-        PageResponseDTO<CustomerDTO> body = response.getBody();
-        assertEquals(1, body.getTotalElements());
-        assertEquals(1, body.getTotalPages());
-        assertEquals(1, body.getContent().size());
-
-        CustomerDTO resultDTO = body.getContent().getFirst();
-        assertEquals("Brais", resultDTO.getName());
-        assertEquals("brais@example.com", resultDTO.getEmail());
-        assertEquals(999999999, resultDTO.getPhone());
-    }
-
-    @Test
-    void testGetCustomersWithoutFilters() {
-        String name = null;
-        Integer phone = null;
-        String email = null;
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("customerId").ascending());
-
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Brais");
-        customerTo.setEmail("brais@example.com");
-        customerTo.setPhone(999999999);
-
-
-        List<CustomerTo> customerToList = List.of(customerTo);
-        PageResponseTo<CustomerTo> customerToPageResponseTo = new PageResponseTo<>(customerToList, 1, 1);
-
-        when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class))).thenReturn(customerToPageResponseTo);
-
-
-        ResponseEntity<PageResponseDTO<CustomerDTO>> response = customerController.getCustomersWithFilters(name, phone, email, pageable);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        assertNotNull(response.getBody());
-
-        PageResponseDTO<CustomerDTO> body = response.getBody();
-        assertEquals(1, body.getTotalElements());
-        assertEquals(1, body.getTotalPages());
-        assertEquals(1, body.getContent().size());
-
-        CustomerDTO resultDTO = body.getContent().getFirst();
-        assertEquals("Brais", resultDTO.getName());
-        assertEquals("brais@example.com", resultDTO.getEmail());
-        assertEquals(999999999, resultDTO.getPhone());
-    }
-
-    @Test
-    void testGetCustomerById() {
-        Integer customerId = 1;
-
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(customerId);
-
-
-        when(customerService.findByCustomerId(customerId)).thenReturn(customerTo);
-
-        ResponseEntity<CustomerDTO> response = customerController.getCustomerById(customerTo.getCustomerId());
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        CustomerDTO customerDTO = response.getBody();
-
-        assertNotNull(customerDTO);
-
-        assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
-    }
-
-    @Test
-    void testGetCustomerByIdNotFound() {
-        Integer customerId = 1;
-
-
-        when(customerService.findByCustomerId(customerId)).thenThrow(new InstanceNotFoundException());
-
-        assertThrows(InstanceNotFoundException.class, () -> {
-            customerController.getCustomerById(customerId);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> {
+          customerController.getCustomerById(customerId);
         });
 
-        verify(customerService, times(1)).findByCustomerId(customerId);
+    verify(customerService, times(1)).findByCustomerId(customerId);
+  }
 
+  @Test
+  void testAddCustomer() {
 
-    }
+    CreateCustomerDto createCustomerDTO = new CreateCustomerDto();
+    createCustomerDTO.setName("Brais");
+    createCustomerDTO.setEmail("brais@example.com");
+    createCustomerDTO.setPhone(999999999);
 
-    @Test
-    void testAddCustomer() {
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(1);
+    customerTo.setName("Luis");
+    customerTo.setEmail("luis@example.com");
+    customerTo.setPhone(888888888);
 
+    when(customerService.saveCustomer(any(CreateCustomerTo.class))).thenReturn(customerTo);
 
-        CreateCustomerDTO createCustomerDTO = new CreateCustomerDTO();
-        createCustomerDTO.setName("Brais");
-        createCustomerDTO.setEmail("brais@example.com");
-        createCustomerDTO.setPhone(999999999);
+    ResponseEntity<CustomerDto> response = customerController.addCustomer(createCustomerDTO);
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(1);
-        customerTo.setName("Luis");
-        customerTo.setEmail("luis@example.com");
-        customerTo.setPhone(888888888);
+    assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-        when(customerService.saveCustomer(any(CreateCustomerTo.class))).thenReturn(customerTo);
+    CustomerDto customerDTO = response.getBody();
+    assertNotNull(customerDTO);
 
-        ResponseEntity<CustomerDTO> response = customerController.addCustomer(createCustomerDTO);
+    assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
+    assertEquals(customerTo.getName(), customerDTO.getName());
+    assertEquals(customerTo.getEmail(), customerDTO.getEmail());
+    assertEquals(customerTo.getPhone(), customerDTO.getPhone());
+  }
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+  @Test
+  void testAddCustomerFailure() {
+    CreateCustomerDto createCustomerDTO = new CreateCustomerDto();
+    createCustomerDTO.setName("Brais");
+    createCustomerDTO.setEmail("brais@gmail.com");
+    createCustomerDTO.setPhone(999999999);
 
-        CustomerDTO customerDTO = response.getBody();
-        assertNotNull(customerDTO);
+    when(customerService.saveCustomer(any(CreateCustomerTo.class)))
+        .thenThrow(new InstanceNotFoundException());
 
-        assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
-        assertEquals(customerTo.getName(), customerDTO.getName());
-        assertEquals(customerTo.getEmail(), customerDTO.getEmail());
-        assertEquals(customerTo.getPhone(), customerDTO.getPhone());
+    assertThrows(
+        InstanceNotFoundException.class, () -> customerController.addCustomer(createCustomerDTO));
+  }
 
+  @Test
+  void testUpdateCustomer() {
+    Integer customerId = 1;
 
-    }
+    CustomerPutDto customerPutTo = new CustomerPutDto();
+    customerPutTo.setName("Brais");
+    customerPutTo.setEmail("brais@gmail.com");
+    customerPutTo.setPhone(999999999);
 
-    @Test
-    void testAddCustomerFailure(){
-        CreateCustomerDTO createCustomerDTO = new CreateCustomerDTO();
-        createCustomerDTO.setName("Brais");
-        createCustomerDTO.setEmail("brais@gmail.com");
-        createCustomerDTO.setPhone(999999999);
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setName("Luis");
+    customerTo.setEmail("luis@example.com");
+    customerTo.setPhone(888888888);
 
-        when(customerService.saveCustomer(any(CreateCustomerTo.class))).thenThrow(new InstanceNotFoundException());
+    when(customerService.updateCustomer(eq(customerId), any(CustomerPutTo.class)))
+        .thenReturn(customerTo);
 
-        assertThrows(InstanceNotFoundException.class, () -> customerController.addCustomer(createCustomerDTO));
+    ResponseEntity<CustomerDto> response =
+        customerController.updateCustomer(customerId, customerPutTo);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    }
+    CustomerDto customerDTO = response.getBody();
+    assertNotNull(customerDTO);
 
-    @Test
-    void testUpdateCustomer() {
-        Integer customerId = 1;
+    assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
+    assertEquals("Luis", customerDTO.getName());
+    assertEquals("luis@example.com", customerDTO.getEmail());
+    assertEquals(888888888, customerDTO.getPhone());
+  }
 
-        CustomerPutDTO customerPutTo = new CustomerPutDTO();
-        customerPutTo.setName("Brais");
-        customerPutTo.setEmail("brais@gmail.com");
-        customerPutTo.setPhone(999999999);
+  @Test
+  void testUpdateCustomerNotFound() {
+    Integer customerId = 1;
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setName("Luis");
-        customerTo.setEmail("luis@example.com");
-        customerTo.setPhone(888888888);
+    CustomerPutDto customerPutDTO = new CustomerPutDto();
+    customerPutDTO.setName("Brais");
+    customerPutDTO.setEmail("brais@example.com");
+    customerPutDTO.setPhone(999999999);
 
-        when(customerService.updateCustomer(eq(customerId), any(CustomerPutTo.class))).thenReturn(customerTo);
+    when(customerService.updateCustomer(eq(customerId), any(CustomerPutTo.class)))
+        .thenThrow(new InstanceNotFoundException());
 
-        ResponseEntity<CustomerDTO> response = customerController.updateCustomer(customerId, customerPutTo);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> customerController.updateCustomer(customerId, customerPutDTO));
+  }
 
-        CustomerDTO customerDTO = response.getBody();
-        assertNotNull(customerDTO);
+  @Test
+  void testPartialUpdateCustomer() {
+    Integer customerId = 1;
 
-        assertEquals(customerTo.getCustomerId(), customerDTO.getCustomerId());
-        assertEquals("Luis", customerDTO.getName());
-        assertEquals("luis@example.com", customerDTO.getEmail());
-        assertEquals(888888888, customerDTO.getPhone());
-    }
+    CreateCustomerDto createCustomerDTO = new CreateCustomerDto();
+    createCustomerDTO.setName("Pablo");
 
-    @Test
-    void testUpdateCustomerNotFound(){
-        Integer customerId = 1;
+    CustomerTo customerTo = new CustomerTo();
+    customerTo.setCustomerId(customerId);
+    customerTo.setName("Pablo");
+    customerTo.setEmail("pablo@example.com");
+    customerTo.setPhone(111111111);
 
-        CustomerPutDTO customerPutDTO = new CustomerPutDTO();
-        customerPutDTO.setName("Brais");
-        customerPutDTO.setEmail("brais@example.com");
-        customerPutDTO.setPhone(999999999);
+    when(customerService.updatePatchCustomer(eq(customerId), any(CreateCustomerTo.class)))
+        .thenReturn(customerTo);
 
-        when(customerService.updateCustomer(eq(customerId), any(CustomerPutTo.class))).thenThrow(new InstanceNotFoundException());
+    ResponseEntity<CustomerDto> response =
+        customerController.partialUpdateCustomer(customerId, createCustomerDTO);
 
+    CustomerDto customerDTO = response.getBody();
+    assertNotNull(customerDTO);
 
-        assertThrows(InstanceNotFoundException.class, () -> customerController.updateCustomer(customerId,customerPutDTO));
+    assertEquals(customerId, customerDTO.getCustomerId());
+    assertEquals("Pablo", customerDTO.getName());
+    assertEquals("pablo@example.com", customerDTO.getEmail());
+    assertEquals(111111111, customerDTO.getPhone());
+  }
 
-    }
+  @Test
+  void testPartialUpdateCustomerNotFound() {
+    Integer customerId = 1;
 
-    @Test
-    void testPartialUpdateCustomer() {
-        Integer customerId = 1;
+    CreateCustomerDto createCustomerDTO = new CreateCustomerDto();
+    createCustomerDTO.setName("Brais");
 
-        CreateCustomerDTO createCustomerDTO = new CreateCustomerDTO();
-        createCustomerDTO.setName("Pablo");
+    when(customerService.updatePatchCustomer(eq(customerId), any(CreateCustomerTo.class)))
+        .thenThrow(new InstanceNotFoundException());
 
-        CustomerTo customerTo = new CustomerTo();
-        customerTo.setCustomerId(customerId);
-        customerTo.setName("Pablo");
-        customerTo.setEmail("pablo@example.com");
-        customerTo.setPhone(111111111);
+    assertThrows(
+        InstanceNotFoundException.class,
+        () -> customerController.partialUpdateCustomer(customerId, createCustomerDTO));
+  }
 
-        when(customerService.updatePatchCustomer(eq(customerId), any(CreateCustomerTo.class))).thenReturn(customerTo);
+  @Test
+  void testDeleteCustomer() {
+    Integer customerId = 1;
 
-        ResponseEntity<CustomerDTO> response = customerController.partialUpdateCustomer(customerId,createCustomerDTO);
+    doNothing().when(customerService).deleteCustomer(customerId);
 
-        CustomerDTO customerDTO = response.getBody();
-        assertNotNull(customerDTO);
+    ResponseEntity<Void> response = customerController.deleteCustomer(customerId);
 
-        assertEquals(customerId, customerDTO.getCustomerId());
-        assertEquals("Pablo", customerDTO.getName());
-        assertEquals("pablo@example.com", customerDTO.getEmail());
-        assertEquals(111111111, customerDTO.getPhone());
-    }
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+  }
 
-    @Test
-    void testPartialUpdateCustomerNotFound(){
-        Integer customerId = 1;
+  @Test
+  void testDeleteCustomerNotFound() {
+    Integer customerId = 1;
 
-        CreateCustomerDTO createCustomerDTO = new CreateCustomerDTO();
-        createCustomerDTO.setName("Brais");
+    // Para que el service simule que lanza la excepción
+    doThrow(new InstanceNotFoundException()).when(customerService).deleteCustomer(customerId);
 
-        when(customerService.updatePatchCustomer(eq(customerId), any(CreateCustomerTo.class))).thenThrow(new InstanceNotFoundException());
-
-        assertThrows(InstanceNotFoundException.class, () -> customerController.partialUpdateCustomer(customerId,createCustomerDTO));
-    }
-
-    @Test
-    void testDeleteCustomer() {
-        Integer customerId = 1;
-
-        doNothing().when(customerService).deleteCustomer(customerId);
-
-        ResponseEntity<Void> response = customerController.deleteCustomer(customerId);
-
-        assertEquals(HttpStatus.OK,response.getStatusCode());
-
-
-    }
-
-    @Test
-    void testDeleteCustomerNotFound() {
-        Integer customerId = 1;
-
-        // Para que el service simule que lanza la excepción
-        doThrow(new InstanceNotFoundException()).when(customerService).deleteCustomer(customerId);
-
-        assertThrows(InstanceNotFoundException.class, () -> customerController.deleteCustomer(customerId));
-
-
-    }
+    assertThrows(
+        InstanceNotFoundException.class, () -> customerController.deleteCustomer(customerId));
+  }
 }

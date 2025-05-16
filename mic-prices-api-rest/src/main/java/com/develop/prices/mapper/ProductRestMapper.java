@@ -1,11 +1,11 @@
 package com.develop.prices.mapper;
 
-import com.develop.prices.dto.AddProductShopDTO;
-import com.develop.prices.dto.ProductDTO;
-import com.develop.prices.dto.ProductInShopDTO;
-import com.develop.prices.dto.ProductInShopPatchDTO;
-import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.dto.ProductWithShopsDTO;
+import com.develop.prices.dto.AddProductShopDto;
+import com.develop.prices.dto.ProductDto;
+import com.develop.prices.dto.ProductInShopDto;
+import com.develop.prices.dto.ProductInShopPatchDto;
+import com.develop.prices.dto.ProductNameDto;
+import com.develop.prices.dto.ProductWithShopsDto;
 import com.develop.prices.to.AddProductShopTo;
 import com.develop.prices.to.ProductInShopPatchTo;
 import com.develop.prices.to.ProductInShopTo;
@@ -18,18 +18,17 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductRestMapper {
 
-    @Mapping(target = "productId", source = "productId")
-    @Mapping(target = "name", source = "name")
-    ProductDTO toProductDTO(ProductTo productTo);
+  @Mapping(target = "productId", source = "productId")
+  @Mapping(target = "name", source = "name")
+  ProductDto toProductDto(ProductTo productTo);
 
-    ProductNameTo toProductNameTo(ProductNameDTO productNameDTO);
+  ProductNameTo toProductNameTo(ProductNameDto productNameDto);
 
+  ProductWithShopsDto toProductWithShopsDto(ProductWithShopsTo productWithShopsTo);
 
-    ProductWithShopsDTO toProductWithShopsDTO(ProductWithShopsTo productWithShopsTo);
+  ProductInShopPatchTo toProductInShopPatchTo(ProductInShopPatchDto productInShopPatchDto);
 
-    ProductInShopPatchTo toProductInShopPatchTo(ProductInShopPatchDTO productInShopPatchDTO);
+  ProductInShopDto toProductInShopDto(ProductInShopTo productInShopTo);
 
-    ProductInShopDTO toProductInShopDTO(ProductInShopTo productInShopTo);
-
-    AddProductShopTo toAddProductShopTo(AddProductShopDTO addProductShopDTO);
+  AddProductShopTo toAddProductShopTo(AddProductShopDto addProductShopDto);
 }

@@ -1,9 +1,9 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.dto.PageResponseDTO;
-import com.develop.prices.dto.ProductDTO;
-import com.develop.prices.dto.ProductNameDTO;
-import com.develop.prices.dto.ProductWithShopsDTO;
+import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.ProductDto;
+import com.develop.prices.dto.ProductNameDto;
+import com.develop.prices.dto.ProductWithShopsDto;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.service.ProductService;
 import com.develop.prices.to.PageResponseTo;
@@ -47,7 +47,7 @@ public class ProductController {
   }
 
   @GetMapping("")
-  public ResponseEntity<PageResponseDTO<ProductWithShopsDTO>> getProductsWithFilters(
+  public ResponseEntity<PageResponseDto<ProductWithShopsDto>> getProductsWithFilters(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) BigDecimal priceMin,
       @RequestParam(required = false) BigDecimal priceMax,
@@ -56,20 +56,20 @@ public class ProductController {
     PageResponseTo<ProductWithShopsTo> productTos =
         productService.findAllProductsWithFilters(name, priceMin, priceMax, pageable);
 
-    List<ProductWithShopsDTO> productDTOS =
-        productTos.getContent().stream().map(productRestMapper::toProductWithShopsDTO).toList();
+    List<ProductWithShopsDto> productDtos =
+        productTos.getContent().stream().map(productRestMapper::toProductWithShopsDto).toList();
 
-    PageResponseDTO<ProductWithShopsDTO> response =
-        new PageResponseDTO<>(productDTOS, productDTOS.size(), 1);
+    PageResponseDto<ProductWithShopsDto> response =
+        new PageResponseDto<>(productDtos, productDtos.size(), 1);
 
     return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{productId}")
-  public ResponseEntity<ProductWithShopsDTO> getProductById(@PathVariable Integer productId) {
+  public ResponseEntity<ProductWithShopsDto> getProductById(@PathVariable Integer productId) {
     ProductWithShopsTo productWithShopsTo = productService.findByProductById(productId);
 
-    return ResponseEntity.ok(productRestMapper.toProductWithShopsDTO(productWithShopsTo));
+    return ResponseEntity.ok(productRestMapper.toProductWithShopsDto(productWithShopsTo));
   }
 
   @ApiResponses(
@@ -88,26 +88,26 @@ public class ProductController {
                         @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
       })
   @PostMapping("")
-  public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductNameDTO productNameDTO) {
-    ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDTO);
+  public ResponseEntity<ProductDto> addProduct(@Valid @RequestBody ProductNameDto productNameDto) {
+    ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDto);
 
     ProductTo savedProduct = productService.saveProduct(productNameTo);
 
-    ProductDTO productDTO = productRestMapper.toProductDTO(savedProduct);
+    ProductDto productDto = productRestMapper.toProductDto(savedProduct);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
   }
 
   @PutMapping("/{productId}")
-  public ResponseEntity<ProductDTO> updateProduct(
-      @PathVariable Integer productId, @Valid @RequestBody ProductNameDTO productNameDTO) {
-    ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDTO);
+  public ResponseEntity<ProductDto> updateProduct(
+      @PathVariable Integer productId, @Valid @RequestBody ProductNameDto productNameDto) {
+    ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDto);
 
     ProductTo updateProductTo = productService.updateProduct(productId, productNameTo);
 
-    ProductDTO updateProductDTO = productRestMapper.toProductDTO(updateProductTo);
+    ProductDto updateProductDto = productRestMapper.toProductDto(updateProductTo);
 
-    return ResponseEntity.ok(updateProductDTO);
+    return ResponseEntity.ok(updateProductDto);
   }
 
   @DeleteMapping("/{productId}")

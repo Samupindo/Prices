@@ -2,26 +2,20 @@ package com.develop.prices.dto;
 
 import java.io.Serializable;
 
-public class CustomerDTO implements Serializable {
-  private Integer customerId;
+public class CreateCustomerDto implements Serializable {
+
   private String name;
+
   private Integer phone;
+
   private String email;
 
-  public CustomerDTO() {}
+  public CreateCustomerDto() {}
 
-  public CustomerDTO(String name, Integer phone, String email) {
+  public CreateCustomerDto(String name, Integer phone, String email) {
     this.name = name;
     this.phone = phone;
     this.email = email;
-  }
-
-  public Integer getCustomerId() {
-    return customerId;
-  }
-
-  public void setCustomerId(Integer customerId) {
-    this.customerId = customerId;
   }
 
   public String getName() {

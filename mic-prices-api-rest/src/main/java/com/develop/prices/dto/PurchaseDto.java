@@ -4,20 +4,20 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class PurchaseDTO implements Serializable {
+public class PurchaseDto implements Serializable {
 
   private Integer purchaseId;
-  private CustomerDTO customer;
-  private List<ProductInShopDTO> products;
+  private CustomerDto customer;
+  private List<ProductInShopDto> products;
   private BigDecimal totalPrice;
   private boolean shopping = true;
 
-  public PurchaseDTO() {}
+  public PurchaseDto() {}
 
-  public PurchaseDTO(
+  public PurchaseDto(
       Integer purchaseId,
-      CustomerDTO customer,
-      List<ProductInShopDTO> products,
+      CustomerDto customer,
+      List<ProductInShopDto> products,
       BigDecimal totalPrice,
       boolean shopping) {
     this.purchaseId = purchaseId;
@@ -27,7 +27,7 @@ public class PurchaseDTO implements Serializable {
     this.shopping = shopping;
   }
 
-  public PurchaseDTO(Integer purchaseId, CustomerDTO customer, BigDecimal totalPrice) {
+  public PurchaseDto(Integer purchaseId, CustomerDto customer, BigDecimal totalPrice) {
     this.purchaseId = purchaseId;
     this.customer = customer;
     this.totalPrice = totalPrice;
@@ -41,19 +41,19 @@ public class PurchaseDTO implements Serializable {
     this.purchaseId = purchaseId;
   }
 
-  public CustomerDTO getCustomer() {
+  public CustomerDto getCustomer() {
     return customer;
   }
 
-  public void setCustomer(CustomerDTO customer) {
+  public void setCustomer(CustomerDto customer) {
     this.customer = customer;
   }
 
-  public List<ProductInShopDTO> getProducts() {
+  public List<ProductInShopDto> getProducts() {
     return products;
   }
 
-  public void setProducts(List<ProductInShopDTO> products) {
+  public void setProducts(List<ProductInShopDto> products) {
     this.products = products;
   }
 

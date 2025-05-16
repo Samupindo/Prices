@@ -3,14 +3,14 @@ package com.develop.prices.dto;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductWithShopsDTO implements Serializable {
+public class ProductWithShopsDto implements Serializable {
   private Integer productId;
   private String name;
-  private List<ShopInfoDTO> shop;
+  private List<ShopInfoDto> shop;
 
-  public ProductWithShopsDTO() {}
+  public ProductWithShopsDto() {}
 
-  public ProductWithShopsDTO(Integer productId, String name, List<ShopInfoDTO> shop) {
+  public ProductWithShopsDto(Integer productId, String name, List<ShopInfoDto> shop) {
     this.productId = productId;
     this.name = name;
     this.shop = shop;
@@ -32,11 +32,11 @@ public class ProductWithShopsDTO implements Serializable {
     this.name = name;
   }
 
-  public List<ShopInfoDTO> getShop() {
+  public List<ShopInfoDto> getShop() {
     return shop;
   }
 
-  public void setShop(List<ShopInfoDTO> shop) {
+  public void setShop(List<ShopInfoDto> shop) {
     this.shop = shop;
   }
 

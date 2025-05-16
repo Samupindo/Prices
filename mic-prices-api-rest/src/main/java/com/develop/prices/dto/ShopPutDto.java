@@ -3,14 +3,14 @@ package com.develop.prices.dto;
 import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-public class ShopPutDTO implements Serializable {
+public class ShopPutDto implements Serializable {
   @NotBlank private String country;
   @NotBlank private String city;
   @NotBlank private String address;
 
-  public ShopPutDTO() {}
+  public ShopPutDto() {}
 
-  public ShopPutDTO(String country, String city, String address) {
+  public ShopPutDto(String country, String city, String address) {
     this.country = country;
     this.city = city;
     this.address = address;

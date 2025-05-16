@@ -5,16 +5,16 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 
-public class ProductNameDTO implements Serializable {
+public class ProductNameDto implements Serializable {
 
   @Size(max = 100, message = "The name can only have 100 characteres")
   @Pattern(regexp = "\\p{L}[\\p{L}\\s]+", message = "The name can only have letters and spaces")
   @NotBlank
   private String name;
 
-  public ProductNameDTO() {}
+  public ProductNameDto() {}
 
-  public ProductNameDTO(String name) {
+  public ProductNameDto(String name) {
     this.name = name;
   }
 

@@ -1,9 +1,9 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.dto.CreateCustomerDTO;
-import com.develop.prices.dto.CustomerDTO;
-import com.develop.prices.dto.CustomerPutDTO;
-import com.develop.prices.dto.PageResponseDTO;
+import com.develop.prices.dto.CreateCustomerDto;
+import com.develop.prices.dto.CustomerDto;
+import com.develop.prices.dto.CustomerPutDto;
+import com.develop.prices.dto.PageResponseDto;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
 import com.develop.prices.to.CreateCustomerTo;
@@ -45,7 +45,7 @@ public class CustomerController {
   }
 
   @GetMapping("")
-  public ResponseEntity<PageResponseDTO<CustomerDTO>> getCustomersWithFilters(
+  public ResponseEntity<PageResponseDto<CustomerDto>> getCustomersWithFilters(
       @RequestParam(required = false) String name,
       @RequestParam(required = false) Integer phone,
       @RequestParam(required = false) String email,
@@ -54,21 +54,21 @@ public class CustomerController {
     PageResponseTo<CustomerTo> customerPage =
         customerService.findAllWithFilters(name, phone, email, pageable);
 
-    List<CustomerDTO> customerDTOList =
-        customerPage.getContent().stream().map(customerRestMapper::toCustomerDTO).toList();
+    List<CustomerDto> customerDtoList =
+        customerPage.getContent().stream().map(customerRestMapper::toCustomerDto).toList();
 
-    PageResponseDTO<CustomerDTO> pageResponseDTO =
-        new PageResponseDTO<>(
-            customerDTOList, customerPage.getTotalElements(), customerPage.getTotalPages());
-    return ResponseEntity.ok(pageResponseDTO);
+    PageResponseDto<CustomerDto> pageResponseDto =
+        new PageResponseDto<>(
+            customerDtoList, customerPage.getTotalElements(), customerPage.getTotalPages());
+    return ResponseEntity.ok(pageResponseDto);
   }
 
   @GetMapping("/{customerId}")
-  public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable Integer customerId) {
+  public ResponseEntity<CustomerDto> getCustomerById(@PathVariable Integer customerId) {
 
     CustomerTo customerTo = customerService.findByCustomerId(customerId);
 
-    return ResponseEntity.ok(customerRestMapper.toCustomerDTO(customerTo));
+    return ResponseEntity.ok(customerRestMapper.toCustomerDto(customerTo));
   }
 
   @ApiResponses(
@@ -87,40 +87,40 @@ public class CustomerController {
                         @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
       })
   @PostMapping("")
-  public ResponseEntity<CustomerDTO> addCustomer(
-      @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+  public ResponseEntity<CustomerDto> addCustomer(
+      @Valid @RequestBody CreateCustomerDto createCustomerDto) {
 
-    CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDTO);
+    CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDto);
 
     CustomerTo newCustomerModel = customerService.saveCustomer(createCustomerTo);
 
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(customerRestMapper.toCustomerDTO(newCustomerModel));
+        .body(customerRestMapper.toCustomerDto(newCustomerModel));
   }
 
   @PutMapping("/{customerId}")
-  public ResponseEntity<CustomerDTO> updateCustomer(
-      @PathVariable Integer customerId, @Valid @RequestBody CustomerPutDTO customerPutDTO) {
+  public ResponseEntity<CustomerDto> updateCustomer(
+      @PathVariable Integer customerId, @Valid @RequestBody CustomerPutDto customerPutDto) {
 
-    CustomerPutTo customerTo = customerRestMapper.toCustomerPutTo(customerPutDTO);
+    CustomerPutTo customerTo = customerRestMapper.toCustomerPutTo(customerPutDto);
 
-    CustomerDTO customerDTO =
-        customerRestMapper.toCustomerDTO(customerService.updateCustomer(customerId, customerTo));
+    CustomerDto customerDto =
+        customerRestMapper.toCustomerDto(customerService.updateCustomer(customerId, customerTo));
 
-    return ResponseEntity.ok().body(customerDTO);
+    return ResponseEntity.ok().body(customerDto);
   }
 
   @PatchMapping("/{customerId}")
-  public ResponseEntity<CustomerDTO> partialUpdateCustomer(
-      @PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDTO createCustomerDTO) {
+  public ResponseEntity<CustomerDto> partialUpdateCustomer(
+      @PathVariable Integer customerId, @Valid @RequestBody CreateCustomerDto createCustomerDto) {
 
-    CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDTO);
+    CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDto);
 
-    CustomerDTO customerDTO =
-        customerRestMapper.toCustomerDTO(
+    CustomerDto customerDto =
+        customerRestMapper.toCustomerDto(
             customerService.updatePatchCustomer(customerId, createCustomerTo));
 
-    return ResponseEntity.ok().body(customerDTO);
+    return ResponseEntity.ok().body(customerDto);
   }
 
   @DeleteMapping("/{customerId}")
