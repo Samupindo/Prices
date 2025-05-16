@@ -4,8 +4,7 @@ package com.develop.prices.to;
 import java.io.Serializable;
 
 public class CreateCustomerTo implements Serializable {
-
-
+  //
   private String name;
   private Integer phone;
   private String email;
