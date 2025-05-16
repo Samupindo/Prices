@@ -283,9 +283,8 @@ public class CustomerServiceImplTest {
         customerPutTo.setName("Jorge");
         customerPutTo.setEmail("Jorge@example.com");
         customerPutTo.setPhone(888888888);
-        ;
 
-        when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
+      when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         assertThrows(InstanceNotFoundException.class, () -> customerService.updateCustomer(customerId, customerPutTo));
     }
