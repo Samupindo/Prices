@@ -1,13 +1,13 @@
 package com.develop.prices.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -25,12 +25,12 @@ public class ProductModel {
     public ProductModel() {
     }
 
+  public ProductModel(String name) {
+    this.name = name;
+  }
+
     public List<ProductInShopModel> getPrices() {
         return prices;
-    }
-
-    public ProductModel(String name) {
-        this.name = name;
     }
 
     public Integer getProductId() {

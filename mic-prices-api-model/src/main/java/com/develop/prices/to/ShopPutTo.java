@@ -1,6 +1,5 @@
 package com.develop.prices.to;
 
-
 import java.io.Serializable;
 
 public class ShopPutTo implements Serializable {
@@ -8,8 +7,7 @@ public class ShopPutTo implements Serializable {
   private String city;
   private String address;
 
-  public ShopPutTo() {
-  }
+  public ShopPutTo() {}
 
   public ShopPutTo(String country, String city, String address) {
     this.country = country;
@@ -40,5 +38,4 @@ public class ShopPutTo implements Serializable {
   public void setAddress(String address) {
     this.address = address;
   }
-
 }

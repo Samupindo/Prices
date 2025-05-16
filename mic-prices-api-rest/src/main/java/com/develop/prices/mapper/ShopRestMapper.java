@@ -12,11 +12,11 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ShopRestMapper {
-    ShopDTO toShopDTO(ShopTo shopTo);
+  ShopDTO toShopDTO(ShopTo shopTo);
 
-    ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
+  ShopAddTo toShopAddTo(ShopAddDTO shopAddDTO);
 
-    UpdateShopTo toUpdateShopTo(UpdateShopDTO updateShopDTO);
+  UpdateShopTo toUpdateShopTo(UpdateShopDTO updateShopDTO);
 
-    ShopPutTo toShopPutTo(ShopPutDTO shopPutDTO);
+  ShopPutTo toShopPutTo(ShopPutDTO shopPutDTO);
 }

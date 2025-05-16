@@ -8,7 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface CustomerService {
 
-  PageResponseTo<CustomerTo> findAllWithFilters(String name, Integer phone, String email, Pageable pageable);
+  PageResponseTo<CustomerTo> findAllWithFilters(
+      String name, Integer phone, String email, Pageable pageable);
 
   CustomerTo findByCustomerId(Integer customerId);
 
@@ -19,6 +20,4 @@ public interface CustomerService {
   CustomerTo updatePatchCustomer(Integer customerId, CreateCustomerTo createCustomerTo);
 
   void deleteCustomer(Integer customerId);
-
-
 }

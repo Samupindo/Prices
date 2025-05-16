@@ -1,10 +1,9 @@
 package com.develop.prices.dto;
 
-import com.develop.prices.validation.StringNotBlank;
 import com.develop.prices.validation.PhoneNotNull;
+import com.develop.prices.validation.StringNotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
 
 public class CustomerPutDTO implements Serializable {

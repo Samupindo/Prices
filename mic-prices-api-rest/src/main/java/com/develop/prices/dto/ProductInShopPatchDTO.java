@@ -5,32 +5,24 @@ import java.math.BigDecimal;
 
 public class ProductInShopPatchDTO implements Serializable {
 
-    private BigDecimal price;
+  private BigDecimal price;
 
-    public ProductInShopPatchDTO() {
-    }
+  public ProductInShopPatchDTO() {}
 
-    public ProductInShopPatchDTO(BigDecimal price) {
-        this.price = price;
+  public ProductInShopPatchDTO(BigDecimal price) {
+    this.price = price;
+  }
 
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-
-    @Override
-    public String toString() {
-        return "ProductInShopModel{" +
-                ", price=" + price +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "ProductInShopModel{" + ", price=" + price + '}';
+  }
 }
-

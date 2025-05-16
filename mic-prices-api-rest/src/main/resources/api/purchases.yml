@@ -67,7 +67,7 @@ paths:
         '201':
           description: Created
           content:
-            application/json: {}
+            application/json: { }
         '400':
           description: Invalid input
           content:
@@ -96,7 +96,7 @@ paths:
         '201':
           description: Created
           content:
-            application/json: {}
+            application/json: { }
         '400':
           description: Invalid input
           content:

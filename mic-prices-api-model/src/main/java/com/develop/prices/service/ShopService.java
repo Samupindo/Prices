@@ -3,11 +3,10 @@ package com.develop.prices.service;
 import com.develop.prices.to.*;
 import org.springframework.data.domain.Pageable;
 
-
 public interface ShopService {
 
-  PageResponseTo<ShopTo> findAllShopWithFilters(String country, String city, String address,
-                                                Pageable pageable);
+  PageResponseTo<ShopTo> findAllShopWithFilters(
+      String country, String city, String address, Pageable pageable);
 
   ShopTo findShopById(Integer shopId);
 
@@ -19,13 +18,11 @@ public interface ShopService {
 
   void deleteShop(Integer shopId);
 
-  ProductInShopTo addProductToShop(Integer productId, Integer shopId,
-                                   AddProductShopTo addProductShopTo);
+  ProductInShopTo addProductToShop(
+      Integer productId, Integer shopId, AddProductShopTo addProductShopTo);
 
-  ProductInShopTo updateProductPriceInShop(Integer shopId, Integer productId,
-                                           ProductInShopPatchTo productInShopPatchTo);
+  ProductInShopTo updateProductPriceInShop(
+      Integer shopId, Integer productId, ProductInShopPatchTo productInShopPatchTo);
 
   void deleteProductFromShop(Integer shopId, Integer productId);
-
-
 }

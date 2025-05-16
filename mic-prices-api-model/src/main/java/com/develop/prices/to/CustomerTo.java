@@ -1,6 +1,5 @@
 package com.develop.prices.to;
 
-
 import java.io.Serializable;
 
 public class CustomerTo implements Serializable {
@@ -9,8 +8,7 @@ public class CustomerTo implements Serializable {
   private Integer phone;
   private String email;
 
-  public CustomerTo() {
-  }
+  public CustomerTo() {}
 
   public CustomerTo(String name, Integer phone, String email) {
     this.name = name;
@@ -49,6 +47,4 @@ public class CustomerTo implements Serializable {
   public void setEmail(String email) {
     this.email = email;
   }
-
-
 }

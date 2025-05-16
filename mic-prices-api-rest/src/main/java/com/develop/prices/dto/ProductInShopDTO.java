@@ -5,60 +5,64 @@ import java.math.BigDecimal;
 
 public class ProductInShopDTO implements Serializable {
 
-    private Integer productInShopId;
-    private Integer productId;
-    private Integer shopId;
-    private BigDecimal price;
+  private Integer productInShopId;
+  private Integer productId;
+  private Integer shopId;
+  private BigDecimal price;
 
-    public ProductInShopDTO() {
-    }
+  public ProductInShopDTO() {}
 
-    public ProductInShopDTO(Integer productInShopId, Integer productId, Integer shopId, BigDecimal price) {
-        this.productInShopId = productInShopId;
-        this.productId = productId;
-        this.shopId = shopId;
-        this.price = price;
-    }
+  public ProductInShopDTO(
+      Integer productInShopId, Integer productId, Integer shopId, BigDecimal price) {
+    this.productInShopId = productInShopId;
+    this.productId = productId;
+    this.shopId = shopId;
+    this.price = price;
+  }
 
-    public Integer getProductInShopId() {
-        return productInShopId;
-    }
+  public Integer getProductInShopId() {
+    return productInShopId;
+  }
 
-    public void setProductInShopId(Integer productInShopId) {
-        this.productInShopId = productInShopId;
-    }
+  public void setProductInShopId(Integer productInShopId) {
+    this.productInShopId = productInShopId;
+  }
 
-    public Integer getProductId() {
-        return productId;
-    }
+  public Integer getProductId() {
+    return productId;
+  }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
+  public void setProductId(Integer productId) {
+    this.productId = productId;
+  }
 
-    public Integer getShopId() {
-        return shopId;
-    }
+  public Integer getShopId() {
+    return shopId;
+  }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
-    }
+  public void setShopId(Integer shopId) {
+    this.shopId = shopId;
+  }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
-    @Override
-    public String toString() {
-        return "ProductInShopTo{" +
-                "productInShopId=" + productInShopId +
-                "productId=" + productId +
-                ", shopId=" + shopId +
-                ", price=" + price +
-                '}';
-    }
+  @Override
+  public String toString() {
+    return "ProductInShopTo{"
+        + "productInShopId="
+        + productInShopId
+        + "productId="
+        + productId
+        + ", shopId="
+        + shopId
+        + ", price="
+        + price
+        + '}';
+  }
 }

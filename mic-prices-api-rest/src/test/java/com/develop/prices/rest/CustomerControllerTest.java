@@ -1,5 +1,8 @@
 package com.develop.prices.rest;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 import com.develop.prices.dto.CreateCustomerDTO;
 import com.develop.prices.dto.CustomerDTO;
 import com.develop.prices.dto.CustomerPutDTO;
@@ -11,6 +14,7 @@ import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponseTo;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -19,12 +23,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 public class CustomerControllerTest {
 

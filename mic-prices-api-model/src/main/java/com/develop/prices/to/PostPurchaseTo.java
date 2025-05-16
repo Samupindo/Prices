@@ -1,13 +1,11 @@
 package com.develop.prices.to;
 
-
 import java.io.Serializable;
 
 public class PostPurchaseTo implements Serializable {
   private Integer customerId;
 
-  public PostPurchaseTo() {
-  }
+  public PostPurchaseTo() {}
 
   public PostPurchaseTo(Integer customerId) {
     this.customerId = customerId;
@@ -20,5 +18,4 @@ public class PostPurchaseTo implements Serializable {
   public void setCustomerId(Integer customerId) {
     this.customerId = customerId;
   }
-
 }

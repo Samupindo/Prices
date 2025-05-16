@@ -7,19 +7,14 @@ import com.develop.prices.to.PageResponseTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-
-
 @Mapper(componentModel = "spring")
 public interface CustomerModelMapper {
 
-    CustomerTo toCustomerTo(CustomerModel customerModel);
+  CustomerTo toCustomerTo(CustomerModel customerModel);
 
-    PageResponseTo<CustomerTo> toCustomerTo(PageResponseTo<CustomerTo> pageResponseTo);
+  PageResponseTo<CustomerTo> toCustomerTo(PageResponseTo<CustomerTo> pageResponseTo);
 
-    @Mapping(target = "customerId", ignore = true)
-    @Mapping(target = "purchases", ignore = true)
-    CustomerModel toCustomerModel(CreateCustomerTo createCustomerTo);
-
-
-
+  @Mapping(target = "customerId", ignore = true)
+  @Mapping(target = "purchases", ignore = true)
+  CustomerModel toCustomerModel(CreateCustomerTo createCustomerTo);
 }

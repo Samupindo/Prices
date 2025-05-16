@@ -1,18 +1,15 @@
 package com.develop.prices.to;
 
-
 import java.io.Serializable;
 
 public class ShopTo implements Serializable {
-
 
   private Integer shopId;
   private String country;
   private String city;
   private String address;
 
-  public ShopTo() {
-  }
+  public ShopTo() {}
 
   public ShopTo(String country, String city, String address) {
     this.country = country;

@@ -8,8 +8,7 @@ public class ShopInfoTo implements Serializable {
   private Integer shopId;
   private BigDecimal price;
 
-  public ShopInfoTo() {
-  }
+  public ShopInfoTo() {}
 
   public ShopInfoTo(Integer productInShopId, Integer shopId, BigDecimal price) {
     this.productInShopId = productInShopId;
@@ -26,12 +25,12 @@ public class ShopInfoTo implements Serializable {
     return shopId;
   }
 
-  public BigDecimal getPrice() {
-    return price;
-  }
-
   public void setShopId(Integer shopId) {
     this.shopId = shopId;
+  }
+
+  public BigDecimal getPrice() {
+    return price;
   }
 
   public void setPrice(BigDecimal price) {
@@ -48,13 +47,6 @@ public class ShopInfoTo implements Serializable {
 
   @Override
   public String toString() {
-    return "ShopInfoTo{"
-        +
-        "shopId=" + shopId
-        +
-        ", price=" + price
-        +
-        '}';
+    return "ShopInfoTo{" + "shopId=" + shopId + ", price=" + price + '}';
   }
-
 }

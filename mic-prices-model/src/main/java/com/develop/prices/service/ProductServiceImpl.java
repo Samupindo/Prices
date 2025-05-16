@@ -6,20 +6,20 @@ import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductModelMapper;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.specification.ProductInShopSpecification;
+import com.develop.prices.to.PageResponseTo;
+import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;
-import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ShopInfoTo;
-import com.develop.prices.to.PageResponseTo;
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
 
 @Service
 @Transactional

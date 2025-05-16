@@ -1,52 +1,58 @@
-# 🛒 Proyecto - Gestión de Productos y Tiendas  
+# 🛒 Proyecto - Gestión de Productos y Tiendas
 
-Este proyecto proporciona una API REST para la gestión de productos y tiendas. Permite realizar operaciones CRUD sobre productos y tiendas, así como filtrado y modificaciones específicas.  
+Este proyecto proporciona una API REST para la gestión de productos y tiendas. Permite realizar operaciones CRUD sobre
+productos y tiendas, así como filtrado y modificaciones específicas.
 
 ---
 
 ## Funcionalidades ##
-### 📦 Productos  
-- **Alta de productos** → Permite añadir nuevos productos a la base de datos.  
-- **Baja de productos** → Elimina un producto de la base de datos.  
-- **Modificación de productos** → Permite modificar el nombre de los productos.  
-- **Filtrar productos** → Permite buscar productos por **name** y **price**.  
 
+### 📦 Productos
 
-### 🏬 Tienda  
-- **Alta de tienda** → Permite registrar una nueva .  
-- **Baja de tienda** → Elimina una  existente.  
-- **Modificación de tienda** → Permite actualizar los datos de una tienda.  
+- **Alta de productos** → Permite añadir nuevos productos a la base de datos.
+- **Baja de productos** → Elimina un producto de la base de datos.
+- **Modificación de productos** → Permite modificar el nombre de los productos.
+- **Filtrar productos** → Permite buscar productos por **name** y **price**.
+
+### 🏬 Tienda
+
+- **Alta de tienda** → Permite registrar una nueva .
+- **Baja de tienda** → Elimina una existente.
+- **Modificación de tienda** → Permite actualizar los datos de una tienda.
 - **Añadir un producto a tienda** → Asigna un producto a una tienda específica.
 - **Modificar un producto de la tienda** → Cambiar el precio un producto de una tienda
 - **Filtrar tiendas** → Permite buscar tiendas por **city, country y address**.
 
-
 ### 👨 Cliente
-- **Alta de cliente** → Permite registrar uno nuevo .
-- **Baja de cliente** → Elimina uno  existente.
-- **Modificación de cliente** → Permite actualizar los datos de un cliente.
-- **Filtrado de clientes** → Permite buscar clientes por **name, phone y email**. 
 
+- **Alta de cliente** → Permite registrar uno nuevo .
+- **Baja de cliente** → Elimina uno existente.
+- **Modificación de cliente** → Permite actualizar los datos de un cliente.
+- **Filtrado de clientes** → Permite buscar clientes por **name, phone y email**.
 
 ### 🎟️ Compra
+
 - **Alta de compra** → Permite registrar una nueva .
-- **Baja de compra** → Elimina una  existente.
+- **Baja de compra** → Elimina una existente.
 - **Modificación de compra** → Permite actualizar los datos de una compra.
 - **Añadir un producto a una compra** → Asigna un producto a una tienda específica.
-- **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda,       price, shopping**.
+- **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda, price, shopping**.
+
 ---
-
-
 
 ## ENDPOINTS ##
 
-### Productos 
+### Productos
+
 #### Obtener los productos  pudiendo aplicar filtros
+
 ```
 http
 GET /products?
 ```
-Ejemplo  JSON respuesta
+
+Ejemplo JSON respuesta
+
 ```json
 {
     "content": [
@@ -88,10 +94,13 @@ Ejemplo  JSON respuesta
     "totalPages": 1
 }
 ```
-Ejemplo  JSON respuesta con filtros
+
+Ejemplo JSON respuesta con filtros
+
 ```
 http://localhost:8080/products?name=fru
 ```
+
 ```json
 {
     "content": [
@@ -112,12 +121,15 @@ http://localhost:8080/products?name=fru
 }
 ```
 
-#### Obtener producto por ID  
+#### Obtener producto por ID
+
 ```
 http
 GET /products/{productId}
 ```
+
 Ejemplo JSON respuesta
+
 ```json
 {
   "productId": 1,
@@ -131,18 +143,22 @@ Ejemplo JSON respuesta
   ]
 }
 ```
+
 Ejemplo Producto no existente
+
 ```
 HTTP/1.1 404 Not Found
 ```
 
-
 #### Añadir un producto
+
 ```
 http
 POST /products
 ```
+
 Json entrada
+
 ```json
 {
     "name": "Pizza con piña"
@@ -150,6 +166,7 @@ Json entrada
 ```
 
 Respuesta
+
 ```
 HTTP/1.1 201 Created
 ```
@@ -161,7 +178,9 @@ HTTP/1.1 201 Created
     "name": "Pizza con piña"
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad Request
 ```
@@ -174,34 +193,45 @@ HTTP/1.1 400 Bad Request
 ```
 
 #### Borrar un producto
+
 ```
 http
 DELETE /products/{productId}
 ```
+
 Respuesta:
+
 ```
 HTTP/1.1 200 OK
 ```
-Ejemplo  Error
+
+Ejemplo Error
+
 ```
 HTTP/1.1 404 Not Found
 ```
-#### Actualizar producto 
+
+#### Actualizar producto
+
 ```
 http
 PUT `/products/{productId}
 ```
 
 Json entrada
+
 ```json
 {
     "name": "Pizza con piña y chocolate"
 }
 ```
+
 Respuesta:
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 
 {
@@ -209,10 +239,13 @@ HTTP/1.1 200 OK
     "name": "Pizza con piña y chocolate"
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 Json Respuesta
 
 ```json
@@ -220,14 +253,18 @@ Json Respuesta
     "message": "Fields misentered"
 }
 ```
+
 ### **Tienda** ###
+
 #### Obtener todas las tiendas pudiendo aplicar filtros
 
 ```
 http
 GET /shops?
 ```
+
 Ejemplo salida
+
 ```json
     "content": [
         {
@@ -252,12 +289,16 @@ Ejemplo salida
     "totalElements": 3,
     "totalPages": 1
 ```
-Ejemplo  JSON respuesta con filtros
+
+Ejemplo JSON respuesta con filtros
+
 ```
 http
 GET shops?country=es
 ```
+
 Json respuesta
+
 ```json
 {
     "content": [
@@ -272,7 +313,9 @@ Json respuesta
     "totalPages": 1
 }
 ```
-Ejemplo  Error
+
+Ejemplo Error
+
 ```
 HTTP/1.1 404 Not Found
 ```
@@ -283,7 +326,9 @@ HTTP/1.1 404 Not Found
 http
 GET /shops/{shopId}
 ```
+
 Ejemplo salida
+
 ```json
 {
   "shopId": 1,
@@ -292,10 +337,13 @@ Ejemplo salida
   "address": "Alfredo R. Bufano 2701-2799"
 }
 ```
+
 Ejemplo si no encuentra tiendas
+
 ```
 HTTP/1.1 404 Not Found
 ```
+
 #### Crear una tienda
 
 ```
@@ -303,7 +351,8 @@ http
 POST `/shops`
 ```
 
-Json entrada 
+Json entrada
+
 ```json
 {
     "country": "España",
@@ -311,10 +360,13 @@ Json entrada
     "address":"Av Buenos Aires"
 }
 ```
+
 Salida
+
 ```
 Status: 201 Created
 ```
+
 ```json
 {
     "shopId": 4,
@@ -323,31 +375,40 @@ Status: 201 Created
     "address":"Av Buenos Aires"
 }
 ```
+
 Ejemplo error
+
 ```
 HTTP/1.1 400 Bad Request
 ```
+
 ```json
 {
     "message": "Fields misentered"
 }
 ```
-#### Añadir un producto a la tienda 
+
+#### Añadir un producto a la tienda
 
 ```
 http
 POST /shops/{shopId}/products/{productId}
 ```
-Json entrada 
+
+Json entrada
+
 ```json
 {
     "price": 10.5
 }
 ```
+
 Respuesta
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "productInShopId": 6,
@@ -356,18 +417,22 @@ HTTP/1.1 200 OK
   "price": 10.5
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 409 Conflict
 ```
 
 #### Actualizar tienda
+
 ```
 http
 PUT `/shops/{shopId}
 ```
 
 Json entrada
+
 ```json
 {
     "country": "Colombia",
@@ -375,7 +440,9 @@ Json entrada
     "address": "Av de Arteixo 6"
 }
 ```
+
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
@@ -389,36 +456,48 @@ HTTP/1.1 200 OK
 }
 ```
 
-**Ejemplo  Error**
+**Ejemplo Error**
 Salida
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 Json salida
+
 ```json
 {
     "message": "The field doesn´t exist"
 }
 ```
+
 #### Actualizar parcialmente la tienda
+
 ```
 http
 PATCH /shops/{shopId}
 ```
+
 Json entrada
+
 ```json
 {
     "city":" Santiago"
 }
 ```
+
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "shopId": 5,
@@ -427,21 +506,29 @@ HTTP/1.1 200 OK
   "address": "Los Mallos, 12"
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
 Salida
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 #### Actualizar el precio del producto
+
 ```
 http
 PATCH /shops/{shopId}/product/{productId}
 ```
+
 Json entrada
+
 ```json
 {
    "price" : 1
@@ -449,9 +536,11 @@ Json entrada
 ```
 
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "productInShopId": 2,
@@ -460,54 +549,68 @@ HTTP/1.1 200 OK
   "price": 1
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
 Salida
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 Json salida
+
 ```json
 {
     "message": "Price cannot be empty"
 }
 ```
+
 #### Dar de baja una tienda
+
 ```
 http
 DELETE /shops/{shopId}
 ```
 
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
 
-Ejemplo  Error
+Ejemplo Error
 
 ```
 HTTP/1.1 404 Not Found
 ```
 
 #### Borrar un producto de la tienda
+
 ```
 http
 DELETE /shops/{shopId}/products/{productId}
 ```
 
-Json entrada 
+Json entrada
+
 ```json
 {
     "price": 10.5
 }
 ```
+
 Respuesta
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
     "productInShopId": 1,
@@ -516,23 +619,30 @@ HTTP/1.1 200 OK
     "price": 10.5
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad Request
 ````
 
 ### **Cliente** ###
+
 #### Obtener todos los clientes
 
 ```
 http
 GET /customers
 ```
+
 Ejemplo salida
+
 ```json
 [
   {
@@ -556,16 +666,22 @@ Ejemplo salida
 ]
 
 ```
+
 #### Listado con filtros de clientes
+
 ```
 http
 GET /customers?=
 ```
+
 Ejemplo
+
 ```
 GET /customers?name=ca
 ```
+
 Json respuesta
+
 ```json
 [
   {
@@ -576,7 +692,9 @@ Json respuesta
   }
 ]
 ```
-Ejemplo  Error
+
+Ejemplo Error
+
 ```
 HTTP/1.1 404 Not Found
 ```
@@ -587,7 +705,9 @@ HTTP/1.1 404 Not Found
 http
 GET /customers/{customerId}
 ```
+
 Ejemplo salida
+
 ```json
 {
   "customerId": 1,
@@ -596,11 +716,15 @@ Ejemplo salida
   "email": "alice@example.com"
 }
 ```
+
 Salida
+
 ```
 HTTP/1.1 200 OK
 ```
+
 Ejemplo si no encuentra clientes
+
 ```
 HTTP/1.1 404 Not Found
 ```
@@ -613,6 +737,7 @@ POST `/customers`
 ```
 
 Json entrada
+
 ```json
 {
   "name": "a",
@@ -620,10 +745,13 @@ Json entrada
   "email": "alice@a.com"
 }
 ```
+
 Salida
+
 ```
 Status: 201 Created
 ```
+
 ```json
 {
   "customerId": 5,
@@ -632,9 +760,11 @@ Status: 201 Created
   "email": "alice@a.com"
 }
 ```
+
 **Ejemplo error**
 
 Json entrada
+
 ```json
 {
   "name": "a",
@@ -642,24 +772,28 @@ Json entrada
   "email": "alice@a.com"
 }
 ```
+
 Salida
+
 ```json
 {
    "phone": "Fields misentered"
 }
 ```
+
 ```
 HTTP/1.1 400 BAD REQUEST
 ```
 
-
 #### Actualizar cliente
+
 ```
 http
 PUT `/customers/{customerId}
 ```
 
 Json entrada
+
 ```json
 {
   "name": "aaaaa",
@@ -667,7 +801,9 @@ Json entrada
   "email": "a@gmail.com"
 }
 ```
+
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
@@ -681,12 +817,15 @@ HTTP/1.1 200 OK
 }
 ```
 
-**Ejemplo  Error**
+**Ejemplo Error**
 Salida
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```json
 {
   "name": "",
@@ -694,31 +833,41 @@ HTTP/1.1 404 Not Found
   "email": "a@gmail.com"
 }
 ```
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 Json salida
+
 ```json
 {
   "name": "The name can only have letters and spaces"
 }
 ```
+
 #### Actualizar parcialmente el cliente
+
 ```
 http
 PATCH /customers/{customerId}
 ```
+
 Json entrada
+
 ```json
 {
   "name": "abcd",
   "phone": 123456789
 }
 ```
+
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "customerId": 1,
@@ -727,46 +876,58 @@ HTTP/1.1 200 OK
   "email": "a@gmail.com"
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
 Salida
+
 ```
 HTTP/1.1 404 Not Found
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
+
 Json salida
+
 ```json
 {
   "name": "must not be blank"
 }
 ```
+
 #### Dar de baja un cliente
+
 ```
 http
 DELETE /customers/{customerId}
 ```
 
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
 
-Ejemplo  Error
+Ejemplo Error
 
 ```
 HTTP/1.1 404 Not Found
 ```
 
 ### **Compra** ###
+
 #### Obtener todas las compras
 
 ```
 http
 GET /purchases
 ```
+
 Ejemplo salida
+
 ```json
 [
   {
@@ -815,16 +976,22 @@ Ejemplo salida
 ]
 
 ```
+
 #### Listado con filtros de compras
+
 ```
 http
 GET /purchases?=
 ```
+
 Ejemplo
+
 ```
 GET /purchases?shopping=false
 ```
+
 Json respuesta
+
 ```json
 [
   {
@@ -848,7 +1015,9 @@ Json respuesta
   }
 ]
 ```
-Ejemplo  Error
+
+Ejemplo Error
+
 ```
 HTTP/1.1 404 Not Found
 ```
@@ -859,7 +1028,9 @@ HTTP/1.1 404 Not Found
 http
 GET /purchases/{purchaseId}
 ```
+
 Ejemplo salida
+
 ```json
 {
   "purchaseId": 2,
@@ -881,10 +1052,13 @@ Ejemplo salida
   "shopping": false
 }
 ```
+
 Ejemplo si no encuentra compras
+
 ```
 HTTP/1.1 404 Not Found
 ```
+
 #### Crear una compra
 
 ```
@@ -893,15 +1067,19 @@ POST `/purchases`
 ```
 
 Json entrada
+
 ```json
 {
   "customerId" : 3
 }
 ```
+
 Salida
+
 ```
 Status: 201 Created
 ```
+
 ```json
 {
   "purchaseId": 7,
@@ -916,17 +1094,21 @@ Status: 201 Created
   "shopping": true
 }
 ```
+
 **Ejemplo error**
 
 Json entrada
+
 ```json
 {
     "customerId" : 6
 }
 ```
+
 ```
 HTTP/1.1 404 Not Found
 ```
+
 #### Añadir un producto a una compra
 
 ```
@@ -935,9 +1117,11 @@ POST /pruchases/{purchaseId}/productInShop/{productInShopId}
 ```
 
 Respuesta
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "purchaseId": 2,
@@ -959,23 +1143,30 @@ HTTP/1.1 200 OK
   "shopping": true
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
 
 Si la compra está finalizada
 
 Json Salida
+
 ```
 HTTP/1.1 400 Bad Request
 ```
+
 #### Actualizar parcialmente la compra
+
 ```
 http
 PATCH /purchases/{purchaseId}/finish
 ```
+
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
+
 ```json
 {
   "purchaseId": 2,
@@ -997,39 +1188,47 @@ HTTP/1.1 200 OK
   "shopping": false
 }
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 400 Bad request
 ```
 
 #### Dar de baja una compra
+
 ```
 http
 DELETE /purchases/{purchaseId}
 ```
 
 Salida:
+
 ```
 HTTP/1.1 200 OK
 ```
 
-Ejemplo  Error
+Ejemplo Error
 
 ```
 HTTP/1.1 404 Not Found
 ```
 
 #### Borrar un producto de la compra
+
 ```
 http
 DELETE /purchases/{purchaseId}/productInShop/{productInShopId}
 ```
 
 Respuesta
+
 ```
 HTTP/1.1 200 OK
 ```
-**Ejemplo  Error**
+
+**Ejemplo Error**
+
 ```
 HTTP/1.1 404 Not Found
 ```

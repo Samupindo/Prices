@@ -7,12 +7,13 @@ import com.develop.prices.to.PurchaseTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {ProductInShopRestMapper.class})
+@Mapper(
+    componentModel = "spring",
+    uses = {ProductInShopRestMapper.class})
 public interface PurchaseRestMapper {
 
-    PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
+  PurchaseDTO toPurchaseDTO(PurchaseTo purchaseTo);
 
-
-    @Mapping(target = "customerId", source = "customerId")
-    PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
+  @Mapping(target = "customerId", source = "customerId")
+  PostPurchaseTo toPostPurchaseTo(PostPurchaseDTO postPurchaseDTO);
 }

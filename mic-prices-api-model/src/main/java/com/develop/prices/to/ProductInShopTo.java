@@ -10,11 +10,10 @@ public class ProductInShopTo implements Serializable {
   private Integer shopId;
   private BigDecimal price;
 
-  public ProductInShopTo() {
-  }
+  public ProductInShopTo() {}
 
-  public ProductInShopTo(Integer productInShopId, Integer productId, Integer shopId,
-                         BigDecimal price) {
+  public ProductInShopTo(
+      Integer productInShopId, Integer productId, Integer shopId, BigDecimal price) {
     this.productInShopId = productInShopId;
     this.productId = productId;
     this.shopId = shopId;
@@ -56,15 +55,14 @@ public class ProductInShopTo implements Serializable {
   @Override
   public String toString() {
     return "ProductInShopTo{"
-        +
-        "productInShopId=" + productInShopId
-        +
-        "productId=" + productId
-        +
-        ", shopId=" + shopId
-        +
-        ", price=" + price
-        +
-        '}';
+        + "productInShopId="
+        + productInShopId
+        + "productId="
+        + productId
+        + ", shopId="
+        + shopId
+        + ", price="
+        + price
+        + '}';
   }
 }

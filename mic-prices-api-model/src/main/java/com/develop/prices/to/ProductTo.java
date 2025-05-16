@@ -6,14 +6,12 @@ public class ProductTo implements Serializable {
   private Integer productId;
   private String name;
 
-  public ProductTo() {
-  }
+  public ProductTo() {}
 
   public ProductTo(Integer productId, String name) {
     this.productId = productId;
     this.name = name;
   }
-
 
   public Integer getProductId() {
     return productId;
@@ -33,12 +31,6 @@ public class ProductTo implements Serializable {
 
   @Override
   public String toString() {
-    return "ProductModel{"
-        +
-        "productId=" + productId
-        +
-        ", name='" + name + '\''
-        +
-        '}';
+    return "ProductModel{" + "productId=" + productId + ", name='" + name + '\'' + '}';
   }
 }

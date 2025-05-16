@@ -1,6 +1,5 @@
 package com.develop.prices.to;
 
-
 import java.io.Serializable;
 
 public class ShopAddTo implements Serializable {
@@ -9,8 +8,7 @@ public class ShopAddTo implements Serializable {
   private String city;
   private String address;
 
-  public ShopAddTo() {
-  }
+  public ShopAddTo() {}
 
   public ShopAddTo(String country, String city, String address) {
     this.country = country;
@@ -45,14 +43,15 @@ public class ShopAddTo implements Serializable {
   @Override
   public String toString() {
     return "ShopAddTo{"
-        +
-        "country='" + country + '\''
-        +
-        ", city='" + city + '\''
-        +
-        ", address='" + address + '\''
-        +
-        '}';
+        + "country='"
+        + country
+        + '\''
+        + ", city='"
+        + city
+        + '\''
+        + ", address='"
+        + address
+        + '\''
+        + '}';
   }
-
 }

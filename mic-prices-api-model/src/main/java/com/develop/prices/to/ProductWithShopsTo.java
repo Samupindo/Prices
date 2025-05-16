@@ -8,9 +8,7 @@ public class ProductWithShopsTo implements Serializable {
   private String name;
   private List<ShopInfoTo> shop;
 
-
-  public ProductWithShopsTo() {
-  }
+  public ProductWithShopsTo() {}
 
   public ProductWithShopsTo(Integer productId, String name, List<ShopInfoTo> shop) {
     this.productId = productId;
@@ -22,20 +20,20 @@ public class ProductWithShopsTo implements Serializable {
     return productId;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public List<ShopInfoTo> getShop() {
-    return shop;
-  }
-
   public void setProductId(Integer productId) {
     this.productId = productId;
   }
 
+  public String getName() {
+    return name;
+  }
+
   public void setName(String name) {
     this.name = name;
+  }
+
+  public List<ShopInfoTo> getShop() {
+    return shop;
   }
 
   public void setShop(List<ShopInfoTo> shop) {
@@ -45,14 +43,13 @@ public class ProductWithShopsTo implements Serializable {
   @Override
   public String toString() {
     return "ProductWithShopsDTO{"
-        +
-        "productId=" + productId
-        +
-        ", name='" + name + '\''
-        +
-        ", shop=" + shop
-        +
-        '}';
+        + "productId="
+        + productId
+        + ", name='"
+        + name
+        + '\''
+        + ", shop="
+        + shop
+        + '}';
   }
-
 }

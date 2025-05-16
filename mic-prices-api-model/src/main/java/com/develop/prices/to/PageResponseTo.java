@@ -17,24 +17,23 @@ public class PageResponseTo<T> {
     return content;
   }
 
-  public long getTotalElements() {
-    return totalElements;
-  }
-
-  public int getTotalPages() {
-    return totalPages;
-  }
-
   public void setContent(List<T> content) {
     this.content = content;
+  }
+
+  public long getTotalElements() {
+    return totalElements;
   }
 
   public void setTotalElements(long totalElements) {
     this.totalElements = totalElements;
   }
 
+  public int getTotalPages() {
+    return totalPages;
+  }
+
   public void setTotalPages(int totalPages) {
     this.totalPages = totalPages;
   }
 }
-

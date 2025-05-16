@@ -12,11 +12,14 @@ public class PurchaseTo implements Serializable {
   private BigDecimal totalPrice;
   private boolean shopping = true;
 
-  public PurchaseTo() {
-  }
+  public PurchaseTo() {}
 
-  public PurchaseTo(Integer purchaseId, CustomerTo customer, List<ProductInShopTo> products,
-                    BigDecimal totalPrice, boolean shopping) {
+  public PurchaseTo(
+      Integer purchaseId,
+      CustomerTo customer,
+      List<ProductInShopTo> products,
+      BigDecimal totalPrice,
+      boolean shopping) {
     this.purchaseId = purchaseId;
     this.customer = customer;
     this.products = products;
@@ -73,17 +76,16 @@ public class PurchaseTo implements Serializable {
   @Override
   public String toString() {
     return "PurchaseTo{"
-        +
-        "purchaseId=" + purchaseId
-        +
-        ", customer=" + customer
-        +
-        ", products=" + products
-        +
-        ", totalPrice=" + totalPrice
-        +
-        ", shopping=" + shopping
-        +
-        '}';
+        + "purchaseId="
+        + purchaseId
+        + ", customer="
+        + customer
+        + ", products="
+        + products
+        + ", totalPrice="
+        + totalPrice
+        + ", shopping="
+        + shopping
+        + '}';
   }
 }

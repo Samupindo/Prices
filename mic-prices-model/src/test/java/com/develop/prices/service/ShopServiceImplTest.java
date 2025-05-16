@@ -1,5 +1,11 @@
 package com.develop.prices.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.entity.ShopModel;
@@ -10,16 +16,18 @@ import com.develop.prices.mapper.ShopModelMapper;
 import com.develop.prices.repository.ProductInShopRepository;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.repository.ShopLocationRepository;
-import com.develop.prices.to.ProductNameTo;
-import com.develop.prices.to.ShopTo;
-import com.develop.prices.to.PageResponseTo;
-import com.develop.prices.to.ShopAddTo;
-import com.develop.prices.to.UpdateShopTo;
-import com.develop.prices.to.ShopPutTo;
-import com.develop.prices.to.ProductInShopTo;
 import com.develop.prices.to.AddProductShopTo;
+import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.ProductInShopPatchTo;
-import org.hibernate.sql.Update;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.ShopPutTo;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.UpdateShopTo;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,17 +39,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ShopServiceImplTest {

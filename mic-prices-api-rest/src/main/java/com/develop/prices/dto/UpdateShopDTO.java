@@ -1,6 +1,5 @@
 package com.develop.prices.dto;
 
-import com.develop.prices.validation.StringNotBlank;
 
 import java.io.Serializable;
 

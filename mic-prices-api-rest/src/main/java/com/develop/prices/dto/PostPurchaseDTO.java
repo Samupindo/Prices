@@ -1,9 +1,7 @@
 package com.develop.prices.dto;
 
 import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
-
 
 public class PostPurchaseDTO implements Serializable {
     @NotNull

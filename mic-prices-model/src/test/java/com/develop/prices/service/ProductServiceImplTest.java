@@ -1,6 +1,11 @@
 
 package com.develop.prices.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
+
 import com.develop.prices.entity.ProductInShopModel;
 import com.develop.prices.entity.ProductModel;
 import com.develop.prices.entity.ShopModel;
@@ -8,14 +13,17 @@ import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.ProductModelMapper;
 import com.develop.prices.repository.ProductRepository;
 import com.develop.prices.to.PageResponseTo;
-import com.develop.prices.to.ProductWithShopsTo;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
+import com.develop.prices.to.ProductWithShopsTo;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -23,19 +31,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {

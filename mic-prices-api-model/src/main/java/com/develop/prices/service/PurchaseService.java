@@ -3,10 +3,9 @@ package com.develop.prices.service;
 import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
-import org.springframework.data.domain.Pageable;
-
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 public interface PurchaseService {
 

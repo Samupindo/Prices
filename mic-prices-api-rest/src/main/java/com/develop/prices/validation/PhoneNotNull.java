@@ -11,9 +11,9 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = PhoneNotNullValidator.class)
 @Target({ElementType.FIELD})
 public @interface PhoneNotNull {
-    String message() default "Fields misentered";
+  String message() default "Fields misentered";
 
-    Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-    Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

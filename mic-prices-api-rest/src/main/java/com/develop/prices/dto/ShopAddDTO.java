@@ -2,7 +2,6 @@ package com.develop.prices.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
 
 public class ShopAddDTO implements Serializable {

@@ -1,20 +1,19 @@
 package com.develop.prices.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Table(name = "product_in_shop")
@@ -55,6 +54,10 @@ public class ProductInShopModel implements Serializable {
         return price;
     }
 
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
+
     public ProductModel getProduct() {
         return product;
     }
@@ -69,10 +72,6 @@ public class ProductInShopModel implements Serializable {
 
     public void setShop(ShopModel shop) {
         this.shop = shop;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public Integer getProductInShopId() {

@@ -8,7 +8,6 @@ import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
 import org.mapstruct.Mapper;
 
-
 @Mapper(componentModel = "spring")
 public interface CustomerRestMapper {
     CustomerDTO toCustomerDTO(CustomerTo customerTo);
