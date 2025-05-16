@@ -3,34 +3,35 @@ package com.develop.prices.to;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AddProductShopTo implements  Serializable {
+public class AddProductShopTo implements Serializable {
 
-    private BigDecimal price;
+  private BigDecimal price;
 
-    public AddProductShopTo() {
-    }
+  public AddProductShopTo() {
+  }
 
-    public AddProductShopTo(BigDecimal price) {
-        this.price = price;
-    }
-
-
-
-    public BigDecimal getPrice() {
-        return price;
-    }
+  public AddProductShopTo(BigDecimal price) {
+    this.price = price;
+  }
 
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
 
-    @Override
-    public String toString() {
-        return "ProductInShopModel{" +
-                ", price=" + price +
-                '}';
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
+
+
+  @Override
+  public String toString() {
+    return "ProductInShopModel{"
+        +
+        ", price=" + price
+        +
+        '}';
+  }
 }
 
