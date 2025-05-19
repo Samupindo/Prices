@@ -27,7 +27,6 @@ public class CustomerControllerTestIT {
   private String validCustomerJson;
   private String invalidCustomerJson;
   private String updateCustomerJson;
-  private String partialUpdateCustomerJson;
   private String InvalidpartialUpdateCustomerJson;
 
   @BeforeEach
@@ -59,12 +58,6 @@ public class CustomerControllerTestIT {
           "name": "Jorgo",
           "email": "jorgollo@correo.com",
           "phone": "122456789"
-           }
-        """;
-    partialUpdateCustomerJson =
-        """
-          {
-          "name": "NoSoyJorge"
            }
         """;
     InvalidpartialUpdateCustomerJson =
@@ -208,11 +201,11 @@ public class CustomerControllerTestIT {
     mockMvc
         .perform(
             MockMvcRequestBuilders.patch("/customers/" + validId)
-                .content(partialUpdateCustomerJson)
+                .content(updateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.customerId", notNullValue()))
-        .andExpect(jsonPath("$.name", is("NoSoyJorge")));
+        .andExpect(jsonPath("$.name", is("Jorgo")));
   }
 
   @Test
