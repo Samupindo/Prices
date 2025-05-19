@@ -158,15 +158,15 @@ public class CustomerControllerTestIT {
         .andExpect(jsonPath("$.phone", is(123456789)));
   }
 
-  //  @Test
-  //  public void postCustomer_invalidName() throws Exception {
-  //    mockMvc
-  //        .perform(
-  //            MockMvcRequestBuilders.post("/customers")
-  //                .content(invalidCustomerJson)
-  //                .contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(status().isBadRequest());
-  //  }
+  @Test
+  public void postCustomer_invalidName() throws Exception {
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.post("/customers")
+                .content(invalidCustomerJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
 
   @Test
   public void putCustomer_success() throws Exception {
@@ -215,15 +215,15 @@ public class CustomerControllerTestIT {
         .andExpect(jsonPath("$.name", is("NoSoyJorge")));
   }
 
-  //  @Test
-  //  public void patchCustomer_invalidName() throws Exception {
-  //    mockMvc
-  //        .perform(
-  //            MockMvcRequestBuilders.patch("/customers/" + validId)
-  //                .content(InvalidpartialUpdateCustomerJson)
-  //                .contentType(MediaType.APPLICATION_JSON))
-  //        .andExpect(status().isBadRequest());
-  //  }
+  @Test
+  public void patchCustomer_invalidName() throws Exception {
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.patch("/customers/" + validId)
+                .content(InvalidpartialUpdateCustomerJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
 
   @Test
   public void deleteCustomer_success() throws Exception {
