@@ -144,6 +144,7 @@ public class CustomerControllerTestIT {
             MockMvcRequestBuilders.post("/customers")
                 .content(validCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.customerId", notNullValue()))
         .andExpect(jsonPath("$.name", is("Jorgillo")))
@@ -203,6 +204,7 @@ public class CustomerControllerTestIT {
             MockMvcRequestBuilders.patch("/customers/" + validId)
                 .content(updateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.customerId", notNullValue()))
         .andExpect(jsonPath("$.name", is("Jorgo")));

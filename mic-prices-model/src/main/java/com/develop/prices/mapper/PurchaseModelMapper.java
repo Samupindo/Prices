@@ -5,7 +5,7 @@ import com.develop.prices.to.PurchaseTo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring",uses = {PurchaseLineModelMapper.class})
+@Mapper(componentModel = "spring", uses = {PurchaseLineModelMapper.class})
 public interface PurchaseModelMapper {
 
   @Mapping(target = "products", source = "purchaseLineModels")
