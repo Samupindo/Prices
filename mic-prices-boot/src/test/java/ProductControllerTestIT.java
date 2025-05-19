@@ -18,9 +18,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
-class ProductControllerTestIT {
+ public class ProductControllerTestIT {
 
-  @Autowired private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
   private String validName;
   private Integer validId;
@@ -89,7 +90,7 @@ class ProductControllerTestIT {
   @Test
   public void getProductById_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/products/1").contentType(MediaType.APPLICATION_JSON))
+        .perform(MockMvcRequestBuilders.get("/products/"+validId).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.productId", is(1)))
         .andExpect(jsonPath("$.name", is("Zumos")));
