@@ -27,6 +27,8 @@ public class CustomerControllerTestIT {
   private String validCustomerJson;
   private String invalidCustomerJson;
   private String updateCustomerJson;
+  private String partialUpdateCustomerJson;
+  private String InvalidpartialUpdateCustomerJson;
 
   @BeforeEach
   void setUp() {
@@ -59,6 +61,18 @@ public class CustomerControllerTestIT {
           "phone": "122456789"
            }
         """;
+    partialUpdateCustomerJson =
+        """
+          {
+          "name": "NoSoyJorge"
+           }
+        """;
+    InvalidpartialUpdateCustomerJson =
+        """
+          {
+          "name": ""
+           }
+        """;
   }
 
   @Test
@@ -71,8 +85,7 @@ public class CustomerControllerTestIT {
                 .param("email", "alice@example.com")
                 .param("page", "0")
                 .param("size", "10")
-                .param("sort", "customerId,asc")
-                .contentType(MediaType.APPLICATION_JSON))
+                .param("sort", "customerId,asc"))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.content", notNullValue()))
@@ -91,8 +104,7 @@ public class CustomerControllerTestIT {
             MockMvcRequestBuilders.get("/customers")
                 .param("page", "0")
                 .param("size", "20")
-                .param("sort", "customerId,asc")
-                .contentType(MediaType.APPLICATION_JSON))
+                .param("sort", "customerId,asc"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content.length()").value(4))
         .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)));
@@ -119,9 +131,7 @@ public class CustomerControllerTestIT {
   @Test
   public void getCustomerById_success() throws Exception {
     mockMvc
-        .perform(
-            MockMvcRequestBuilders.get("/customers/" + validId)
-                .contentType(MediaType.APPLICATION_JSON))
+        .perform(MockMvcRequestBuilders.get("/customers/" + validId))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.customerId", is(1)))
         .andExpect(jsonPath("$.name", is("Alice Johnson")));
@@ -130,9 +140,7 @@ public class CustomerControllerTestIT {
   @Test
   public void getCustomerById_notFound() throws Exception {
     mockMvc
-        .perform(
-            MockMvcRequestBuilders.get("/customers/" + invalidId)
-                .contentType(MediaType.APPLICATION_JSON))
+        .perform(MockMvcRequestBuilders.get("/customers/" + invalidId))
         .andExpect(status().isNotFound());
   }
 
@@ -173,5 +181,61 @@ public class CustomerControllerTestIT {
         .andExpect(jsonPath("$.name", is("Jorgo")))
         .andExpect(jsonPath("$.email", is("jorgollo@correo.com")))
         .andExpect(jsonPath("$.phone", is(122456789)));
+  }
+
+  @Test
+  public void putCustomer_invalidName() throws Exception {
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/customers/" + validId)
+                .content(invalidCustomerJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void putCustomer_notFound() throws Exception {
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.put("/customers/" + invalidId)
+                .content(updateCustomerJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void patchCustomer_success() throws Exception {
+    mockMvc
+        .perform(
+            MockMvcRequestBuilders.patch("/customers/" + validId)
+                .content(partialUpdateCustomerJson)
+                .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.customerId", notNullValue()))
+        .andExpect(jsonPath("$.name", is("NoSoyJorge")));
+  }
+
+  //  @Test
+  //  public void patchCustomer_invalidName() throws Exception {
+  //    mockMvc
+  //        .perform(
+  //            MockMvcRequestBuilders.patch("/customers/" + validId)
+  //                .content(InvalidpartialUpdateCustomerJson)
+  //                .contentType(MediaType.APPLICATION_JSON))
+  //        .andExpect(status().isBadRequest());
+  //  }
+
+  @Test
+  public void deleteCustomer_success() throws Exception {
+    mockMvc
+        .perform(MockMvcRequestBuilders.delete("/customers/" + validId))
+        .andExpect(status().isOk());
+  }
+
+  @Test
+  public void deleteCustomer_notFound() throws Exception {
+    mockMvc
+        .perform(MockMvcRequestBuilders.delete("/customers/" + invalidId))
+        .andExpect(status().isNotFound());
   }
 }
