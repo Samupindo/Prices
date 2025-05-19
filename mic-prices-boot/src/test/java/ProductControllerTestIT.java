@@ -65,6 +65,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
                 .param("sort", "productId,asc")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.content.length()").value(5))
         .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)));
   }
@@ -92,6 +93,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
     mockMvc
         .perform(MockMvcRequestBuilders.get("/products/"+validId).contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.productId", is(1)))
         .andExpect(jsonPath("$.name", is("Zumos")));
   }
@@ -112,6 +114,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
             MockMvcRequestBuilders.post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"" + validName + "\"}"))
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
   }
 
@@ -132,6 +135,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
             MockMvcRequestBuilders.put("/products/" + validId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"" + validName + "\"}"))
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk());
   }
 

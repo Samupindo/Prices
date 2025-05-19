@@ -99,6 +99,7 @@ public class CustomerControllerTestIT {
                 .param("size", "20")
                 .param("sort", "customerId,asc"))
         .andExpect(status().isOk())
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.content.length()").value(4))
         .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)));
   }
@@ -115,7 +116,6 @@ public class CustomerControllerTestIT {
                 .param("size", "10")
                 .param("sort", "customerId,asc"))
         .andExpect(status().isOk())
-        .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content").isEmpty())
         .andExpect(jsonPath("$.totalElements").value(0));
@@ -126,6 +126,7 @@ public class CustomerControllerTestIT {
     mockMvc
         .perform(MockMvcRequestBuilders.get("/customers/" + validId))
         .andExpect(status().isOk())
+        .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.customerId", is(1)))
         .andExpect(jsonPath("$.name", is("Alice Johnson")));
   }
