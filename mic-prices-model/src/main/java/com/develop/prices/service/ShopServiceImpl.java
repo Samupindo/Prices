@@ -138,9 +138,7 @@ public class ShopServiceImpl implements ShopService {
     shopModel.setCity(shopPutTo.getCity());
     shopModel.setAddress(shopPutTo.getAddress());
 
-    ShopModel savedShopModel = shopLocationRepository.save(shopModel);
-
-    return shopModelMapper.toShopTo(savedShopModel);
+    return shopModelMapper.toShopTo(shopModel);
   }
 
   @Override
