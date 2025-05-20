@@ -13,8 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +28,7 @@ public class ShopControllerTestIT {
 
     private String validShopCreationJson,
             invalidShopCreationJson,
+            validAddProductToShopJson,
             validUpdateShopJson,
             invalidUpdateShopJson,
             validPartialUpdateShopJson,
@@ -50,6 +50,12 @@ public class ShopControllerTestIT {
                     "city": ,
                     "address":
                 }""";
+
+        validAddProductToShopJson = """
+                {
+                    "price": 10
+                }
+                """;
 
         validUpdateShopJson = """
                 {
@@ -78,27 +84,65 @@ public class ShopControllerTestIT {
 
     }
 
-//    @Test
-//    public void getShopLocationWithFilters_ReturnsMatchingShops() throws Exception {
-//        mockMvc.perform(get("/shops")
-//                .param("country", "España")
-//                .param("city", "Madrid"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.content", hasSize(1)))
-//                .andExpect(jsonPath("$.content[0].city", is("Madrid")))
-//    }
+    @Test
+    public void getShopLocationWithFiltersCountry() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/shops")
+                                .param("country", "es"))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].country", is("España")))
+                .andExpect(jsonPath("$.content[0].city", is("A Coruña")))
+                .andExpect(jsonPath("$.content[0].address", is("Rúa Río Brexa, 5 ")))
+                .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)))
+                .andExpect(jsonPath("$.totalPages", greaterThanOrEqualTo(1)));
+
+    }
+
+    @Test
+    public void getShopLocationWithFiltersCity() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/shops")
+                                .param("city", "A Coruña"))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].country", is("España")))
+                .andExpect(jsonPath("$.content[0].city", is("A Coruña")))
+                .andExpect(jsonPath("$.content[0].address", is("Rúa Río Brexa, 5 ")))
+                .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)))
+                .andExpect(jsonPath("$.totalPages", greaterThanOrEqualTo(1)));
+
+    }
+
+    @Test
+    public void getShopLocationWithFiltersAddress() throws Exception {
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/shops")
+                                .param("address", "Rúa Río Brexa, 5"))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.content[0].country", is("España")))
+                .andExpect(jsonPath("$.content[0].city", is("A Coruña")))
+                .andExpect(jsonPath("$.content[0].address", is("Rúa Río Brexa, 5 ")))
+                .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)))
+                .andExpect(jsonPath("$.totalPages", greaterThanOrEqualTo(1)));
+
+    }
 
     @Test
     public void getShopById() throws Exception {
-        String shopId = "1";
+        String shopId = "2";
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/shops/" + shopId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.shopId", is(1)))
+                .andExpect(jsonPath("$.shopId", is(2)))
                 .andExpect(jsonPath("$.country", is("Argentina")))
-                .andExpect(jsonPath("$.city", is("Buenos Aires")))
-                .andExpect(jsonPath("$.address", is("Alfredo R. Bufano 2701-2799")));
+                .andExpect(jsonPath("$.city", is("Córdoba")))
+                .andExpect(jsonPath("$.address", is("Av. Vélez Sarsfield")));
 
     }
 
@@ -126,8 +170,37 @@ public class ShopControllerTestIT {
     }
 
     @Test
-    public void updateShop() throws Exception {
+    public void addProductToShop() throws Exception {
+        String shopId = "4";
+        String productId = "1";
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/shops/" + shopId + "/products/" + productId)
+                        .content(validAddProductToShopJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productInShopId", notNullValue()))
+                .andExpect(jsonPath("$.shopId", is(4)))
+                .andExpect(jsonPath("$.productId", is(1)))
+                .andExpect(jsonPath("$.price", is(10)));
+
+    }
+
+    @Test
+    public void addProductToShop_error() throws Exception{
         String shopId = "1";
+        String productId = "1000";
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/shops/" + shopId + "/products/" + productId)
+                        .content(validAddProductToShopJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    public void updateShop() throws Exception {
+        String shopId = "2";
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/shops/" + shopId)
@@ -154,7 +227,7 @@ public class ShopControllerTestIT {
 
     @Test
     public void partialUpdateShop() throws Exception {
-        String shopId = "1";
+        String shopId = "2";
 
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/shops/" + shopId)
@@ -178,20 +251,65 @@ public class ShopControllerTestIT {
     }
 
     @Test
+    public void updateProductInShop() throws Exception {
+        String shopId = "3";
+        String productId = "3";
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/shops/" + shopId + "/products/" + productId)
+                        .content(validAddProductToShopJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(jsonPath("$.productInShopId", notNullValue()))
+                .andExpect(jsonPath("$.shopId", is(3)))
+                .andExpect(jsonPath("$.productId", is(3)))
+                .andExpect(jsonPath("$.price", is(10)));
+    }
+
+    @Test
+    public void updateProductInShop_error() throws Exception{
+        String shopId = "3";
+        String productId = "1000";
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/shops/" + shopId + "/products/" + productId)
+                        .content(validAddProductToShopJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
+    @Test
     public void deleteShop() throws Exception {
-        String shopId = "1";
+        String shopId = "2";
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/shops/" + shopId))
                 .andExpect(status().isOk());
     }
 
+    @Test
     public void deleteShop_error() throws Exception {
-        String shopId = "99";
+        String shopId = "1000";
 
         mockMvc.perform(MockMvcRequestBuilders.get("/shops/" + shopId))
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    public void deleteProductInShop() throws Exception {
+        String shopId = "3";
+        String productId = "3";
 
+        mockMvc.perform(MockMvcRequestBuilders.delete("/shops/" + shopId + "/products/" + productId))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteProductInShop_error() throws Exception {
+        String shopId = "1";
+        String productId = "1000";
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/shops/" + shopId + "/products/" + productId))
+                .andExpect(status().isNotFound());
+    }
 
 }

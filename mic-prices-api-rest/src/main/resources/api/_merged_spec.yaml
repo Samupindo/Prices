@@ -1,0 +1,31 @@
+---
+servers:
+- url: "http://localhost:8080"
+openapi: "3.0.3"
+paths:
+  /customers/{customerId}:
+    $ref: "./customer.yml#/paths/~1customers~1{customerId}"
+  /purchases:
+    $ref: "./purchases.yml#/paths/~1purchases"
+  /purchases/{purchaseId}/productInShop/{productInShopId}:
+    $ref: "./purchases.yml#/paths/~1purchases~1{purchaseId}~1productInShop~1{productInShopId}"
+  /shops:
+    $ref: "./shop.yml#/paths/~1shops"
+  /purchases/{purchaseId}/finish:
+    $ref: "./purchases.yml#/paths/~1purchases~1{purchaseId}~1finish"
+  /purchases/{purchaseId}:
+    $ref: "./purchases.yml#/paths/~1purchases~1{purchaseId}"
+  /shops/{shopId}/products/{productId}:
+    $ref: "./shop.yml#/paths/~1shops~1{shopId}~1products~1{productId}"
+  /products/{productId}:
+    $ref: "./product.yml#/paths/~1products~1{productId}"
+  /customers:
+    $ref: "./customer.yml#/paths/~1customers"
+  /products:
+    $ref: "./product.yml#/paths/~1products"
+  /shops/{shopId}:
+    $ref: "./shop.yml#/paths/~1shops~1{shopId}"
+info:
+  title: "merged spec"
+  description: "merged spec"
+  version: "1.0.0"
