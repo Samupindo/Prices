@@ -18,10 +18,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
- public class ProductControllerTestIT {
+public class ProductControllerTestIT {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
   private String validName;
   private Integer validId;
@@ -44,8 +43,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
                 .param("priceMax", "10.00")
                 .param("page", "0")
                 .param("size", "10")
-                .param("sort", "productId,asc")
-                .contentType(MediaType.APPLICATION_JSON))
+                .param("sort", "productId,asc"))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.content", notNullValue()))
@@ -91,7 +89,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
   @Test
   public void getProductById_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/products/"+validId).contentType(MediaType.APPLICATION_JSON))
+        .perform(
+            MockMvcRequestBuilders.get("/products/" + validId)
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.productId", is(1)))
