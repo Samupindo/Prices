@@ -27,7 +27,7 @@ public class CustomerControllerTestIT {
   private String validCustomerJson;
   private String invalidCustomerJson;
   private String updateCustomerJson;
-  private String InvalidpartialUpdateCustomerJson;
+  private String invalidPartialUpdateCustomerJson;
 
   @BeforeEach
   void setUp() {
@@ -60,7 +60,7 @@ public class CustomerControllerTestIT {
           "phone": "122456789"
            }
         """;
-    InvalidpartialUpdateCustomerJson =
+    invalidPartialUpdateCustomerJson =
         """
           {
           "name": ""
@@ -216,7 +216,7 @@ public class CustomerControllerTestIT {
     mockMvc
         .perform(
             MockMvcRequestBuilders.patch("/customers/" + validId)
-                .content(InvalidpartialUpdateCustomerJson)
+                .content(invalidPartialUpdateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
