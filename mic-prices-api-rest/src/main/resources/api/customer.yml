@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
     put:
       tags:
         - customer-controller
@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerPutDTO'
+              $ref: '#/components/schemas/CustomerPutDto'
         required: true
       responses:
         '200':
@@ -49,7 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
     delete:
       tags:
         - customer-controller
@@ -79,7 +79,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerDTO'
+              $ref: '#/components/schemas/CreateCustomerDto'
         required: true
       responses:
         '200':
@@ -87,7 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
   /customers:
     get:
       tags:
@@ -110,7 +110,7 @@ paths:
           required: false
           schema:
             type: string
-        - name: page
+        - name: pageable
           in: query
           required: false
           schema:
@@ -136,7 +136,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageResponseDTOCustomerDTO'
+                $ref: '#/components/schemas/PageResponseDtoCustomerDto'
     post:
       tags:
         - customer-controller
@@ -145,7 +145,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerDTO'
+              $ref: '#/components/schemas/CreateCustomerDto'
         required: true
       responses:
         '201':
@@ -153,7 +153,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
         '400':
           description: Invalid input
           content:
@@ -162,31 +162,20 @@ paths:
                 error: 'Missing required field: name'
 components:
   schemas:
-    PageResponseDTOCustomerDTO:
+    PageResponseDtoCustomerDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/CustomerDTO'
+            $ref: '#/components/schemas/CustomerDto'
         totalElements:
           type: integer
           format: int64
         totalPages:
           type: integer
           format: int32
-    Pageable:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        sort:
-          type: string
-    CustomerDTO:
+    CustomerDto:
       type: object
       properties:
         customerId:
@@ -199,7 +188,7 @@ components:
           format: int32
         email:
           type: string
-    CustomerPutDTO:
+    CustomerPutDto:
       type: object
       properties:
         name:
@@ -209,7 +198,7 @@ components:
           format: int32
         email:
           type: string
-    CreateCustomerDTO:
+    CreateCustomerDto:
       type: object
       properties:
         name:
