@@ -1,3 +1,5 @@
+package com.develop.prices;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-@SpringBootTest(classes = com.develop.prices.MicPricesApplication.class)
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional

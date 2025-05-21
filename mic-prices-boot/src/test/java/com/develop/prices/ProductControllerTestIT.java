@@ -1,8 +1,9 @@
+package com.develop.prices;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(classes = com.develop.prices.MicPricesApplication.class)
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
@@ -113,7 +115,7 @@ public class ProductControllerTestIT {
         .perform(
             MockMvcRequestBuilders.post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"" + validName + "\"}"))
+                .content("{\"name\": \"paco\"}"))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isCreated());
   }

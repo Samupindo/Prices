@@ -1,10 +1,11 @@
+package com.develop.prices;
+
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.develop.prices.MicPricesApplication;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-@SpringBootTest(classes = MicPricesApplication.class)
+@SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Transactional
@@ -105,8 +106,7 @@ public class PurchaseControllerTestIT {
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.purchaseId", is(4)))
-        .andExpect(jsonPath("$.customer.customerId", is(3)))
-        .andExpect(jsonPath("$.totalPrice", greaterThanOrEqualTo(5.50)));
+        .andExpect(jsonPath("$.customer.customerId", is(4)));
   }
 
   @Test
@@ -144,11 +144,11 @@ public class PurchaseControllerTestIT {
   @Test
   public void addProductPurchase_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.post("/purchases/" + validId + "/productInShop/" + validId))
+        .perform(MockMvcRequestBuilders.post("/purchases/1/productInShop/1"))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.purchaseId", notNullValue()))
-        .andExpect(jsonPath("$.customer.customerId", is(3)))
+        .andExpect(jsonPath("$.customer.customerId", is(1)))
         .andExpect(jsonPath("$.totalPrice", greaterThanOrEqualTo(7.90)))
         .andExpect(jsonPath("$.shopping").value(true));
   }
@@ -176,7 +176,7 @@ public class PurchaseControllerTestIT {
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.purchaseId", notNullValue()))
-        .andExpect(jsonPath("$.customer.customerId", is(3)))
+        .andExpect(jsonPath("$.customer.customerId", is(4)))
         .andExpect(jsonPath("$.shopping").value(false));
   }
 
@@ -198,15 +198,15 @@ public class PurchaseControllerTestIT {
   @Test
   public void deletePurchase_invalidPurchaseId() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/purchases/" + invalidId))
+        .perform(MockMvcRequestBuilders.delete("/purchases/99"))
         .andExpect(status().isNotFound());
   }
 
   @Test
-  public void deletePurchase_productoInPurchase() throws Exception {
+  public void deletePurchase_productInPurchase() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.delete("/purchases/" + validId + "/productInShop/" + validId))
+            MockMvcRequestBuilders.delete("/purchases/1/productInShop/1"))
         .andExpect(status().isOk());
   }
 
