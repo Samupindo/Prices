@@ -22,7 +22,7 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/ProductWithShopsDto'
     put:
@@ -84,18 +84,31 @@ paths:
           required: false
           schema:
             type: number
-        - name: pageable
+        - name: page
           in: query
           required: false
           schema:
             type: integer
             format: int32
           description: Número de página (0-indexed)
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          description: Tamaño de página
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Criterio de ordenación (ej. "customerId,asc")
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: '#/components/schemas/PageResponseDtoProductWithShopsDto'
     post:

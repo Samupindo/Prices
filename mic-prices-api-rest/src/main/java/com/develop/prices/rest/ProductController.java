@@ -15,15 +15,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,11 +41,21 @@ public class ProductController implements ProductsApi {
   @Override
   public ResponseEntity<PageResponseDtoProductWithShopsDto>
                                     getProductsWithFilters(String name,
-                                                       BigDecimal priceMin,
-                                                       BigDecimal priceMax,
-                                                       Integer pageable) {
+                                                           BigDecimal priceMin,
+                                                           BigDecimal priceMax,
+                                                           Integer page,
+                                                           Integer size,
+                                                           String sort) {
+
+
+    if(page == null){
+      page = 0;
+    }
+
+    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "productId"));
+
     PageResponseTo<ProductWithShopsTo> productTos =
-        productService.findAllProductsWithFilters(name, priceMin, priceMax, Pageable.unpaged());
+        productService.findAllProductsWithFilters(name, priceMin, priceMax, pageable);
 
     List<ProductWithShopsDto> productDtos =
         productTos.getContent().stream().map(productRestMapper::toProductWithShopsDto).toList();
@@ -80,7 +89,9 @@ public class ProductController implements ProductsApi {
                 @Content(
                     mediaType = "application/json",
                     examples =
-                        @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
+                        @ExampleObject(value = "{ \"error\": "
+                            +
+                            "\"Missing required field: name\" }")))
       })
   @Override
   public ResponseEntity<ProductDto> addProduct(ProductNameDto productNameDto) {

@@ -15,20 +15,18 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
 
 @RestController
-public class CustomerController implements CustomersApi {
+public class CustomerController  implements CustomersApi {
   private final CustomerService customerService;
   private final CustomerRestMapper customerRestMapper;
 
@@ -42,12 +40,19 @@ public class CustomerController implements CustomersApi {
   public ResponseEntity<PageResponseDtoCustomerDto> getCustomersWithFilters(String name,
                                                                             Integer phone,
                                                                             String email,
-                                                                            Integer pageable,
+                                                                            Integer page,
                                                                             Integer size,
                                                                             String sort) {
+
+
+    if(page == null){
+      page = 0;
+    }
+
+    Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "customerId"));
     PageResponseTo<CustomerTo> customerPage =
         customerService.findAllWithFilters(name, phone, email,
-            Pageable.unpaged(Sort.by(Sort.Direction.DESC)));
+            pageable);
 
     List<CustomerDto> customerDtoList =
         customerPage.getContent().stream().map(customerRestMapper::toCustomerDto).toList();
@@ -60,8 +65,9 @@ public class CustomerController implements CustomersApi {
     return ResponseEntity.ok(response);
   }
 
+
   @Override
-  public ResponseEntity<CustomerDto> getProductById(Integer customerId) {
+  public ResponseEntity<CustomerDto> getCustomerById(Integer customerId) {
     CustomerTo customerTo = customerService.findByCustomerId(customerId);
 
     return ResponseEntity.ok(customerRestMapper.toCustomerDto(customerTo));
@@ -126,4 +132,6 @@ public class CustomerController implements CustomersApi {
 
     return ResponseEntity.ok().build();
   }
+
+
 }

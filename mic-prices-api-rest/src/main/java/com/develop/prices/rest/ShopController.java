@@ -28,7 +28,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,11 +54,18 @@ public class ShopController implements ShopsApi {
   public ResponseEntity<PageResponseDtoShopDto> getShopLocationWithFilters(String country,
                                                                            String city,
                                                                            String address,
-                                                                           Integer pageable,
+                                                                           Integer page,
                                                                            Integer size,
                                                                            String sort) {
+
+    if(page == null){
+      page = 0;
+    }
+
+    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "shopId"));
+
     PageResponseTo<ShopTo> shopTo =
-        shopService.findAllShopWithFilters(country, city, address, Pageable.unpaged());
+        shopService.findAllShopWithFilters(country, city, address, pageable);
 
     List<ShopDto> shopDtoList =
         shopTo.getContent().stream().map(shopRestMapper::toShopDto).toList();
@@ -200,8 +209,8 @@ public class ShopController implements ShopsApi {
 
   @Override
   public ResponseEntity<ProductInShopDto> updateProductInShop(
-                                                      Integer shopId, Integer productId,
-                                                      ProductInShopPatchDto productInShopPatchDto) {
+                                                  Integer shopId, Integer productId,
+                                                  ProductInShopPatchDto productInShopPatchDto) {
     BigDecimal price = productInShopPatchDto.getPrice();
 
     ProductInShopPatchTo productInShopPatchTo =

@@ -16,7 +16,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,11 +42,18 @@ public class PurchaseController implements PurchasesApi {
   @Override
   public ResponseEntity<PageResponseDtoPurchaseDto> getPurchasesWithFilters(
       Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax,
-      BigDecimal totalPriceMin, Boolean shopping, Integer pageable) {
+      BigDecimal totalPriceMin, Boolean shopping, Integer page,
+      Integer size, String sort) {
+
+    if(page == null){
+      page = 0;
+    }
+
+    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "purchaseId"));
 
     PageResponseTo<PurchaseTo> purchaseToPageResponseTo =
         purchaseService.findAllWithFilters(
-            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, Pageable.unpaged());
+            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
     List<PurchaseDto> purchaseToList =
         purchaseToPageResponseTo.getContent().stream()
