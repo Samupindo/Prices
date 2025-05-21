@@ -4,7 +4,6 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProductControllerTestIT {
 
   @Autowired private MockMvc mockMvc;
-
 
   @Test
   public void getProductsWithFilters_success() throws Exception {
@@ -81,9 +79,7 @@ public class ProductControllerTestIT {
   @Test
   public void getProductById_success() throws Exception {
     mockMvc
-        .perform(
-            MockMvcRequestBuilders.get("/products/1")
-                .contentType(MediaType.APPLICATION_JSON))
+        .perform(MockMvcRequestBuilders.get("/products/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.productId", is(1)))
@@ -94,8 +90,7 @@ public class ProductControllerTestIT {
   public void getProductById_notFound() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/products/999")
-                .contentType(MediaType.APPLICATION_JSON))
+            MockMvcRequestBuilders.get("/products/999").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
 
@@ -155,8 +150,7 @@ public class ProductControllerTestIT {
   public void deleteProduct_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.delete("/products/1")
-                .contentType(MediaType.APPLICATION_JSON))
+            MockMvcRequestBuilders.delete("/products/1").contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
   }
 
