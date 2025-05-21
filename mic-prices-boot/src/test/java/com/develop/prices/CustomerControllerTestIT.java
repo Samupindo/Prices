@@ -24,8 +24,6 @@ public class CustomerControllerTestIT {
 
   @Autowired private MockMvc mockMvc;
 
-  private Integer validId;
-  private Integer invalidId;
   private String validCustomerJson;
   private String invalidCustomerJson;
   private String updateCustomerJson;
@@ -33,8 +31,6 @@ public class CustomerControllerTestIT {
 
   @BeforeEach
   void setUp() {
-    validId = 1;
-    invalidId = 999;
 
     validCustomerJson =
 """
@@ -126,7 +122,7 @@ public class CustomerControllerTestIT {
   @Test
   public void getCustomerById_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/customers/" + validId))
+        .perform(MockMvcRequestBuilders.get("/customers/1"))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.customerId", is(1)))
@@ -136,7 +132,7 @@ public class CustomerControllerTestIT {
   @Test
   public void getCustomerById_notFound() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/customers/" + invalidId))
+        .perform(MockMvcRequestBuilders.get("/customers/999"))
         .andExpect(status().isNotFound());
   }
 
@@ -169,7 +165,7 @@ public class CustomerControllerTestIT {
   public void putCustomer_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/customers/" + validId)
+            MockMvcRequestBuilders.put("/customers/1")
                 .content(updateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
@@ -184,7 +180,7 @@ public class CustomerControllerTestIT {
   public void putCustomer_invalidName() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/customers/" + validId)
+            MockMvcRequestBuilders.put("/customers/1")
                 .content(invalidCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -194,7 +190,7 @@ public class CustomerControllerTestIT {
   public void putCustomer_notFound() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/customers/" + invalidId)
+            MockMvcRequestBuilders.put("/customers/999")
                 .content(updateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
@@ -204,7 +200,7 @@ public class CustomerControllerTestIT {
   public void patchCustomer_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.patch("/customers/" + validId)
+            MockMvcRequestBuilders.patch("/customers/1")
                 .content(updateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andDo(MockMvcResultHandlers.print())
@@ -217,7 +213,7 @@ public class CustomerControllerTestIT {
   public void patchCustomer_invalidName() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.patch("/customers/" + validId)
+            MockMvcRequestBuilders.patch("/customers/1")
                 .content(invalidPartialUpdateCustomerJson)
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
@@ -226,14 +222,14 @@ public class CustomerControllerTestIT {
   @Test
   public void deleteCustomer_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/customers/" + validId))
+        .perform(MockMvcRequestBuilders.delete("/customers/1"))
         .andExpect(status().isOk());
   }
 
   @Test
   public void deleteCustomer_notFound() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/customers/" + invalidId))
+        .perform(MockMvcRequestBuilders.delete("/customers/999"))
         .andExpect(status().isNotFound());
   }
 }

@@ -24,16 +24,6 @@ public class ProductControllerTestIT {
 
   @Autowired private MockMvc mockMvc;
 
-  private String validName;
-  private Integer validId;
-  private Integer invalidId;
-
-  @BeforeEach
-  void setUp() {
-    validName = "name";
-    validId = 1;
-    invalidId = 999;
-  }
 
   @Test
   public void getProductsWithFilters_success() throws Exception {
@@ -92,7 +82,7 @@ public class ProductControllerTestIT {
   public void getProductById_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/products/" + validId)
+            MockMvcRequestBuilders.get("/products/1")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
@@ -104,7 +94,7 @@ public class ProductControllerTestIT {
   public void getProductById_notFound() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.get("/products/" + invalidId)
+            MockMvcRequestBuilders.get("/products/999")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
@@ -134,9 +124,9 @@ public class ProductControllerTestIT {
   public void putProduct_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/products/" + validId)
+            MockMvcRequestBuilders.put("/products/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"" + validName + "\"}"))
+                .content("{\"name\": \"paco\"}"))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk());
   }
@@ -145,7 +135,7 @@ public class ProductControllerTestIT {
   public void putProduct_invalidName() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/products/" + validId)
+            MockMvcRequestBuilders.put("/products/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"\"}"))
         .andExpect(status().isBadRequest());
@@ -155,9 +145,9 @@ public class ProductControllerTestIT {
   public void putProduct_notFound() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.put("/products/" + invalidId)
+            MockMvcRequestBuilders.put("/products/999")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"" + validName + "\"}"))
+                .content("{\"name\": \"paco\"}"))
         .andExpect(status().isNotFound());
   }
 
@@ -165,7 +155,7 @@ public class ProductControllerTestIT {
   public void deleteProduct_success() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.delete("/products/" + validId)
+            MockMvcRequestBuilders.delete("/products/1")
                 .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
   }
@@ -173,7 +163,7 @@ public class ProductControllerTestIT {
   @Test
   public void deleteProduct_notFound() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/products/" + invalidId))
+        .perform(MockMvcRequestBuilders.delete("/products/999"))
         .andExpect(status().isNotFound());
   }
 }

@@ -26,15 +26,11 @@ public class PurchaseControllerTestIT {
 
   @Autowired private MockMvc mockMvc;
 
-  private Integer validId;
-  private Integer invalidId;
   private String validPurchaseJson;
   private String invalidPurchaseJson;
 
   @BeforeEach
   void setUp() {
-    validId = 4;
-    invalidId = 999;
 
     validPurchaseJson =
         """
@@ -102,7 +98,7 @@ public class PurchaseControllerTestIT {
   @Test
   public void getPurchaseById_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/purchases/" + validId))
+        .perform(MockMvcRequestBuilders.get("/purchases/4"))
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.purchaseId", is(4)))
@@ -112,7 +108,7 @@ public class PurchaseControllerTestIT {
   @Test
   public void getPurchaseById_notFound() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.get("/purchases/" + invalidId))
+        .perform(MockMvcRequestBuilders.get("/purchases/999"))
         .andExpect(status().isNotFound());
   }
 
@@ -157,7 +153,7 @@ public class PurchaseControllerTestIT {
   public void addProductPurchase_invalidPurchaseId() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/purchases/" + invalidId + "/productInShop/" + validId))
+            MockMvcRequestBuilders.post("/purchases/999/productInShop/4"))
         .andExpect(status().isNotFound());
   }
 
@@ -165,14 +161,14 @@ public class PurchaseControllerTestIT {
   public void addProductPurchase_invalidProductInShopId() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.post("/purchases/" + validId + "/productInShop/" + invalidId))
+            MockMvcRequestBuilders.post("/purchases/4/productInShop/999"))
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void patchFinishPurchase_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.patch("/purchases/" + validId + "/finish"))
+        .perform(MockMvcRequestBuilders.patch("/purchases/4/finish"))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.purchaseId", notNullValue()))
@@ -183,14 +179,14 @@ public class PurchaseControllerTestIT {
   @Test
   public void patchFinishPurchase_invalidPurchaseId() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.patch("/purchases/" + invalidId + "/finish"))
+        .perform(MockMvcRequestBuilders.patch("/purchases/9/finish"))
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void deletePurchase_success() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/purchases/" + validId))
+        .perform(MockMvcRequestBuilders.delete("/purchases/4"))
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk());
   }
@@ -198,7 +194,7 @@ public class PurchaseControllerTestIT {
   @Test
   public void deletePurchase_invalidPurchaseId() throws Exception {
     mockMvc
-        .perform(MockMvcRequestBuilders.delete("/purchases/99"))
+        .perform(MockMvcRequestBuilders.delete("/purchases/999"))
         .andExpect(status().isNotFound());
   }
 
@@ -214,7 +210,7 @@ public class PurchaseControllerTestIT {
   public void deletePurchase_productoInPurchase_invalidPurchaseId() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.delete("/purchases/" + invalidId + "/productInShop/" + validId))
+            MockMvcRequestBuilders.delete("/purchases/999/productInShop/4"))
         .andExpect(status().isNotFound());
   }
 
@@ -222,7 +218,7 @@ public class PurchaseControllerTestIT {
   public void deletePurchase_productoInPurchase_invalidProductInShopId() throws Exception {
     mockMvc
         .perform(
-            MockMvcRequestBuilders.delete("/purchases/" + validId + "/productInShop/" + invalidId))
+            MockMvcRequestBuilders.delete("/purchases/4/productInShop/999"))
         .andExpect(status().isNotFound());
   }
 }
