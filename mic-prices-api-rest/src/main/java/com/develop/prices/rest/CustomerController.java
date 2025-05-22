@@ -23,10 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
 @RestController
-public class CustomerController  implements CustomersApi {
+public class CustomerController implements CustomersApi {
   private final CustomerService customerService;
   private final CustomerRestMapper customerRestMapper;
 
@@ -37,22 +35,13 @@ public class CustomerController  implements CustomersApi {
   }
 
   @Override
-  public ResponseEntity<PageResponseDtoCustomerDto> getCustomersWithFilters(String name,
-                                                                            Integer phone,
-                                                                            String email,
-                                                                            Integer page,
-                                                                            Integer size,
-                                                                            String sort) {
+  public ResponseEntity<PageResponseDtoCustomerDto> getCustomersWithFilters(
+      String name, Integer phone, String email, Pageable pageable) {
 
-
-    if(page == null){
-      page = 0;
-    }
-
-    Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.ASC, "customerId"));
+    pageable =
+        PageRequest.of(pageable.getPageNumber(), 10, Sort.by(Sort.Direction.ASC, "customerId"));
     PageResponseTo<CustomerTo> customerPage =
-        customerService.findAllWithFilters(name, phone, email,
-            pageable);
+        customerService.findAllWithFilters(name, phone, email, pageable);
 
     List<CustomerDto> customerDtoList =
         customerPage.getContent().stream().map(customerRestMapper::toCustomerDto).toList();
@@ -65,7 +54,6 @@ public class CustomerController  implements CustomersApi {
     return ResponseEntity.ok(response);
   }
 
-
   @Override
   public ResponseEntity<CustomerDto> getCustomerById(Integer customerId) {
     CustomerTo customerTo = customerService.findByCustomerId(customerId);
@@ -75,36 +63,35 @@ public class CustomerController  implements CustomersApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "201",
-              description = "Created",
-              content = @Content(mediaType = "application/json")),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid input",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(value = "{ \"error\": "
-                      +
-                      "\"Missing required field: name\" }")))
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value = "{ \"error\": " + "\"Missing required field: name\" }")))
       })
-
-
   @Override
   public ResponseEntity<CustomerDto> addCustomer(CreateCustomerDto createCustomerDto) {
     CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDto);
 
     CustomerTo newCustomerModel = customerService.saveCustomer(createCustomerTo);
 
+    CustomerDto customerDto = customerRestMapper.toCustomerDto(newCustomerModel);
+
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(customerRestMapper.toCustomerDto(newCustomerModel));
+        .body(customerDto);
   }
 
   @Override
-  public ResponseEntity<CustomerDto> updateCustomer(Integer customerId,
-                                                    CustomerPutDto customerPutDto) {
+  public ResponseEntity<CustomerDto> updateCustomer(
+      Integer customerId, CustomerPutDto customerPutDto) {
     CustomerPutTo customerTo = customerRestMapper.toCustomerPutTo(customerPutDto);
 
     CustomerDto customerDto =
@@ -114,8 +101,8 @@ public class CustomerController  implements CustomersApi {
   }
 
   @Override
-  public ResponseEntity<CustomerDto> partialUpdateCustomer(Integer customerId,
-                                                           CreateCustomerDto createCustomerDto) {
+  public ResponseEntity<CustomerDto> partialUpdateCustomer(
+      Integer customerId, CreateCustomerDto createCustomerDto) {
     CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDto);
 
     CustomerDto customerDto =
@@ -125,13 +112,10 @@ public class CustomerController  implements CustomersApi {
     return ResponseEntity.ok().body(customerDto);
   }
 
-
   @Override
   public ResponseEntity<Void> deleteCustomer(Integer customerId) {
     customerService.deleteCustomer(customerId);
 
     return ResponseEntity.ok().build();
   }
-
-
 }

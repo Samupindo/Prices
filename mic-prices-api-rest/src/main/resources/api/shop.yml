@@ -105,6 +105,7 @@ paths:
       tags:
         - shop-controller
       operationId: getShopLocationWithFilters
+      x-spring-paginated: true
       parameters:
         - name: country
           in: query
@@ -121,26 +122,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Número de página (0-indexed)
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Tamaño de página
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Criterio de ordenación (ej. "customerId,asc")
       responses:
         '200':
           description: OK
@@ -165,11 +146,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ShopDto'
-              example:
-                shopId: 4
-                country: España
-                city: Coruña
-                address: Os Mallos 10
         '400':
           description: Missing or invalid fields
           content:

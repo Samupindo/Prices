@@ -1,9 +1,13 @@
 package com.develop.prices.rest;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import com.develop.prices.dto.PageResponseDtoProductWithShopsDto;
 import com.develop.prices.dto.ProductDto;
 import com.develop.prices.dto.ProductNameDto;
@@ -67,13 +71,13 @@ class ProductControllerTest {
     productWithShopsDTO.setName("name");
 
     when(productService.findAllProductsWithFilters(
-            eq(name), eq(totalPriceMin), eq(totalPriceMax), any(Pageable.class)))
+            eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
         .thenReturn(pageResponseTo);
     when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
         .thenReturn(productWithShopsDTO);
 
     ResponseEntity<PageResponseDtoProductWithShopsDto> response =
-        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, 0,10,String.valueOf(Sort.by("productId").ascending()));
+        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -106,13 +110,13 @@ class ProductControllerTest {
     productWithShopsDTO.setName("name");
 
     when(productService.findAllProductsWithFilters(
-            eq(name), eq(totalPriceMin), eq(totalPriceMax), any(Pageable.class)))
+            eq(name), eq(totalPriceMin), eq(totalPriceMax), eq(pageable)))
         .thenReturn(pageResponseTo);
     when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
         .thenReturn(productWithShopsDTO);
 
     ResponseEntity<PageResponseDtoProductWithShopsDto> response =
-        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, 0,10,String.valueOf(Sort.by("productId").ascending()));
+        productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());

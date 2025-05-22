@@ -1,28 +1,46 @@
 package com.develop.prices.rest;
 
-import com.develop.prices.dto.*;
+import com.develop.prices.dto.AddProductShopDto;
+import com.develop.prices.dto.PageResponseDtoShopDto;
+import com.develop.prices.dto.ProductInShopDto;
+import com.develop.prices.dto.ProductInShopPatchDto;
+import com.develop.prices.dto.ShopAddDto;
+import com.develop.prices.dto.ShopDto;
+import com.develop.prices.dto.ShopPutDto;
+import com.develop.prices.dto.UpdateShopDto;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.ShopRestMapper;
 import com.develop.prices.service.ShopService;
-import com.develop.prices.to.*;
+import com.develop.prices.to.AddProductShopTo;
+import com.develop.prices.to.PageResponseTo;
+import com.develop.prices.to.ProductInShopPatchTo;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.ShopPutTo;
+import com.develop.prices.to.ShopTo;
+import com.develop.prices.to.UpdateShopTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ShopControllerTest {
 
@@ -45,7 +63,7 @@ class ShopControllerTest {
   @Test
   void testGetShopLocationWithFilters() {
     // Preparar datos de prueba
-    Pageable pageable = PageRequest.of(0, 10);
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("shopId").ascending());
     String country = "España";
     String city = "Madrid";
     String address = "Gran Vía";
@@ -68,11 +86,11 @@ class ShopControllerTest {
 
     PageResponseTo<ShopTo> pageResponseTo = new PageResponseTo<>(shopToList, shopToList.size(), 1);
 
-    when(shopService.findAllShopWithFilters(eq(country), eq(city), eq(address), any(Pageable.class)))
+    when(shopService.findAllShopWithFilters(eq(country), eq(city), eq(address), eq(pageable)))
         .thenReturn(pageResponseTo);
 
     ResponseEntity<PageResponseDtoShopDto> response =
-        shopController.getShopLocationWithFilters(country, city, address, 0, 10, String.valueOf(Sort.by("shopId").ascending()));
+        shopController.getShopLocationWithFilters(country, city, address, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -92,6 +110,8 @@ class ShopControllerTest {
   @Test
   void testGetShopLocationWithNoFilters() {
 
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("shopId").ascending());
+
     ShopTo shopTo1 = new ShopTo();
     shopTo1.setShopId(1);
     shopTo1.setCountry("España");
@@ -108,10 +128,11 @@ class ShopControllerTest {
 
     PageResponseTo<ShopTo> pageResponseTo = new PageResponseTo<>(shopToList, 2L, 1);
 
-    when(shopService.findAllShopWithFilters(isNull(), isNull(), isNull(), any(Pageable.class))).thenReturn(pageResponseTo);
+    when(shopService.findAllShopWithFilters(isNull(), isNull(), isNull(), any(Pageable.class)))
+        .thenReturn(pageResponseTo);
 
     ResponseEntity<PageResponseDtoShopDto> response =
-        shopController.getShopLocationWithFilters(null, null, null, 0, 10, String.valueOf(Sort.by("shopId").ascending()));
+        shopController.getShopLocationWithFilters(null, null, null, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -122,12 +143,11 @@ class ShopControllerTest {
     List<String> cities = pageResponseDTO.getContent().stream().map(ShopDto::getCity).toList();
     assertTrue(cities.contains("Madrid"));
     assertTrue(cities.contains("Barcelona"));
-
   }
 
   @Test
   void testGetShopLocationWithPagination() {
-    Pageable pageable = PageRequest.of(1, 1);
+    Pageable pageable = PageRequest.of(0, 10, Sort.by("shopId").ascending());
 
     ShopTo shopTo = new ShopTo();
     shopTo.setShopId(2);
@@ -140,11 +160,12 @@ class ShopControllerTest {
 
     PageResponseTo<ShopTo> pageResponseTo = new PageResponseTo<>(shopToList, 2L, 2);
 
-    when(shopService.findAllShopWithFilters(isNull(), isNull(), isNull(), any(Pageable.class))).thenReturn(pageResponseTo);
+    when(shopService.findAllShopWithFilters(isNull(), isNull(), isNull(), eq(pageable)))
+        .thenReturn(pageResponseTo);
 
     // Ejecutar
     ResponseEntity<PageResponseDtoShopDto> response =
-        shopController.getShopLocationWithFilters(null, null, null, 0, 10, String.valueOf(Sort.by("shopId").ascending()));
+        shopController.getShopLocationWithFilters(null, null, null, pageable);
 
     // Verificar
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -157,7 +178,6 @@ class ShopControllerTest {
 
     assertEquals(2, pageResponseDTO.getContent().get(0).getShopId());
     assertEquals("Barcelona", pageResponseDTO.getContent().get(0).getCity());
-
   }
 
   @Test
@@ -341,7 +361,7 @@ class ShopControllerTest {
     productInShopTo.setPrice(price);
 
     when(shopService.updateProductPriceInShop(
-        eq(shopId), eq(productId), any(ProductInShopPatchTo.class)))
+            eq(shopId), eq(productId), any(ProductInShopPatchTo.class)))
         .thenReturn(productInShopTo);
 
     ResponseEntity<ProductInShopDto> response =
@@ -376,8 +396,7 @@ class ShopControllerTest {
 
     doNothing().when(shopService).deleteProductFromShop(shopId, productId);
 
-    ResponseEntity<Void> response =
-        shopController.deleteProductFromShop(shopId, productId);
+    ResponseEntity<Void> response = shopController.deleteProductFromShop(shopId, productId);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
   }

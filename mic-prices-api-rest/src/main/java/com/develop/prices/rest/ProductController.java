@@ -37,25 +37,14 @@ public class ProductController implements ProductsApi {
     this.productRestMapper = productRestMapper;
   }
 
-
   @Override
-  public ResponseEntity<PageResponseDtoProductWithShopsDto>
-                                    getProductsWithFilters(String name,
-                                                           BigDecimal priceMin,
-                                                           BigDecimal priceMax,
-                                                           Integer page,
-                                                           Integer size,
-                                                           String sort) {
-
-
-    if(page == null){
-      page = 0;
-    }
-
-    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "productId"));
-
+  public ResponseEntity<PageResponseDtoProductWithShopsDto> getProductsWithFilters(
+      String name, BigDecimal priceMin, BigDecimal priceMax, Pageable pageable) {
     PageResponseTo<ProductWithShopsTo> productTos =
         productService.findAllProductsWithFilters(name, priceMin, priceMax, pageable);
+
+    pageable =
+        PageRequest.of(pageable.getPageNumber(), 10, Sort.by(Sort.Direction.ASC, "productId"));
 
     List<ProductWithShopsDto> productDtos =
         productTos.getContent().stream().map(productRestMapper::toProductWithShopsDto).toList();
@@ -75,7 +64,6 @@ public class ProductController implements ProductsApi {
     return ResponseEntity.ok(productRestMapper.toProductWithShopsDto(productWithShopsTo));
   }
 
-
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -89,9 +77,8 @@ public class ProductController implements ProductsApi {
                 @Content(
                     mediaType = "application/json",
                     examples =
-                        @ExampleObject(value = "{ \"error\": "
-                            +
-                            "\"Missing required field: name\" }")))
+                        @ExampleObject(
+                            value = "{ \"error\": " + "\"Missing required field: name\" }")))
       })
   @Override
   public ResponseEntity<ProductDto> addProduct(ProductNameDto productNameDto) {
@@ -104,10 +91,9 @@ public class ProductController implements ProductsApi {
     return ResponseEntity.status(HttpStatus.CREATED).body(productDto);
   }
 
-
   @Override
-  public ResponseEntity<ProductDto> updateProduct(Integer productId,
-                                                  ProductNameDto productNameDto) {
+  public ResponseEntity<ProductDto> updateProduct(
+      Integer productId, ProductNameDto productNameDto) {
     ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDto);
 
     ProductTo updateProductTo = productService.updateProduct(productId, productNameTo);
@@ -122,6 +108,4 @@ public class ProductController implements ProductsApi {
     productService.deleteProduct(productId);
     return ResponseEntity.ok().build();
   }
-
-
 }

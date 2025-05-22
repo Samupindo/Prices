@@ -11,6 +11,7 @@ paths:
       tags:
         - purchase-controller
       operationId: getPurchasesWithFilters
+      x-spring-paginated: true
       parameters:
         - name: customerId
           in: query
@@ -41,26 +42,6 @@ paths:
           required: false
           schema:
             type: boolean
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Número de página (0-indexed)
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Tamaño de página
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Criterio de ordenación (ej. "customerId,asc")
       responses:
         '200':
           description: OK

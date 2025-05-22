@@ -1,6 +1,5 @@
 package com.develop.prices.rest;
 
-
 import com.develop.prices.controller.ShopsApi;
 import com.develop.prices.dto.AddProductShopDto;
 import com.develop.prices.dto.PageResponseDtoShopDto;
@@ -35,7 +34,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 public class ShopController implements ShopsApi {
   private final ShopService shopService;
@@ -51,18 +49,10 @@ public class ShopController implements ShopsApi {
   }
 
   @Override
-  public ResponseEntity<PageResponseDtoShopDto> getShopLocationWithFilters(String country,
-                                                                           String city,
-                                                                           String address,
-                                                                           Integer page,
-                                                                           Integer size,
-                                                                           String sort) {
+  public ResponseEntity<PageResponseDtoShopDto> getShopLocationWithFilters(
+      String country, String city, String address, Pageable pageable) {
 
-    if(page == null){
-      page = 0;
-    }
-
-    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "shopId"));
+    pageable = PageRequest.of(pageable.getPageNumber(), 10, Sort.by(Sort.Direction.ASC, "shopId"));
 
     PageResponseTo<ShopTo> shopTo =
         shopService.findAllShopWithFilters(country, city, address, pageable);
@@ -93,46 +83,40 @@ public class ShopController implements ShopsApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "201",
-              description = "Created",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(
-                      value =
-                          "{ \"shopId\": 4, \"country\": \"España\", "
-                              +
-                              "\"city\": \"Coruña\", "
-                              +
-                              "\"address\": "
-                              +
-                              "\"Os Mallos 10\" }"))),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Missing or invalid fields",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(value = "{ \"error\": \"Missing "
-                      +
-                      "required field: city\" }"))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "Shop already exists",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(
-                      value =
-                          "{ \"error\": \"Shop already exists "
-                              +
-                              "at this address in this "
-                              +
-                              "city and country\" }")))
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value =
+                                "{ \"shopId\": 4, \"country\": \"España\", "
+                                    + "\"city\": \"Coruña\", "
+                                    + "\"address\": "
+                                    + "\"Os Mallos 10\" }"))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Missing or invalid fields",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value = "{ \"error\": \"Missing " + "required field: city\" }"))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "Shop already exists",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value =
+                                "{ \"error\": \"Shop already exists "
+                                    + "at this address in this "
+                                    + "city and country\" }")))
       })
   @Override
   public ResponseEntity<ShopDto> addShop(ShopAddDto shopAddDto) {
@@ -147,49 +131,48 @@ public class ShopController implements ShopsApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "200",
-              description = "Product added to shop",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(
-                      value = "{ \"productId\": 1, \"shopId\": 2, \"price\": 15.99 }"))),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid price provided",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(
-                      value =
-                          "{ \"error\": \"Price must be greater than or equal to 0\" }"))),
-          @ApiResponse(
-              responseCode = "404",
-              description = "Shop or product not found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(value = "{ \"error\": \"Product or shop not found\" }"))),
-          @ApiResponse(
-              responseCode = "409",
-              description = "Product already exists in shop",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(
-                      value =
-                          "{ \"error\": \"This product is already registered in this "
-                              +
-                              "shop\" }")))
+        @ApiResponse(
+            responseCode = "200",
+            description = "Product added to shop",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value = "{ \"productId\": 1, \"shopId\": 2, \"price\": 15.99 }"))),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid price provided",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value =
+                                "{ \"error\": \"Price must be greater than or equal to 0\" }"))),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Shop or product not found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(value = "{ \"error\": \"Product or shop not found\" }"))),
+        @ApiResponse(
+            responseCode = "409",
+            description = "Product already exists in shop",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(
+                            value =
+                                "{ \"error\": \"This product is already registered in this "
+                                    + "shop\" }")))
       })
   @Override
-  public ResponseEntity<ProductInShopDto> addProductShop(Integer productId, Integer shopId,
-                                                         AddProductShopDto addProductShopDto) {
+  public ResponseEntity<ProductInShopDto> addProductShop(
+      Integer productId, Integer shopId, AddProductShopDto addProductShopDto) {
     AddProductShopTo addProductShopTo = productRestMapper.toAddProductShopTo(addProductShopDto);
 
     ProductInShopTo productInShopTo =
@@ -209,8 +192,7 @@ public class ShopController implements ShopsApi {
 
   @Override
   public ResponseEntity<ProductInShopDto> updateProductInShop(
-                                                  Integer shopId, Integer productId,
-                                                  ProductInShopPatchDto productInShopPatchDto) {
+      Integer shopId, Integer productId, ProductInShopPatchDto productInShopPatchDto) {
     BigDecimal price = productInShopPatchDto.getPrice();
 
     ProductInShopPatchTo productInShopPatchTo =
@@ -224,7 +206,6 @@ public class ShopController implements ShopsApi {
     return ResponseEntity.ok(productRestMapper.toProductInShopDto(productInShopTo));
   }
 
-
   @Override
   public ResponseEntity<ShopDto> partialUpdateShop(Integer shopId, UpdateShopDto updateShopDto) {
     UpdateShopTo updateShopTo = shopRestMapper.toUpdateShopTo(updateShopDto);
@@ -236,17 +217,15 @@ public class ShopController implements ShopsApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204",
-              description = "The shop has been deleted successfully"),
-          @ApiResponse(
-              responseCode = "404",
-              description = "Shop not found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
+        @ApiResponse(responseCode = "204", description = "The shop has been deleted successfully"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Shop not found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
       })
-
   @Override
   public ResponseEntity<Void> deleteShop(Integer shopId) {
     shopService.deleteShop(shopId);
@@ -256,18 +235,15 @@ public class ShopController implements ShopsApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(responseCode = "204",
-              description = "The shop has been deleted successfully"),
-          @ApiResponse(
-              responseCode = "404",
-              description = "Shop not found",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
+        @ApiResponse(responseCode = "204", description = "The shop has been deleted successfully"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Shop not found",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
       })
-
-
   @Override
   public ResponseEntity<Void> deleteProductFromShop(Integer productId, Integer shopId) {
     shopService.deleteProductFromShop(shopId, productId);

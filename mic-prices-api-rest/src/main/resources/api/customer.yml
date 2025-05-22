@@ -93,6 +93,7 @@ paths:
       tags:
         - customer-controller
       operationId: getCustomersWithFilters
+      x-spring-paginated: true
       parameters:
         - name: name
           in: query
@@ -110,26 +111,6 @@ paths:
           required: false
           schema:
             type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Número de página (0-indexed)
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Tamaño de página
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Criterio de ordenación (ej. "customerId,asc")
       responses:
         '200':
           description: OK

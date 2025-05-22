@@ -83,6 +83,14 @@
                         <configuration>
                             <inputSpecRootDirectory>${project.basedir}/src/main/resources/api</inputSpecRootDirectory>
                             <generatorName>spring</generatorName>
+                            <typeMappings>
+                                <typeMapping>object+pageable=Pageable</typeMapping>
+                                <typeMapping>object+sort=Sort</typeMapping>
+                            </typeMappings>
+                            <schemaMappings>
+                                <schemaMapping>Pageable=org.springframework.data.domain.Pageable</schemaMapping>
+                                <schemaMapping>Sort=org.springframework.data.domain.Sort</schemaMapping>
+                            </schemaMappings>
                             <library>spring-boot</library>
                             <configOptions>
                                 <useSpringBoot3>true</useSpringBoot3>

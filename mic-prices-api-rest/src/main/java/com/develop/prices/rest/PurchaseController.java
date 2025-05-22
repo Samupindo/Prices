@@ -23,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 public class PurchaseController implements PurchasesApi {
 
@@ -38,18 +37,17 @@ public class PurchaseController implements PurchasesApi {
     this.purchaseRestMapper = purchaseRestMapper;
   }
 
-
   @Override
   public ResponseEntity<PageResponseDtoPurchaseDto> getPurchasesWithFilters(
-      Integer customerId, List<Integer> productInShop, BigDecimal totalPriceMax,
-      BigDecimal totalPriceMin, Boolean shopping, Integer page,
-      Integer size, String sort) {
+      Integer customerId,
+      List<Integer> productInShop,
+      BigDecimal totalPriceMax,
+      BigDecimal totalPriceMin,
+      Boolean shopping,
+      Pageable pageable) {
 
-    if(page == null){
-      page = 0;
-    }
-
-    Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.ASC, "purchaseId"));
+    pageable =
+        PageRequest.of(pageable.getPageNumber(), 10, Sort.by(Sort.Direction.ASC, "purchaseId"));
 
     PageResponseTo<PurchaseTo> purchaseToPageResponseTo =
         purchaseService.findAllWithFilters(
@@ -66,7 +64,6 @@ public class PurchaseController implements PurchasesApi {
     response.setTotalPages(purchaseToPageResponseTo.getTotalPages());
 
     return ResponseEntity.ok(response);
-
   }
 
   @Override
@@ -75,7 +72,6 @@ public class PurchaseController implements PurchasesApi {
 
     return ResponseEntity.ok(purchaseRestMapper.toPurchaseDto(purchaseTo));
   }
-
 
   @Override
   public ResponseEntity<PurchaseDto> postPurchase(PostPurchaseDto postPurchaseDto) {
@@ -90,30 +86,28 @@ public class PurchaseController implements PurchasesApi {
 
   @ApiResponses(
       value = {
-          @ApiResponse(
-              responseCode = "201",
-              description = "Created",
-              content = @Content(mediaType = "application/json")),
-          @ApiResponse(
-              responseCode = "400",
-              description = "Invalid input",
-              content =
-              @Content(
-                  mediaType = "application/json",
-                  examples =
-                  @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
+        @ApiResponse(
+            responseCode = "201",
+            description = "Created",
+            content = @Content(mediaType = "application/json")),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input",
+            content =
+                @Content(
+                    mediaType = "application/json",
+                    examples =
+                        @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
       })
-
   @Override
-  public ResponseEntity<PurchaseDto> addProductPurchase(Integer purchaseId,
-                                                        Integer productInShopId) {
+  public ResponseEntity<PurchaseDto> addProductPurchase(
+      Integer purchaseId, Integer productInShopId) {
     PurchaseTo purchaseTo =
         purchaseService.savePurchaseAndPurchaseLine(purchaseId, productInShopId);
     PurchaseDto purchaseDto = purchaseRestMapper.toPurchaseDto(purchaseTo);
 
     return ResponseEntity.ok(purchaseDto);
   }
-
 
   @Override
   public ResponseEntity<PurchaseDto> finishPurchase(Integer purchaseId) {
@@ -135,6 +129,4 @@ public class PurchaseController implements PurchasesApi {
     purchaseService.deleteProductToPurchase(purchaseId, productInShopId);
     return ResponseEntity.ok().build();
   }
-
-
 }

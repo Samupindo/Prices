@@ -1,10 +1,14 @@
 package com.develop.prices.rest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import com.develop.prices.dto.PageResponseDtoPurchaseDto;
 import com.develop.prices.dto.PostPurchaseDto;
 import com.develop.prices.dto.PurchaseDto;
@@ -71,14 +75,14 @@ class PurchaseControllerTest {
             eq(totalPriceMax),
             eq(totalPriceMin),
             eq(shopping),
-            any(Pageable.class)))
+            eq(pageable)))
         .thenReturn(pageResponseTo);
 
     when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
     ResponseEntity<PageResponseDtoPurchaseDto> response =
         purchaseController.getPurchasesWithFilters(
-            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, 0,10,String.valueOf(Sort.by("purchaseId").ascending()));
+            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -96,7 +100,7 @@ class PurchaseControllerTest {
             eq(totalPriceMax),
             eq(totalPriceMin),
             eq(shopping),
-            any(Pageable.class));
+            eq(pageable));
   }
 
   @Test
@@ -127,14 +131,14 @@ class PurchaseControllerTest {
             eq(totalPriceMax),
             eq(totalPriceMin),
             eq(shopping),
-            any(Pageable.class)))
+            eq(pageable)))
         .thenReturn(pageResponseTo);
 
     when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
     ResponseEntity<PageResponseDtoPurchaseDto> response =
         purchaseController.getPurchasesWithFilters(
-            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, 0,10,String.valueOf(Sort.by("purchaseId").ascending()));
+            customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -149,7 +153,7 @@ class PurchaseControllerTest {
             eq(totalPriceMax),
             eq(totalPriceMin),
             eq(shopping),
-            any(Pageable.class));
+            eq(pageable));
   }
 
   @Test
