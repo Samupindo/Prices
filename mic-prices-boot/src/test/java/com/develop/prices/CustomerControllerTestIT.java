@@ -46,8 +46,8 @@ public class CustomerControllerTestIT {
     invalidCustomerJson =
 """
 {
-"name": 123,
-  "email": "jorgillo@correo.com",
+  "name": 1"",
+  "email": "pepe@correo.com",
   "phone": "123456789"
 }
 """;
@@ -63,7 +63,7 @@ public class CustomerControllerTestIT {
     invalidPartialUpdateCustomerJson =
         """
           {
-          "name": ""
+          "name": 1""
            }
         """;
   }
