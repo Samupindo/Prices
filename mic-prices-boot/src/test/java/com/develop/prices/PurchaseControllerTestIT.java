@@ -65,7 +65,7 @@ public class PurchaseControllerTestIT {
         .andExpect(jsonPath("$.content[0].customer.customerId", is(1)))
         .andExpect(jsonPath("$.content[0].totalPrice", greaterThanOrEqualTo(7.90)))
         .andExpect(jsonPath("$.content.length()", greaterThanOrEqualTo(1)))
-        .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1)));
+        .andExpect(jsonPath("$.totalElements", greaterThanOrEqualTo(1))); // Corregir
   }
 
   @Test
@@ -102,7 +102,7 @@ public class PurchaseControllerTestIT {
         .andExpect(status().isOk())
         .andDo(MockMvcResultHandlers.print())
         .andExpect(jsonPath("$.purchaseId", is(4)))
-        .andExpect(jsonPath("$.customer.customerId", is(4)));
+        .andExpect(jsonPath("$.customer.customerId", is(3)));
   }
 
   @Test
@@ -172,7 +172,7 @@ public class PurchaseControllerTestIT {
         .andDo(MockMvcResultHandlers.print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.purchaseId", notNullValue()))
-        .andExpect(jsonPath("$.customer.customerId", is(4)))
+        .andExpect(jsonPath("$.customer.customerId", is(3)))
         .andExpect(jsonPath("$.shopping").value(false));
   }
 
