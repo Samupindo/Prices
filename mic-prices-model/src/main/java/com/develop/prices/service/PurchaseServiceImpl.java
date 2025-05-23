@@ -16,7 +16,6 @@ import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.ProductInShopTo;
 import com.develop.prices.to.PurchaseTo;
-import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional

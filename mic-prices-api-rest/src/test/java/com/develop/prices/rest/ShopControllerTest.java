@@ -1,18 +1,39 @@
 package com.develop.prices.rest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import com.develop.prices.dto.*;
+import com.develop.prices.dto.AddProductShopDto;
+import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.ProductInShopDto;
+import com.develop.prices.dto.ProductInShopPatchDto;
+import com.develop.prices.dto.ShopAddDto;
+import com.develop.prices.dto.ShopDto;
+import com.develop.prices.dto.ShopPutDto;
+import com.develop.prices.dto.UpdateShopDto;
 import com.develop.prices.mapper.ProductRestMapper;
 import com.develop.prices.mapper.ShopRestMapper;
 import com.develop.prices.service.ShopService;
-import com.develop.prices.to.*;
+import com.develop.prices.to.AddProductShopTo;
+import com.develop.prices.to.PageResponseTo;
+import com.develop.prices.to.ProductInShopPatchTo;
+import com.develop.prices.to.ProductInShopTo;
+import com.develop.prices.to.ShopAddTo;
+import com.develop.prices.to.ShopPutTo;
+import com.develop.prices.to.ShopTo;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+
+import com.develop.prices.to.UpdateShopTo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;

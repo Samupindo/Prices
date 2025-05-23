@@ -26,9 +26,4 @@ public class ShopsSpecification {
     };
   }
 
-  public static Specification<ShopModel> findByShopId(Integer shopId) {
-    return (root, query, criteriaBuilder) -> {
-      return criteriaBuilder.equal(root.get("shopId"), shopId);
-    };
-  }
 }
