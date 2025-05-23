@@ -22,9 +22,9 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProductWithShopsDTO'
+                $ref: '#/components/schemas/ProductWithShopsDto'
     put:
       tags:
         - product-controller
@@ -40,15 +40,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductNameDTO'
+              $ref: '#/components/schemas/ProductNameDto'
         required: true
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/ProductDTO'
+                $ref: '#/components/schemas/ProductDto'
     delete:
       tags:
         - product-controller
@@ -68,6 +68,7 @@ paths:
       tags:
         - product-controller
       operationId: getProductsWithFilters
+      x-spring-paginated: true
       parameters:
         - name: name
           in: query
@@ -84,18 +85,13 @@ paths:
           required: false
           schema:
             type: number
-        - name: pageable
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Pageable'
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/PageResponseDTOProductWithShopsDTO'
+                $ref: '#/components/schemas/PageResponseDtoProductWithShopsDto'
     post:
       tags:
         - product-controller
@@ -104,13 +100,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductNameDTO'
+              $ref: '#/components/schemas/ProductNameDto'
         required: true
       responses:
         '201':
           description: Created
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
         '400':
           description: Invalid input
           content:
@@ -119,7 +117,7 @@ paths:
                 error: 'Missing required field: name'
 components:
   schemas:
-    ProductNameDTO:
+    ProductNameDto:
       type: object
       properties:
         name:
@@ -127,7 +125,7 @@ components:
           maxLength: 100
           minLength: 0
           pattern: "^\\p{L}[\\p{L}\\s]+$"
-    ProductDTO:
+    ProductDto:
       type: object
       properties:
         productId:
@@ -135,35 +133,20 @@ components:
           format: int32
         name:
           type: string
-    Pageable:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-        size:
-          type: integer
-          format: int32
-          minimum: 1
-        sort:
-          type: array
-          items:
-            type: string
-    PageResponseDTOProductWithShopsDTO:
+    PageResponseDtoProductWithShopsDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/ProductWithShopsDTO'
+            $ref: '#/components/schemas/ProductWithShopsDto'
         totalElements:
           type: integer
           format: int64
         totalPages:
           type: integer
           format: int32
-    ProductWithShopsDTO:
+    ProductWithShopsDto:
       type: object
       properties:
         productId:
@@ -174,8 +157,8 @@ components:
         shop:
           type: array
           items:
-            $ref: '#/components/schemas/ShopInfoDTO'
-    ShopInfoDTO:
+            $ref: '#/components/schemas/ShopInfoDto'
+    ShopInfoDto:
       type: object
       properties:
         productInShopId:
