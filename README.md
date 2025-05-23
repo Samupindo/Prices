@@ -1232,3 +1232,33 @@ HTTP/1.1 200 OK
 ```
 HTTP/1.1 404 Not Found
 ```
+
+## Preparación para los test de integración
+
+Para que funcionen los test de integración deberás crear una base de datos específica para los test.
+
+### Paso 1
+
+Mediante la imagen de postgres 17.4 crearemos un nuevo contenedor llamado test, usaremos como variable POSTGRES_PASSWORD para definir la contraseña que usará nuestra base de datos y lo iniciaremos
+
+![imagen](https://github.com/user-attachments/assets/cf800805-7d91-4680-859e-515015a358fd)
+
+### Paso 2
+
+En Dbeaver añadiremos una nueva conexión de PostgreSQL donde debemos especificar el puerto al que está asignado nuestro contenedor y la contraseña para conectarse.
+
+![imagen](https://github.com/user-attachments/assets/4dbd954e-a0b6-4214-a4e4-d407cdcf5b2a)
+
+### Paso 3
+
+Una vez creada la conexión crearemos una base de datos nueva llamada test
+
+![imagen](https://github.com/user-attachments/assets/b365922f-d56d-445c-a224-7a9d2b7b27ad)
+
+Después accederemos a las propiedades de la conexión y cambiaremos el apartado database por test
+
+![imagen](https://github.com/user-attachments/assets/838c7d96-e009-4166-be98-817af3d54ffd)
+
+### Paso 4
+
+Por último debemos crear las tablas añadiendo a nuestro scriptSQL usando los archivos schemaTest.sql y dataTest.sql situados en la carpeta db del repositorio
