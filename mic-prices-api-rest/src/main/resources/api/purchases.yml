@@ -11,6 +11,7 @@ paths:
       tags:
         - purchase-controller
       operationId: getPurchasesWithFilters
+      x-spring-paginated: true
       parameters:
         - name: customerId
           in: query
@@ -41,18 +42,13 @@ paths:
           required: false
           schema:
             type: boolean
-        - name: pageable
-          in: query
-          required: true
-          schema:
-            $ref: '#/components/schemas/Pageable'
       responses:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/PageResponseDTOPurchaseDTO'
+                $ref: '#/components/schemas/PageResponseDtoPurchaseDto'
     post:
       tags:
         - purchase-controller
@@ -61,13 +57,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PostPurchaseDTO'
+              $ref: '#/components/schemas/PostPurchaseDto'
         required: true
       responses:
         '201':
           description: Created
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseDto'
         '400':
           description: Invalid input
           content:
@@ -96,7 +94,9 @@ paths:
         '201':
           description: Created
           content:
-            application/json: { }
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PurchaseDto'
         '400':
           description: Invalid input
           content:
@@ -140,9 +140,9 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/PurchaseDTO'
+                $ref: '#/components/schemas/PurchaseDto'
   /purchases/{purchaseId}:
     get:
       tags:
@@ -159,9 +159,9 @@ paths:
         '200':
           description: OK
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/PurchaseDTO'
+                $ref: '#/components/schemas/PurchaseDto'
     delete:
       tags:
         - purchase-controller
@@ -179,7 +179,7 @@ paths:
 components:
   schemas:
 
-    CustomerDTO:
+    CustomerDto:
       type: object
       properties:
         customerId:
@@ -193,14 +193,14 @@ components:
         email:
           type: string
 
-    PostPurchaseDTO:
+    PostPurchaseDto:
       type: object
       properties:
         customerId:
           type: integer
           format: int32
 
-    ProductInShopDTO:
+    ProductInShopDto:
       type: object
       properties:
         productInShopId:
@@ -215,45 +215,29 @@ components:
         price:
           type: number
 
-    PurchaseDTO:
+    PurchaseDto:
       type: object
       properties:
         purchaseId:
           type: integer
           format: int32
         customer:
-          $ref: '#/components/schemas/CustomerDTO'
+          $ref: '#/components/schemas/CustomerDto'
         products:
           type: array
           items:
-            $ref: '#/components/schemas/ProductInShopDTO'
+            $ref: '#/components/schemas/ProductInShopDto'
         totalPrice:
           type: number
         shopping:
           type: boolean
-    Pageable:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-        size:
-          type: integer
-          format: int32
-          minimum: 1
-        sort:
-          type: array
-          items:
-            type: string
-
-    PageResponseDTOPurchaseDTO:
+    PageResponseDtoPurchaseDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/PurchaseDTO'
+            $ref: '#/components/schemas/PurchaseDto'
         totalElements:
           type: integer
           format: int64

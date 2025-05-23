@@ -9,8 +9,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.PageResponseDtoPurchaseDto;
 import com.develop.prices.dto.PostPurchaseDto;
 import com.develop.prices.dto.PurchaseDto;
 import com.develop.prices.exception.InstanceNotFoundException;
@@ -81,14 +80,14 @@ class PurchaseControllerTest {
 
     when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
-    ResponseEntity<PageResponseDto<PurchaseDto>> response =
+    ResponseEntity<PageResponseDtoPurchaseDto> response =
         purchaseController.getPurchasesWithFilters(
             customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    PageResponseDto<PurchaseDto> body = response.getBody();
+    PageResponseDtoPurchaseDto body = response.getBody();
     assertNotNull(body);
 
     assertEquals(1, response.getBody().getContent().size());
@@ -137,14 +136,14 @@ class PurchaseControllerTest {
 
     when(purchaseRestMapper.toPurchaseDto(any(PurchaseTo.class))).thenReturn(purchaseDTO);
 
-    ResponseEntity<PageResponseDto<PurchaseDto>> response =
+    ResponseEntity<PageResponseDtoPurchaseDto> response =
         purchaseController.getPurchasesWithFilters(
             customerId, productInShop, totalPriceMax, totalPriceMin, shopping, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    PageResponseDto<PurchaseDto> body = response.getBody();
+    PageResponseDtoPurchaseDto body = response.getBody();
     assertNotNull(body);
 
     verify(purchaseService)
@@ -322,7 +321,7 @@ class PurchaseControllerTest {
     PurchaseDto body = response.getBody();
     assertNotNull(body);
     assertEquals(purchaseId, body.getPurchaseId());
-    assertFalse(body.isShopping());
+    assertFalse(body.getShopping());
 
     verify(purchaseService).updatePurchaseStatusToFinishes(eq(purchaseId));
     verify(purchaseRestMapper).toPurchaseDto(purchaseTo);

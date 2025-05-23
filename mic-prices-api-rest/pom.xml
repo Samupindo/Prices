@@ -69,6 +69,43 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${open-api-tools.version}</version>
+                <executions>
+
+                    <execution>
+                        <id>generate-products-api</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpecRootDirectory>${project.basedir}/src/main/resources/api</inputSpecRootDirectory>
+                            <generatorName>spring</generatorName>
+                            <typeMappings>
+                                <typeMapping>object+pageable=Pageable</typeMapping>
+                                <typeMapping>object+sort=Sort</typeMapping>
+                            </typeMappings>
+                            <schemaMappings>
+                                <schemaMapping>Pageable=org.springframework.data.domain.Pageable</schemaMapping>
+                                <schemaMapping>Sort=org.springframework.data.domain.Sort</schemaMapping>
+                            </schemaMappings>
+                            <library>spring-boot</library>
+                            <configOptions>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <openApiNullable>false</openApiNullable>
+                                <apiPackage>com.develop.prices.controller</apiPackage>
+                                <modelPackage>com.develop.prices.dto</modelPackage>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 

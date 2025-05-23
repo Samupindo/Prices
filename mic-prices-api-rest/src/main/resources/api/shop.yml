@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShopDTO'
+                $ref: '#/components/schemas/ShopDto'
         '404':
           description: Shop not found
           content:
@@ -47,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShopPutDTO'
+              $ref: '#/components/schemas/ShopPutDto'
         required: true
       responses:
         '200':
@@ -55,7 +55,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShopDTO'
+                $ref: '#/components/schemas/ShopDto'
     delete:
       tags:
         - shop-controller
@@ -91,7 +91,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateShopDTO'
+              $ref: '#/components/schemas/UpdateShopDto'
         required: true
       responses:
         '200':
@@ -99,12 +99,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShopDTO'
+                $ref: '#/components/schemas/ShopDto'
   /shops:
     get:
       tags:
         - shop-controller
       operationId: getShopLocationWithFilters
+      x-spring-paginated: true
       parameters:
         - name: country
           in: query
@@ -121,30 +122,13 @@ paths:
           required: false
           schema:
             type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageResponseDTOShopDTO'
+                $ref: '#/components/schemas/PageResponseDtoShopDto'
     post:
       tags:
         - shop-controller
@@ -153,7 +137,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ShopAddDTO'
+              $ref: '#/components/schemas/ShopAddDto'
         required: true
       responses:
         '201':
@@ -161,12 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ShopDTO'
-              example:
-                shopId: 4
-                country: España
-                city: Coruña
-                address: Os Mallos 10
+                $ref: '#/components/schemas/ShopDto'
         '400':
           description: Missing or invalid fields
           content:
@@ -201,7 +180,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddProductShopDTO'
+              $ref: '#/components/schemas/AddProductShopDto'
         required: true
       responses:
         '200':
@@ -209,7 +188,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductInShopDTO'
+                $ref: '#/components/schemas/ProductInShopDto'
               example:
                 productId: 1
                 shopId: 2
@@ -279,7 +258,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductInShopPatchDTO'
+              $ref: '#/components/schemas/ProductInShopPatchDto'
         required: true
       responses:
         '200':
@@ -287,23 +266,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductInShopDTO'
+                $ref: '#/components/schemas/ProductInShopDto'
 components:
   schemas:
-    PageResponseDTOShopDTO:
+    PageResponseDtoShopDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/ShopDTO'
+            $ref: '#/components/schemas/ShopDto'
         totalElements:
           type: integer
           format: int64
         totalPages:
           type: integer
           format: int32
-    ShopDTO:
+    ShopDto:
       type: object
       properties:
         shopId:
@@ -315,7 +294,7 @@ components:
           type: string
         address:
           type: string
-    ShopPutDTO:
+    ShopPutDto:
       type: object
       properties:
         country:
@@ -328,7 +307,7 @@ components:
         - country
         - city
         - address
-    ShopAddDTO:
+    ShopAddDto:
       type: object
       properties:
         country:
@@ -341,7 +320,7 @@ components:
         - country
         - city
         - address
-    UpdateShopDTO:
+    UpdateShopDto:
       type: object
       properties:
         country:
@@ -350,15 +329,14 @@ components:
           type: string
         address:
           type: string
-    AddProductShopDTO:
+    AddProductShopDto:
       type: object
       properties:
         price:
           type: number
-          format: double
       required:
         - price
-    ProductInShopDTO:
+    ProductInShopDto:
       type: object
       properties:
         productId:
@@ -369,12 +347,10 @@ components:
           format: int32
         price:
           type: number
-          format: double
-    ProductInShopPatchDTO:
+    ProductInShopPatchDto:
       type: object
       properties:
         price:
           type: number
-          format: double
       required:
         - price

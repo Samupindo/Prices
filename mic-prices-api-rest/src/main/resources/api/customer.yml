@@ -11,7 +11,7 @@ paths:
     get:
       tags:
         - customer-controller
-      operationId: getProductById
+      operationId: getCustomerById
       parameters:
         - name: customerId
           in: path
@@ -25,7 +25,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
     put:
       tags:
         - customer-controller
@@ -41,7 +41,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerPutDTO'
+              $ref: '#/components/schemas/CustomerPutDto'
         required: true
       responses:
         '200':
@@ -49,7 +49,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
     delete:
       tags:
         - customer-controller
@@ -79,7 +79,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerDTO'
+              $ref: '#/components/schemas/CreateCustomerDto'
         required: true
       responses:
         '200':
@@ -87,12 +87,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
   /customers:
     get:
       tags:
         - customer-controller
       operationId: getCustomersWithFilters
+      x-spring-paginated: true
       parameters:
         - name: name
           in: query
@@ -110,33 +111,13 @@ paths:
           required: false
           schema:
             type: string
-        - name: page
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Número de página (0-indexed)
-        - name: size
-          in: query
-          required: false
-          schema:
-            type: integer
-            format: int32
-          description: Tamaño de página
-        - name: sort
-          in: query
-          required: false
-          schema:
-            type: string
-          description: Criterio de ordenación (ej. "customerId,asc")
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PageResponseDTOCustomerDTO'
+                $ref: '#/components/schemas/PageResponseDtoCustomerDto'
     post:
       tags:
         - customer-controller
@@ -145,7 +126,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateCustomerDTO'
+              $ref: '#/components/schemas/CreateCustomerDto'
         required: true
       responses:
         '201':
@@ -153,7 +134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerDTO'
+                $ref: '#/components/schemas/CustomerDto'
         '400':
           description: Invalid input
           content:
@@ -162,31 +143,20 @@ paths:
                 error: 'Missing required field: name'
 components:
   schemas:
-    PageResponseDTOCustomerDTO:
+    PageResponseDtoCustomerDto:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/CustomerDTO'
+            $ref: '#/components/schemas/CustomerDto'
         totalElements:
           type: integer
           format: int64
         totalPages:
           type: integer
           format: int32
-    Pageable:
-      type: object
-      properties:
-        page:
-          type: integer
-          format: int32
-        size:
-          type: integer
-          format: int32
-        sort:
-          type: string
-    CustomerDTO:
+    CustomerDto:
       type: object
       properties:
         customerId:
@@ -199,7 +169,7 @@ components:
           format: int32
         email:
           type: string
-    CustomerPutDTO:
+    CustomerPutDto:
       type: object
       properties:
         name:
@@ -209,7 +179,7 @@ components:
           format: int32
         email:
           type: string
-    CreateCustomerDTO:
+    CreateCustomerDto:
       type: object
       properties:
         name:

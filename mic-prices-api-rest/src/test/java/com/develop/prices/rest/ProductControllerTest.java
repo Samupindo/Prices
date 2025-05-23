@@ -3,13 +3,12 @@ package com.develop.prices.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.PageResponseDtoProductWithShopsDto;
 import com.develop.prices.dto.ProductDto;
 import com.develop.prices.dto.ProductNameDto;
 import com.develop.prices.dto.ProductWithShopsDto;
@@ -77,13 +76,13 @@ class ProductControllerTest {
     when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
         .thenReturn(productWithShopsDTO);
 
-    ResponseEntity<PageResponseDto<ProductWithShopsDto>> response =
+    ResponseEntity<PageResponseDtoProductWithShopsDto> response =
         productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    PageResponseDto<ProductWithShopsDto> body = response.getBody();
+    PageResponseDtoProductWithShopsDto body = response.getBody();
     assertNotNull(body);
     assertEquals(1, body.getContent().size());
   }
@@ -116,13 +115,13 @@ class ProductControllerTest {
     when(productRestMapper.toProductWithShopsDto(any(ProductWithShopsTo.class)))
         .thenReturn(productWithShopsDTO);
 
-    ResponseEntity<PageResponseDto<ProductWithShopsDto>> response =
+    ResponseEntity<PageResponseDtoProductWithShopsDto> response =
         productController.getProductsWithFilters(name, totalPriceMin, totalPriceMax, pageable);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
-    PageResponseDto<ProductWithShopsDto> body = response.getBody();
+    PageResponseDtoProductWithShopsDto body = response.getBody();
     assertNotNull(body);
     assertEquals(1, body.getContent().size());
   }

@@ -3,19 +3,18 @@ package com.develop.prices.rest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import com.develop.prices.dto.CreateCustomerDto;
 import com.develop.prices.dto.CustomerDto;
 import com.develop.prices.dto.CustomerPutDto;
-import com.develop.prices.dto.PageResponseDto;
+import com.develop.prices.dto.PageResponseDtoCustomerDto;
 import com.develop.prices.exception.InstanceNotFoundException;
 import com.develop.prices.mapper.CustomerRestMapper;
 import com.develop.prices.service.CustomerService;
@@ -62,17 +61,17 @@ public class CustomerControllerTest {
     PageResponseTo<CustomerTo> customerToPageResponseTo =
         new PageResponseTo<>(customerToList, 1, 1);
 
-    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), eq(pageable)))
         .thenReturn(customerToPageResponseTo);
 
-    ResponseEntity<PageResponseDto<CustomerDto>> response =
+    ResponseEntity<PageResponseDtoCustomerDto> response =
         customerController.getCustomersWithFilters(name, phone, email, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
     assertNotNull(response.getBody());
 
-    PageResponseDto<CustomerDto> body = response.getBody();
+    PageResponseDtoCustomerDto body = response.getBody();
     assertEquals(1, body.getTotalElements());
     assertEquals(1, body.getTotalPages());
     assertEquals(1, body.getContent().size());
@@ -100,17 +99,17 @@ public class CustomerControllerTest {
     PageResponseTo<CustomerTo> customerToPageResponseTo =
         new PageResponseTo<>(customerToList, 1, 1);
 
-    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), eq(pageable)))
         .thenReturn(customerToPageResponseTo);
 
-    ResponseEntity<PageResponseDto<CustomerDto>> response =
+    ResponseEntity<PageResponseDtoCustomerDto> response =
         customerController.getCustomersWithFilters(name, phone, email, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
     assertNotNull(response.getBody());
 
-    PageResponseDto<CustomerDto> body = response.getBody();
+    PageResponseDtoCustomerDto body = response.getBody();
     assertEquals(1, body.getTotalElements());
     assertEquals(1, body.getTotalPages());
     assertEquals(1, body.getContent().size());
@@ -138,17 +137,17 @@ public class CustomerControllerTest {
     PageResponseTo<CustomerTo> customerToPageResponseTo =
         new PageResponseTo<>(customerToList, 1, 1);
 
-    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), eq(pageable)))
         .thenReturn(customerToPageResponseTo);
 
-    ResponseEntity<PageResponseDto<CustomerDto>> response =
+    ResponseEntity<PageResponseDtoCustomerDto> response =
         customerController.getCustomersWithFilters(name, phone, email, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
     assertNotNull(response.getBody());
 
-    PageResponseDto<CustomerDto> body = response.getBody();
+    PageResponseDtoCustomerDto body = response.getBody();
     assertEquals(1, body.getTotalElements());
     assertEquals(1, body.getTotalPages());
     assertEquals(1, body.getContent().size());
@@ -176,17 +175,17 @@ public class CustomerControllerTest {
     PageResponseTo<CustomerTo> customerToPageResponseTo =
         new PageResponseTo<>(customerToList, 1, 1);
 
-    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), eq(pageable)))
         .thenReturn(customerToPageResponseTo);
 
-    ResponseEntity<PageResponseDto<CustomerDto>> response =
+    ResponseEntity<PageResponseDtoCustomerDto> response =
         customerController.getCustomersWithFilters(name, phone, email, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
     assertNotNull(response.getBody());
 
-    PageResponseDto<CustomerDto> body = response.getBody();
+    PageResponseDtoCustomerDto body = response.getBody();
     assertEquals(1, body.getTotalElements());
     assertEquals(1, body.getTotalPages());
     assertEquals(1, body.getContent().size());
@@ -214,17 +213,17 @@ public class CustomerControllerTest {
     PageResponseTo<CustomerTo> customerToPageResponseTo =
         new PageResponseTo<>(customerToList, 1, 1);
 
-    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), any(Pageable.class)))
+    when(customerService.findAllWithFilters(eq(name), eq(phone), eq(email), eq(pageable)))
         .thenReturn(customerToPageResponseTo);
 
-    ResponseEntity<PageResponseDto<CustomerDto>> response =
+    ResponseEntity<PageResponseDtoCustomerDto> response =
         customerController.getCustomersWithFilters(name, phone, email, pageable);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
 
     assertNotNull(response.getBody());
 
-    PageResponseDto<CustomerDto> body = response.getBody();
+    PageResponseDtoCustomerDto body = response.getBody();
     assertEquals(1, body.getTotalElements());
     assertEquals(1, body.getTotalPages());
     assertEquals(1, body.getContent().size());
