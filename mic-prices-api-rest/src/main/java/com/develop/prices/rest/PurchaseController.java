@@ -9,10 +9,6 @@ import com.develop.prices.service.PurchaseService;
 import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.PostPurchaseTo;
 import com.develop.prices.to.PurchaseTo;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,21 +80,6 @@ public class PurchaseController implements PurchasesApi {
     return ResponseEntity.status(HttpStatus.CREATED).body(purchaseDto);
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created",
-            content = @Content(mediaType = "application/json")),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid input",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(value = "{ \"error\": \"Missing required field: name\" }")))
-      })
   @Override
   public ResponseEntity<PurchaseDto> addProductPurchase(
       Integer purchaseId, Integer productInShopId) {

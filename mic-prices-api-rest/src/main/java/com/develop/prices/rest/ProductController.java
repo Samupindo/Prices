@@ -11,10 +11,6 @@ import com.develop.prices.to.PageResponseTo;
 import com.develop.prices.to.ProductNameTo;
 import com.develop.prices.to.ProductTo;
 import com.develop.prices.to.ProductWithShopsTo;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,22 +60,7 @@ public class ProductController implements ProductsApi {
     return ResponseEntity.ok(productRestMapper.toProductWithShopsDto(productWithShopsTo));
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created",
-            content = @Content(mediaType = "application/json")),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid input",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value = "{ \"error\": " + "\"Missing required field: name\" }")))
-      })
+
   @Override
   public ResponseEntity<ProductDto> addProduct(ProductNameDto productNameDto) {
     ProductNameTo productNameTo = productRestMapper.toProductNameTo(productNameDto);

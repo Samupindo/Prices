@@ -20,10 +20,6 @@ import com.develop.prices.to.ShopAddTo;
 import com.develop.prices.to.ShopPutTo;
 import com.develop.prices.to.ShopTo;
 import com.develop.prices.to.UpdateShopTo;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,43 +77,7 @@ public class ShopController implements ShopsApi {
     return ResponseEntity.ok(shopDto);
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value =
-                                "{ \"shopId\": 4, \"country\": \"España\", "
-                                    + "\"city\": \"Coruña\", "
-                                    + "\"address\": "
-                                    + "\"Os Mallos 10\" }"))),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Missing or invalid fields",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value = "{ \"error\": \"Missing " + "required field: city\" }"))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "Shop already exists",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value =
-                                "{ \"error\": \"Shop already exists "
-                                    + "at this address in this "
-                                    + "city and country\" }")))
-      })
+
   @Override
   public ResponseEntity<ShopDto> addShop(ShopAddDto shopAddDto) {
     ShopAddTo shopAddTo = shopRestMapper.toShopAddTo(shopAddDto);
@@ -129,47 +89,7 @@ public class ShopController implements ShopsApi {
     return ResponseEntity.status(HttpStatus.CREATED).body(shopDto);
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Product added to shop",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value = "{ \"productId\": 1, \"shopId\": 2, \"price\": 15.99 }"))),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid price provided",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value =
-                                "{ \"error\": \"Price must be greater than or equal to 0\" }"))),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Shop or product not found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(value = "{ \"error\": \"Product or shop not found\" }"))),
-        @ApiResponse(
-            responseCode = "409",
-            description = "Product already exists in shop",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value =
-                                "{ \"error\": \"This product is already registered in this "
-                                    + "shop\" }")))
-      })
+
   @Override
   public ResponseEntity<ProductInShopDto> addProductShop(
       Integer productId, Integer shopId, AddProductShopDto addProductShopDto) {
@@ -215,17 +135,7 @@ public class ShopController implements ShopsApi {
     return ResponseEntity.ok(shopRestMapper.toShopDto(shopTo));
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "204", description = "The shop has been deleted successfully"),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Shop not found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
-      })
+
   @Override
   public ResponseEntity<Void> deleteShop(Integer shopId) {
     shopService.deleteShop(shopId);
@@ -233,17 +143,6 @@ public class ShopController implements ShopsApi {
     return ResponseEntity.ok().build();
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(responseCode = "204", description = "The shop has been deleted successfully"),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Shop not found",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples = @ExampleObject(value = "{ \"error\": \"Shop not found\" }"))),
-      })
   @Override
   public ResponseEntity<Void> deleteProductFromShop(Integer productId, Integer shopId) {
     shopService.deleteProductFromShop(shopId, productId);

@@ -11,10 +11,6 @@ import com.develop.prices.to.CreateCustomerTo;
 import com.develop.prices.to.CustomerPutTo;
 import com.develop.prices.to.CustomerTo;
 import com.develop.prices.to.PageResponseTo;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -61,22 +57,6 @@ public class CustomerController implements CustomersApi {
     return ResponseEntity.ok(customerRestMapper.toCustomerDto(customerTo));
   }
 
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Created",
-            content = @Content(mediaType = "application/json")),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid input",
-            content =
-                @Content(
-                    mediaType = "application/json",
-                    examples =
-                        @ExampleObject(
-                            value = "{ \"error\": " + "\"Missing required field: name\" }")))
-      })
   @Override
   public ResponseEntity<CustomerDto> addCustomer(CreateCustomerDto createCustomerDto) {
     CreateCustomerTo createCustomerTo = customerRestMapper.toCreateCustomerTo(createCustomerDto);
