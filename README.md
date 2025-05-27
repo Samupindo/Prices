@@ -1232,6 +1232,22 @@ HTTP/1.1 200 OK
 ```
 HTTP/1.1 404 Not Found
 ```
+## Como lanzar el proyecto
+Primero necesitamos tener los programas a utilizar y el proyecto clonado.
+## Paso 1
+Primero necesitaremos hacer Pull de una imagen de Postgres desde Podman, acorde  a la versión de Postgres utilizada en el proyecto.
+![image](https://github.com/user-attachments/assets/14e2763d-497c-490e-a06b-791cc154bf23)
+
+![image](https://github.com/user-attachments/assets/f6619efe-8b8d-473e-8e09-b9e6fd92feae)
+Tras ello necesitamos iniciarla y cubrir con los datos que se ven en la imagen.
+![image](https://github.com/user-attachments/assets/868d8398-62b3-4996-9cfd-5610bd663c72)
+
+## Paso 2
+Necesitamos ir a DBeaver y crear conexión y base de datos. 
+Primer creamos una conexión PostGresSQL
+![image](https://github.com/user-attachments/assets/b6470af7-24a8-434a-b115-9f9ec7339fd3)
+
+Para ello cogeremos los sql de proyecto
 
 ## Preparación para los test de integración
 
@@ -1246,6 +1262,8 @@ Mediante la imagen de postgres 17.4 crearemos un nuevo contenedor llamado test, 
 ### Paso 2
 
 En Dbeaver añadiremos una nueva conexión de PostgreSQL donde debemos especificar el puerto al que está asignado nuestro contenedor y la contraseña para conectarse.
+Especificamos que la base de datos será prices, el usuario postgres y la contraseña 1234.
+![image](https://github.com/user-attachments/assets/a64d96e3-fc6a-4f89-86bf-cf96daf27c9b)
 
 ![imagen](https://github.com/user-attachments/assets/4dbd954e-a0b6-4214-a4e4-d407cdcf5b2a)
 
