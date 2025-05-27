@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+//Si fallan los api, hay que borrar las implementaciones para volver a generarlos
 @RestController
 public class CustomerController implements CustomersApi {
   private final CustomerService customerService;
