@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { getShops } from "../../services/shops-service";
+import { getShops, getShopById } from "../../services/shops-service";
 import type { ShopDto } from "../../types/shops";
 import { ShopList } from "./shopsList";
+import { ShopDetail } from "./shopDetail";
+import { useParams } from "react-router-dom";
 
-export const Shops = () => {
+export const AllShops = () => {
     const [shops, setShops] = useState<ShopDto[]>([]);
     const [error, setError] = useState<string | null>(null);
 
@@ -21,3 +23,27 @@ export const Shops = () => {
     
     return <ShopList shops={shops} />;
 }
+
+export const ShopById = () => {
+    const { shopId } = useParams();
+    const [shop, setShop] = useState<ShopDto | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (shopId) {
+            getShopById(shopId)
+                .then((response) => {
+                    setShop(response);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
+        }
+    }, [shopId]);
+
+    if (error) return <div>Error loading shop: {error}</div>;
+
+    return <ShopDetail shop={shop} />;
+}
+
+

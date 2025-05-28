@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ShopDto } from "../../types/shops"; // Assuming ShopDto has shopId, country, city, address
+import type { ShopDto } from "../../types/shops";
 
 interface ShopListProps {
     shops: ShopDto[];
@@ -12,7 +12,6 @@ export const ShopList = ({ shops }: ShopListProps) => {
         <div className="p-4">
             <h2 className="text-xl font-semibold mb-3">Shops</h2>
 
-            {/* Container for shadow, rounded corners, and overflow to clip the table */}
             <div className="shadow-md rounded-lg overflow-hidden bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
