@@ -1,85 +1,55 @@
-import React, { useEffect, useState } from "react";
-import { CustomerDto } from "./types/Customer";
-import { CustomerService } from "./services/customerService";
-import { PageResponse } from "./types/Customer";
+import type { CustomerDto } from './types/customer';
+import { useNavigate } from 'react-router-dom';
 
-const CustomerList = () => {
-    const [customerPage, setCustomerPage] = useState<PageResponse<CustomerDto>>({
-        content: [],
-        totalElements: 0,
-        totalPages: 0
-    });
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
-    const customerService = new CustomerService();
+interface CustomerListProps {
+    customers: CustomerDto[];
+}
 
-    useEffect(() => {
-        const fetchCustomers = async () => {
-            try {
-                console.log('Fetching customers...');
-                const response = await customerService.getCustomers();
-                setCustomerPage(response);
-                console.log('Customers loaded:', response);
-            } catch (error: any) {
-                console.error("Error details:", error);
-                setError(`Error: ${error.message}`);
-            } finally {
-                setLoading(false);
-            }
-        };
+const CustomerList = ({ customers }: CustomerListProps) => {
 
-        fetchCustomers();
-    }, []);
-
-    if (loading) {
-        return <div>Loading Customers... Please wait.</div>;
-    }
-
-    if (error) {
-        return (
-            <div>
-                <h2>Error Loading Customers</h2>
-                <div style={{ color: 'red', margin: '10px 0' }}>{error}</div>
-                <div>Please check your browser's console for more details.</div>
-            </div>
-        );
-    }
-
-    if (!customerPage.content || customerPage.content.length === 0) {
-        return (
-            <div>
-                <h2>Customer List</h2>
-                <p>No customers found in the database</p>
-            </div>
-        );
-    }
-
+    const navigate = useNavigate();
     return (
-        <div>
-            <h2>Customer List</h2>
-            <div>Total customers: {customerPage.totalElements}</div>
-            <div>Page: {customerPage.totalPages}</div>
-            <table border={1} cellPadding={10}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {customerPage.content.map((customer: CustomerDto) => (
-                        <tr key={customer.customerId}>
-                            <td>{customer.customerId}</td>
-                            <td>{customer.name}</td>
-                            <td>{customer.email}</td>
-                            <td>{customer.phone}</td>
+        <div className="container mx-auto p-8">
+            <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+                Customer List
+            </h2>
+            
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-black text-white sticky top-0">
+                        <tr>
+                            <th className="px-6 py- text-left text-xs font-medium uppercase tracking-wider w-1/6">ID</th>
+                            <th className="px-14 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Name</th>
+                            <th className="px-14 py-3 text-left text-xs font-medium uppercase tracking-wider w-1/6">Phone</th>
+                            <th className="px-20 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Email</th>
+                            <th className="px-20 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200 overflow-y-auto max-h-[50vh]">
+                        {customers.map((customer: CustomerDto) => (
+                            <tr key={customer.customerId} 
+                                className="hover:bg-gray-100 transition-colors duration-200">
+                                <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.customerId}</td>
+                                <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.name}</td>
+                                <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>
+                                <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
+                                <td className="px-6 py-4 whitespace-nowrap w-2/6">
+                                    <button className="text-blue-600 hover:text-blue-800" onClick={() => navigate(`/customers/${customer.customerId}`)}>
+                                        View
+                                        </button>
+                                    <button className="text-yellow-600 hover:text-yellow-800 ml-2">
+                                        <a href={`/customers/edit/${customer.customerId}`}>Edit</a>
+                                    </button>
+                                    <button className="text-red-600 hover:text-red-800 ml-2">
+                                        <a href={`/customers/delete/${customer.customerId}`}>Delete</a>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };

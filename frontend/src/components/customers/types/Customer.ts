@@ -1,10 +1,9 @@
 export interface CustomerPutDto {
-    customerId: number | null,
+    customerId: number,
     name: string,
     phone: number,
     email: string,
 }
-
 
 export interface CustomerDto {
     customerId: number,

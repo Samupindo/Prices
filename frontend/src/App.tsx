@@ -1,15 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import CustomerList from './components/customers/customerList';
+import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { CustomersGetAll } from './components/customers/customers'
+import { CustomerById } from './components/customers/customers'
 
 function App() {
-  return (
-    <div className="App">
-      <h1>Customer Management</h1>
-      <CustomerList />
-    </div>
-  );
+  return(
+    <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<h2>Home</h2>} />
+          <Route path="/customers" element={<CustomersGetAll />} />
+          <Route path="/customers/:customerId" element={<CustomerById />} />
+        </Routes>
+    </BrowserRouter>
+  )
+  
 }
 
-export default App;
+export default App

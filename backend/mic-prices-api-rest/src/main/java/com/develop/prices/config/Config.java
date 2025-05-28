@@ -11,7 +11,7 @@ public class Config {
       @Override
       public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // permite todas las rutas
-            .allowedOrigins("http://localhost:3000") // React dev server
+            .allowedOrigins("http://localhost:5173") // React dev server
             .allowedMethods("*"); // GET, POST, etc.
       }
     };
