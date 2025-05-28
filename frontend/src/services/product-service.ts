@@ -1,5 +1,6 @@
 import type { PageResponseDto, ProductWithShopsDto, ProductNameDto } from "../types/products";
 import axiosInstance from "../lib/api/apiFacade";
+import { prerenderToNodeStream } from "react-dom/static";
 
 interface ProductFilters {
     name?: string;
@@ -56,3 +57,15 @@ export const updateProduct = async (productId: number, product: ProductNameDto) 
         throw new Error(errorDetails?.message || error.message || 'Failed to update product');
     }
 };
+
+export const deleteProduct = async(productId: number) =>{
+    try {
+        const response = await axiosInstance.delete(`/products/${productId}`);
+        console.log('Product deleted successfully:', response.data);
+        return response.data;
+    } catch (error: any) {
+        const errorDetails = error.response?.data;
+        console.error('Backend error details:', errorDetails);
+        throw new Error(errorDetails?.message || error.message || 'Failed to delete product');
+    }
+}

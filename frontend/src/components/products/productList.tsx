@@ -9,10 +9,6 @@ interface ProductListProps {
 export const ProductList = ({ products, totalPages }: ProductListProps) => {
     const cellPadding = "px-6 py-4";
 
-    const handleEditClick = (productId: string | number) => {
-        console.log("Edit product with ID:", productId);
-    };
-
     return (
         <div className="p-4">
             <div className="shadow-md sm:rounded-lg overflow-x-auto">
@@ -95,11 +91,16 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                         className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
                                                     >
                                                         <button
-                                                            onClick={() => handleEditClick(product.productId)}
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                         >
                                                             <Link to={`/update-products/${product.productId}`}>Edit</Link>
                                                         </button>
+                                                        <button
+                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                        >
+                                                            <Link to={`/delete-products/${product.productId}`}>Delete</Link>
+                                                        </button>
+
                                                     </td>
                                                 )}
                                             </tr>
@@ -123,10 +124,14 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                 </td>
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
                                                     <button
-                                                        onClick={() => handleEditClick(product.productId)}
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                     >
                                                         <Link to={`/update-products/${product.productId}`}>Edit</Link>
+                                                    </button>
+                                                    <button
+                                                        className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                    >
+                                                        <Link to={`/delete-products/${product.productId}`}>Delete</Link>
                                                     </button>
                                                 </td>
                                             </tr>

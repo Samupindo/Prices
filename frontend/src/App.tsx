@@ -6,6 +6,7 @@ import { Home } from './components/Home'
 import { CreateProduct } from './components/products/CreateProduct'
 import { ProductDetail } from './components/products/ProductDetail'
 import { UpdateProduct } from './components/products/UpdateProduct'
+import { DeleteProduct } from './components/products/DeleteProduct'
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/products-create" element={<CreateProduct />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/update-products/:id" element={<UpdateProduct />} />
+        <Route path="/delete-products/:id" element={<DeleteProduct />} />
+
 
       </Routes>
     </BrowserRouter>
