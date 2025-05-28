@@ -1,23 +1,19 @@
-import type { ProductWithShopsDto } from "../../types/products";
+import type { ProductWithShopsDto } from "../../types/shops";
 
 interface ProductListProps {
     products: ProductWithShopsDto[];
-    
+    totalPages: number;
 }
 
-export const ProductList = ({ products }: ProductListProps) => {
-    const cellPadding = "px-6 py-4"; 
+export const ProductList = ({ products, totalPages }: ProductListProps) => {
+    const cellPadding = "px-6 py-4";
 
     const handleEditClick = (productId: string | number) => {
-        
         console.log("Edit product with ID:", productId);
-      
     };
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-semibold mb-3">Products</h2>
-
             <div className="shadow-md sm:rounded-lg overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-100">
@@ -53,7 +49,7 @@ export const ProductList = ({ products }: ProductListProps) => {
                             products.map((product, productIndex) => {
                                 const rowBgClass = productIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50';
                                 const hasShops = product.shop && Array.isArray(product.shop) && product.shop.length > 0;
-                                const shopCount = hasShops ? product.shop.length : 1; // Para rowspan, mínimo 1
+                                const shopCount = hasShops ? product.shop.length : 1;
 
                                 if (hasShops) {
                                     return product.shop.map((shop, shopIndex) => (
@@ -93,7 +89,7 @@ export const ProductList = ({ products }: ProductListProps) => {
                                 } else {
                                     return (
                                         <tr key={product.productId} className={rowBgClass}>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}> {/* Centrado para consistencia */}
+                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}>
                                                 {product.name}
                                             </td>
                                             <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-500 text-center`}>
@@ -115,10 +111,9 @@ export const ProductList = ({ products }: ProductListProps) => {
                                 }
                             })
                         ) : (
-                            // Caso: No hay productos
                             <tr>
                                 <td
-                                    colSpan={4} // Ajustado a 4 columnas
+                                    colSpan={4}
                                     className={`${cellPadding} text-center text-sm text-gray-500`}
                                 >
                                     No products available
@@ -127,6 +122,21 @@ export const ProductList = ({ products }: ProductListProps) => {
                         )}
                     </tbody>
                 </table>
+                <div className="py-4">
+                    <nav aria-label="Page navigation">
+                        <ul className="inline-flex -space-x-px">
+                            {[...Array(totalPages).keys()].map((page) => (
+                                <li key={page}>
+                                    <button
+                                        className="py-2 px-3 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                                    >
+                                        {page + 1}
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     );
