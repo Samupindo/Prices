@@ -1,4 +1,5 @@
 import type { ProductWithShopsDto } from "../../types/shops";
+import { Link } from "react-router-dom"
 
 interface ProductListProps {
     products: ProductWithShopsDto[];
@@ -137,7 +138,10 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                         </ul>
                     </nav>
                 </div>
+                <button><Link to="/products-create">Añadir un producto</Link></button>
+
             </div>
+
         </div>
     );
 };

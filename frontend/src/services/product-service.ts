@@ -1,4 +1,4 @@
-import type { PageResponseDto, ProductWithShopsDto } from "../types/shops";
+import type { PageResponseDto, ProductWithShopsDto, ProductNameDto } from "../types/products";
 import axiosInstance from "../lib/api/apiFacade";
 
 interface ProductFilters {
@@ -25,3 +25,16 @@ export const getProducts = async (filters?: ProductFilters): Promise<PageRespons
 };
 
 export const getProductById = (productId: number) => axiosInstance.get(`/products/${productId}`);
+
+export const createProduct = async (product: ProductNameDto) => {
+    try {
+        const response = await axiosInstance.post("/products", product);
+        console.log('Product created successfully:', response.data);
+        return response.data;
+    } catch (error: any) {
+        // Agregar más detalles al error
+        const errorDetails = error.response?.data;
+        console.error('Backend error details:', errorDetails);
+        throw new Error(errorDetails?.message || error.message || 'Failed to create product');
+    }
+};

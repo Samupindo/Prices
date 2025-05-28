@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../../services/product-service";
-import { ProductList } from "./productList";
-import { ProductsFilters } from "./productsFilters";
-import type { ProductWithShopsDto, PageResponseDto } from "../../types/shops";
+import { createProduct, getProducts } from "../../services/product-service";
+import { ProductList } from "./ProductList";
+import { ProductsFilters } from "./ProductsFilters";
+import type { ProductWithShopsDto, PageResponseDto, ProductDto } from "../../types/products";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
@@ -31,6 +31,8 @@ export const Products = () => {
         fetchProducts();
     }, []);
 
+
+
     if (error) return <div>Error loading products: {error}</div>;
     
     return (
@@ -43,6 +45,7 @@ export const Products = () => {
                     </p>
                 </div>
             </div>
+
 
             <ProductsFilters onApplyFilters={fetchProducts} />
 
