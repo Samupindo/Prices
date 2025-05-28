@@ -23,6 +23,12 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                 scope="col"
                                 className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
                             >
+                                ID
+                            </th>
+                            <th
+                                scope="col"
+                                className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
+                            >
                                 Product
                             </th>
                             <th
@@ -47,36 +53,75 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {Array.isArray(products) && products.length > 0 ? (
-                            products.map((product, productIndex) => {
-                                const rowBgClass = productIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50';
-                                const hasShops = product.shop && Array.isArray(product.shop) && product.shop.length > 0;
-                                const shopCount = hasShops ? product.shop.length : 1;
+                            products
+                                .sort((a, b) => Number(a.productId) - Number(b.productId))
+                                .map((product, productIndex) => {
+                                    const rowBgClass = productIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                                    const hasShops = product.shop && Array.isArray(product.shop) && product.shop.length > 0;
+                                    const shopCount = hasShops ? product.shop.length : 1;
 
-                                if (hasShops) {
-                                    return product.shop.map((shop, shopIndex) => (
-                                        <tr
-                                            key={`${product.productId}-${shop.productInShopId}`}
-                                            className={rowBgClass}
-                                        >
-                                            {shopIndex === 0 && (
+                                    if (hasShops) {
+                                        return product.shop.map((shop, shopIndex) => (
+                                            <tr
+                                                key={`${product.productId}-${shop.productInShopId}`}
+                                                className={rowBgClass}
+                                            >
+                                                {shopIndex === 0 && (
+                                                    <td
+                                                        rowSpan={shopCount}
+                                                        className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
+                                                    >
+                                                        {product.productId}
+                                                    </td>
+                                                )}
+                                                {shopIndex === 0 && (
+
+                                                    <td
+                                                        rowSpan={shopCount}
+                                                        className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
+                                                    >
+                                                        {product.name}
+                                                    </td>
+                                                )}
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
+                                                    Shop {shop.shopId}
+                                                </td>
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
+                                                    {shop.price} €
+                                                </td>
+                                                {shopIndex === 0 && (
+                                                    <td
+                                                        rowSpan={shopCount}
+                                                        className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
+                                                    >
+                                                        <button
+                                                            onClick={() => handleEditClick(product.productId)}
+                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ));
+                                    } else {
+                                        return (
+                                            <tr key={product.productId} className={rowBgClass}>
                                                 <td
-                                                    rowSpan={shopCount}
                                                     className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
                                                 >
+                                                    {product.productId}
+                                                </td>
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}>
                                                     {product.name}
                                                 </td>
-                                            )}
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
-                                                Shop {shop.shopId}
-                                            </td>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
-                                                {shop.price} €
-                                            </td>
-                                            {shopIndex === 0 && (
-                                                <td
-                                                    rowSpan={shopCount}
-                                                    className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
-                                                >
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-500 text-center`}>
+                                                    -
+                                                </td>
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-500 text-center`}>
+                                                    -
+                                                </td>
+                                                <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
                                                     <button
                                                         onClick={() => handleEditClick(product.productId)}
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
@@ -84,33 +129,10 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                         Edit
                                                     </button>
                                                 </td>
-                                            )}
-                                        </tr>
-                                    ));
-                                } else {
-                                    return (
-                                        <tr key={product.productId} className={rowBgClass}>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}>
-                                                {product.name}
-                                            </td>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-500 text-center`}>
-                                                -
-                                            </td>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-500 text-center`}>
-                                                -
-                                            </td>
-                                            <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
-                                                <button
-                                                    onClick={() => handleEditClick(product.productId)}
-                                                    className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                >
-                                                    Edit
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                }
-                            })
+                                            </tr>
+                                        );
+                                    }
+                                })
                         ) : (
                             <tr>
                                 <td

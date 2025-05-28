@@ -4,6 +4,7 @@ import { Shops } from './components/shops/shops'
 import { Products } from './components/products/Product'
 import { Home } from './components/Home'
 import { CreateProduct } from './components/products/CreateProduct'
+import { ProductDetail } from './components/products/ProductDetail'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/products-create" element={<CreateProduct />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
       </Routes>
     </BrowserRouter>
   )

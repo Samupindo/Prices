@@ -24,8 +24,14 @@ export const getProducts = async (filters?: ProductFilters): Promise<PageRespons
     }
 };
 
-export const getProductById = (productId: number) => axiosInstance.get(`/products/${productId}`);
-
+export const getProductById = async (productId: number) => {
+    try {
+        const response = await axiosInstance.get(`/products/${productId}`);
+        return response.data; 
+    } catch (error) {
+        throw new Error('Failed to fetch product');
+    }
+};
 export const createProduct = async (product: ProductNameDto) => {
     try {
         const response = await axiosInstance.post("/products", product);
