@@ -1235,7 +1235,7 @@ HTTP/1.1 404 Not Found
 ## Como lanzar el proyecto
 Primero necesitamos tener los programas a utilizar y el proyecto clonado.
 ## Paso 1
-Primero necesitaremos hacer Pull de una imagen de Postgres desde Podman, acorde  a la versión de Postgres utilizada en el proyecto.
+Hacemos Pull de una imagen de Postgres desde Podman, acorde  a la versión  utilizada en el proyecto.
 ![image](https://github.com/user-attachments/assets/14e2763d-497c-490e-a06b-791cc154bf23)
 
 ![image](https://github.com/user-attachments/assets/f6619efe-8b8d-473e-8e09-b9e6fd92feae)
@@ -1247,7 +1247,23 @@ Necesitamos ir a DBeaver y crear conexión y base de datos.
 Primer creamos una conexión PostGresSQL
 ![image](https://github.com/user-attachments/assets/b6470af7-24a8-434a-b115-9f9ec7339fd3)
 
-Para ello cogeremos los sql de proyecto
+Para ello cogeremos los sql de proyecto y crearemos nueva base de datos con el nombre Prices
+
+## Paso 3
+Abrimos IntelliJ. Seleccionamos nuevo proyecto de un Control de Versiones, ahí pasamos la URL del Proyecto.
+Otra opcion clonar desde el mismo cmd el proyecto y desde IntelliJ abrir el proyecto. 
+
+Para lanzar el backend necesitamos primero hacer Clean Compile, esto lo haremos accediendo a la M de la barra lateral y luego en el icono con una venta con el icono de play. Tras esto escribimos Clean Compile y ejectutamos.
+![Captura de pantalla](https://github.com/user-attachments/assets/7e1f1f4b-e9a5-4068-83bf-6c6f261c1838)
+
+Después necesitamos volver a las opciones de Maven y sincronizar el proyecto, esto se hace en el icono de sincronizar ![image](https://github.com/user-attachments/assets/0b26652d-7640-4f68-abbf-9c4fe32dd3ac)
+
+
+Ya podemos lanzar nuestro backend desde la carpeta mic-prices-boot, ejecutando el archivo MicPricesApplication.
+![image](https://github.com/user-attachments/assets/0f2212a9-789b-49c2-bc2e-d8dd854571e0)
+
+
+
 
 ## Preparación para los test de integración
 
