@@ -1,31 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { ProductDto, ProductNameDto } from "../../types/products";
 import { createProduct, getProducts } from "../../services/product-service";
 
 export const CreateProduct = () => {
-    const [newProduct, setNewProduct] = useState<ProductNameDto>({
-        name: ''
-    });
     const [error, setError] = useState<string | null>(null);
+    const [name,setName] = useState<string>('');
     const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setNewProduct({ ...newProduct, [name]: value });
+        setName(e.target.value);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!newProduct.name.trim()) {
+        if (!name.trim()) {
             setError('El nombre del producto es requerido');
             return;
         }
 
         try {
             setError(null);
-            const response = await createProduct({ name: newProduct.name });
+            const response = await createProduct({ name: name });
             console.log('Response from createProduct:', response);
             const productsResponse = await getProducts();
             navigate('/products');
@@ -78,7 +74,7 @@ export const CreateProduct = () => {
                                 type="text"
                                 id="name"
                                 name="name"
-                                value={newProduct.name}
+                                value={name}
                                 onChange={handleChange}
                                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                                 required
