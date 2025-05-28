@@ -123,25 +123,29 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                         )}
                     </tbody>
                 </table>
-                <div className="py-4">
-                    <nav aria-label="Page navigation">
-                        <ul className="inline-flex -space-x-px">
-                            {[...Array(totalPages).keys()].map((page) => (
-                                <li key={page}>
-                                    <button
-                                        className="py-2 px-3 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                                    >
-                                        {page + 1}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
+                <div className="py-4 flex justify-between items-center">
+                    <div className="flex-1 text-center">
+                        <nav aria-label="Page navigation">
+                            <ul className="inline-flex -space-x-px">
+                                {[...Array(totalPages).keys()].map((page) => (
+                                    <li key={page}>
+                                        <button
+                                            className="py-2 px-3 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                                        >
+                                            {page + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
+                    </div>
+
                 </div>
-                <button><Link to="/products-create">Añadir un producto</Link></button>
 
             </div>
-
+            <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-10 mr-70">
+                <Link to="/products-create" className="text-white">Añadir producto</Link>
+            </button>
         </div>
     );
 };
