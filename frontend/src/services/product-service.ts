@@ -27,7 +27,7 @@ export const getProducts = async (filters?: ProductFilters): Promise<PageRespons
 export const getProductById = async (productId: number) => {
     try {
         const response = await axiosInstance.get(`/products/${productId}`);
-        return response.data; 
+        return response.data;
     } catch (error) {
         throw new Error('Failed to fetch product');
     }
@@ -42,5 +42,17 @@ export const createProduct = async (product: ProductNameDto) => {
         const errorDetails = error.response?.data;
         console.error('Backend error details:', errorDetails);
         throw new Error(errorDetails?.message || error.message || 'Failed to create product');
+    }
+};
+
+export const updateProduct = async (productId: number, product: ProductNameDto) => {
+    try {
+        const response = await axiosInstance.put(`/products/${productId}`, product);
+        console.log('Product updated successfully:', response.data);
+        return response.data;
+    } catch (error: any) {
+        const errorDetails = error.response?.data;
+        console.error('Backend error details:', errorDetails);
+        throw new Error(errorDetails?.message || error.message || 'Failed to update product');
     }
 };

@@ -98,7 +98,7 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                             onClick={() => handleEditClick(product.productId)}
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                         >
-                                                            Edit
+                                                            <Link to={`/update-products/${product.productId}`}>Edit</Link>
                                                         </button>
                                                     </td>
                                                 )}
@@ -126,7 +126,7 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                         onClick={() => handleEditClick(product.productId)}
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                     >
-                                                        Edit
+                                                        <Link to={`/update-products/${product.productId}`}>Edit</Link>
                                                     </button>
                                                 </td>
                                             </tr>
