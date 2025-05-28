@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { AllShops } from './components/shops/shops'
-import { ShopById } from './components/shops/shops'
+import { AllShops } from './components/shops/Shops'
+import { ShopById } from './components/shops/Shops'
 
 function App() {
   return (

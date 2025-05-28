@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { getShops, getShopById } from "../../services/shops-service";
+import { getShops, getShopById } from "../../services/ShopsService";
 import type { ShopDto } from "../../types/shops";
-import { ShopList } from "./shopsList";
-import { ShopDetail } from "./shopDetail";
+import { ShopList } from "./ShopList";
+import { ShopDetail } from "./ShopDetail";
 import { useParams } from "react-router-dom";
 
 export const AllShops = () => {

@@ -1,5 +1,5 @@
 import type { PageResponseDto, ShopDto } from "../types/shops";
-import axiosInstance from "../lib/api/apiFacade";
+import axiosInstance from "../lib/api/ApiFacade";
 
 
 
