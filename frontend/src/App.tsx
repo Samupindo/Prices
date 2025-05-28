@@ -1,6 +1,6 @@
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { CustomersGetAll } from './components/customers/customers'
+import { CustomerPost, CustomersGetAll } from './components/customers/customers'
 import { CustomerById } from './components/customers/customers'
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
           <Route path="/" element={<h2>Home</h2>} />
           <Route path="/customers" element={<CustomersGetAll />} />
           <Route path="/customers/:customerId" element={<CustomerById />} />
+          <Route path="/customers-createCustomers" element={<CustomerPost/>} />
         </Routes>
     </BrowserRouter>
   )

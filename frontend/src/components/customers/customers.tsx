@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { getCustomers, getCustomerById } from "./services/customerService";
-import type { CustomerDto } from "./types/customer";
+import { getCustomers, getCustomerById, createCustomer } from "./services/customerService";
+import type { CreateCustomerDto, CustomerDto } from "./types/customer";
 import CustomerList from "./CustomerList";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CustomerDetail from "./customerDetail";
+import  CustomerForm  from "./CustomerForm";
 
 
 export const CustomersGetAll = () => {
@@ -43,4 +44,22 @@ export const CustomerById = () => {
     }, [customerId]);
     if (error) return <div>Error loading customer: {error}</div>;
     return <CustomerDetail customer={customers}/>
+}
+
+export const CustomerPost = () => {
+    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
+
+    const handleCreateCustomer = async (newCustomer: CreateCustomerDto) => {
+        try {
+            const createdCustomer = await createCustomer(newCustomer);
+            navigate(`/customers/${createdCustomer.customerId}`);
+        } catch (error: any) {
+            setError(error.message);
+        }
+    };
+
+    if (error) return <div>Error creating customer: {error}</div>;
+    
+    return <CustomerForm onSubmit={handleCreateCustomer} />;  
 }

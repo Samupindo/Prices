@@ -48,8 +48,13 @@ const CustomerList = ({ customers }: CustomerListProps) => {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                </table> 
             </div>
+            <button
+                    onClick={() => navigate("/customers-createCustomers")}
+                    className="mt-4 bg-blue-500 text-black flex justify-left px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
+                    Add Customer
+                </button>
         </div>
     );
 };
