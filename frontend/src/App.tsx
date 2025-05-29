@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { AllShops } from './components/shops/Shops'
+import { AllShops, ShopPut } from './components/shops/Shops'
 import { ShopById } from './components/shops/Shops'
+import { ShopPost } from './components/shops/Shops'
 
 function App() {
   return (
@@ -10,6 +11,8 @@ function App() {
         <Route path="/" element={<div>Home</div>} />
         <Route path="/shops" element={<AllShops />} />
         <Route path="/shops/:shopId" element={<ShopById />} />
+        <Route path="/shops/create" element={<ShopPost />} />
+        <Route path="/shops/:shopId/edit" element={<ShopPut />} />
       </Routes>
     </BrowserRouter>
   )

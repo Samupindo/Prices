@@ -61,6 +61,7 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
 
                 <div className="flex flex-col sm:flex-row w-full md:w-auto space-y-3 sm:space-y-0 sm:space-x-4">
                     <button
+                        onClick={() => navigate(`/shops/${shop.shopId}/edit`)}
                         className="w-full sm:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Edit Shop
                     </button>

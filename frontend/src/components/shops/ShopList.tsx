@@ -10,7 +10,7 @@ export const ShopList = ({ shops }: ShopListProps) => {
 
     return (
         <div className="p-4">
-            <h2 className="text-xl font-semibold mb-3">Shops</h2>
+            <h2 className="text-xl font-semibold mb-3 bg-gray-200 rounded-xl py-3">Shops</h2>
 
             <div className="shadow-md rounded-lg overflow-hidden bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -56,12 +56,27 @@ export const ShopList = ({ shops }: ShopListProps) => {
                                         className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
                                         View
                                     </button>
+                                    <button
+                                        onClick={() => navigate(`/shops/${shop.shopId}/edit`)}
+                                        className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => navigate(`/shops/${shop.shopId}/delete`)}
+                                        className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
+            <button
+                onClick={() => navigate('/shops/create')}
+                className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4">
+                Add New Shop
+            </button>
         </div>
     );
 };
