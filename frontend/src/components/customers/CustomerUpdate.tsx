@@ -82,7 +82,7 @@ const CustomerUpdate = ({ customer }: CustomerUpdateProps) => {
             </div>
                 <button
                 onClick={() => navigate("/customers")}
-                className="bg-gray-500 mt-20 text-black px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200">
+                className="bg-gray-500 mt-10 text-black px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200">
                 Back to List
             </button>
             

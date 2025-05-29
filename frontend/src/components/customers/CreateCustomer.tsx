@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { CreateCustomerDto } from "./types/customer";
+import { useNavigate } from "react-router-dom";
 
 
 interface CustomerPostProps {
@@ -12,6 +13,7 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
         phone: 0,
         email: ""
     });
+    const navigate = useNavigate();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
@@ -70,13 +72,20 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
                         required
                     />
                 </div>
-                <button
-                    type="submit"
-                    className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
-                >
-                    Create Customer
-                </button>
             </form>
+            <div className="flex gap-7 items-center ">
+                    <button
+                        onClick={() => navigate("/customers")}
+                        className="bg-gray-500 mt-10 text-black px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200">
+                        Back to List
+                    </button>
+                    <button
+                        type="submit"
+                        className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
+                    >
+                        Create Customer
+                    </button>
+                </div>
         </div>
     );
 
