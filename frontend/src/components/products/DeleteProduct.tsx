@@ -57,15 +57,15 @@ export const DeleteProduct = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="sm:flex sm:items-center mb-8">
-                <div className="sm:flex-auto">
-                    <h1 className="text-xl font-semibold text-gray-900">Eliminar Producto</h1>
-                </div>
-            </div>
+            <button
+                onClick={() => navigate('/products')}
+                className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6 mr-100" 
+            >
+                Back
+            </button>
 
             {/* Sección de detalles del producto */}
             <div className="mb-8">
-                <h2 className="text-lg font-medium text-gray-900 mb-4">Producto a Eliminar</h2>
                 <ProductDetail />
             </div>
 

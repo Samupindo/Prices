@@ -67,7 +67,7 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
                                                     >
-                                                    <Link to={`/products/${product.productId}`}>{product.productId}</Link>
+                                                        <Link to={`/products/${product.productId}`}>{product.productId}</Link>
                                                     </td>
                                                 )}
                                                 {shopIndex === 0 && (

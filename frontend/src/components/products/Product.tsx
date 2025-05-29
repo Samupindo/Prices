@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { createProduct, getProducts } from "../../services/product-service";
+import { getProducts } from "../../services/product-service";
 import { ProductList } from "./ProductList";
 import { ProductsFilters } from "./ProductsFilters";
-import type { ProductWithShopsDto, PageResponseDto, ProductDto } from "../../types/products";
+import type { ProductWithShopsDto } from "../../types/products";
+import { Link, useNavigate } from "react-router-dom";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
     const [totalPages, setTotalPages] = useState(1);
     const [error, setError] = useState<string | null>(null);
-
+    const navigate = useNavigate();
     const fetchProducts = async (filters?: {
         name?: string;
         priceMin?: number;
@@ -34,7 +35,7 @@ export const Products = () => {
 
 
     if (error) return <div>Error loading products: {error}</div>;
-    
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -45,12 +46,17 @@ export const Products = () => {
                     </p>
                 </div>
             </div>
-
+            <button
+                onClick={() => navigate('/')}
+                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
+            >
+                Home
+            </button>
 
             <ProductsFilters onApplyFilters={fetchProducts} />
 
-            <ProductList 
-                products={products} 
+            <ProductList
+                products={products}
                 totalPages={totalPages}
             />
         </div>
