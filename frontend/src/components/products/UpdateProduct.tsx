@@ -10,6 +10,7 @@ export const UpdateProduct = () => {
     const [name, setName] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const isUpdatePage = location.pathname.includes('/update-products');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -103,7 +104,9 @@ export const UpdateProduct = () => {
                             </button>
                         </div>
                     </form>
+                    
                 </div>
+                
             </div>
         </div>
     );

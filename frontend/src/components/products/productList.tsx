@@ -178,9 +178,11 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                 <Link to="/products-create" className="text-white">Añadir producto</Link>
             </button>
             <input  name="productId" type="number" placeholder="Find product by id" onChange={(e) => setFindId(e.target.value)} />
-            <button onClick={() => navigate(`/products/${findId}`)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-10 mr-70">
+            <button onClick={() => navigate(`/update-products/${findId}`)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-10 mr-70">
                 Buscar
             </button>
         </div>
     );
 };
+
+// Añadir un botón de edit en el componente  Detail que solo se verá para el admin
