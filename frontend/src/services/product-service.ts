@@ -1,6 +1,5 @@
 import type { PageResponseDto, ProductWithShopsDto, ProductNameDto } from "../types/products";
 import axiosInstance from "../lib/api/apiFacade";
-import { prerenderToNodeStream } from "react-dom/static";
 
 interface ProductFilters {
     name?: string;

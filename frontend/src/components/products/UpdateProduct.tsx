@@ -1,88 +1,72 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import type { ProductWithShopsDto } from "../../types/products";
-import { getProductById, updateProduct } from "../../services/product-service";
+import { useState,  } from "react";
+import {  useNavigate } from "react-router-dom";
+import {  updateProduct } from "../../services/product-service";
 import { ProductDetail } from "./ProductDetail";
+import { useParams } from "react-router-dom";
 
 export const UpdateProduct = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [product, setProduct] = useState<ProductWithShopsDto | null>(null);
-    const [error, setError] = useState<string | null>(null);
     const [name, setName] = useState<string>("");
-    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const fetchProduct = async () => {
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
+        setIsLoading(true);
+
+        if (!name.trim()) {
+            setError('El nombre del producto es requerido');
+            setIsLoading(false);
+            return;
+        }
+
+        if (!id) {
+            setError('Product ID is required');
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            if (!id) {
-                setError('Product ID is required');
-                return;
-            }
-
             const productId = parseInt(id);
             if (isNaN(productId)) {
                 setError('Invalid product ID');
+                setIsLoading(false);
                 return;
             }
 
-            setError(null);
-            const response = await getProductById(productId);
-            setProduct(response);
-            setName(response.name); // Inicializar el campo del formulario con el nombre actual
+            await updateProduct(productId, { name });
+            navigate('/products');
         } catch (error) {
-            setError('Failed to fetch product');
-            console.error('Error fetching product:', error);
+            setError('Failed to update product');
+            console.error('Error updating product:', error);
         } finally {
             setIsLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchProduct();
-    }, [id]);
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        
-        if (!name.trim()) {
-            setError('El nombre del producto es requerido');
-            return;
-        }
-
-        try {
-            setError(null);
-            if (product) {
-                const updatedProduct = await updateProduct(product.productId, { name });
-                setProduct(updatedProduct);
-                navigate('/products');
-            }
-        } catch (error) {
-            setError('Failed to update product');
-            console.error('Error updating product:', error);
-        }
-    };
-
     if (error) {
-        return <div className="text-red-500">Error: {error}</div>;
-    }
-
-    if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div className="rounded-md bg-red-50 p-4 mb-4">
+                <div className="flex">
+                    <div className="ml-3">
+                        <h3 className="text-sm font-medium text-red-800">Error</h3>
+                        <div className="mt-2 text-sm text-red-700">
+                            <p>{error}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button
-                onClick={() => navigate('/products')}
-                className=" mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
-            >
-                Back
-            </button>
             <div className="mb-8">
                 <ProductDetail />
             </div>
 
-            {/* Formulario para actualizar */}
             <div className="bg-white shadow rounded-lg">
                 <div className="p-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -106,9 +90,10 @@ export const UpdateProduct = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                disabled={isLoading}
+                                className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
                             >
-                                Actualizar Producto
+                                {isLoading ? 'Actualizando...' : 'Actualizar'}
                             </button>
                         </div>
                     </form>

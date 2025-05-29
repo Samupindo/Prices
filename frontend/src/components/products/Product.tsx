@@ -3,7 +3,7 @@ import { getProducts } from "../../services/product-service";
 import { ProductList } from "./ProductList";
 import { ProductsFilters } from "./ProductsFilters";
 import type { ProductWithShopsDto } from "../../types/products";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
