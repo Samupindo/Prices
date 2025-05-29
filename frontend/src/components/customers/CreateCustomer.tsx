@@ -6,7 +6,7 @@ interface CustomerPostProps {
     onSubmit: (customer: CreateCustomerDto) => void;
 }
 
-const CustomerForm = ({ onSubmit }: CustomerPostProps) => {
+const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
     const [newCustomer, setNewCustomer] = useState<CreateCustomerDto>({
         name: "",
         phone: 0,
@@ -81,4 +81,4 @@ const CustomerForm = ({ onSubmit }: CustomerPostProps) => {
     );
 
 }
-export default CustomerForm;
+export default CreateCustomer;

@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import type { CustomerDto } from "./types/customer";
-import { useState } from "react";
 
 
 interface CustomerDetailProps {
@@ -9,7 +8,6 @@ interface CustomerDetailProps {
 
 const CustomerDetail = ({ customer }: CustomerDetailProps) => {
     const navigate = useNavigate();
-    const [isEditing, setIsEditing] = useState(false);
     if (!customer) {
         return <div className="text-red-500">Customer not found</div>;
     }
@@ -31,44 +29,12 @@ const CustomerDetail = ({ customer }: CustomerDetailProps) => {
                         Back to List
                     </button>
                     <button
-                        onClick={() => setIsEditing(!isEditing)}
+                        onClick={() => navigate(`/customers/${customer.customerId}/update`)}
                         className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
-                        {isEditing ? "Cancel Edit" : "Edit"}
+                        Edit
                     </button>
                     
                 </div>
-                {isEditing && (
-                    <div className="mt-6 shadow-md rounded-lg p-6">
-                        <form className="space-y-4">
-                            <div>
-                                <label className="block text-gray-700">Name</label>
-                                <input
-                                    type="text"
-                                    className="w-full px-3 py-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700">Phone</label>
-                                <input
-                                    type="text"
-                                    className="w-full px-3 py-2 border rounded"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-gray-700">Email</label>
-                                <input
-                                    type="email"
-                                    className="w-full px-3 py-2 border rounded"
-                                />
-                            </div>
-                            <button
-                                type="submit"
-                                className="bg-green-500 text-black px-4 py-2 rounded hover:bg-green-600 transition-colors duration-200">
-                                Save Changes
-                            </button>
-                        </form>
-                    </div>
-                )}
             </div>
         </div>
     );

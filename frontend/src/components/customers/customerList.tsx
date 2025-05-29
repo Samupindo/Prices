@@ -35,13 +35,14 @@ const CustomerList = ({ customers }: CustomerListProps) => {
                                 <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">
-                                    <button className="text-blue-600 hover:text-blue-800" onClick={() => navigate(`/customers/${customer.customerId}`)}>
+                                    <button className="bg-blue-600 hover:bg-blue-800" onClick={() => navigate(`/customers/${customer.customerId}`)}>
                                         View
                                         </button>
-                                    <button className="text-yellow-600 hover:text-yellow-800 ml-2">
-                                        <a href={`/customers/edit/${customer.customerId}`}>Edit</a>
+                                    <button className="bg-yellow-600 hover:bg-yellow-800 ml-2" onClick={() => navigate(`/customers/${customer.customerId}/update`)}
+                                        >
+                                            Edit
                                     </button>
-                                    <button className="text-red-600 hover:text-red-800 ml-2">
+                                    <button className="bg-red-600 hover:bg-red-800 ml-2">
                                         <a href={`/customers/delete/${customer.customerId}`}>Delete</a>
                                     </button>
                                 </td>

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { getCustomers, getCustomerById, createCustomer } from "./services/customerService";
-import type { CreateCustomerDto, CustomerDto } from "./types/customer";
+import { use, useEffect, useState } from "react";
+import { getCustomers, getCustomerById, createCustomer, updateCustomer } from "./services/customerService";
+import type { CreateCustomerDto, CustomerDto, CustomerPutDto } from "./types/customer";
 import CustomerList from "./CustomerList";
 import { useNavigate, useParams } from "react-router-dom";
-import CustomerDetail from "./customerDetail";
-import  CustomerForm  from "./CustomerForm";
+import CustomerDetail from "./CustomerDetail";
+import CreateCustomer from "./CreateCustomer";
+import CustomerUpdate from "./CustomerUpdate";
 
 
 export const CustomersGetAll = () => {
@@ -22,28 +23,28 @@ export const CustomersGetAll = () => {
     }, []);
 
     if (error) return <div>Error loading customers: {error}</div>;
-    
-    return <CustomerList customers={customers}/>
+
+    return <CustomerList customers={customers} />
 }
 
 export const CustomerById = () => {
     const [customers, setCustomer] = useState<CustomerDto | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {customerId} = useParams();
+    const { customerId } = useParams();
 
     useEffect(() => {
         if (customerId) {
-             getCustomerById(Number(customerId))
-            .then((response) => {
-                setCustomer(response);
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
+            getCustomerById(Number(customerId))
+                .then((response) => {
+                    setCustomer(response);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
         }
     }, [customerId]);
     if (error) return <div>Error loading customer: {error}</div>;
-    return <CustomerDetail customer={customers}/>
+    return <CustomerDetail customer={customers} />
 }
 
 export const CustomerPost = () => {
@@ -60,6 +61,41 @@ export const CustomerPost = () => {
     };
 
     if (error) return <div>Error creating customer: {error}</div>;
-    
-    return <CustomerForm onSubmit={handleCreateCustomer} />;  
+
+    return <CreateCustomer onSubmit={handleCreateCustomer} />;
 }
+
+export const CustomerPut = () => {
+    const { customerId } = useParams();
+    const [formData, setFormData] = useState<CustomerPutDto>({
+        name: "",
+        phone: 0,
+        email: ""
+    });
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (customerId) {
+            getCustomerById(Number(customerId))
+                .then((customer) => {
+                    setFormData({
+                        name: customer.name,
+                        email: customer.email,
+                        phone: customer.phone,
+                    });
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
+        }
+    }, [customerId]);
+
+
+    if (error) return <div>Error loading customer: {error}</div>;
+    return <CustomerUpdate customer={formData}
+    />;
+
+}
+
+
+
