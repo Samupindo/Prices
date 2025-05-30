@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import type { CustomerPutDto } from "./types/customer";
+import type { CustomerPutDto } from "./types/Customer";
 import { useState } from "react";
 import { updateCustomer } from "./services/customerService";
 

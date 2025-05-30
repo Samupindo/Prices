@@ -1,4 +1,4 @@
-import type { CustomerDto } from './types/customer';
+import type { CustomerDto } from './types/Customer';
 import { useNavigate } from 'react-router-dom';
 
 

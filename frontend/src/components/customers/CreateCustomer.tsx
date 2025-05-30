@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CreateCustomerDto } from "./types/customer";
+import type { CreateCustomerDto } from "./types/Customer";
 import { useNavigate } from "react-router-dom";
 
 
@@ -10,7 +10,7 @@ interface CustomerPostProps {
 const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
     const [newCustomer, setNewCustomer] = useState<CreateCustomerDto>({
         name: "",
-        phone: 0,
+        phone: Number(""),
         email: ""
     });
     const navigate = useNavigate();
@@ -80,9 +80,8 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
                         Back to List
                     </button>
                     <button
-                        type="submit"
-                        className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
-                    >
+                        onClick={handleSubmit}
+                        className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
                         Create Customer
                     </button>
                 </div>

@@ -7,7 +7,7 @@ import { CreateProduct } from './components/products/CreateProduct'
 import { ProductDetail } from './components/products/ProductDetail'
 import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
-import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/customers'
+import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/Customers';
 import { CustomerDelete } from './components/customers/CustomerDelete'
 
 function App() {

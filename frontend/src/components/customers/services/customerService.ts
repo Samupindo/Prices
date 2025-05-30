@@ -1,5 +1,5 @@
 import axiosInstance from "../../../config/api-customer";
-import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } from "../types/customer";
+import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } from "../types/Customer";
 
 
 export const getCustomers = async () => {
