@@ -27,6 +27,7 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
             [name]: name === "phone" ? Number(value) : value
         });
     };
+    
     return (
         <div className="container mx-auto p-8">
             <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
@@ -80,14 +81,12 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
                         Back to List
                     </button>
                     <button
-                        type="submit"
-                        className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200"
-                    >
+                        onClick={handleSubmit}
+                        className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
                         Create Customer
                     </button>
                 </div>
         </div>
     );
-
 }
 export default CreateCustomer;
