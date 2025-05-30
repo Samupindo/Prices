@@ -41,6 +41,7 @@ export const PurchasesList = ({purchases,totalPages}:PurchaseListProps) => {
                     </tbody>
                 </table>
             </div>
+            
         </div>
     );
 };

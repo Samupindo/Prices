@@ -1,5 +1,5 @@
 import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto } from "../types/shops";
-import axiosInstance from "../lib/api/ApiFacade";
+import axiosInstance from "../lib/api/apiFacade";
 
 export const getShops = async () => {
     const response = await axiosInstance.get<PageResponseDto<ShopDto>>("/shops")
