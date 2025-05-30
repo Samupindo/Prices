@@ -174,15 +174,27 @@ export const ProductList = ({ products, totalPages }: ProductListProps) => {
                 </div>
 
             </div>
-            <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-10 mr-70">
-                <Link to="/products-create" className="text-white">Añadir producto</Link>
-            </button>
-            <input  name="productId" type="number" placeholder="Find product by id" onChange={(e) => setFindId(e.target.value)} />
-            <button onClick={() => navigate(`/update-products/${findId}`)} className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-10 mr-70">
-                Buscar
-            </button>
+            <div className="flex flex-col space-y-4">
+                <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                    <Link to="/products-create" className="text-white">Añadir producto</Link>
+                </button>
+                <div className="flex space-x-4">
+                    <input
+                        name="productId"
+                        type="number"
+                        placeholder="Find product by id"
+                        onChange={(e) => setFindId(e.target.value)}
+                        className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    />
+                    <button
+                        onClick={() => navigate(`/update-products/${findId}`)}
+                        className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                    >
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };
 
-// Añadir un botón de edit en el componente  Detail que solo se verá para el admin

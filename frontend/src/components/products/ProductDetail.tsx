@@ -9,8 +9,7 @@ export const ProductDetail = () => {
     const [error, setError] = useState<string | null>(null);
     const { id } = useParams();
     const navigate = useNavigate();
-    const isUpdatePage = location.pathname.includes('/update-products');
-
+    const isUpdatePage = ['/update-products', '/delete-products'].some(path => location.pathname.includes(path));
 
     const fetchProduct = async () => {
         try {
@@ -81,11 +80,11 @@ export const ProductDetail = () => {
                     </div>
                 </div>
             </div>
-            {!isUpdatePage && ( // Solo mostrar el botón si no estamos en la página de actualización
+            {!isUpdatePage && ( 
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                         <button
                             type="button"
-                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mr-11 mt-10"
                             onClick={() => navigate(`/update-products/${id}`)}
                         >
                             Editar
