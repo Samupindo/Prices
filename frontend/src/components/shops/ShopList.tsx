@@ -50,7 +50,7 @@ export const ShopList = ({ shops }: ShopListProps) => {
                                 <td className="px-6 py-4 text-sm text-gray-500 text-left">
                                     {shop.address}
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <td className="flex gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <button
                                         onClick={() => navigate(`/shops/${shop.shopId}`)}
                                         className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
@@ -58,12 +58,12 @@ export const ShopList = ({ shops }: ShopListProps) => {
                                     </button>
                                     <button
                                         onClick={() => navigate(`/shops/${shop.shopId}/edit`)}
-                                        className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
+                                        className="text-green-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
                                         Edit
                                     </button>
                                     <button
                                         onClick={() => navigate(`/shops/${shop.shopId}/delete`)}
-                                        className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
+                                        className="text-red-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
                                         Delete
                                     </button>
                                 </td>

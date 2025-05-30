@@ -4,7 +4,7 @@ import { createShop } from "../../services/ShopsService";
 import { useState } from "react";
 
 interface CreateShopProps {
-    shopAddDto : ShopAddDto    
+    shopAddDto: ShopAddDto
 }
 
 export const CreateShop = ({ shopAddDto }: CreateShopProps) => {
@@ -70,16 +70,16 @@ export const CreateShop = ({ shopAddDto }: CreateShopProps) => {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                     <button
-                    type="submit"
-                    className="w-full bg-blue-500 text-black py-2 px-4 rounded hover:bg-blue-600 transition-colors">
-                    Create Shop
-                </button>
-                <button
-                    type="button"
-                    onClick={() => navigate('/shops')}
-                    className="w-full bg-gray-500 text-black py-2 px-4 rounded hover:bg-gray-600 transition-colors">
-                    Cancel
-                </button>
+                        type="button"
+                        onClick={() => navigate('/shops')}
+                        className="w-full bg-gray-500 text-black py-2 px-4 rounded hover:bg-gray-600 transition-colors">
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-500 text-black py-2 px-4 rounded hover:bg-blue-600 transition-colors">
+                        Create Shop
+                    </button>
                 </div>
             </form>
         </div>
