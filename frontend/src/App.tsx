@@ -9,13 +9,21 @@ import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
 import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/customers'
 import { CustomerDelete } from './components/customers/CustomerDelete'
+import { AllShops, ShopPut } from './components/shops/Shops'
+import { ShopById } from './components/shops/Shops'
+import { ShopPost } from './components/shops/Shops'
+import { ShopDelete } from './components/shops/Shops'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/shops" element={<Shops />} />
+        <Route path="/shops" element={<AllShops />} />
+        <Route path="/shops/:shopId" element={<ShopById />} />
+        <Route path="/shops/create" element={<ShopPost />} />
+        <Route path="/shops/:shopId/edit" element={<ShopPut />} />
+        <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
         <Route path="/products" element={<Products />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/products-create" element={<CreateProduct />} />
@@ -27,7 +35,6 @@ function App() {
         <Route path="/customers-createCustomers" element={<CustomerPost />} />
         <Route path="/customers/:customerId/update" element={<CustomerPut />} />
         <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
-
       </Routes>
     </BrowserRouter>
   )
