@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import type { ProductWithShopsDto } from "../../types/products";
-import { getProductById } from "../../services/product-service";
+import { getProductById } from "../../services/Product-service";
 import { useParams } from "react-router-dom";
 import {  useNavigate } from "react-router-dom";
 

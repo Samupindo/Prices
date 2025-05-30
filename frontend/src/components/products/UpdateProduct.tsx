@@ -1,6 +1,6 @@
 import { useState,  } from "react";
 import {  useNavigate } from "react-router-dom";
-import {  updateProduct } from "../../services/product-service";
+import {  updateProduct } from "../../services/Product-service";
 import { ProductDetail } from "./ProductDetail";
 import { useParams } from "react-router-dom";
 

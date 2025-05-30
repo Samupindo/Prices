@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {  deleteProduct } from "../../services/product-service";
+import {  deleteProduct } from "../../services/Product-service";
 import { ProductDetail } from "./ProductDetail";
 
 export const DeleteProduct = () => {
