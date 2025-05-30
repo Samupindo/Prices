@@ -22,13 +22,13 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
         size: undefined,
     });
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFilters(prev => ({
             ...prev,
             [name]: value === '' ? undefined : value,
         }));
-    }
+    };
 
     const handleApplyFilters = () => {
         onApplyFilters({
@@ -103,15 +103,17 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
                     <label htmlFor="shopping" className="block text-xs font-medium text-gray-600">
                         Shopping Status
                     </label>
-                    <input
-                        type="text"
+                    <select
                         id="shopping"
                         name="shopping"
                         value={filters.shopping || ''}
                         onChange={handleInputChange}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Filter by shopping status"
-                    />
+                    >
+                        <option value="">All</option>
+                        <option value="true">Shopping</option>
+                        <option value="false">Not Shopping</option>
+                    </select>
                 </div>
             </div>
 

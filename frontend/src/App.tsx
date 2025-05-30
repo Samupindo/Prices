@@ -13,6 +13,7 @@ import { ShopById } from './components/shops/Shops'
 import { ShopPost } from './components/shops/Shops'
 import { ShopDelete } from './components/shops/Shops'
 import { Purchases } from './components/purchases/Purchases'
+import { PurchaseDetail } from './components/purchases/PurchaseDetail'
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
 
         <Route path="/purchases" element={<Purchases/>}/>
+        <Route path='/purchases/:id' element={<PurchaseDetail/>}/>
       </Routes>
     </BrowserRouter>
   )

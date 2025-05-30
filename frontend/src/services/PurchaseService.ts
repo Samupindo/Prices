@@ -25,3 +25,12 @@ export const getPurchases = async (filters? : PurchaseFilters): Promise<PageResp
         throw new Error('Failed to fetch purchases');
     }
 }
+
+export const getPurchaseById = async (purchaseId: number) => {
+    try {
+        const response = await axiosInstance.get(`/purchases/${purchaseId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to fetch purchase');
+    }
+}
