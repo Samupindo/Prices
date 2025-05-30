@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { Shops } from './components/shops/shops'
 import { Products } from './components/products/Product'
 import { Home } from './components/Home'
 import { CreateProduct } from './components/products/CreateProduct'

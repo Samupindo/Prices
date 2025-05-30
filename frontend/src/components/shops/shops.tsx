@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getShops, getShopById, deleteShop } from "../../services/ShopsService";
+import { getShops, getShopById } from "../../services/ShopsService";
 import type { ShopDto, ShopAddDto, ShopPutDto } from "../../types/shops";
 import { ShopList } from "./ShopList";
 import { ShopDetail } from "./ShopDetail";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { CreateShop } from "./CreateShop";
 import { UpdateShop } from "./UpdateShop";
 import { DeleteShop } from "./DeleteShop";
