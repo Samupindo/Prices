@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createProduct, getProducts } from "../../services/Product-service";
+import { createProduct, getProducts } from "../../services/ProductsService";
 
 export const CreateProduct = () => {
     const [error, setError] = useState<string | null>(null);

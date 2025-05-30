@@ -12,6 +12,7 @@ import { AllShops, ShopPut } from './components/shops/Shops'
 import { ShopById } from './components/shops/Shops'
 import { ShopPost } from './components/shops/Shops'
 import { ShopDelete } from './components/shops/Shops'
+import { Purchases } from './components/purchases/Purchases'
 
 function App() {
   return (
@@ -23,17 +24,22 @@ function App() {
         <Route path="/shops/create" element={<ShopPost />} />
         <Route path="/shops/:shopId/edit" element={<ShopPut />} />
         <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
+
         <Route path="/products" element={<Products />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/products-create" element={<CreateProduct />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/update-products/:id" element={<UpdateProduct />} />
         <Route path="/delete-products/:id" element={<DeleteProduct />} />
+
+
         <Route path="/customers" element={<CustomersGetAll />} />
         <Route path="/customers/:customerId" element={<CustomerById />} />
         <Route path="/customers-createCustomers" element={<CustomerPost />} />
         <Route path="/customers/:customerId/update" element={<CustomerPut />} />
         <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
+
+        <Route path="/purchases" element={<Purchases/>}/>
       </Routes>
     </BrowserRouter>
   )
