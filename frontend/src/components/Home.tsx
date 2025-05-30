@@ -13,7 +13,7 @@ export const Home = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <Link 
                         to="/products" 
                         className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
@@ -65,6 +65,33 @@ export const Home = () => {
                         </h2>
                         <p className="text-gray-600">
                             Manage your retail locations
+                        </p>
+                    </Link>
+
+                    <Link 
+                        to="/customers" 
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                    >
+                        <div className="bg-blue-100 p-3 rounded-full mb-4">
+                            <svg 
+                                className="w-8 h-8 text-blue-600" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth={2} 
+                                    d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
+                                />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                            Customers
+                        </h2>
+                        <p className="text-gray-600">
+                            Manage your customer information and preferences
                         </p>
                     </Link>
                 </div>
