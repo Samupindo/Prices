@@ -39,9 +39,9 @@ export const CustomerDelete = () => {
     return (
         <div className="container mx-auto p-8">
             <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
-                Customer Delete
+                Customer
             </h2>
-            <div className=" space-x-10 flex justify-between items-center mb-6">
+            <div className=" max-w-4xl mx-auto  mb-6 mt-10">
                 <div className="bg-white shadow-md rounded-lg p-6">
                     <p className="text-gray-700 mb-4"><strong>ID:</strong> {customer.customerId}</p>
                     <p className="text-gray-700 mb-4"><strong>Name:</strong> {customer.name}</p>
@@ -57,9 +57,9 @@ export const CustomerDelete = () => {
                                 </svg>
                             </div>
                             <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 className="text-base font-semibold text-gray-900" id="modal-title">Deactivate account</h3>
+                                <h3 className="text-base font-semibold text-gray-900" id="modal-title">Delete Customer</h3>
                                 <div className="mt-2">
-                                    <p className="text-sm text-gray-500">Are you sure you want to deactivate your account? All of your data will be permanently removed. This action cannot be undone.</p>
+                                    <p className="text-sm text-gray-500">Are you sure you want to delete this customer? </p>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@ export const CustomerDelete = () => {
                     <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                         <button
                             onClick={handleDeleteCustomer}
-                            className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-black shadow-xs hover:bg-red-500 sm:ml-3 sm:w-auto">Deactivate</button>
+                            className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-black shadow-xs bg-red-800 hover:bg-red-500 ring-1 ring-red-300  sm:ml-3 sm:w-auto">Deactivate</button>
                         <button
                             onClick={() => navigate("/customers")}
                             className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
