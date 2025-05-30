@@ -7,6 +7,8 @@ import { CreateProduct } from './components/products/CreateProduct'
 import { ProductDetail } from './components/products/ProductDetail'
 import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
+import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/customers'
+import { CustomerDelete } from './components/customers/CustomerDelete'
 
 function App() {
   return (
@@ -20,7 +22,11 @@ function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/update-products/:id" element={<UpdateProduct />} />
         <Route path="/delete-products/:id" element={<DeleteProduct />} />
-
+        <Route path="/customers" element={<CustomersGetAll />} />
+        <Route path="/customers/:customerId" element={<CustomerById />} />
+        <Route path="/customers-createCustomers" element={<CustomerPost />} />
+        <Route path="/customers/:customerId/update" element={<CustomerPut />} />
+        <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
 
       </Routes>
     </BrowserRouter>
