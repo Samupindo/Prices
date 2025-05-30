@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { CustomerDto } from "./types/customer";
 import { deleteCustomer, getCustomerById } from "./services/customerService";
-import CustomerDetail from "./CustomerDetail";
 
 
 export const CustomerDelete = () => {
