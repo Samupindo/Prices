@@ -54,3 +54,13 @@ export const deletePurchase = async (purchaseId: number) => {
         throw new Error('Failed to delete purchase');
     }
 }
+
+export const finishPurchase = async (purchaseId: number) => {
+    try {
+        const response = await axiosInstance.patch(`/purchases/${purchaseId}/finish`);
+        console.log('Purchase finished successfully:', response.data);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to finish purchase');
+    }
+}

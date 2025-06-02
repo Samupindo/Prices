@@ -16,7 +16,7 @@ import { Purchases } from './components/purchases/Purchases'
 import { PurchaseDetail } from './components/purchases/PurchaseDetail'
 import { AddPurchase } from './components/purchases/AddPurchase'
 import { DeletePurchase } from './components/purchases/DeletePurchase'
-
+import { FinishPurchase } from './components/purchases/FinishPurchase'
 function App() {
   return (
     <BrowserRouter>
@@ -46,6 +46,7 @@ function App() {
         <Route path='/purchases/:id' element={<PurchaseDetail />} />
         <Route path="/create-purchase" element={<AddPurchase />} />
         <Route path="/delete-purchases/:id" element={<DeletePurchase />} />
+        <Route path="/finish-purchases/:id" element={<FinishPurchase />} />
       </Routes>
     </BrowserRouter>
   )
