@@ -10,7 +10,6 @@ interface PurchaseListProps {
 export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
-    const purchaseIdBtn = purchases.map((purchase) => (purchase.purchaseId));
     return (
         <div className="p-4">
             <div className="shadow-md sm:rounded-lg overflow-x-auto">
