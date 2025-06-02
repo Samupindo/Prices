@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { PurchaseDto } from "../../types/purchase";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getPurchaseById } from "../../services/PurchaseService";
 import { useParams } from "react-router-dom";
 
@@ -99,10 +99,11 @@ export const PurchaseDetail = () => {
                             <div className="mt-4">
                                 <button
                                     onClick={() => navigate('/purchases')}
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    className="text-indigo-600 hover:text-indigo-900 font-medium"
                                 >
                                     Back to Purchases
                                 </button>
+
                             </div>
                         </div>
                     </div>

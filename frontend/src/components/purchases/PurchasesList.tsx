@@ -10,6 +10,7 @@ interface PurchaseListProps {
 export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
+    const purchaseIdBtn = purchases.map((purchase) => (purchase.purchaseId));
     return (
         <div className="p-4">
             <div className="shadow-md sm:rounded-lg overflow-x-auto">
@@ -45,11 +46,14 @@ export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
                                     <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/delete-purchases/${purchase.purchaseId}`}>Delete</Link></button>
                                 </td>
                             </tr>
+                            
                         ))}
                     </tbody>
                 </table>
             </div>
-            <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate('/create-purchase')}>Add Purchase</button>
+            <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate('/create-purchase')}>Add Purchase</button>          
+            <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/add-purchaseLine`}>Add Product to Purchase</Link></button>
+
         </div>
     );
 };
