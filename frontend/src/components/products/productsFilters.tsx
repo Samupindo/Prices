@@ -22,13 +22,13 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
             ...prev,
             [name]: value === '' ? undefined : value,
         }));
-    };
-
-    const handleApplyFilters = () => {
+        
+        // Aplicar los filtros inmediatamente después de cambiar el valor
         onApplyFilters({
             ...filters,
-            priceMin: filters.priceMin ? parseFloat(filters.priceMin) : undefined,
-            priceMax: filters.priceMax ? parseFloat(filters.priceMax) : undefined
+            [name]: value === '' ? undefined : value,
+            priceMin: name === 'priceMin' ? (value ? parseFloat(value) : undefined) : filters.priceMin,
+            priceMax: name === 'priceMax' ? (value ? parseFloat(value) : undefined) : filters.priceMax
         });
     };
 
@@ -96,12 +96,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
                     className="px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md text-xs font-medium text-gray hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-indigo-500 transition-all duration-150"
                 >
                     Reset
-                </button>
-                <button
-                    onClick={handleApplyFilters}
-                    className="px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md text-xs font-medium text-gray hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-indigo-500 transition-all duration-150"
-                >
-                    Apply Filters
                 </button>
             </div>
         </div>
