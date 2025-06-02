@@ -89,6 +89,7 @@ export const ProductDetail = () => {
                         >
                             Editar
                         </button>
+
                     </div>
                 )}
         </div>

@@ -53,6 +53,7 @@ export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
             </div>
             <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate('/create-purchase')}>Add Purchase</button>          
             <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/add-purchaseLine`}>Add Product to Purchase</Link></button>
+            <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/delete-purchaseLine`}>Delete Product from Purchase</Link></button>
 
         </div>
     );

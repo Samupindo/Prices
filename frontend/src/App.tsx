@@ -17,7 +17,8 @@ import { PurchaseDetail } from './components/purchases/PurchaseDetail'
 import { AddPurchase } from './components/purchases/AddPurchase'
 import { DeletePurchase } from './components/purchases/DeletePurchase'
 import { FinishPurchase } from './components/purchases/FinishPurchase'
-import { AddProduct } from './components/purchases/AddProduct'
+import { AddProduct } from './components/purchases/AddProduct'  
+import { DeleteProductFromPurchase } from './components/purchases/DeleteProductFromPurchase'
 function App() {
   return (
     <BrowserRouter>
@@ -49,6 +50,7 @@ function App() {
         <Route path="/delete-purchases/:id" element={<DeletePurchase />} />
         <Route path="/finish-purchases/:id" element={<FinishPurchase />} />
         <Route path="/add-purchaseLine" element={<AddProduct />} />
+        <Route path="/delete-purchaseLine" element={<DeleteProductFromPurchase />} />
       </Routes>
     </BrowserRouter>
   )

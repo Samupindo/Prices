@@ -102,12 +102,15 @@ export const PurchaseDetail = () => {
                                     Back to Purchases
                                 </button>
                                 {!isUpdatePage && (
+                                <div>
                                 <button
                                     onClick={() => navigate('/add-purchaseLine')}
                                     className="text-indigo-600 hover:text-indigo-900 font-medium"
                                 >
                                     Add Product to Purchase
                                 </button>
+                                <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate(`/delete-products/${id}`)}>Delete product from purchase</button>
+                                </div>
                                 )}
                             </div>
                         </div>

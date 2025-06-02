@@ -79,3 +79,19 @@ export const addProductToPurchase = async (purchaseId: number, productInShopId: 
         throw new Error(errorMessage);
     }
 }
+
+export const deleteProductFromPurchase = async (purchaseId: number, productInShopId: number) => {
+    try {
+        const response = await axiosInstance.delete(`/purchases/${purchaseId}/productInShop/${productInShopId}`);
+        console.log('Product in shop deleted from purchase successfully:', response.data);
+        return response.data;
+    } catch (error: any) {
+        const errorMessage = error.response?.data?.message || 
+                           error.message || 
+                           `Failed to delete product in shop with ID ${productInShopId} from purchase with ID ${purchaseId}. ` +
+                           `Please verify that the product in shop exists and is available for purchase.`;
+        console.error('Error details:', error);
+        throw new Error(errorMessage);
+    }
+}
+
