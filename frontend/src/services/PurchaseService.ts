@@ -1,5 +1,5 @@
 import axiosInstance from "../lib/api/apiFacade";
-import type { PageResponseDto, PurchaseDto } from "../types/purchase";
+import type { PageResponseDto, PostPurchaseDto, PurchaseDto } from "../types/purchase";
 
 interface PurchaseFilters {
     customerId?: number;
@@ -32,5 +32,25 @@ export const getPurchaseById = async (purchaseId: number) => {
         return response.data;
     } catch (error) {
         throw new Error('Failed to fetch purchase');
+    }
+}
+
+export const createPurchase = async (purchase: PostPurchaseDto) => {
+    try {
+        const response = await axiosInstance.post("/purchases", purchase);
+        console.log('Purchase created successfully:', response.data);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to create purchase');
+    }
+}
+
+export const deletePurchase = async (purchaseId: number) => {
+    try {
+        const response = await axiosInstance.delete(`/purchases/${purchaseId}`);
+        console.log('Purchase deleted successfully:', response.data);
+        return response.data;
+    } catch (error) {
+        throw new Error('Failed to delete purchase');
     }
 }

@@ -14,6 +14,8 @@ import { ShopPost } from './components/shops/Shops'
 import { ShopDelete } from './components/shops/Shops'
 import { Purchases } from './components/purchases/Purchases'
 import { PurchaseDetail } from './components/purchases/PurchaseDetail'
+import { AddPurchase } from './components/purchases/AddPurchase'
+import { DeletePurchase } from './components/purchases/DeletePurchase'
 
 function App() {
   return (
@@ -40,8 +42,10 @@ function App() {
         <Route path="/customers/:customerId/update" element={<CustomerPut />} />
         <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
 
-        <Route path="/purchases" element={<Purchases/>}/>
-        <Route path='/purchases/:id' element={<PurchaseDetail/>}/>
+        <Route path="/purchases" element={<Purchases />} />
+        <Route path='/purchases/:id' element={<PurchaseDetail />} />
+        <Route path="/create-purchase" element={<AddPurchase />} />
+        <Route path="/delete-purchases/:id" element={<DeletePurchase />} />
       </Routes>
     </BrowserRouter>
   )

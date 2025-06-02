@@ -13,7 +13,7 @@ export const Home = () => {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <Link 
                         to="/products" 
                         className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
@@ -92,6 +92,33 @@ export const Home = () => {
                         </h2>
                         <p className="text-gray-600">
                             Manage your customer information and preferences
+                        </p>
+                    </Link>
+
+                    <Link 
+                        to="/purchases" 
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                    >
+                        <div className="bg-purple-100 p-3 rounded-full mb-4">
+                            <svg 
+                                className="w-8 h-8 text-purple-600" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                            >
+                                <path 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    strokeWidth={2} 
+                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 11-1.732 2.866L7.066 22H3a1 1 0 110-2h4l5.172-5.172a1.5 1.5 0 012.122 0l5.171 5.171a1 1 0 010 1.414z"
+                                />
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+                            Purchases
+                        </h2>
+                        <p className="text-gray-600">
+                            Manage and track customer purchases
                         </p>
                     </Link>
                 </div>
