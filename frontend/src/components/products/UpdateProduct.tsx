@@ -1,6 +1,6 @@
-import { useState,  } from "react";
-import {  useNavigate } from "react-router-dom";
-import {  updateProduct } from "../../services/ProductsService";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { updateProduct, getProductById } from "../../services/ProductsService";
 import { ProductDetail } from "./ProductDetail";
 import { useParams } from "react-router-dom";
 
@@ -10,7 +10,34 @@ export const UpdateProduct = () => {
     const [name, setName] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [product, setProduct] = useState<any>(null);
     const isUpdatePage = location.pathname.includes('/update-products');
+
+    const fetchProduct = async () => {
+        if (!id) {
+            setError('Product ID is required');
+            return;
+        }
+
+        const productId = parseInt(id);
+        if (isNaN(productId)) {
+            setError('Invalid product ID');
+            return;
+        }
+
+        try {
+            const response = await getProductById(productId);
+            setProduct(response);
+            setName(response?.name || '');
+        } catch (error) {
+            setError('Failed to fetch product');
+            console.error('Error fetching product:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchProduct();
+    }, [id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,6 +89,10 @@ export const UpdateProduct = () => {
         );
     }
 
+    if (!product) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <button
@@ -104,9 +135,7 @@ export const UpdateProduct = () => {
                             </button>
                         </div>
                     </form>
-                    
                 </div>
-                
             </div>
         </div>
     );
