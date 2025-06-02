@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getCustomers, getCustomerById, createCustomer, type CustomerFilters } from "./services/customerService";
-import type { CreateCustomerDto, CustomerDto, CustomerPutDto } from "./types/Customer";
+import { getCustomers, getCustomerById, createCustomer, type CustomerFilters } from "../../services/customerService";
+import type { CreateCustomerDto, CustomerDto, CustomerPutDto } from "../../types/Customer";
 import CustomerList from "./CustomerList";
 import { useNavigate, useParams } from "react-router-dom";
 import CustomerDetail from "./CustomerDetail";
@@ -41,7 +41,7 @@ export const CustomersGetAll = () => {
 
     const handleFilterChange = (newFilters: CustomerFilters) => {
         setFilters(newFilters);
-        setCurrentPage(1); // Reset page when filters change
+        setCurrentPage(1); 
     };
 
     if (loading) return <div>Loading customers...</div>;

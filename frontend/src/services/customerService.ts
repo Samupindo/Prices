@@ -1,4 +1,4 @@
-import axiosInstance from "../../../config/api-customer";
+import axiosInstance from "../config/api-customer";
 import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } from "../types/Customer";
 
 

@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react';
-import type { CustomerDto } from './types/Customer';
+import { useState } from 'react';
+import type { CustomerDto } from '../../types/Customer';
 import { useNavigate } from 'react-router-dom';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
-import type { CustomerFilters } from './services/customerService';
+
+import type { CustomerFilters } from '../../services/customerService';
+import {PaginationDefault} from '../PaginationDefault';
 
 interface CustomerListProps {
     customers: CustomerDto[];
@@ -128,35 +122,11 @@ const CustomerList = ({
             </button>
             <div className="flex items-center gap-6">
 
-                <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious
-                                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                                className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
-                            />
-                        </PaginationItem>
-
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                            <PaginationItem key={page}>
-                                <PaginationLink
-                                    onClick={() => onPageChange(page)}
-                                    isActive={currentPage === page}
-                                    className="cursor-pointer"
-                                >
-                                    {page}
-                                </PaginationLink>
-                            </PaginationItem>
-                        ))}
-
-                        <PaginationItem>
-                            <PaginationNext
-                                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-                                className={`cursor-pointer ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+                <PaginationDefault
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={onPageChange}
+                />
             </div>
         </div>
     );
