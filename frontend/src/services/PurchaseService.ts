@@ -68,13 +68,13 @@ export const finishPurchase = async (purchaseId: number) => {
 export const addProductToPurchase = async (purchaseId: number, productInShopId: number) => {
     try {
         const response = await axiosInstance.post(`/purchases/${purchaseId}/productInShop/${productInShopId}`);
-        console.log('Product added to purchase successfully:', response.data);
+        console.log('Product in shop added to purchase successfully:', response.data);
         return response.data;
     } catch (error: any) {
         const errorMessage = error.response?.data?.message || 
                            error.message || 
-                           `Failed to add product with ID ${productInShopId} to purchase with ID ${purchaseId}. ` +
-                           `Please verify that both IDs exist and the product is available in the shop.`;
+                           `Failed to add product in shop with ID ${productInShopId} to purchase with ID ${purchaseId}. ` +
+                           `Please verify that the product in shop exists and is available for purchase.`;
         console.error('Error details:', error);
         throw new Error(errorMessage);
     }

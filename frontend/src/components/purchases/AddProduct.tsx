@@ -1,16 +1,42 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { addProductToPurchase } from "../../services/PurchaseService";
+import { addProductToPurchase,getPurchaseById } from "../../services/PurchaseService";
+import axiosInstance from "../../config/api-customer";
 
 export const AddProduct = () => {
     const [purchaseId, setPurchaseId] = useState<number>(0);
     const [productInShopId, setProductInShopId] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    
+    const validateIds = async (purchaseId: number, productInShopId: number) => {
+        try {
+            const response = await getPurchaseById(purchaseId);
+            const purchase = response;
 
+            if (!purchase.shopping) {
+                throw new Error(`Purchase with ID ${purchaseId} is already finished.`);
+            }
+
+            // const productInShopResponse = await axiosInstance.get(`/productInShop/${productInShopId}`);
+            // const productInShop = productInShopResponse.data;
+
+            // // Verificar que el productInShop tiene precio
+            // if (!productInShop.price) {
+            //     throw new Error(`Product in shop with ID ${productInShopId} is not available for purchase.`);
+            // }
+
+            return true;
+        } catch (error: any) {
+            const errorMessage = error.response?.data?.message ||
+                error.message ||
+                `Invalid IDs. Please verify that purchase ID ${purchaseId} and product in shop ID ${productInShopId} exist.`;
+            throw new Error(errorMessage);
+        }
+    }
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        
+
         if (!purchaseId || !productInShopId) {
             setError('Both IDs are required');
             return;
@@ -18,14 +44,15 @@ export const AddProduct = () => {
 
         try {
             setError(null);
+            await validateIds(purchaseId, productInShopId);
             try {
                 await addProductToPurchase(purchaseId, productInShopId);
                 navigate('/purchases');
             } catch (error: any) {
-                const errorMessage = error.response?.data?.message || 
-                                   error.message || 
-                                   `Failed to add product in shop with ID ${productInShopId} to purchase with ID ${purchaseId}. ` +
-                                   `Please verify that the product is available in the shop.`;
+                const errorMessage = error.response?.data?.message ||
+                    error.message ||
+                    `Failed to add product in shop with ID ${productInShopId} to purchase with ID ${purchaseId}. ` +
+                    `Please verify that the product is available in the shop.`;
                 setError(errorMessage);
             }
         } catch (error: any) {

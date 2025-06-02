@@ -4,15 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { getPurchaseById } from "../../services/PurchaseService";
 import { useParams } from "react-router-dom";
 
-interface PurchaseDetailProps {
-    purchaseId: number;
-}
-
 export const PurchaseDetail = () => {
     const [purchase, setPurchase] = useState<PurchaseDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const { id } = useParams();
+    const isUpdatePage = ['/finish-purchases/', '/delete-purchases/'].some(path => location.pathname.includes(path));
+
 
     useEffect(() => {
         const fetchPurchase = async () => {
@@ -103,7 +101,14 @@ export const PurchaseDetail = () => {
                                 >
                                     Back to Purchases
                                 </button>
-
+                                {!isUpdatePage && (
+                                <button
+                                    onClick={() => navigate('/add-purchaseLine')}
+                                    className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                >
+                                    Add Product to Purchase
+                                </button>
+                                )}
                             </div>
                         </div>
                     </div>
