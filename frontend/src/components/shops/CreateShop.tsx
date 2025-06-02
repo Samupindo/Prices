@@ -23,8 +23,8 @@ export const CreateShop = ({ shopAddDto }: CreateShopProps) => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            await createShop(formData);
-            navigate("/shops");
+            const createdShop = await createShop(formData);
+            navigate(`/shops/${createdShop.shopId}`);
         } catch (error) {
             setError(error instanceof Error ? error.message : "An error occurred");
         }

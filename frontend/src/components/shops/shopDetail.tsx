@@ -54,7 +54,7 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                 <div>
                      <button
                         onClick={() => navigate('/shops')}
-                        className="w-full md:w-auto bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                        className="w-full md:w-auto bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
                         Back to Shops
                     </button>
                 </div>
