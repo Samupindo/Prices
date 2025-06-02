@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProducts } from "../../services/product-service";
+import { getProducts } from "../../services/ProductsService";
 import { ProductList } from "./ProductList";
 import { ProductsFilters } from "./ProductsFilters";
 import type { ProductWithShopsDto } from "../../types/products";
@@ -8,8 +8,10 @@ import {  useNavigate } from "react-router-dom";
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+
     const fetchProducts = async (filters?: {
         name?: string;
         priceMin?: number;
@@ -19,7 +21,10 @@ export const Products = () => {
     }) => {
         try {
             setError(null);
-            const response = await getProducts(filters);
+            const response = await getProducts({
+                ...filters,
+                page: currentPage
+            });
             setProducts(response.content);
             setTotalPages(response.totalPages);
         } catch (error) {
@@ -30,9 +35,12 @@ export const Products = () => {
 
     useEffect(() => {
         fetchProducts();
-    }, []);
+    }, [currentPage]);
 
-
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        fetchProducts();
+    };
 
     if (error) return <div>Error loading products: {error}</div>;
 
@@ -58,6 +66,8 @@ export const Products = () => {
             <ProductList
                 products={products}
                 totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
             />
         </div>
     );

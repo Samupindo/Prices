@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import type { ProductWithShopsDto } from "../../types/products";
-import { getProductById } from "../../services/product-service";
+import { getProductById } from "../../services/ProductsService";
 import { useParams } from "react-router-dom";
 import {  useNavigate } from "react-router-dom";
 
@@ -45,6 +45,9 @@ export const ProductDetail = () => {
         return <div>Loading...</div>;
     }
 
+    // Mostrar el botón de editar solo si el producto existe y no estamos en una página de actualización/eliminación
+    const showEditButton = product !== null && !isUpdatePage;
+
     return (
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -80,17 +83,17 @@ export const ProductDetail = () => {
                     </div>
                 </div>
             </div>
-            {!isUpdatePage && ( 
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <button
-                            type="button"
-                            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mr-11 mt-10"
-                            onClick={() => navigate(`/update-products/${id}`)}
-                        >
-                            Editar
-                        </button>
-                    </div>
-                )}
+            {showEditButton && (
+                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                    <button
+                        type="button"
+                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mr-11 mt-10"
+                        onClick={() => navigate(`/update-products/${id}`)}
+                    >
+                        Editar
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
