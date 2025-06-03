@@ -24,33 +24,31 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                 </p>
             </div>
             
-            <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200">
-                <div className="p-6 sm:p-10 md:p-12">
-                    <div className="gap-x-8">
-                        <div className="space-y-1">
+                <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200 p-6 sm:p-10 md:p-12">
+                    <div>
+                        <div className="space-y-1 mt-5">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Shop ID</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 break-words">{shop.shopId}</p>
                         </div>
 
-                        <div className="space-y-1">
+                        <div className="space-y-1 mt-5">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Country</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.country}</p>
                         </div>
 
-                        <div className="space-y-1">
+                        <div className="space-y-1 mt-5">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">City</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.city}</p>
                         </div>
 
-                        <div className="md:col-span-3 space-y-1 mt-4 md:mt-0">
+                        <div className="md:col-span-3 space-y-1 mt-5">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Address</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.address}</p>
                         </div>
                     </div>
                 </div>
-            </div>
             
-            <div className="mt-10 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div className="mt-6 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
                 <div>
                      <button
                         onClick={() => navigate('/shops')}

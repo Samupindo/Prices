@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { ShopDto } from "../../types/shops";
 import type { ShopFilter } from "@/services/ShopsService";
 import {
@@ -66,16 +66,22 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                     onChange={(event) => handleSearch(event, 'address')}
                 />
             </div>
+            <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
+            <div className="m-2">
+                    <label>Shop ID:</label>
+                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" />
+                    <button
+                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
+                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Search
+                    </button>
+                </div>
+            </div>
 
             <div className="shadow-md rounded-lg overflow-hidden bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                            <th
-                                scope="col"
-                                className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Shop ID
-                            </th>
                             <th
                                 scope="col"
                                 className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -100,10 +106,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {shops.map((shop, index) => (
-                            <tr key={shop.shopId} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
-                                    {shop.shopId}
-                                </td>
+                            <tr key={shop.shopId} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} cursor-pointer hover:bg-gray-100`} onClick={() => navigate(`/shops/${shop.shopId}`)}>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
                                     {shop.country}
                                 </td>
@@ -131,15 +134,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                 </table>
             </div>
             <div className="flex justify-center items-center bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
-                <div className="m-2">
-                    <label>Shop ID:</label>
-                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" />
-                    <button
-                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
-                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Search
-                    </button>
-                </div>
+                
             </div>
             <button
                 onClick={() => navigate('/shops/create')}

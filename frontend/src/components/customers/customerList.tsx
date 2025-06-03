@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import type { CustomerDto } from '../../types/Customer';
+import type { CustomerDto } from '../../types/customer';
 import { useNavigate } from 'react-router-dom';
-import type { CustomerFilters } from '../../services/customerService';
+import type { CustomerFilters } from '../../services/CustomerService';
 import { PaginationDefault } from '../PaginationDefault';
 
 interface CustomerListProps {

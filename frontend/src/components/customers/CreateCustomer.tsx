@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { CreateCustomerDto } from "../../types/Customer";
+import type { CreateCustomerDto } from "../../types/customer";
 import { useNavigate } from "react-router-dom";
 
 

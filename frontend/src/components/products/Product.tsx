@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
-import { ProductList } from "./productList";
-import { ProductsFilters } from "./productsFilters";
+import { ProductList } from "./ProductList";
+import { ProductsFilters } from "./ProductsFilters";
 import type { ProductWithShopsDto } from "../../types/products";
 import { useNavigate } from "react-router-dom";
 

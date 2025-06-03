@@ -10,3 +10,4 @@ public class MicPricesApplication {
     SpringApplication.run(MicPricesApplication.class, args);
   }
 }
+  
