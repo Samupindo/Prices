@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { PurchaseDto } from "../../types/purchase";
+import type { PurchaseDto } from "../../types/Purchase";
 import { useNavigate } from "react-router-dom";
 import { getPurchases } from "../../services/PurchaseService";
 import { PurchasesFilters } from "./PurchasesFilters";

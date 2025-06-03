@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getShops, getShopById, type ShopFilter } from "../../services/ShopsService";
-import type { ShopDto, ShopAddDto, ShopPutDto } from "../../types/shops";
+import type { ShopDto, ShopAddDto, ShopPutDto } from "../../types/Shops";
 import { ShopList } from "./ShopList";
 import { ShopDetail } from "./ShopDetail";
 import { useParams } from "react-router-dom";

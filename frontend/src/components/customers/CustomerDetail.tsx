@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { CustomerDto } from "../../types/customer";
+import type { CustomerDto } from "../../types/Customer";
 
 
 interface CustomerDetailProps {

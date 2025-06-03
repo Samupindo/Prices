@@ -1,5 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import type { ShopDto } from "../../types/shops";
+import type { ShopDto } from "../../types/Shops";
 import type { ShopFilter } from "@/services/ShopsService";
 import {
     Pagination,

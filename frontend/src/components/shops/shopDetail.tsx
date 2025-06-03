@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ShopDto } from "../../types/shops"; 
+import type { ShopDto } from "../../types/Shops"; 
 
 interface ShopDetailProps {
     shop: ShopDto | null;

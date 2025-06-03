@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ProductWithShopsDto } from "../../types/shops";
+import type { ProductWithShopsDto } from "../../types/Shops";
 import { Link, useNavigate } from "react-router-dom";
 import { PaginationDefault } from "../PaginationDefault";
 

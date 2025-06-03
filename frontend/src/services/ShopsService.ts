@@ -1,4 +1,4 @@
-import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto } from "../types/shops";
+import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto } from "../types/Shops";
 import axiosInstance from "../lib/api/apiFacade";
 
 export interface ShopFilter {

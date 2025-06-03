@@ -1,5 +1,5 @@
 import axiosInstance from "../lib/api/apiFacade";
-import type { PageResponseDto, PostPurchaseDto, PurchaseDto } from "../types/purchase";
+import type { PageResponseDto, PostPurchaseDto, PurchaseDto } from "../types/Purchase";
 
 interface PurchaseFilters {
     customerId?: number;

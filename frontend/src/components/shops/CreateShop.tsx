@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import type { ShopAddDto } from "../../types/shops";
+import type { ShopAddDto } from "../../types/Shops";
 import { createShop } from "../../services/ShopsService";
 import { useState } from "react";
 

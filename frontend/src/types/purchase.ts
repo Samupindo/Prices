@@ -1,5 +1,5 @@
 import type { CustomerDto } from "../components/customers/types/Customer";
-import type { ProductInShopDto } from "./shops";
+import type { ProductInShopDto } from "./Shops";
 
 export interface PurchaseDto{
     purchaseId :number,

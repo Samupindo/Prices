@@ -1,5 +1,5 @@
 import axiosInstance from "../lib/api/apiFacade";
-import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } from "../types/customer";
+import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } from "../types/Customer";
 
 export interface CustomerFilters {
     name?: string;

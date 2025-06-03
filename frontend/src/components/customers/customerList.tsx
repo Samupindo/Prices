@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { CustomerDto } from '../../types/customer';
+import type { CustomerDto } from '../../types/Customer';
 import { useNavigate } from 'react-router-dom';
 import type { CustomerFilters } from '../../services/CustomerService';
 import { PaginationDefault } from '../PaginationDefault';

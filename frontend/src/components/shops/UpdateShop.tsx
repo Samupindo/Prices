@@ -1,4 +1,4 @@
-import type { ShopPutDto } from "../../types/shops";
+import type { ShopPutDto } from "../../types/Shops";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { updateShop } from "../../services/ShopsService";
