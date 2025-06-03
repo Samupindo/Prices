@@ -23,15 +23,15 @@ interface ShopListProps {
 export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filters, onPageChange }: ShopListProps) => {
     const navigate = useNavigate();
     const [localFilters, setLocalFilters] = useState<ShopFilter>(filters);
-    type ShopFilterKey = 'country' | 'city' | 'address'; 
+    type ShopFilterKey = 'country' | 'city' | 'address';
 
     const handleFilterChange = (filter: ShopFilter) => {
         onFilterChange(filter);
     }
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>, field: ShopFilterKey) => {
-        const emptyFilter = {country: '', city: '', address: ''};
-        const newFilter = {...localFilters, [field]: event.target.value};
+        const emptyFilter = { country: '', city: '', address: '' };
+        const newFilter = { ...localFilters, [field]: event.target.value };
         setLocalFilters(newFilter);
         handleFilterChange(newFilter);
 
@@ -104,7 +104,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
                                     {shop.shopId}
                                 </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
                                     {shop.country}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
@@ -114,11 +114,6 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                                     {shop.address}
                                 </td>
                                 <td className="flex gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
-                                    <button
-                                        onClick={() => navigate(`/shops/${shop.shopId}`)}
-                                        className="text-indigo-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
-                                        View
-                                    </button>
                                     <button
                                         onClick={() => navigate(`/shops/${shop.shopId}/edit`)}
                                         className="text-green-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
@@ -135,38 +130,49 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                     </tbody>
                 </table>
             </div>
+            <div className="flex justify-center items-center bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
+                <div className="m-2">
+                    <label>Shop ID:</label>
+                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" />
+                    <button
+                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
+                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Search
+                    </button>
+                </div>
+            </div>
             <button
                 onClick={() => navigate('/shops/create')}
                 className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4">
                 Add New Shop
             </button>
             <Pagination>
-                    <PaginationContent>
-                        <PaginationItem>
-                            <PaginationPrevious
-                                onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                                className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
-                            />
+                <PaginationContent>
+                    <PaginationItem>
+                        <PaginationPrevious
+                            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+                            className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
+                        />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <PaginationItem key={page}>
+                            <PaginationLink
+                                onClick={() => onPageChange(page)}
+                                isActive={currentPage === page}
+                                className="cursor-pointer"
+                            >
+                                {page}
+                            </PaginationLink>
                         </PaginationItem>
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                            <PaginationItem key={page}>
-                                <PaginationLink
-                                    onClick={() => onPageChange(page)}
-                                    isActive={currentPage === page}
-                                    className="cursor-pointer"
-                                >
-                                    {page}
-                                </PaginationLink>
-                            </PaginationItem>
-                        ))}
-                        <PaginationItem>
-                            <PaginationNext
-                                onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-                                className={`cursor-pointer ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
-                            />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
+                    ))}
+                    <PaginationItem>
+                        <PaginationNext
+                            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+                            className={`cursor-pointer ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
+                        />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
         </div>
     );
 };

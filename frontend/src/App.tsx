@@ -37,7 +37,6 @@ function App() {
         <Route path="/update-products/:id" element={<UpdateProduct />} />
         <Route path="/delete-products/:id" element={<DeleteProduct />} />
 
-
         <Route path="/customers" element={<CustomersGetAll />} />
         <Route path="/customers/:customerId" element={<CustomerById />} />
         <Route path="/customers-createCustomers" element={<CustomerPost />} />
