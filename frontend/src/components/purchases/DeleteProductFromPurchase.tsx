@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { deleteProductFromPurchase,getPurchaseById } from "../../services/PurchaseService";
-import axiosInstance from "../../config/api-customer";
+
 
 export const DeleteProductFromPurchase = () => {
     const [purchaseId, setPurchaseId] = useState<number>(0);

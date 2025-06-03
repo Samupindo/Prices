@@ -26,7 +26,7 @@ export const CustomerDelete = () => {
         if (!customerId) return;
         try {
             await deleteCustomer(Number(customerId));
-            navigate('/customers');
+            navigate('/customers', { replace: true });
         } catch (error: any) {
             setError(error.message);
         }
@@ -68,7 +68,7 @@ export const CustomerDelete = () => {
                             onClick={handleDeleteCustomer}
                             className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-black shadow-xs bg-red-800 hover:bg-red-500 ring-1 ring-red-300  sm:ml-3 sm:w-auto">Delete</button>
                         <button
-                            onClick={() => navigate("/customers")}
+                            onClick={() => navigate("/customers", { replace: true })}
                             className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
                     </div>
                 </div>

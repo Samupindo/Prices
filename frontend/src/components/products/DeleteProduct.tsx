@@ -22,7 +22,7 @@ export const DeleteProduct = () => {
                 return;
             }
             await deleteProduct(productIdNumber);
-            navigate('/products');
+            navigate('/products', { replace: true });
         } catch (error) {
             setError('Failed to delete product');
             console.error('Error deleting product:', error);
@@ -66,7 +66,7 @@ export const DeleteProduct = () => {
                         </p>
                         <div className="flex justify-center gap-4">
                             <button
-                                onClick={() => navigate('/products')}
+                                onClick={() => navigate('/products', { replace: true })}
                                 className="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                                 Cancelar

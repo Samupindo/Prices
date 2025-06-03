@@ -15,7 +15,7 @@ export const DeleteShop = () => {
                 try {
                     setIsDeleting(true);
                     await deleteShop(shopId);
-                    navigate('/shops');
+                    navigate('/shops', { replace: true });
                 } catch (error) {
                     setError(error instanceof Error ? error.message : "An error occurred");
                     setIsDeleting(false);
@@ -33,7 +33,7 @@ export const DeleteShop = () => {
     };
 
     const handleCancel = () => {
-        navigate('/shops');
+        navigate('/shops', { replace: true });
     };
 
     return (
