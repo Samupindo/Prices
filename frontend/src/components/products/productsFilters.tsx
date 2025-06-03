@@ -6,14 +6,12 @@ interface ProductsFiltersProps {
         priceMax?: number;
     }) => void;
 }
-
 export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
     const [filters, setFilters] = useState({
         name: '',
         priceMin: undefined,
         priceMax: undefined,
     });
-
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFilters(prev => ({
@@ -29,7 +27,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
             priceMax: name === 'priceMax' ? (value ? parseFloat(value) : undefined) : filters.priceMax
         });
     };
-
     const handleResetFilters = () => {
         setFilters({
             name: '',
@@ -55,7 +52,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
                         placeholder="Search by product name"
                     />
                 </div>
-
                 <div>
                     <label htmlFor="priceMin" className="block text-xs font-medium text-gray-600">
                         Min Price
@@ -70,7 +66,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
                         placeholder="Min price"
                     />
                 </div>
-
                 <div>
                     <label htmlFor="priceMax" className="block text-xs font-medium text-gray-600">
                         Max Price
@@ -86,7 +81,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
                     />
                 </div>
             </div>
-
             <div className="mt-4 flex justify-end space-x-2">
                 <button
                     onClick={handleResetFilters}

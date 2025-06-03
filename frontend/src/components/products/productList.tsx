@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ProductWithShopsDto } from "../../types/Shops";
+import type { ProductWithShopsDto } from "../../types/Products";
 import { Link, useNavigate } from "react-router-dom";
 import { PaginationDefault } from "../PaginationDefault";
 
@@ -131,18 +131,21 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                     >
                                                          <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                            onClick={() => navigate(`/products/${product.productId}`)}
                                                         >
-                                                            <Link to={`/products/${product.productId}`}>View</Link>
+                                                            View
                                                         </button> 
                                                         <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                            onClick={() => navigate(`/products/${product.productId}/edit`)}
                                                         >
-                                                            <Link to={`/update-products/${product.productId}`}>Edit</Link>
+                                                            Edit
                                                         </button>
                                                         <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                            onClick={() => navigate(`/products/${product.productId}/delete`)}
                                                         >
-                                                            <Link to={`/delete-products/${product.productId}`}>Delete</Link>
+                                                            Delete
                                                         </button>
                                                        
 
@@ -170,13 +173,15 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
                                                     <button
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                        onClick={() => navigate(`/products/${product.productId}/edit`)}
                                                     >
-                                                        <Link to={`/update-products/${product.productId}`}>Edit</Link>
+                                                        Edit
                                                     </button>
                                                     <button
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                        onClick={() => navigate(`/products/${product.productId}/delete`)}
                                                     >
-                                                        <Link to={`/delete-products/${product.productId}`}>Delete</Link>
+                                                        Delete
                                                     </button>
                                                 </td>
                                             </tr>

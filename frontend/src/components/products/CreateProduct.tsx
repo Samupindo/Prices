@@ -1,24 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createProduct, getProducts } from "../../services/ProductsService";
-
 export const CreateProduct = () => {
     const [error, setError] = useState<string | null>(null);
     const [name,setName] = useState<string>('');
     const navigate = useNavigate();
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         if (!name.trim()) {
             setError('El nombre del producto es requerido');
             return;
         }
-
         try {
             setError(null);
             const response = await createProduct({ name: name });
@@ -31,7 +26,6 @@ export const CreateProduct = () => {
             console.error('Error details:', error);
         }
     };
-
     if (error) {
         return (
             <div className="mt-8">
@@ -48,7 +42,6 @@ export const CreateProduct = () => {
             </div>
         );
     }
-
     return (
             <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
                 {error && (

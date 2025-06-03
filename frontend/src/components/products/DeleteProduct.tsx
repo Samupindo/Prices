@@ -2,30 +2,26 @@ import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {  deleteProduct } from "../../services/ProductsService";
 import { ProductDetail } from "./ProductDetail";
-
 export const DeleteProduct = () => {
-    const { id } = useParams();
+    const { productId } = useParams();
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-
     const handleDelete = async () => {
-        if (!id) {
+        if (!productId) {
             setError('Product ID is required');
             return;
         }
-
         try {
             setError(null);
             setIsLoading(true);
-            const productId = parseInt(id);
-            if (isNaN(productId)) {
+            const productIdNumber = parseInt(productId);
+            if (isNaN(productIdNumber)) {
                 setError('Invalid product ID');
                 setIsLoading(false);
                 return;
             }
-
-            await deleteProduct(productId);
+            await deleteProduct(productIdNumber);
             navigate('/products');
         } catch (error) {
             setError('Failed to delete product');
@@ -34,7 +30,6 @@ export const DeleteProduct = () => {
             setIsLoading(false);
         }
     };
-
     if (error) {
         return (
             <div className="rounded-md bg-red-50 p-4 mb-4">
@@ -49,7 +44,6 @@ export const DeleteProduct = () => {
             </div>
         );
     }
-
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <button
@@ -61,7 +55,6 @@ export const DeleteProduct = () => {
             <div className="mb-8">
                 <ProductDetail />
             </div>
-
             <div className="bg-white shadow rounded-lg">
                 <div className="p-6">
                     <div className="text-center">
@@ -71,7 +64,6 @@ export const DeleteProduct = () => {
                         <p className="text-sm text-gray-500 mb-6">
                             Esta acción no se puede deshacer.
                         </p>
-
                         <div className="flex justify-center gap-4">
                             <button
                                 onClick={() => navigate('/products')}

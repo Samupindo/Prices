@@ -5,7 +5,7 @@ import { ProductDetail } from "./ProductDetail";
 import { useParams } from "react-router-dom";
 
 export const UpdateProduct = () => {
-    const { id } = useParams();
+    const { productId } = useParams();
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
@@ -14,19 +14,19 @@ export const UpdateProduct = () => {
     const isUpdatePage = location.pathname.includes('/update-products');
 
     const fetchProduct = async () => {
-        if (!id) {
+        if (!productId) {
             setError('Product ID is required');
             return;
         }
 
-        const productId = parseInt(id);
-        if (isNaN(productId)) {
+        const productIdNumber = parseInt(productId);
+        if (isNaN(productIdNumber)) {
             setError('Invalid product ID');
             return;
         }
 
         try {
-            const response = await getProductById(productId);
+            const response = await getProductById(productIdNumber);
             setProduct(response);
             setName(response?.name || '');
         } catch (error) {
@@ -37,7 +37,7 @@ export const UpdateProduct = () => {
 
     useEffect(() => {
         fetchProduct();
-    }, [id]);
+    }, [productId]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,21 +50,21 @@ export const UpdateProduct = () => {
             return;
         }
 
-        if (!id) {
+        if (!productId) {
             setError('Product ID is required');
             setIsLoading(false);
             return;
         }
 
         try {
-            const productId = parseInt(id);
-            if (isNaN(productId)) {
+            const productIdNumber = parseInt(productId);
+            if (isNaN(productIdNumber)) {
                 setError('Invalid product ID');
                 setIsLoading(false);
                 return;
             }
 
-            await updateProduct(productId, { name });
+            await updateProduct(productIdNumber, { name });
             navigate('/products');
         } catch (error) {
             setError('Failed to update product');
