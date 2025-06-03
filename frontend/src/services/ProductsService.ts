@@ -1,4 +1,4 @@
-import type { PageResponseDto, ProductWithShopsDto, ProductNameDto } from "../types/products";
+import type { PageResponseDto, ProductWithShopsDto, ProductNameDto } from "../types/Products";
 import axiosInstance from "../lib/api/apiFacade";
 
 interface ProductFilters {

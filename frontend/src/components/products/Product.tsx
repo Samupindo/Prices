@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
-import { ProductList } from "./productList";
-import { ProductsFilters } from "./productsFilters";
-import type { ProductWithShopsDto } from "../../types/products";
+import { ProductList } from "./ProductList";
+import { ProductsFilters } from "./ProductsFilters";
+import type { ProductWithShopsDto } from "../../types/Products";
 import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
