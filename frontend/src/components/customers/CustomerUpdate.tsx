@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import type { CustomerPutDto } from "./types/Customer";
+import type { CustomerPutDto } from "../../types/Customer";
 import { useState } from "react";
-import { updateCustomer } from "./services/customerService";
+import { updateCustomer } from "../../services/customerService";
 
 
 interface CustomerUpdateProps {

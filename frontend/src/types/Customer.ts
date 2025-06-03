@@ -1,7 +1,7 @@
 export interface CustomerPutDto {
     name: string,
     email: string,
-     phone: number,
+    phone: number,
 }
 
 export interface CustomerDto {
