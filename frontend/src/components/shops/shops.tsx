@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getShops, getShopById } from "../../services/ShopsService";
+import { getShops, getShopById, type ShopFilter } from "../../services/ShopsService";
 import type { ShopDto, ShopAddDto, ShopPutDto } from "../../types/shops";
 import { ShopList } from "./ShopList";
 import { ShopDetail } from "./ShopDetail";
@@ -10,21 +10,43 @@ import { DeleteShop } from "./DeleteShop";
 
 export const AllShops = () => {
     const [shops, setShops] = useState<ShopDto[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [totalElements, setTotalElements] = useState<number>(0);
+    const [totalPages, setTotalPages] = useState<number>(0);
+    const [filters, setFilters] = useState<ShopFilter>({
+        country: '',
+        city: '',
+        address: ''
+    });
+    const itemsPerPage: number = 10;
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        getShops()
+            getShops({page: currentPage -1, size: itemsPerPage, filters})
             .then((response) => {
-                    setShops(response);
+                    setShops(response.content);
+                    setTotalElements(response.totalElements);
+                    setTotalPages(response.totalPages);
             })
             .catch((error) => {
                 setError(error.message);
             });
-    }, []);
+    }, [currentPage, filters]);
+
+    const handleFilterChange = (filter: ShopFilter) => {
+        setFilters(filter);
+        setCurrentPage(1);
+    }
 
     if (error) return <div>Error loading shops: {error}</div>;
     
-    return <ShopList shops={shops} />;
+    return <ShopList shops={shops} 
+    onFilterChange={handleFilterChange}
+    onPageChange={setCurrentPage}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    filters={filters}   
+    />;
 }
 
 export const ShopById = () => {

@@ -19,8 +19,6 @@ INSERT INTO product_in_Shop(product_id, shop_id, price) VALUES
 (4, 4, 5.5),
 (5, 5, 3.2);
 
-
-
 insert into customers (name, email, phone) values
 ('Alice Johnson', 'alice@example.com', 123123123),
 ('Bob Smith', 'bob@example.com', 111111111),

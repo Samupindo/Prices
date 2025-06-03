@@ -1,9 +1,35 @@
 import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto } from "../types/shops";
 import axiosInstance from "../lib/api/apiFacade";
 
-export const getShops = async () => {
-    const response = await axiosInstance.get<PageResponseDto<ShopDto>>("/shops")
-    return response.data.content;
+export interface ShopFilter {
+    country?: string;
+    city?: string;
+    address?: string;
+}
+
+export interface PageResponse{
+    page: number;
+    size: number;
+    filters?: ShopFilter;
+}
+
+export const getShops = async ({page = 0, size = 0, filters}: PageResponse) => {
+    const params = new URLSearchParams({
+        page: page.toString(),
+        size: size.toString()
+    });
+    if(filters?.country){
+        params.append("country", filters.country);
+    }
+    if(filters?.city){
+        params.append("city", filters.city);
+    }
+    if(filters?.address){
+        params.append("address", filters.address);
+    }
+
+    const response = await axiosInstance.get<PageResponseDto<ShopDto>>(`/shops?${params}`);
+    return response.data;
 }
 
 export const getShopById = async (shopId: string) => {

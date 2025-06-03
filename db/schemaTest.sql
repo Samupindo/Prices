@@ -3,7 +3,6 @@ CREATE TABLE products(
     name varchar(30) not null
 );
 
-
 CREATE TABLE shops(
     shop_id SERIAL primary key,
     country varchar(50) not null,

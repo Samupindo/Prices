@@ -8,10 +8,10 @@ import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
 import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/Customers';
 import { CustomerDelete } from './components/customers/CustomerDelete'
-import { AllShops, ShopPut } from './components/shops/Shops'
-import { ShopById } from './components/shops/Shops'
-import { ShopPost } from './components/shops/Shops'
-import { ShopDelete } from './components/shops/Shops'
+import { AllShops, ShopPut } from './components/shops/shops'
+import { ShopById } from './components/shops/shops'
+import { ShopPost } from './components/shops/shops'
+import { ShopDelete } from './components/shops/shops'
 import { Purchases } from './components/purchases/Purchases'
 import { PurchaseDetail } from './components/purchases/PurchaseDetail'
 import { AddPurchase } from './components/purchases/AddPurchase'
@@ -36,7 +36,6 @@ function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/update-products/:id" element={<UpdateProduct />} />
         <Route path="/delete-products/:id" element={<DeleteProduct />} />
-
 
         <Route path="/customers" element={<CustomersGetAll />} />
         <Route path="/customers/:customerId" element={<CustomerById />} />

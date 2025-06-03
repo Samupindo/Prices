@@ -12,7 +12,6 @@ interface ProductListProps {
 export const ProductList = ({ products, totalPages, currentPage, onPageChange }: ProductListProps) => {
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
-    const [findId, setFindId] = useState<string | null>(null);
 
     // Estado para los filtros
     const [filters, setFilters] = useState<{
@@ -106,7 +105,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
                                                     >
-                                                        <Link to={`/products/${product.productId}`}>{product.productId}</Link>
+                                                        {product.productId}
                                                     </td>
                                                 )}
                                                 {shopIndex === 0 && (
@@ -129,6 +128,11 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
                                                     >
+                                                         <button
+                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
+                                                        >
+                                                            <Link to={`/products/${product.productId}`}>View</Link>
+                                                        </button> 
                                                         <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                         >
@@ -139,6 +143,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         >
                                                             <Link to={`/delete-products/${product.productId}`}>Delete</Link>
                                                         </button>
+                                                       
 
                                                     </td>
                                                 )}
@@ -150,7 +155,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                 <td
                                                     className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
                                                 >
-                                                    <Link to={`/products/${product.productId}`}>{product.productId}</Link>
+                                                    {product.productId}
                                                 </td>
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}>
                                                     {product.name}
@@ -200,21 +205,20 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                 >
                     Previous
                 </button>
-                
+
                 {Array.from({ length: totalPages }, (_, i) => i).map((page) => (
                     <button
                         key={page}
                         onClick={() => onPageChange(page)}
-                        className={`px-4 py-2 rounded-md ${
-                            currentPage === page 
-                                ? 'bg-blue-500 text-white' 
+                        className={`px-4 py-2 rounded-md ${currentPage === page
+                                ? 'bg-blue-500 text-white'
                                 : 'bg-gray-100 hover:bg-gray-200'
-                        }`}
+                            }`}
                     >
                         {page + 1} {/* Mostramos el número de página +1 para que sea más amigable */}
                     </button>
                 ))}
-                
+
                 <button
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === totalPages - 1}
@@ -228,21 +232,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                 <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                     <Link to="/products-create" className="text-white">Añadir producto</Link>
                 </button>
-                <div className="flex space-x-4">
-                    <input
-                        name="productId"
-                        type="number"
-                        placeholder="Find product by id"
-                        onChange={(e) => setFindId(e.target.value)}
-                        className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                    <button
-                        onClick={() => navigate(`/update-products/${findId}`)}
-                        className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-                    >
-                        Buscar
-                    </button>
-                </div>
+
             </div>
         </div>
     );

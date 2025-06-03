@@ -24,9 +24,9 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                 </p>
             </div>
             
-            <div className="bg-white shadow-xl rounded-xl overflow-hidden border-gray-200">
+            <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200">
                 <div className="p-6 sm:p-10 md:p-12">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-8">
+                    <div className="gap-x-8">
                         <div className="space-y-1">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Shop ID</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 break-words">{shop.shopId}</p>
@@ -54,7 +54,7 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                 <div>
                      <button
                         onClick={() => navigate('/shops')}
-                        className="w-full md:w-auto bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                        className="w-full md:w-auto bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
                         Back to Shops
                     </button>
                 </div>
