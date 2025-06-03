@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
-import { ProductList } from "./ProductList";
-import { ProductsFilters } from "./ProductsFilters";
+import { ProductList } from "./productList";
+import { ProductsFilters } from "./productsFilters";
 import type { ProductWithShopsDto } from "../../types/products";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
@@ -11,6 +11,7 @@ export const Products = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const [findId, setFindId] = useState<string | null>(null);
 
     const fetchProducts = async (filters?: {
         name?: string;
@@ -56,13 +57,27 @@ export const Products = () => {
             </div>
             <button
                 onClick={() => navigate('/')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
+                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
             >
                 Home
             </button>
 
             <ProductsFilters onApplyFilters={fetchProducts} />
-
+            <div className="flex space-x-4">
+                <input
+                    name="productId"
+                    type="number"
+                    placeholder="Find product by id"
+                    onChange={(e) => setFindId(e.target.value)}
+                    className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                <button
+                    onClick={() => navigate(`/update-products/${findId}`)}
+                    className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                >
+                    Search
+                </button>
+            </div>
             <ProductList
                 products={products}
                 totalPages={totalPages}
