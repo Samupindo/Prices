@@ -23,7 +23,7 @@ export const CreateProduct = () => {
             setError(null);
             const response = await createProduct({ name: name });
             console.log('Response from createProduct:', response);
-            const productsResponse = await getProducts();
+            await getProducts({page: 0, size: 10});
             navigate('/products');
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || error.message || 'Failed to create product';

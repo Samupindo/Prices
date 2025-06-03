@@ -118,12 +118,18 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                                 </td>
                                 <td className="flex gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <button
-                                        onClick={() => navigate(`/shops/${shop.shopId}/edit`)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/shops/${shop.shopId}/edit`);
+                                        }}
                                         className="text-green-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
                                         Edit
                                     </button>
                                     <button
-                                        onClick={() => navigate(`/shops/${shop.shopId}/delete`)}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/shops/${shop.shopId}/delete`);
+                                        }}
                                         className="text-red-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md">
                                         Delete
                                     </button>
