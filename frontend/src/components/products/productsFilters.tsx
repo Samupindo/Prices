@@ -4,8 +4,6 @@ interface ProductsFiltersProps {
         name?: string;
         priceMin?: number;
         priceMax?: number;
-        page?: number;
-        size?: number;
     }) => void;
 }
 
@@ -40,7 +38,6 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
         });
         onApplyFilters({});
     };
-
     return (
         <div className="bg-white shadow-sm rounded-lg p-4 mb-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

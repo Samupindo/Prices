@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
-import { ProductList } from "./ProductList";
-import { ProductsFilters } from "./ProductsFilters";
+import { ProductList } from "./productList";
+import { ProductsFilters } from "./productsFilters";
 import type { ProductWithShopsDto } from "../../types/products";
 import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1); 
+    const [currentPage, setCurrentPage] = useState(0); 
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
@@ -17,15 +17,13 @@ export const Products = () => {
         name?: string;
         priceMin?: number;
         priceMax?: number;
-        page?: number;
-        size?: number;
     }) => {
         try {
             setError(null);
             const response = await getProducts({
-                ...filters,
                 page: currentPage,
-                size: 10
+                size: 10,
+                filters: filters || {}
             });
             setProducts(response.content);
             setTotalPages(response.totalPages);
@@ -36,8 +34,11 @@ export const Products = () => {
     };
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-        fetchProducts();
+        const backendPage = page - 1;
+        if (backendPage >= 0 && backendPage < totalPages) {
+            setCurrentPage(backendPage);
+            fetchProducts();
+        }
     };
 
     useEffect(() => {
@@ -82,7 +83,7 @@ export const Products = () => {
             <ProductList
                 products={products}
                 totalPages={totalPages}
-                currentPage={currentPage}
+                currentPage={currentPage + 1}
                 onPageChange={handlePageChange}
             />
         </div>
