@@ -43,6 +43,21 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
     return (
         <div className="p-4">
             <h2 className="text-center text-xl font-semibold mb-3 bg-gray-200 rounded-xl py-3">Shops</h2>
+            <div className="flex justify-between items-center">
+                <button
+                    onClick={() => navigate('/shops/create')}
+                    className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Add New Shop
+                </button>
+                <div className="m-2">
+                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" placeholder="Search by shop ID" />
+                    <button
+                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
+                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Search
+                    </button>
+                </div>
+            </div>
             <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
                 <label htmlFor="country">Country:</label>
                 <input
@@ -67,15 +82,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                 />
             </div>
             <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
-            <div className="m-2">
-                    <label>Shop ID:</label>
-                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" />
-                    <button
-                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
-                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Search
-                    </button>
-                </div>
+                
             </div>
 
             <div className="shadow-md rounded-lg overflow-hidden bg-white">
@@ -140,13 +147,9 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                 </table>
             </div>
             <div className="flex justify-center items-center bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
-                
+
             </div>
-            <button
-                onClick={() => navigate('/shops/create')}
-                className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4">
-                Add New Shop
-            </button>
+
             <Pagination>
                 <PaginationContent>
                     <PaginationItem>
