@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ProductWithShopsDto } from "../../types/shops";
 import { Link, useNavigate } from "react-router-dom";
+import { PaginationDefault } from "../PaginationDefault";
 
 interface ProductListProps {
     products: ProductWithShopsDto[];
@@ -197,36 +198,11 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
             </div>
 
             {/* Paginación */}
-            <div className="mt-4 flex justify-center items-center space-x-2">
-                <button
-                    onClick={() => onPageChange(currentPage - 1)}
-                    disabled={currentPage === 0}
-                    className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
-                >
-                    Previous
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => i).map((page) => (
-                    <button
-                        key={page}
-                        onClick={() => onPageChange(page)}
-                        className={`px-4 py-2 rounded-md ${currentPage === page
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-100 hover:bg-gray-200'
-                            }`}
-                    >
-                        {page + 1} {/* Mostramos el número de página +1 para que sea más amigable */}
-                    </button>
-                ))}
-
-                <button
-                    onClick={() => onPageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages - 1}
-                    className="px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 disabled:opacity-50"
-                >
-                    Next
-                </button>
-            </div>
+            <PaginationDefault
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+            />
 
             <div className="flex flex-col space-y-4">
                 <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">

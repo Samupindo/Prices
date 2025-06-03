@@ -1,19 +1,40 @@
 import { useState } from "react";
 import type { PurchaseDto } from "../../types/purchase";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import { PaginationDefault } from "../PaginationDefault";
 
 interface PurchaseListProps {
     purchases: PurchaseDto[];
     totalPages: number;
+    currentPage: number;
+    onPageChange: (page: number) => void;
 }
 
-export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
+export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange }: PurchaseListProps) => {
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
+
     return (
         <div className="p-4">
-            <div className="shadow-md sm:rounded-lg overflow-x-auto">
+            <div className="shadow-md sm:rounded-lg overflow-x-auto mb-4">
+                <div className="flex-1">
+                    <div className="flex space-x-4">
+                        <input
+                            name="purchaseId"
+                            type="number"
+                            placeholder="Find purchase by id"
+                            onChange={(e) => setFindId(e.target.value)}
+                            className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        <button
+                            onClick={() => navigate(`/update-purchases/${findId}`)}
+                            className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                        >
+                            Buscar
+                        </button>
+                    </div>
+                </div>
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-100">
                         <tr>
@@ -46,30 +67,36 @@ export const PurchasesList = ({ purchases, totalPages }: PurchaseListProps) => {
                                     <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/delete-purchases/${purchase.purchaseId}`}>Delete</Link></button>
                                 </td>
                             </tr>
-
                         ))}
                     </tbody>
                 </table>
             </div>
-            <div className="flex space-x-4">
-                <input
-                    name="purchaseId"
-                    type="number"
-                    placeholder="Find purchase by id"
-                    onChange={(e) => setFindId(e.target.value)}
-                    className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-                <button
-                    onClick={() => navigate(`/purchases/${findId}`)}
-                    className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
-                >
-                    Buscar
-                </button>
-            </div>
-            <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate('/create-purchase')}>Add Purchase</button>
-            <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/add-purchaseLine`}>Add Product to Purchase</Link></button>
-            <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/delete-purchaseLine`}>Delete Product from Purchase</Link></button>
 
+            {/* Paginación */}
+            <PaginationDefault
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+            />
+
+            <div className="mt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+
+
+                <div className="flex space-x-4">
+                    <button
+                        className="text-indigo-600 hover:text-indigo-900 font-medium"
+                        onClick={() => navigate('/create-purchase')}
+                    >
+                        Add Purchase
+                    </button>
+                    <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                        <Link to={`/add-purchaseLine`}>Add Product to Purchase</Link>
+                    </button>
+                    <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                        <Link to={`/delete-purchaseLine`}>Delete Product from Purchase</Link>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 };

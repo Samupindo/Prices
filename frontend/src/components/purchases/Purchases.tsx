@@ -5,25 +5,32 @@ import { getPurchases } from "../../services/PurchaseService";
 import { PurchasesFilters } from "./PurchasesFilters";
 import { PurchasesList } from "./PurchasesList";
 
-
-
-export const Purchases= () => {
-    const [purchases,setPurchases] = useState<PurchaseDto[]>([]);
-    const [totalPages,setTotalPages] = useState(1);
-    const [error,setError] = useState<string | null>(null);
+export const Purchases = () => {
+    const [purchases, setPurchases] = useState<PurchaseDto[]>([]);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        fetchPurchases();
+    };
+
     const fetchPurchases = async (filters?: {
         customerId?: number;
         productInShop?: number[];
         totalPriceMax?: number;
         totalPriceMin?: number;
         shopping?: boolean;
-        page?: number;
-        size?: number;
     }) => {
         try {
             setError(null);
-            const response = await getPurchases(filters);
+            const response = await getPurchases({
+                page: currentPage,
+                size: 10,
+                ...filters
+            });
             setPurchases(response.content);
             setTotalPages(response.totalPages);
         } catch (error) {
@@ -34,11 +41,11 @@ export const Purchases= () => {
 
     useEffect(() => {
         fetchPurchases();
-    }, []);
+    }, [currentPage]);
 
+    if (error) return <div>Error loading purchases: {error}</div>;
 
-    if (error) return <div>Error loading products: {error}</div>;
-    return  ( 
+    return (
         <div>
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
@@ -55,7 +62,12 @@ export const Purchases= () => {
                 Home
             </button>
             <PurchasesFilters onApplyFilters={fetchPurchases}/>
-            <PurchasesList purchases={purchases} totalPages={totalPages}/>
+            <PurchasesList
+                purchases={purchases}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
-}
+};

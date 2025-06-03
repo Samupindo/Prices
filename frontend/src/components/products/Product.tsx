@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
-    const [totalPages, setTotalPages] = useState(1);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1); 
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
@@ -24,7 +24,8 @@ export const Products = () => {
             setError(null);
             const response = await getProducts({
                 ...filters,
-                page: currentPage
+                page: currentPage,
+                size: 10
             });
             setProducts(response.content);
             setTotalPages(response.totalPages);
@@ -34,14 +35,14 @@ export const Products = () => {
         }
     };
 
-    useEffect(() => {
-        fetchProducts();
-    }, [currentPage]);
-
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
         fetchProducts();
     };
+
+    useEffect(() => {
+        fetchProducts();
+    }, [currentPage]);
 
     if (error) return <div>Error loading products: {error}</div>;
 
