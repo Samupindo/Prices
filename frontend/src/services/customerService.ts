@@ -6,7 +6,7 @@ import type { PageResponse, CustomerDto, CreateCustomerDto, CustomerPutDto } fro
 export interface CustomerFilters {
     name?: string;
     email?: string;
-    phone?: string;
+    phone?: number;
 }
 
 export interface PaginatedRequest {
@@ -24,7 +24,7 @@ export const getCustomers = async ({ page = 0, size = 10, filters }: PaginatedRe
 
     if (filters?.name) queryParams.append('name', filters.name);
     if (filters?.email) queryParams.append('email', filters.email);
-    if (filters?.phone) queryParams.append('phone', filters.phone);
+    if (filters?.phone) queryParams.append('phone', filters.phone.toString());
 
     const response = await axiosInstance.get<PageResponse<CustomerDto>>(`/customers?${queryParams}`);
     return response.data;

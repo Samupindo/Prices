@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import type { CustomerDto } from '../../types/Customer';
 import { useNavigate } from 'react-router-dom';
-
 import type { CustomerFilters } from '../../services/customerService';
-import {PaginationDefault} from '../PaginationDefault';
+import { PaginationDefault } from '../PaginationDefault';
 
 interface CustomerListProps {
     customers: CustomerDto[];
@@ -25,19 +24,19 @@ const CustomerList = ({
     const navigate = useNavigate();
     const [localFilters, setLocalFilters] = useState(filters);
 
-    type CustomerFiltersKeys ='name' | 'email' | 'phone';
+    type CustomerFiltersKeys = 'name' | 'email' | 'phone';
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>, field: CustomerFiltersKeys) => {
         const newFilters = { ...localFilters, [field]: e.target.value };
-        const emptyFilters = { name: '', email: '', phone: '' };
+        const emptyFilters = { name: '', email: '', phone: 0 };
 
         setLocalFilters(newFilters);
-        onFilterChange(localFilters);
+        onFilterChange(newFilters);
 
-        if(e.target.value === '') {
+        if (e.target.value === '') {
             onFilterChange(emptyFilters);
         }
-        
+
     };
 
     return (
@@ -70,7 +69,7 @@ const CustomerList = ({
                     <div className="flex flex-col">
                         <label className="text-sm font-medium text-gray-700 mb-1">Phone</label>
                         <input
-                            type="text"
+                            type="number"
                             value={localFilters.phone || ''}
                             onChange={(e) => handleSearch(e, 'phone')}
                             className="rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
@@ -79,11 +78,22 @@ const CustomerList = ({
                     </div>
                 </div>
             </div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="flex items-center justify-center gap-4 mb-6 bg-white p-4 rounded-lg shadow-md">
+                <label className="text-sm font-medium text-gray-700">CustomerID</label>
+                <input
+                    id='searchCustomerId'
+                    type="number"
+                    className="rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 mt-2"
+                    placeholder="Search by Customer ID..."></input>
+                <button onClick={() => navigate(`/customers/${(document.getElementById('searchCustomerId') as HTMLInputElement)?.value}`)}
+                    className="ml-2 bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
+                    Search
+                </button>
+            </div>
+            <div className="relative overflow-x-auto shadow-md mt-10 sm:rounded-lg">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-black text-white sticky top-0">
                         <tr>
-                            <th className="px-6 py- text-left text-xs font-medium uppercase tracking-wider w-1/6">ID</th>
                             <th className="px-14 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Name</th>
                             <th className="px-14 py-3 text-left text-xs font-medium uppercase tracking-wider w-1/6">Phone</th>
                             <th className="px-20 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Email</th>
@@ -94,14 +104,10 @@ const CustomerList = ({
                         {customers.map((customer: CustomerDto) => (
                             <tr key={customer.customerId}
                                 className="hover:bg-gray-100 transition-colors duration-200">
-                                <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.customerId}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">
-                                    <button className="bg-blue-600 hover:bg-blue-800" onClick={() => navigate(`/customers/${customer.customerId}`)}>
-                                        View
-                                    </button>
                                     <button className="bg-yellow-600 hover:bg-yellow-800 ml-2" onClick={() => navigate(`/customers/${customer.customerId}/update`)}
                                     >
                                         Edit
@@ -115,6 +121,7 @@ const CustomerList = ({
                     </tbody>
                 </table>
             </div>
+
             <button
                 onClick={() => navigate("/customers-createCustomers")}
                 className="mt-4 bg-blue-500 text-black flex justify-left px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
