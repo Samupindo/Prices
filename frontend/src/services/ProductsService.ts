@@ -5,22 +5,27 @@ interface ProductFilters {
     name?: string;
     priceMin?: number;
     priceMax?: number;
-    page?: number;
-    size?: number;
 }
-
-export const getProducts = async (filters?: ProductFilters): Promise<PageResponseDto<ProductWithShopsDto>> => {
+export interface PageResponse{
+    page: number;
+    size: number;
+    filters?: ProductFilters;
+}
+export const getProducts = async ({page = 1, size = 10, filters}: PageResponse) => {
     try {
+        // Convertimos la página de frontend (1-based) a backend (0-based)
+        const backendPage = page - 1;
+        
         const response = await axiosInstance.get("/products", {
             params: {
                 ...filters,
-                page: filters?.page || 0,
-                size: filters?.size || 10
+                page: backendPage,
+                size
             }
         });
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch products');
+        throw error;
     }
 };
 

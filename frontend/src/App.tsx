@@ -6,7 +6,7 @@ import { CreateProduct } from './components/products/CreateProduct'
 import { ProductDetail } from './components/products/ProductDetail'
 import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
-import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/Customers';
+import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/customers';
 import { CustomerDelete } from './components/customers/CustomerDelete'
 import { AllShops, ShopPut } from './components/shops/shops'
 import { ShopById } from './components/shops/shops'
@@ -24,6 +24,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
+
+
         <Route path="/shops" element={<AllShops />} />
         <Route path="/shops/:shopId" element={<ShopById />} />
         <Route path="/shops/create" element={<ShopPost />} />
@@ -31,25 +34,24 @@ function App() {
         <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
 
         <Route path="/products" element={<Products />} />
-        <Route path="*" element={<div>404 Not Found</div>} />
-        <Route path="/products-create" element={<CreateProduct />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/update-products/:id" element={<UpdateProduct />} />
-        <Route path="/delete-products/:id" element={<DeleteProduct />} />
+        <Route path="/products/:productId" element={<ProductDetail />} />
+        <Route path="/products/create" element={<CreateProduct />} />
+        <Route path="/products/:productId/edit" element={<UpdateProduct />} />
+        <Route path="/products/:productId/delete" element={<DeleteProduct />} />
 
         <Route path="/customers" element={<CustomersGetAll />} />
         <Route path="/customers/:customerId" element={<CustomerById />} />
-        <Route path="/customers-createCustomers" element={<CustomerPost />} />
-        <Route path="/customers/:customerId/update" element={<CustomerPut />} />
-        <Route path="/customers/delete/:customerId" element={<CustomerDelete />} />
+        <Route path="/customers/create" element={<CustomerPost />} />
+        <Route path="/customers/:customerId/edit" element={<CustomerPut />} />
+        <Route path="/customers/:customerId/delete" element={<CustomerDelete />} />
 
         <Route path="/purchases" element={<Purchases />} />
-        <Route path='/purchases/:id' element={<PurchaseDetail />} />
-        <Route path="/create-purchase" element={<AddPurchase />} />
-        <Route path="/delete-purchases/:id" element={<DeletePurchase />} />
-        <Route path="/finish-purchases/:id" element={<FinishPurchase />} />
-        <Route path="/add-purchaseLine" element={<AddProduct />} />
-        <Route path="/delete-purchaseLine" element={<DeleteProductFromPurchase />} />
+        <Route path='/purchases/:purchaseId' element={<PurchaseDetail />} />
+        <Route path="/purchases/create" element={<AddPurchase />} />
+        <Route path="/purchases/:purchaseId/delete" element={<DeletePurchase />} />
+        <Route path="/purchases/:purchaseId/finish" element={<FinishPurchase />} />
+        <Route path="/purchases/:purchaseId/addProduct" element={<AddProduct />} />
+        <Route path="/purchases/:purchaseId/deleteProduct" element={<DeleteProductFromPurchase />} />
       </Routes>
     </BrowserRouter>
   )

@@ -11,18 +11,27 @@ interface PurchaseFilters {
     size?: number;
 }
 
-export const getPurchases = async (filters? : PurchaseFilters): Promise<PageResponseDto<PurchaseDto>> => {
+interface PageResponse {
+    page: number;
+    size: number;
+    filters?: PurchaseFilters;
+}
+
+export const getPurchases = async ({page = 1, size = 10, filters}: PageResponse): Promise<PageResponseDto<PurchaseDto>> => {
     try {
+        // Convertimos la página de frontend (1-based) a backend (0-based)
+        const backendPage = page - 1;
+        
         const response = await axiosInstance.get("/purchases", {
             params: {
                 ...filters,
-                page: filters?.page || 0,
-                size: filters?.size || 10
+                page: backendPage,
+                size
             }
         });
         return response.data;
     } catch (error) {
-        throw new Error('Failed to fetch purchases');
+        throw error;
     }
 }
 
@@ -94,4 +103,3 @@ export const deleteProductFromPurchase = async (purchaseId: number, productInSho
         throw new Error(errorMessage);
     }
 }
-
