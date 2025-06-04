@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { deleteShop } from "../../services/ShopsService";
+import { deleteShop, getShopById } from "../../services/ShopsService";
 import { useParams, useNavigate } from "react-router-dom";
+import type { ShopDto } from "../../types/Shops";
 
 export const DeleteShop = () => {
     const { shopId } = useParams();
@@ -8,9 +9,24 @@ export const DeleteShop = () => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [shouldDelete, setShouldDelete] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [shop, setShop] = useState<ShopDto | null>(null);
 
     useEffect(() => {
-        if (shouldDelete && shopId) {
+        if (shopId) {
+            getShopById(shopId)
+                .then((response) => {
+                    setShop(response);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
+        }
+    }, [shopId]);
+
+    if (!shopId) return <div>Shop ID not found</div>;
+
+    const handleDelete = () => {
+        if (shop) {
             const performDelete = async () => {
                 try {
                     setIsDeleting(true);
@@ -24,23 +40,44 @@ export const DeleteShop = () => {
             };
             performDelete();
         }
-    }, [shouldDelete, shopId, navigate]);
-
-    if (!shopId) return <div>Shop ID not found</div>;
-
-    const handleDelete = () => {
-        setShouldDelete(true);
     };
 
     const handleCancel = () => {
         navigate('/shops', { replace: true });
     };
 
+    if (!shop) return <div>Shop not found</div>;
+
     return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center p-4">
             <div className="bg-white rounded-lg p-6 max-w-sm w-full">
                 <h2 className="text-xl font-bold mb-4">Delete Shop</h2>
-                <p className="text-gray-600 mb-6">
+
+                <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200 p-6 sm:p-10 md:p-12">
+                    <div>
+                        <div className="space-y-1">
+                            <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Shop ID</p>
+                            <p className="text-lg sm:text-xl md:text-2xl text-gray-700 break-words">{shop.shopId}</p>
+                        </div>
+
+                        <div className="space-y-1 mt-5">
+                            <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Country</p>
+                            <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.country}</p>
+                        </div>
+
+                        <div className="space-y-1 mt-5">
+                            <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">City</p>
+                            <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.city}</p>
+                        </div>
+
+                        <div className="md:col-span-3 space-y-1 mt-5">
+                            <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Address</p>
+                            <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.address}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <p className="text-gray-600 mb-6 mt-4">
                     Are you sure you want to delete this shop? This action cannot be undone.
                 </p>
 
