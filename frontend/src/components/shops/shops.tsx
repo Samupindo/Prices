@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { getShops, getShopById, type ShopFilter } from "../../services/ShopsService";
-import type { ShopDto, ShopAddDto, ShopPutDto } from "../../types/Shops";
+import type { ShopDto, ShopAddDto, ShopPutDto, AddProductShopDto } from "../../types/Shops";
 import { ShopList } from "./ShopList";
 import { ShopDetail } from "./ShopDetail";
 import { useParams } from "react-router-dom";
 import { CreateShop } from "./CreateShop";
 import { UpdateShop } from "./UpdateShop";
 import { DeleteShop } from "./DeleteShop";
+import type { ProductDto, ProductNameDto } from "@/types/Products";
+import { getProductById } from "@/services/ProductsService";
+import { ProductToShop } from "./ProductToShop";
 
 export const AllShops = () => {
     const [shops, setShops] = useState<ShopDto[]>([]);
@@ -112,4 +115,13 @@ export const ShopPut = () => {
     
 export const ShopDelete = () => {
     return <DeleteShop />;
+}
+
+export const AddProductToShop = () => {
+    const [formData] = useState<AddProductShopDto>({
+        price: 0,
+    });
+    
+
+    return <ProductToShop addProductShopDto={formData} />;
 }
