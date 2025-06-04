@@ -119,14 +119,14 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                             View
                                                         </button> 
                                                         <button
-                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                            onClick={() => navigate(`/products/${product.productId}/edit`)}
+                                                            className="text-indigo-600 hover:text-indigo-900 font-medium "
+                                                            onClick={(e) =>{e.stopPropagation(); navigate(`/products/${product.productId}/edit`)} }
                                                         >
                                                             Edit
                                                         </button>
                                                         <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                            onClick={() => navigate(`/products/${product.productId}/delete`)}
+                                                            onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/delete`)} }
                                                         >
                                                             Delete
                                                         </button>
@@ -157,7 +157,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                     </button>
                                                     <button
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                        onClick={() => navigate(`/products/${product.productId}/delete`)}
+                                                        onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/delete`)} }
                                                     >
                                                         Delete
                                                     </button>
