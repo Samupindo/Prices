@@ -46,9 +46,6 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                     <thead className="bg-gray-100">
                         <tr>
                             <th scope="col" className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}>
-                                ID
-                            </th>
-                            <th scope="col" className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}>
                                 Customer ID
                             </th>
                             <th scope="col" className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}>
@@ -65,7 +62,6 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                     <tbody className="bg-white divide-y divide-gray-200">
                         {purchases.map((purchase) => (
                             <tr key={purchase.purchaseId}>
-                                <td className={cellPadding}><Link to={`/purchases/${purchase.purchaseId}`}>{purchase.purchaseId}</Link></td>
                                 <td className={cellPadding}>{purchase.customer.customerId}</td>
                                 <td className={cellPadding}>{purchase.totalPrice.toFixed(2)}</td>
                                 <td className={cellPadding}>{purchase.shopping ? "Shopping" : "Not Shopping"}</td>

@@ -14,7 +14,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
 
-    // Estado para los filtros
     const [filters, setFilters] = useState<{
         name?: string;
         priceMin?: number;
@@ -25,9 +24,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
         priceMax: undefined,
     });
 
-    // Filtrar productos según los filtros aplicados
     const filteredProducts = products.filter(product => {
-        // Si no hay filtros, mostramos todos los productos
         if (!filters.name && !filters.priceMin && !filters.priceMax) {
             return true;
         }
@@ -35,7 +32,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
         const productName = product.name?.toLowerCase() || "";
         const matchesName = !filters?.name || productName.includes(filters.name?.toLowerCase());
 
-        // Verificar si el producto tiene al menos un shop que cumpla con los filtros de precio
         const hasMatchingShop = product.shop?.some(shop => {
             const price = shop.price;
             const matchesPrice = !filters?.priceMin || price >= filters.priceMin;
@@ -54,12 +50,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-100">
                         <tr>
-                            <th
-                                scope="col"
-                                className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
-                            >
-                                ID
-                            </th>
                             <th
                                 scope="col"
                                 className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
@@ -101,14 +91,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                 key={`${product.productId}-${shop.productInShopId}`}
                                                 className={rowBgClass}
                                             >
-                                                {shopIndex === 0 && (
-                                                    <td
-                                                        rowSpan={shopCount}
-                                                        className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
-                                                    >
-                                                        {product.productId}
-                                                    </td>
-                                                )}
                                                 {shopIndex === 0 && (
 
                                                     <td
@@ -156,11 +138,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                     } else {
                                         return (
                                             <tr key={product.productId} className={rowBgClass}>
-                                                <td
-                                                    className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
-                                                >
-                                                    {product.productId}
-                                                </td>
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}>
                                                     {product.name}
                                                 </td>
