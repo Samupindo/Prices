@@ -16,19 +16,18 @@ export const Purchases = () => {
         setCurrentPage(page);
     };
 
-    const fetchPurchases = async (filters?: {
+    const handleApplyFilters = async (filters?: {
         customerId?: number;
-        productInShop?: number[];
-        totalPriceMax?: number;
         totalPriceMin?: number;
+        totalPriceMax?: number;
         shopping?: boolean;
     }) => {
         try {
             setError(null);
             const response = await getPurchases({
-                page: currentPage,
+                page: currentPage - 1, // Convertir a 0-based
                 size: 10,
-                ...filters
+                filters: filters
             });
             setPurchases(response.content);
             setTotalPages(response.totalPages);
@@ -39,7 +38,7 @@ export const Purchases = () => {
     };
 
     useEffect(() => {
-        fetchPurchases();
+        handleApplyFilters();
     }, [currentPage]);
 
     if (error) return <div>Error loading purchases: {error}</div>;
@@ -50,17 +49,17 @@ export const Purchases = () => {
                 <div className="sm:flex-auto">
                     <h1 className="text-xl font-semibold text-gray-900">Purchases</h1>
                     <p className="mt-2 text-sm text-gray-700">
-                        A list of all purchases in your store
+                        A list of all purchases
                     </p>
                 </div>
             </div>
             <button
                 onClick={() => navigate('/')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-blue bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
             >
                 Home
             </button>
-            <PurchasesFilters onApplyFilters={fetchPurchases}/>
+            <PurchasesFilters onApplyFilters={handleApplyFilters} />
             <PurchasesList
                 purchases={purchases}
                 totalPages={totalPages}

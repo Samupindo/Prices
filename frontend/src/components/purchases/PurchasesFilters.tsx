@@ -3,51 +3,47 @@ import { useState } from "react";
 interface PurchasesFiltersProps {
     onApplyFilters: (filters: {
         customerId?: number;
-        productInShop?: number[];
-        totalPriceMax?: number;
         totalPriceMin?: number;
+        totalPriceMax?: number;
         shopping?: boolean;
-        page?: number;
-        size?: number;
     }) => void;
 }
 
 export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
     const [filters, setFilters] = useState({
         customerId: undefined,
-        totalPriceMax: undefined,
         totalPriceMin: undefined,
+        totalPriceMax: undefined,
         shopping: undefined,
-        page: undefined,
-        size: undefined,
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+        
+        // Actualizar el filtro correspondiente
         setFilters(prev => ({
             ...prev,
             [name]: value === '' ? undefined : value,
         }));
-    };
 
-    const handleApplyFilters = () => {
+        // Aplicar los filtros inmediatamente
         onApplyFilters({
             ...filters,
-            totalPriceMin: filters.totalPriceMin ? parseFloat(filters.totalPriceMin) : undefined,
-            totalPriceMax: filters.totalPriceMax ? parseFloat(filters.totalPriceMax) : undefined,
-        })
-    }
-
+            [name]: value === '' ? undefined : value,
+            customerId: name === 'customerId' ? (value ? parseInt(value) : undefined) : filters.customerId,
+            totalPriceMin: name === 'totalPriceMin' ? (value ? parseFloat(value) : undefined) : filters.totalPriceMin,
+            totalPriceMax: name === 'totalPriceMax' ? (value ? parseFloat(value) : undefined) : filters.totalPriceMax,
+            shopping: name === 'shopping' ? (value === 'true') : filters.shopping
+        });
+    };
 
     const handleResetFilters = () => {
         setFilters({
             customerId: undefined,
-            totalPriceMax: undefined,
             totalPriceMin: undefined,
+            totalPriceMax: undefined,
             shopping: undefined,
-            page: undefined,
-            size: undefined,
-        })
+        });
         onApplyFilters({});
     };
 
@@ -64,11 +60,9 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
                         name="customerId"
                         value={filters.customerId || ''}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Filter by customer ID"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
-
                 <div>
                     <label htmlFor="totalPriceMin" className="block text-xs font-medium text-gray-600">
                         Min Total Price
@@ -79,11 +73,9 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
                         name="totalPriceMin"
                         value={filters.totalPriceMin || ''}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Min total price"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
-
                 <div>
                     <label htmlFor="totalPriceMax" className="block text-xs font-medium text-gray-600">
                         Max Total Price
@@ -94,21 +86,19 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
                         name="totalPriceMax"
                         value={filters.totalPriceMax || ''}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Max total price"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     />
                 </div>
-
                 <div>
                     <label htmlFor="shopping" className="block text-xs font-medium text-gray-600">
-                        Shopping Status
+                        Shopping
                     </label>
                     <select
                         id="shopping"
                         name="shopping"
-                        value={filters.shopping || ''}
+                        value={filters.shopping ?? ''}
                         onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                         <option value="">All</option>
                         <option value="true">Shopping</option>
@@ -116,21 +106,14 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
                     </select>
                 </div>
             </div>
-
-            <div className="mt-4 flex justify-end space-x-2">
+            <div className="mt-4 flex justify-end space-x-4">
                 <button
                     onClick={handleResetFilters}
-                    className="px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md text-xs font-medium text-gray hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-indigo-500 transition-all duration-150"
+                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
                 >
                     Reset
-                </button>
-                <button
-                    onClick={handleApplyFilters}
-                    className="px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md text-xs font-medium text-gray hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-indigo-500 transition-all duration-150"
-                >
-                    Apply Filters
                 </button>
             </div>
         </div>
     );
-}
+};
