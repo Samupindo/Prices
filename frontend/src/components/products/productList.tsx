@@ -81,7 +81,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                             filteredProducts
                                 .sort((a, b) => Number(a.productId) - Number(b.productId))
                                 .map((product, productIndex) => {
-                                    const rowBgClass = productIndex % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                                    const rowBgClass = productIndex % 2 === 0 ? 'bg-white cursor-pointer' : 'bg-gray-50 cursor-pointer';
                                     const hasShops = product.shop && Array.isArray(product.shop) && product.shop.length > 0;
                                     const shopCount = hasShops ? product.shop.length : 1;
 
@@ -90,6 +90,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                             <tr
                                                 key={`${product.productId}-${shop.productInShopId}`}
                                                 className={rowBgClass}
+                                                onClick={() => navigate(`/products/${product.productId}`)}
                                             >
                                                 {shopIndex === 0 && (
 
