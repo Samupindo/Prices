@@ -41,10 +41,16 @@ const CustomerList = ({
 
     return (
         <div className="container mx-auto p-8">
+            <button
+                onClick={() => navigate('/')}
+                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
+            >
+                Home
+            </button>
             <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
                 Customer List
             </h2>
-
+            
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => navigate("/customers/create")}
@@ -110,10 +116,10 @@ const CustomerList = ({
                             <th className="px-20 py-3 text-left text-xs font-medium uppercase tracking-wider w-2/6">Actions</th>
                         </tr>
                     </thead>
-                    <tbody className="bg-gray-300 divide-y divide-gray-200 overflow-y-auto max-h-[50vh]">
+                    <tbody className="bg-white divide-y divide-gray-200 overflow-y-auto max-h-[50vh]">
                         {customers.map((customer: CustomerDto) => (
                             <tr onClick={() => navigate(`/customers/${customer.customerId}`)} key={customer.customerId}
-                                className="hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                                className="hover:bg-teal-100 transition-colors duration-200 cursor-pointer">
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>

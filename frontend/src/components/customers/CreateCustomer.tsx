@@ -29,8 +29,8 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
     };
     
     return (
-        <div className="container mx-auto p-8">
-            <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+        <div className="container shadow-md rounded-lg mx-auto p-8">
+            <h2 className="text-2xl font-bold flex justify-center mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
                 Create Customer
             </h2>
             <form onSubmit={handleSubmit} className="max-w-md space-y-4">
@@ -74,12 +74,7 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
                     />
                 </div>
             </form>
-            <div className="flex gap-7 items-center ">
-                    <button
-                        onClick={() => navigate("/customers")}
-                        className="bg-gray-500 mt-10 text-black px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200">
-                        Back to List
-                    </button>
+            <div className="flex gap-7 justify-center items-center ">
                     <button
                         onClick={handleSubmit}
                         className="bg-blue-500 mt-10 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">

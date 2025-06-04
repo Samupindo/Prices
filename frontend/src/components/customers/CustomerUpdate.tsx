@@ -34,12 +34,12 @@ const CustomerUpdate = ({ customer }: CustomerUpdateProps) => {
     };
 
     return (
-        <div className="container mx-auto p-8 ">
-            <h2 className="text-2xl font-bold text-gray-900  border-b-2 border-gray-200">
+        <div className="container shadow-md rounded-lg mx-auto px-8  ">
+            <h2 className="text-2xl text-center p-6 font-bold text-gray-900  border-b-2 border-gray-200">
                 Update Customer
             </h2>
             {error && <div className="text-red-500 mb-4">{error}</div>}
-            <div className="bg-white shadow-md rounded-lg p-6">
+            <div className="bg-white p-6">
                 <form onSubmit={handleSubmit} className="max-w-md space-y-5">
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Name</label>
@@ -73,19 +73,15 @@ const CustomerUpdate = ({ customer }: CustomerUpdateProps) => {
                             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
-                        Update Customer
-                    </button>
+                    <div className="flex justify-center">
+                        <button
+                            type="submit"
+                            className="mt-4 bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
+                            Update Customer
+                        </button>
+                    </div>
                 </form>
             </div>
-                <button
-                onClick={() => navigate("/customers")}
-                className="bg-gray-500 mt-10 text-black px-4 py-2 rounded hover:bg-gray-600 transition-colors duration-200">
-                Back to List
-            </button>
-            
         </div>
     );
 }
