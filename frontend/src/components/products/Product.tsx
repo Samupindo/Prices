@@ -34,7 +34,6 @@ export const Products = () => {
         const backendPage = page - 1;
         if (backendPage >= 0 && backendPage < totalPages) {
             setCurrentPage(backendPage);
-            fetchProducts();
         }
     };
     useEffect(() => {
