@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { PurchaseDetail } from "./PurchaseDetail";
 export const FinishPurchase = () => {
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { purchaseId } = useParams();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -13,20 +13,20 @@ export const FinishPurchase = () => {
 
 
     const handleFinish = async () => {
-        if (!id) {
+        if (!purchaseId) {
             setError('Purchase ID is required');
             return;
         }
         try {
             setError(null);
             setIsLoading(true);
-            const purchaseId = parseInt(id);
-            if (isNaN(purchaseId)) {
+            const purchaseIdNumber = parseInt(purchaseId);
+            if (isNaN(purchaseIdNumber)) {
                 setError('Invalid purchase ID');
                 setIsLoading(false);
                 return;
             }
-            await finishPurchase(purchaseId);
+            await finishPurchase(purchaseIdNumber);
             navigate('/purchases');
         } catch (error) {
             setError('Failed to finish purchase');

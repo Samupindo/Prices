@@ -1,30 +1,31 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { addProductToPurchase,getPurchaseById } from "../../services/PurchaseService";
-import axiosInstance from "../../config/api-customer";
+import { addProductToPurchase, getPurchaseById } from "../../services/PurchaseService";
+import { PurchaseDetail } from "./PurchaseDetail";
 
 export const AddProduct = () => {
-    const [purchaseId, setPurchaseId] = useState<number>(0);
+    const { purchaseId } = useParams();
     const [productInShopId, setProductInShopId] = useState<number>(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    
-    const validateIds = async (purchaseId: number, productInShopId: number) => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const validateIds = async (purchaseId: string, productInShopId: number) => {
         try {
-            const response = await getPurchaseById(purchaseId);
+            if (!purchaseId) {
+                throw new Error('Purchase ID is required');
+            }
+            const purchaseIdNumber = parseInt(purchaseId);
+            if (isNaN(purchaseIdNumber)) {
+                throw new Error('Invalid purchase ID');
+            }
+
+            const response = await getPurchaseById(purchaseIdNumber);
             const purchase = response;
 
             if (!purchase.shopping) {
                 throw new Error(`Purchase with ID ${purchaseId} is already finished.`);
             }
-
-            // const productInShopResponse = await axiosInstance.get(`/productInShop/${productInShopId}`);
-            // const productInShop = productInShopResponse.data;
-
-            // // Verificar que el productInShop tiene precio
-            // if (!productInShop.price) {
-            //     throw new Error(`Product in shop with ID ${productInShopId} is not available for purchase.`);
-            // }
 
             return true;
         } catch (error: any) {
@@ -34,78 +35,62 @@ export const AddProduct = () => {
             throw new Error(errorMessage);
         }
     }
+
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-
-        if (!purchaseId || !productInShopId) {
-            setError('Both IDs are required');
-            return;
-        }
+        setError(null);
+        setIsLoading(true);
 
         try {
-            setError(null);
-            await validateIds(purchaseId, productInShopId);
-            try {
-                await addProductToPurchase(purchaseId, productInShopId);
-                navigate('/purchases');
-            } catch (error: any) {
-                const errorMessage = error.response?.data?.message ||
-                    error.message ||
-                    `Failed to add product in shop with ID ${productInShopId} to purchase with ID ${purchaseId}. ` +
-                    `Please verify that the product is available in the shop.`;
-                setError(errorMessage);
+            if (!purchaseId) {
+                throw new Error('Purchase ID is required');
             }
+            const purchaseIdNumber = parseInt(purchaseId);
+            if (isNaN(purchaseIdNumber)) {
+                throw new Error('Invalid purchase ID');
+            }
+
+            await validateIds(purchaseId, productInShopId);
+            await addProductToPurchase(purchaseIdNumber, productInShopId);
+            navigate(`/purchases/${purchaseId}`);
         } catch (error: any) {
             setError(error.message);
-            console.error('Error details:', error);
+            console.error('Error adding product:', error);
+        } finally {
+            setIsLoading(false);
         }
-    }
+    };
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === 'purchaseId') {
-            setPurchaseId(parseInt(value));
-        } else if (name === 'productInShopId') {
+        if (name === 'productInShopId') {
             setProductInShopId(parseInt(value));
         }
-    }
+    };
 
-    if (error) {
-        return (
-            <div className="mt-8">
-                <div className="rounded-md bg-red-50 p-4">
-                    <div className="flex">
-                        <div className="ml-3">
-                            <h3 className="text-sm font-medium text-red-800">Error</h3>
-                            <div className="mt-2 text-sm text-red-700">
-                                <p>{error}</p>
+    return (
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+                <PurchaseDetail />
+            </div>
+            <div className="mb-8">
+                <h1 className="text-xl font-semibold text-gray-900 mb-4">Add Product to Purchase</h1>
+                {error && (
+                    <div className="mb-4 p-4 rounded-md bg-red-50 border-l-4 border-red-400">
+                        <div className="flex">
+                            <div className="flex-shrink-0">
+                                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                                </svg>
+                            </div>
+                            <div className="ml-3">
+                                <h3 className="text-sm font-medium text-red-800">{error}</h3>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        );
-    }
+                )}
 
-    return (
-        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
-            <div>
-                <h1 className="text-xl font-semibold text-gray-900 mb-4">Add Product to Purchase</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label htmlFor="purchaseId" className="block text-sm font-medium text-gray-700">
-                            Purchase ID
-                        </label>
-                        <input
-                            type="number"
-                            id="purchaseId"
-                            name="purchaseId"
-                            value={purchaseId}
-                            onChange={handleOnChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            required
-                        />
-                    </div>
                     <div>
                         <label htmlFor="productInShopId" className="block text-sm font-medium text-gray-700">
                             Product in Shop ID
@@ -118,14 +103,27 @@ export const AddProduct = () => {
                             onChange={handleOnChange}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                             required
+                            min="1"
                         />
                     </div>
-                    <button
-                        type="submit"
-                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full"
-                    >
-                        Add Product
-                    </button>
+
+                    <div className="flex justify-end space-x-4">
+                        <button
+                            type="button"
+                            onClick={() => navigate(`/purchases/${purchaseId}`)}
+                            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={isLoading || !productInShopId}
+                            className={`px-4 py-2 border border-transparent rounded-md text-sm font-medium ${isLoading || !productInShopId ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'
+                                }`}
+                        >
+                            {isLoading ? 'Adding...' : 'Add Product'}
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

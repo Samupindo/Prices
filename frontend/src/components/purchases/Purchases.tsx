@@ -14,7 +14,6 @@ export const Purchases = () => {
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-        fetchPurchases();
     };
 
     const fetchPurchases = async (filters?: {
