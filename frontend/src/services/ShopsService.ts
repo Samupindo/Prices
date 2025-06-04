@@ -1,4 +1,4 @@
-import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto, AddProductShopDto } from "../types/Shops";
+import type { ShopAddDto, PageResponseDto, ShopDto, ShopPutDto, AddProductShopDto, ProductInShopPatchDto } from "../types/Shops";
 import axiosInstance from "../lib/api/apiFacade";
 
 export interface ShopFilter {
@@ -49,6 +49,11 @@ export const addProductToShop = async (shopId: string, productId: string, addPro
 
 export const updateShop = async (shopId: string, shopPutDto: ShopPutDto) => {
     const response = await axiosInstance.put(`/shops/${shopId}`, shopPutDto);
+    return response.data;
+}
+
+export const updateProductInShop = async (shopId: string, productId: string, productInShopPatchDto: ProductInShopPatchDto) => {
+    const response = await axiosInstance.patch(`/shops/${shopId}/products/${productId}`, productInShopPatchDto);
     return response.data;
 }
 
