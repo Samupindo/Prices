@@ -8,7 +8,7 @@ export const ProductDetail = () => {
     const [error, setError] = useState<string | null>(null);
     const {productId} = useParams();
     const navigate = useNavigate();
-    const isUpdatePage = ['/update-products', '/delete-products'].some(path => location.pathname.includes(path));
+    const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
         try {
             if (!productId) {
