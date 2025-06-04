@@ -17,7 +17,9 @@ export const getProducts = async ({ page = 0, size = 10, filters }: PageResponse
     try {
         const params = new URLSearchParams({
             page: page.toString(),
-            size: size.toString()
+            size: size.toString(),
+            sort: 'productId',
+            order: 'asc'
         });
         
         if (filters?.name) {
