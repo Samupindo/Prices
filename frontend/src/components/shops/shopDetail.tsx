@@ -26,7 +26,7 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
             
                 <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200 p-6 sm:p-10 md:p-12">
                     <div>
-                        <div className="space-y-1 mt-5">
+                        <div className="space-y-1">
                             <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Shop ID</p>
                             <p className="text-lg sm:text-xl md:text-2xl text-gray-700 break-words">{shop.shopId}</p>
                         </div>
@@ -49,13 +49,6 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                 </div>
             
             <div className="mt-6 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
-                <div>
-                     <button
-                        onClick={() => navigate('/shops')}
-                        className="w-full md:w-auto bg-gray-200 text-black px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
-                        Back to Shops
-                    </button>
-                </div>
 
                 <div className="flex flex-col sm:flex-row w-full md:w-auto space-y-3 sm:space-y-0 sm:space-x-4">
                     <button
@@ -64,6 +57,7 @@ export const ShopDetail = ({ shop  }: ShopDetailProps) => {
                         Edit Shop
                     </button>
                     <button
+                    onClick={() => navigate(`/shops/${shop.shopId}/delete`)}
                         className="w-full sm:w-auto bg-red-600 text-black px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         Delete Shop
                     </button>

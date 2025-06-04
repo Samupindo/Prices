@@ -42,6 +42,12 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
 
     return (
         <div className="p-4">
+            <button
+                onClick={() => navigate('/')}
+                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
+            >
+                Home
+            </button>
             <h2 className="text-center text-xl font-semibold mb-3 bg-gray-200 rounded-xl py-3">Shops</h2>
             <div className="flex justify-between items-center">
                 <button
@@ -81,10 +87,6 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                     onChange={(event) => handleSearch(event, 'address')}
                 />
             </div>
-            <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
-                
-            </div>
-
             <div className="shadow-md rounded-lg overflow-hidden bg-white">
                 <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
@@ -123,7 +125,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                                 <td className="px-6 py-4 text-sm text-gray-500 text-left">
                                     {shop.address}
                                 </td>
-                                <td className="flex gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <td className="flex justify-center gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
