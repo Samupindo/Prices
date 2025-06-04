@@ -95,12 +95,6 @@ export const UpdateProduct = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button
-                onClick={() => navigate('/products')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
-            >
-                Back
-            </button>
             <div className="mb-8">
                 <ProductDetail />
             </div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {  deleteProduct } from "../../services/ProductsService";
+import { deleteProduct } from "../../services/ProductsService";
 import { ProductDetail } from "./ProductDetail";
 export const DeleteProduct = () => {
     const { productId } = useParams();
@@ -46,12 +46,6 @@ export const DeleteProduct = () => {
     }
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <button
-                onClick={() => navigate('/products')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6" 
-            >
-                Back
-            </button>
             <div className="mb-8">
                 <ProductDetail />
             </div>
