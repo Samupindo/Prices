@@ -20,6 +20,7 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
             <div className="shadow-md sm:rounded-lg overflow-x-auto mb-4">
                 <div className="flex-1">
                     <div className="flex space-x-4">
+                        
                         <input
                             name="purchaseId"
                             type="number"
@@ -28,11 +29,17 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                             className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         <button
-                            onClick={() => navigate(`/update-purchases/${findId}`)}
+                            onClick={() => navigate(`/purchases/${findId}`)}
                             className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
                         >
                             Buscar
                         </button>
+                        <button
+                        className="text-indigo-600 hover:text-indigo-900 font-medium"
+                        onClick={() => navigate('/purchases/create')}
+                    >
+                        Add Purchase
+                    </button>
                     </div>
                 </div>
                 <table className="min-w-full divide-y divide-gray-200">
@@ -63,8 +70,39 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                                 <td className={cellPadding}>{purchase.totalPrice.toFixed(2)}</td>
                                 <td className={cellPadding}>{purchase.shopping ? "Shopping" : "Not Shopping"}</td>
                                 <td className={cellPadding}>
-                                    <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/finish-purchases/${purchase.purchaseId}`}>Finish</Link></button>
-                                    <button className="text-indigo-600 hover:text-indigo-900 font-medium"><Link to={`/delete-purchases/${purchase.purchaseId}`}>Delete</Link></button>
+                                    <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                                        <Link to={`/purchases/${purchase.purchaseId}/delete`}>
+                                            Delete
+                                        </Link>
+                                    </button>
+                                    {purchase.shopping ? (
+                                        <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                                            <Link to={`/purchases/${purchase.purchaseId}/finish`}>Finish</Link>
+                                        </button>
+                                    ) : (
+                                        <button className="text-gray-400 cursor-not-allowed font-medium" disabled>
+                                            Finish
+                                        </button>
+                                    )}
+                                    {purchase.shopping ? (
+                                        <>
+                                            <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                                                <Link to={`/purchases/${purchase.purchaseId}/addProduct`}>Add Products</Link>
+                                            </button>
+                                            <button className="text-indigo-600 hover:text-indigo-900 font-medium">
+                                                <Link to={`/purchases/${purchase.purchaseId}/deleteProduct`}>Delete Product</Link>
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button className="text-gray-400 cursor-not-allowed font-medium" disabled>
+                                                Add Products
+                                            </button>
+                                            <button className="text-gray-400 cursor-not-allowed font-medium" disabled>
+                                                Delete Product
+                                            </button>
+                                        </>
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -79,24 +117,6 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                 onPageChange={onPageChange}
             />
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-
-
-                <div className="flex space-x-4">
-                    <button
-                        className="text-indigo-600 hover:text-indigo-900 font-medium"
-                        onClick={() => navigate('/create-purchase')}
-                    >
-                        Add Purchase
-                    </button>
-                    <button className="text-indigo-600 hover:text-indigo-900 font-medium">
-                        <Link to={`/add-purchaseLine`}>Add Product to Purchase</Link>
-                    </button>
-                    <button className="text-indigo-600 hover:text-indigo-900 font-medium">
-                        <Link to={`/delete-purchaseLine`}>Delete Product from Purchase</Link>
-                    </button>
-                </div>
-            </div>
         </div>
     );
 };

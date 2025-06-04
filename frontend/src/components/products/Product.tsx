@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
 import { ProductList } from "./ProductList";
-import { ProductsFilters } from "./ProductsFilters"; 
+import { ProductsFilters } from "./ProductsFilters";
 import type { ProductWithShopsDto } from "../../types/Products";
 import { useNavigate } from "react-router-dom";
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
     const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0); 
+    const [currentPage, setCurrentPage] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
@@ -71,6 +71,10 @@ export const Products = () => {
                     className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
                 >
                     Search
+                </button>
+                <button className="inline-flex justify-center py-2 px-4 border  border-transparent shadow-sm text-sm font-medium rounded-md text-blue bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                    onClick={() => navigate('/products/create')}>
+                    Añadir producto
                 </button>
             </div>
             <ProductList

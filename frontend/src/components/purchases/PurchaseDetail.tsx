@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { PurchaseDto } from "../../types/Purchase";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getPurchaseById } from "../../services/PurchaseService";
 import { useParams } from "react-router-dom";
 
@@ -8,34 +8,34 @@ export const PurchaseDetail = () => {
     const [purchase, setPurchase] = useState<PurchaseDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const { id } = useParams();
-    const isUpdatePage = ['/finish-purchases/', '/delete-purchases/'].some(path => location.pathname.includes(path));
+    const { purchaseId } = useParams();
+    const isUpdatePage = [`/purchases/${purchaseId}/delete`, `/purchases/${purchaseId}/finish`].some(path => location.pathname.includes(path));
 
 
     useEffect(() => {
         const fetchPurchase = async () => {
             try {
-                if(!id) {
+                if(!purchaseId) {
                     setError('Purchase ID is required');
                     return;
                 }
-
-                const purchaseId = parseInt(id);
-                if(isNaN(purchaseId)){
+        
+                const purchaseIdNumber = parseInt(purchaseId);
+                if(isNaN(purchaseIdNumber)){
                     setError('Invalid purchase ID');
                     return;
                 }
-
-                const data = await getPurchaseById(purchaseId);
-                setPurchase(data);
-                setError(null);
-            } catch (err) {
+        
+                const response = await getPurchaseById(purchaseIdNumber);
+                setPurchase(response);
+            } catch (error) {
                 setError('Failed to fetch purchase details');
+                console.error('Error fetching purchase:', error);
             }
         };
 
         fetchPurchase();
-    }, [id]);
+    }, [purchaseId]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -104,12 +104,12 @@ export const PurchaseDetail = () => {
                                 {!isUpdatePage && (
                                 <div>
                                 <button
-                                    onClick={() => navigate('/add-purchaseLine')}
+                                    onClick={() => navigate(`/purchases/${purchaseId}/addProduct`)}
                                     className="text-indigo-600 hover:text-indigo-900 font-medium"
                                 >
                                     Add Product to Purchase
                                 </button>
-                                <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate(`/delete-products/${id}`)}>Delete product from purchase</button>
+                                <button className="text-indigo-600 hover:text-indigo-900 font-medium" onClick={() => navigate(`/purchases/${purchaseId}/deleteProduct`)}>Delete product from purchase</button>
                                 </div>
                                 )}
                             </div>

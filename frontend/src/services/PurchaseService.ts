@@ -55,12 +55,15 @@ export const createPurchase = async (purchase: PostPurchaseDto) => {
 }
 
 export const deletePurchase = async (purchaseId: number) => {
+    if (isNaN(purchaseId)) {
+        throw new Error('Purchase ID is required and must be a valid number');
+    }
     try {
         const response = await axiosInstance.delete(`/purchases/${purchaseId}`);
         console.log('Purchase deleted successfully:', response.data);
         return response.data;
     } catch (error) {
-        throw new Error('Failed to delete purchase');
+        throw error;
     }
 }
 
