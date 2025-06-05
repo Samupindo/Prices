@@ -1256,7 +1256,7 @@ Otra opcion clonar desde el mismo cmd el proyecto y desde IntelliJ abrir el proy
 Para lanzar el backend necesitamos primero hacer Clean Compile, esto lo haremos accediendo a la M de la barra lateral y luego en el icono con una venta con el icono de play. Tras esto escribimos Clean Compile y ejectutamos.
 ![Captura de pantalla](https://github.com/user-attachments/assets/7e1f1f4b-e9a5-4068-83bf-6c6f261c1838)
 
-Después necesitamos volver a las opciones de Maven y sincronizar el proyecto, esto se hace en el icono de sincronizar ![image](https://github.com/user-attachments/assets/0b26652d-7640-4f68-abbf-9c4fe32dd3ac)
+Después necesitamos volver a las opciones de Maven y clickar en "Reload", esto se hace en el icono de sincronizar/recargar ![image](https://github.com/user-attachments/assets/0b26652d-7640-4f68-abbf-9c4fe32dd3ac)
 
 
 Ya podemos lanzar nuestro backend desde la carpeta mic-prices-boot, ejecutando el archivo MicPricesApplication.
