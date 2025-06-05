@@ -1,7 +1,6 @@
 # 🛒 MIC-PRICES - Gestión de Productos y Tiendas
 
-Este proyecto proporciona una API REST para la gestión de productos y tiendas. Permite realizar operaciones CRUD sobre
-productos y tiendas, así como filtrado y modificaciones específicas.
+Este proyecto proporciona una API REST para la gestión de productos,tiendas, clientes y tickets. Permite realizar operaciones CRUDestas, así como filtrado, paginación y modificaciones específicas.
 
 ---
 
@@ -34,10 +33,10 @@ productos y tiendas, así como filtrado y modificaciones específicas.
 
 - **Alta de compra** → Permite registrar una nueva .
 - **Baja de compra** → Elimina una existente.
-- **Modificación de compra** → Permite actualizar los datos de una compra.
 - **Añadir un producto a una compra** → Asigna un producto a una tienda específica.
+- **Eliminar un producto a una compra** → Elimina un producto a una tienda específica.
 - **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda, price, shopping**.
-
+- **Finalizar una compra** → Permite dar como finalizada una compra
 ---
 
 ## ENDPOINTS ##
