@@ -44,7 +44,7 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
         <div className="p-4">
             <button
                 onClick={() => navigate('/')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
+                className="mr-150 bg-blue-500 shadow-md rounded-md hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
             >
                 Home
             </button>
@@ -52,17 +52,9 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => navigate('/shops/create')}
-                    className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    className="flex w-full md:w-auto shadow-md rounded-md bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Add New Shop
                 </button>
-                <div className="m-2">
-                    <input className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2" type="number" id="searchShopId" placeholder="Search by shop ID" />
-                    <button
-                        onClick={() => navigate(`/shops/${(document.getElementById('searchShopId') as HTMLInputElement)?.value}`)}
-                        className="bg-indigo-600 text-black px-6 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Search
-                    </button>
-                </div>
             </div>
             <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
                 <label htmlFor="country">Country:</label>
