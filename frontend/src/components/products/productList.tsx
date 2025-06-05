@@ -93,7 +93,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                 onClick={() => navigate(`/products/${product.productId}`)}
                                             >
                                                 {shopIndex === 0 && (
-
                                                     <td
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm text-gray-900 font-medium align-middle text-center`}
@@ -102,17 +101,19 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                     </td>
                                                 )}
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
-                                                    Shop {shop.shopId}
+                                                    {shopIndex === 3 && shopCount > 3
+                                                        ? `And ${shopCount - 3} more stores...`
+                                                        : shopIndex < 3 ? `Shop ${shop.shopId}` : ''}
                                                 </td>
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm text-gray-700`}>
-                                                    {shop.price} €
+                                                    {shopIndex === 3 && shopCount > 3 ? '' : shopIndex < 3 ? `${shop.price} €` : ''}
                                                 </td>
                                                 {shopIndex === 0 && (
                                                     <td
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
                                                     >
-                                                         <button
+                                                        <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium"
                                                             onClick={() => navigate(`/products/${product.productId}`)}
                                                         >
@@ -130,8 +131,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         >
                                                             Delete
                                                         </button>
-                                                       
-
                                                     </td>
                                                 )}
                                             </tr>
