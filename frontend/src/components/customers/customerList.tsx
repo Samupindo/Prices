@@ -43,7 +43,7 @@ const CustomerList = ({
         <div className="container mx-auto p-8">
             <button
                 onClick={() => navigate('/')}
-                className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
+                className="mr-150 bg-blue-500 shadow-md rounded-md text-blue-400 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
             >
                 Home
             </button>
@@ -54,21 +54,9 @@ const CustomerList = ({
             <div className="flex justify-between items-center">
                 <button
                     onClick={() => navigate("/customers/create")}
-                    className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    className="flex w-full md:w-auto shadow-md rounded-md border-gray-300 bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Add Customer
                 </button>
-                <div className="m-2">
-                    <input
-                        id='searchCustomerId'
-                        type="number"
-                        className="border border-gray-300 rounded-md px-2 py-1 bg-white mx-2"
-                        placeholder="Search by Customer ID..."></input>
-                    <button onClick={() => navigate(`/customers/${(document.getElementById('searchCustomerId') as HTMLInputElement)?.value}`)}
-                        className="ml-2 bg-blue-500 text-black px-4 py-2 rounded hover:bg-blue-600 transition-colors duration-200">
-                        Search
-                    </button>
-                </div>
-
             </div>
 
             <div className="mb-6 bg-white p-4 rounded-lg shadow-md">
@@ -124,12 +112,12 @@ const CustomerList = ({
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">
-                                    <button className="bg-yellow-600 hover:bg-yellow-800 ml-2" onClick={(e) => { e.stopPropagation(); navigate(`/customers/${customer.customerId}/edit`) }}
+                                    <button className="bg-yellow-600 shadow-md rounded-md hover:bg-yellow-800 ml-2 text-green-600" onClick={(e) => { e.stopPropagation(); navigate(`/customers/${customer.customerId}/edit`) }}
                                     >
                                         Edit
                                     </button>
                                     <button onClick={(e) => { e.stopPropagation(); navigate(`/customers/${customer.customerId}/delete`) }}
-                                        className="bg-red-600 hover:bg-red-800 ml-2">
+                                        className="bg-red-600 shadow-md rounded-md text-red-500 hover:bg-red-800 ml-2">
                                         Delete
                                     </button>
                                 </td>
