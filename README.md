@@ -1,4 +1,4 @@
-# 🛒 Proyecto - Gestión de Productos y Tiendas
+# 🛒 MIC-PRICES - Gestión de Productos y Tiendas
 
 Este proyecto proporciona una API REST para la gestión de productos y tiendas. Permite realizar operaciones CRUD sobre
 productos y tiendas, así como filtrado y modificaciones específicas.
