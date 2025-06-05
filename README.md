@@ -1,7 +1,6 @@
-# 🛒 Proyecto - Gestión de Productos y Tiendas
+# 🛒 MIC-PRICES - Gestión de Productos y Tiendas
 
-Este proyecto proporciona una API REST para la gestión de productos y tiendas. Permite realizar operaciones CRUD sobre
-productos y tiendas, así como filtrado y modificaciones específicas.
+Este proyecto proporciona una API REST para la gestión de productos,tiendas, clientes y tickets. Permite realizar operaciones CRUDestas, así como filtrado, paginación y modificaciones específicas.
 
 ---
 
@@ -34,10 +33,10 @@ productos y tiendas, así como filtrado y modificaciones específicas.
 
 - **Alta de compra** → Permite registrar una nueva .
 - **Baja de compra** → Elimina una existente.
-- **Modificación de compra** → Permite actualizar los datos de una compra.
 - **Añadir un producto a una compra** → Asigna un producto a una tienda específica.
+- **Eliminar un producto a una compra** → Elimina un producto a una tienda específica.
 - **Filtrar compras** → Permite buscar compras por **customerId, lista de productos tienda, price, shopping**.
-
+- **Finalizar una compra** → Permite dar como finalizada una compra
 ---
 
 ## ENDPOINTS ##
@@ -1256,7 +1255,7 @@ Otra opcion clonar desde el mismo cmd el proyecto y desde IntelliJ abrir el proy
 Para lanzar el backend necesitamos primero hacer Clean Compile, esto lo haremos accediendo a la M de la barra lateral y luego en el icono con una venta con el icono de play. Tras esto escribimos Clean Compile y ejectutamos.
 ![Captura de pantalla](https://github.com/user-attachments/assets/7e1f1f4b-e9a5-4068-83bf-6c6f261c1838)
 
-Después necesitamos volver a las opciones de Maven y sincronizar el proyecto, esto se hace en el icono de sincronizar ![image](https://github.com/user-attachments/assets/0b26652d-7640-4f68-abbf-9c4fe32dd3ac)
+Después necesitamos volver a las opciones de Maven y clickar en "Reload", esto se hace en el icono de sincronizar/recargar ![image](https://github.com/user-attachments/assets/0b26652d-7640-4f68-abbf-9c4fe32dd3ac)
 
 
 Ya podemos lanzar nuestro backend desde la carpeta mic-prices-boot, ejecutando el archivo MicPricesApplication.
