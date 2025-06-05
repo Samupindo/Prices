@@ -1,0 +1,193 @@
+openapi: 3.0.3
+info:
+  title: API de Clientes
+  description: API para la gestión de clientes
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Servidor de desarrollo
+paths:
+  /customers/{customerId}:
+    get:
+      tags:
+        - customer-controller
+      operationId: getCustomerById
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+    put:
+      tags:
+        - customer-controller
+      operationId: updateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerPutDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+    delete:
+      tags:
+        - customer-controller
+      operationId: deleteCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: OK
+    patch:
+      tags:
+        - customer-controller
+      operationId: partialUpdateCustomer
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDto'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+  /customers:
+    get:
+      tags:
+        - customer-controller
+      operationId: getCustomersWithFilters
+      x-spring-paginated: true
+      parameters:
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: phone
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: email
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponseDtoCustomerDto'
+    post:
+      tags:
+        - customer-controller
+      operationId: addCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomerDto'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerDto'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              example:
+                error: 'Missing required field: name'
+components:
+  schemas:
+    PageResponseDtoCustomerDto:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerDto'
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+    CustomerDto:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          format: int32
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+    CustomerPutDto:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+    CreateCustomerDto:
+      type: object
+      properties:
+        name:
+          type: string
+        phone:
+          type: integer
+          format: int32
+        email:
+          type: string
+      required:
+        - name
