@@ -46,9 +46,9 @@ export const DeleteProduct = () => {
     }
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-                <ProductDetail />
-            </div>
+            <h2 className="text-2xl text-center font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+                Delete Product
+            </h2>
             <div className="bg-white shadow rounded-lg">
                 <div className="p-6">
                     <div className="text-center">

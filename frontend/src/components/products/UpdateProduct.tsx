@@ -95,10 +95,9 @@ export const UpdateProduct = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-                <ProductDetail />
-            </div>
-
+            <h2 className="text-2xl text-center font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+                Update Product
+            </h2>
             <div className="bg-white shadow rounded-lg">
                 <div className="p-6">
                     <form onSubmit={handleSubmit} className="space-y-6">
