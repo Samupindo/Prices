@@ -4,6 +4,7 @@ import { ProductList } from "./ProductList";
 import { ProductsFilters } from "./ProductsFilters";
 import type { ProductWithShopsDto } from "../../types/Products";
 import { useNavigate } from "react-router-dom";
+
 export const Products = () => {
     const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
     const [totalPages, setTotalPages] = useState(0);
@@ -11,6 +12,7 @@ export const Products = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
+
     const fetchProducts = async (filters?: {
         name?: string;
         priceMin?: number;
@@ -30,52 +32,38 @@ export const Products = () => {
             console.error('Error fetching products:', error);
         }
     };
+
     const handlePageChange = (page: number) => {
         const backendPage = page - 1;
         if (backendPage >= 0 && backendPage < totalPages) {
             setCurrentPage(backendPage);
         }
     };
+
     useEffect(() => {
         fetchProducts();
     }, [currentPage]);
+
     if (error) return <div>Error loading products: {error}</div>;
+
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <h1 className="text-xl font-semibold text-gray-900">Products</h1>
-                    <p className="mt-2 text-sm text-gray-700">
-                        A list of all the products in your store
-                    </p>
-                </div>
-            </div>
+        <div className="p-4">
             <button
                 onClick={() => navigate('/')}
                 className="mr-150 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
             >
                 Home
             </button>
-            <ProductsFilters onApplyFilters={fetchProducts} />
-            <div className="flex space-x-4">
-                <input
-                    name="productId"
-                    type="number"
-                    placeholder="Find product by id"
-                    onChange={(e) => setFindId(e.target.value)}
-                    className="flex-1 rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm placeholder-gray-400 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+            <h2 className="text-center text-xl font-semibold mb-3 bg-gray-200 rounded-xl py-3">Products</h2>
+            <div className="flex justify-start mb-4">
                 <button
-                    onClick={() => navigate(`/products/${findId}/edit`)}
-                    className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200"
+                    onClick={() => navigate('/products/create')}
+                    className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Search
-                </button>
-                <button className="inline-flex justify-center py-2 px-4 border  border-transparent shadow-sm text-sm font-medium rounded-md text-blue bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
-                    onClick={() => navigate('/products/create')}>
                     Añadir producto
                 </button>
             </div>
+            <ProductsFilters onApplyFilters={fetchProducts} />
             <ProductList
                 products={products}
                 totalPages={totalPages}

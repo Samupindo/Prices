@@ -114,12 +114,6 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
                                                     >
                                                         <button
-                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                            onClick={() => navigate(`/products/${product.productId}`)}
-                                                        >
-                                                            View
-                                                        </button> 
-                                                        <button
                                                             className="text-indigo-600 hover:text-indigo-900 font-medium "
                                                             onClick={(e) =>{e.stopPropagation(); navigate(`/products/${product.productId}/edit`)} }
                                                         >
@@ -150,7 +144,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
                                                     <button
                                                         className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                        onClick={() => navigate(`/products/${product.productId}/edit`)}
+                                                        onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/edit`)} }
                                                     >
                                                         Edit
                                                     </button>

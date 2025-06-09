@@ -36,59 +36,55 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
         onApplyFilters({});
     };
     return (
-        <div className="bg-white shadow-sm rounded-lg p-4 mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label htmlFor="name" className="block text-xs font-medium text-gray-600">
-                        Product Name
-                    </label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={filters.name || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Search by product name"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="priceMin" className="block text-xs font-medium text-gray-600">
-                        Min Price
-                    </label>
-                    <input
-                        type="number"
-                        id="priceMin"
-                        name="priceMin"
-                        value={filters.priceMin || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Min price"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="priceMax" className="block text-xs font-medium text-gray-600">
-                        Max Price
-                    </label>
-                    <input
-                        type="number"
-                        id="priceMax"
-                        name="priceMax"
-                        value={filters.priceMax || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:ring-1 focus:ring-offset-0 sm:text-xs"
-                        placeholder="Max price"
-                    />
-                </div>
+        <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4">
+            <div className="flex items-center gap-2">
+                <label htmlFor="name" className="text-xs font-medium text-gray-600">
+                    Product Name:
+                </label>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={filters.name || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                    placeholder="Search by product name"
+                />
             </div>
-            <div className="mt-4 flex justify-end space-x-2">
-                <button
-                    onClick={handleResetFilters}
-                    className="px-3 py-1.5 bg-indigo-600 border border-transparent rounded-md text-xs font-medium text-gray hover:bg-indigo-700 focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-indigo-500 transition-all duration-150"
-                >
-                    Reset
-                </button>
+            <div className="flex items-center gap-2">
+                <label htmlFor="priceMin" className="text-xs font-medium text-gray-600">
+                    Min Price:
+                </label>
+                <input
+                    type="number"
+                    id="priceMin"
+                    name="priceMin"
+                    value={filters.priceMin || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                    placeholder="Min price"
+                />
             </div>
+            <div className="flex items-center gap-2">
+                <label htmlFor="priceMax" className="text-xs font-medium text-gray-600">
+                    Max Price:
+                </label>
+                <input
+                    type="number"
+                    id="priceMax"
+                    name="priceMax"
+                    value={filters.priceMax || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                    placeholder="Max price"
+                />
+            </div>
+            <button
+                onClick={handleResetFilters}
+                className="bg-indigo-600 text-black px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                Reset
+            </button>
         </div>
     );
 };
