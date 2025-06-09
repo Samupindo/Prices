@@ -69,61 +69,64 @@ export const DeleteProductFromPurchase = () => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-<h2 className="text-2xl text-center font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
-                Delete Product from Purchase
-            </h2> 
-            
-                {error && (
-                    <div className="mb-4 p-4 rounded-md bg-red-50 border-l-4 border-red-400">
-                        <div className="flex">
-                            <div className="flex-shrink-0">
-                                <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+        <div className="container mx-auto p-8">
+            <div className="max-w-4xl mx-auto mb-6 mt-10">
+                <div className="bg-white shadow-md rounded-lg p-6">
+                    <PurchaseDetail />
+                </div>
+                <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                    <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div className="sm:flex sm:items-start">
+                            <div className="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+                                <svg className="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                                 </svg>
                             </div>
-                            <div className="ml-3">
-                                <h3 className="text-sm font-medium text-red-800">{error}</h3>
+                            <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 className="text-base font-semibold text-gray-900" id="modal-title">Delete Product from Purchase</h3>
+                                <div className="mt-2">
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div>
+                                            <label htmlFor="productInShopId" className="block text-sm font-medium text-gray-700">
+                                                Product in Shop ID
+                                            </label>
+                                            <div className="mt-1">
+                                                <input
+                                                    type="number"
+                                                    id="productInShopId"
+                                                    name="productInShopId"
+                                                    value={productInShopId}
+                                                    onChange={handleOnChange}
+                                                    className="shadow-sm focus:ring-red-500 focus:border-red-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                                    required
+                                                    min="1"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex justify-center w-full sm:justify-end">
+                                            <button
+                                                type="button"
+                                                onClick={() => navigate(`/purchases/${purchaseId}`)}
+                                                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={isLoading || !productInShopId}
+                                                className={`inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-red-500 shadow-xs bg-red-800 hover:bg-red-500 ring-1 ring-red-300 ${isLoading || !productInShopId ? 'cursor-not-allowed' : ''} sm:ml-3 sm:w-auto`}
+                                            >
+                                                {isLoading ? 'Deleting...' : 'Delete Product'}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label htmlFor="productInShopId" className="block text-sm font-medium text-gray-700">
-                            Product in Shop ID
-                        </label>
-                        <input
-                            type="number"
-                            id="productInShopId"
-                            name="productInShopId"
-                            value={productInShopId}
-                            onChange={handleOnChange}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                            required
-                            min="1"
-                        />
-                    </div>
-
-                    <div className="flex justify-end space-x-4">
-                        <button
-                            type="button"
-                            onClick={() => navigate(`/purchases/${purchaseId}`)}
-                            className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={isLoading || !productInShopId}
-                            className={`px-4 py-2 bg-red-600 text-red-600 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 ${isLoading || !productInShopId ? 'cursor-not-allowed' : ''}`}
-                        >
-                            {isLoading ? 'Deleting...' : 'Delete Product'}
-                        </button>
-                    </div>
-                </form>
+                </div>
             </div>
-        
+        </div>
     );
 };
