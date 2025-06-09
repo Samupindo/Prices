@@ -47,7 +47,7 @@ const CustomerList = ({
             >
                 Home
             </button>
-            <h2 className="text-2xl font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+            <h2 className="text-xl text-center bg-gray-200 rounded-xl py-3 font-bold mb-3 text-gray-900 pb-2 border-b-2 border-gray-200">
                 Customer List
             </h2>
             
