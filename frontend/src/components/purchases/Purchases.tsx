@@ -44,21 +44,22 @@ export const Purchases = () => {
     if (error) return <div>Error loading purchases: {error}</div>;
 
     return (
-        <div>
-            <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <h1 className="text-xl font-semibold text-gray-900">Purchases</h1>
-                    <p className="mt-2 text-sm text-gray-700">
-                        A list of all purchases
-                    </p>
-                </div>
-            </div>
+        <div className="p-4">
             <button
                 onClick={() => navigate('/')}
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-blue bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+                className="mr-150 bg-blue-500 shadow-md rounded-md hover:bg-blue-700 text-black font-bold py-2 px-4 rounded-md mb-6"
             >
                 Home
             </button>
+            <h2 className="text-center text-xl font-semibold mb-3 bg-gray-200 rounded-xl py-3">Purchases</h2>
+            <div className="flex justify-start mb-4">
+                <button
+                    onClick={() => navigate('/purchases/create')}
+                    className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                    Add Purchase
+                </button>
+            </div>
             <PurchasesFilters onApplyFilters={handleApplyFilters} />
             <PurchasesList
                 purchases={purchases}

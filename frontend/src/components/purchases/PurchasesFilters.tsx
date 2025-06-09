@@ -48,72 +48,68 @@ export const PurchasesFilters = ({ onApplyFilters }: PurchasesFiltersProps) => {
     };
 
     return (
-        <div className="bg-white shadow-sm rounded-lg p-4 mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label htmlFor="customerId" className="block text-xs font-medium text-gray-600">
-                        Customer ID
-                    </label>
-                    <input
-                        type="number"
-                        id="customerId"
-                        name="customerId"
-                        value={filters.customerId || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="totalPriceMin" className="block text-xs font-medium text-gray-600">
-                        Min Total Price
-                    </label>
-                    <input
-                        type="number"
-                        id="totalPriceMin"
-                        name="totalPriceMin"
-                        value={filters.totalPriceMin || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="totalPriceMax" className="block text-xs font-medium text-gray-600">
-                        Max Total Price
-                    </label>
-                    <input
-                        type="number"
-                        id="totalPriceMax"
-                        name="totalPriceMax"
-                        value={filters.totalPriceMax || ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="shopping" className="block text-xs font-medium text-gray-600">
-                        Shopping
-                    </label>
-                    <select
-                        id="shopping"
-                        name="shopping"
-                        value={filters.shopping ?? ''}
-                        onChange={handleInputChange}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    >
-                        <option value="">All</option>
-                        <option value="true">Shopping</option>
-                        <option value="false">Not Shopping</option>
-                    </select>
-                </div>
+        <div className="flex justify-center items-center gap-4 bg-gray-100 p-2 px-4 rounded-xl mb-4">
+            <div className="flex items-center gap-2">
+                <label htmlFor="customerId" className="text-xs font-medium text-gray-600">
+                    Customer ID:
+                </label>
+                <input
+                    type="number"
+                    id="customerId"
+                    name="customerId"
+                    value={filters.customerId || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                />
             </div>
-            <div className="mt-4 flex justify-end space-x-4">
-                <button
-                    onClick={handleResetFilters}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+            <div className="flex items-center gap-2">
+                <label htmlFor="totalPriceMin" className="text-xs font-medium text-gray-600">
+                    Min Total Price:
+                </label>
+                <input
+                    type="number"
+                    id="totalPriceMin"
+                    name="totalPriceMin"
+                    value={filters.totalPriceMin || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                />
+            </div>
+            <div className="flex items-center gap-2">
+                <label htmlFor="totalPriceMax" className="text-xs font-medium text-gray-600">
+                    Max Total Price:
+                </label>
+                <input
+                    type="number"
+                    id="totalPriceMax"
+                    name="totalPriceMax"
+                    value={filters.totalPriceMax || ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
+                />
+            </div>
+            <div className="flex items-center gap-2">
+                <label htmlFor="shopping" className="text-xs font-medium text-gray-600">
+                    Shopping:
+                </label>
+                <select
+                    id="shopping"
+                    name="shopping"
+                    value={filters.shopping ?? ''}
+                    onChange={handleInputChange}
+                    className="border border-gray-300 rounded-md px-2 py-1 bg-white"
                 >
-                    Reset
-                </button>
+                    <option value="">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
             </div>
+            <button
+                onClick={handleResetFilters}
+                className="bg-indigo-600 text-black px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+                Reset
+            </button>
         </div>
     );
 };

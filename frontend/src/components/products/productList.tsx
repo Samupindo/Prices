@@ -113,18 +113,26 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                         rowSpan={shopCount}
                                                         className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}
                                                     >
-                                                        <button
-                                                            className="text-indigo-600 hover:text-indigo-900 font-medium "
-                                                            onClick={(e) =>{e.stopPropagation(); navigate(`/products/${product.productId}/edit`)} }
-                                                        >
-                                                            Edit
-                                                        </button>
-                                                        <button
-                                                            className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                            onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/delete`)} }
-                                                        >
-                                                            Delete
-                                                        </button>
+                                                        <div className="flex justify-center gap-1">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    navigate(`/products/${product.productId}/edit`);
+                                                                }}
+                                                                className="text-green-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
+                                                            >
+                                                                Edit
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    navigate(`/products/${product.productId}/delete`);
+                                                                }}
+                                                                className="text-red-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 )}
                                             </tr>
@@ -142,18 +150,26 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                                                     -
                                                 </td>
                                                 <td className={`${cellPadding} whitespace-nowrap text-sm align-middle text-center`}>
-                                                    <button
-                                                        className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                        onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/edit`)} }
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                                        onClick={(e) => {e.stopPropagation(); navigate(`/products/${product.productId}/delete`)} }
-                                                    >
-                                                        Delete
-                                                    </button>
+                                                    <div className="flex justify-center gap-1">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                navigate(`/products/${product.productId}/edit`);
+                                                            }}
+                                                            className="text-green-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                navigate(`/products/${product.productId}/delete`);
+                                                            }}
+                                                            className="text-red-600 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         );
