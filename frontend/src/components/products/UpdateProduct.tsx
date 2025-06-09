@@ -96,9 +96,7 @@ export const UpdateProduct = () => {
     return (
         <div className="container mx-auto p-8 ">
             <div className="max-w-4xl mx-auto mb-6 mt-10">
-                <div className="bg-white shadow-md rounded-lg p-6">
-                    <ProductDetail />
-                </div>
+         
                 <div className="relative transform overflow-hidden rounded-lg  bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                     <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4 sm:flex sm:items-center">
                         <div className="sm:flex sm:items-center">

@@ -2,8 +2,6 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { finishPurchase } from "../../services/PurchaseService";
 import { useNavigate } from "react-router-dom";
-import { PurchaseDetail } from "./PurchaseDetail";
-
 export const FinishPurchase = () => {
     const navigate = useNavigate();
     const { purchaseId } = useParams();
@@ -25,7 +23,7 @@ export const FinishPurchase = () => {
                 return;
             }
             await finishPurchase(purchaseIdNumber);
-            navigate('/purchases');
+            navigate('/purchases'); 
         } catch (error) {
             setError('Failed to finish purchase');
             console.error('Error finishing purchase:', error);
