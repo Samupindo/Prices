@@ -8,7 +8,7 @@ import { UpdateProduct } from './components/products/UpdateProduct'
 import { DeleteProduct } from './components/products/DeleteProduct'
 import { CustomerById, CustomerPost, CustomerPut, CustomersGetAll } from './components/customers/Customers';
 import { CustomerDelete } from './components/customers/CustomerDelete'
-import { AddProductToShop, AllShops, ShopPut } from './components/shops/Shops'
+import { AddProductToShop, AllShops, PatchProductInShop, ShopPut } from './components/shops/Shops'
 import { ShopById } from './components/shops/Shops'
 import { ShopPost } from './components/shops/Shops'
 import { ShopDelete } from './components/shops/Shops'
@@ -34,6 +34,7 @@ function App() {
         <Route path="/shops/:shopId/edit" element={<ShopPut />} />
         <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
         <Route path="/shops/:shopId/addProduct" element={<AddProductToShop />} />
+        <Route path="/shops/:shopId/patchProduct" element={<PatchProductInShop />} />
 
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<ProductDetail />} />
