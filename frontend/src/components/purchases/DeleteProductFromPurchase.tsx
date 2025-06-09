@@ -70,11 +70,10 @@ export const DeleteProductFromPurchase = () => {
 
     return (
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-8">
-                <PurchaseDetail />
-            </div>
-            <div className="mb-8">
-                <h1 className="text-xl font-semibold text-gray-900 mb-4">Delete Product from Purchase</h1>
+<h2 className="text-2xl text-center font-bold mb-8 text-gray-900 pb-2 border-b-2 border-gray-200">
+                Delete Product from Purchase
+            </h2> 
+            
                 {error && (
                     <div className="mb-4 p-4 rounded-md bg-red-50 border-l-4 border-red-400">
                         <div className="flex">
@@ -118,14 +117,13 @@ export const DeleteProductFromPurchase = () => {
                         <button
                             type="submit"
                             disabled={isLoading || !productInShopId}
-                            className={`px-4 py-2 border border-transparent rounded-md text-sm font-medium ${isLoading || !productInShopId ? 'bg-red-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'
-                                }`}
+                            className={`px-4 py-2 bg-red-600 text-red-600 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 ${isLoading || !productInShopId ? 'cursor-not-allowed' : ''}`}
                         >
                             {isLoading ? 'Deleting...' : 'Delete Product'}
                         </button>
                     </div>
                 </form>
             </div>
-        </div>
+        
     );
 };

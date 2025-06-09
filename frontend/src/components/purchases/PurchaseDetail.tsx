@@ -95,12 +95,6 @@ export const PurchaseDetail = () => {
                             </div>
 
                             <div className="mt-4">
-                                <button
-                                    onClick={() => navigate('/purchases')}
-                                    className="text-indigo-600 hover:text-indigo-900 font-medium"
-                                >
-                                    Back to Purchases
-                                </button>
                                 {!isUpdatePage && (
                                 <div>
                                 <button
