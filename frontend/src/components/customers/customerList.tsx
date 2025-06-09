@@ -107,7 +107,7 @@ const CustomerList = ({
                     <tbody className="bg-white divide-y divide-gray-200 overflow-y-auto max-h-[50vh]">
                         {customers.map((customer: CustomerDto) => (
                             <tr onClick={() => navigate(`/customers/${customer.customerId}`)} key={customer.customerId}
-                                className="hover:bg-teal-100 transition-colors duration-200 cursor-pointer">
+                                className="hover:bg-gray-200 transition-colors duration-200 cursor-pointer">
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.name}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-2/6">{customer.email}</td>
                                 <td className="px-6 py-4 whitespace-nowrap w-1/6">{customer.phone}</td>
