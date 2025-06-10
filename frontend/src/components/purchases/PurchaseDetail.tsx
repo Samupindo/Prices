@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import type { PurchaseDto } from "../../types/Purchase";
 import { useNavigate } from "react-router-dom";
 import { getPurchaseById } from "../../services/PurchaseService";
@@ -10,10 +10,16 @@ export const PurchaseDetail = () => {
     const navigate = useNavigate();
     const { purchaseId } = useParams();
     const isUpdatePage = [`/purchases/${purchaseId}/delete`, `/purchases/${purchaseId}/finish`].some(path => location.pathname.includes(path));
-
+    const initialized = useRef(false);
 
     useEffect(() => {
-        const fetchPurchase = async () => {
+        if (!initialized.current) {
+            initialized.current = true
+            fetchPurchase();
+        }
+    }, [purchaseId]);
+
+    const fetchPurchase = async () => {
             try {
                 if(!purchaseId) {
                     setError('Purchase ID is required');
@@ -34,8 +40,7 @@ export const PurchaseDetail = () => {
             }
         };
 
-        fetchPurchase();
-    }, [purchaseId]);
+    
 
     if (error) {
         return <div>Error: {error}</div>;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateProduct, getProductById } from "../../services/ProductsService";
 import { ProductDetail } from "./ProductDetail";
@@ -11,6 +11,7 @@ export const UpdateProduct = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState<any>(null);
+    const initialized = useRef(false)
     const isUpdatePage = location.pathname.includes('/update-products');
 
     const fetchProduct = async () => {
@@ -36,7 +37,10 @@ export const UpdateProduct = () => {
     };
 
     useEffect(() => {
-        fetchProduct();
+        if (!initialized.current) {
+            initialized.current = true
+            fetchProduct();
+        }
     }, [productId]);
 
     const handleSubmit = async (e: React.FormEvent) => {

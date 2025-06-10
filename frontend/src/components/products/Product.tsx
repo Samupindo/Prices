@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getProducts } from "../../services/ProductsService";
 import { ProductList } from "./ProductList";
 import { ProductsFilters } from "./ProductsFilters";
@@ -12,6 +12,7 @@ export const Products = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const [findId, setFindId] = useState<string | null>(null);
+    const initialized = useRef(false)
 
     const fetchProducts = async (filters?: {
         name?: string;
@@ -41,7 +42,10 @@ export const Products = () => {
     };
 
     useEffect(() => {
-        fetchProducts();
+        if (!initialized.current) {
+            initialized.current = true
+            fetchProducts();
+        }
     }, [currentPage]);
 
     if (error) return <div>Error loading products: {error}</div>;

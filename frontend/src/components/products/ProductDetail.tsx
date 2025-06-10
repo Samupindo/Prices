@@ -1,4 +1,4 @@
- import { useState, useEffect } from "react"
+ import { useState, useEffect, useRef } from "react"
 import type { ProductWithShopsDto } from "../../types/Products";
 import { getProductById } from "../../services/ProductsService";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ export const ProductDetail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const {productId} = useParams<{ productId: string }>();
     const navigate = useNavigate();
+    const initialized = useRef(false)
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
         if (isLoading || !productId) return;
@@ -33,8 +34,11 @@ export const ProductDetail = () => {
     };
 
     useEffect(() => {
-        if (productId) {
-            fetchProduct();
+        if (!initialized.current) {
+            initialized.current = true
+            if (productId) {
+                fetchProduct();
+            }
         }
     }, [productId]);
     if (isLoading) {
