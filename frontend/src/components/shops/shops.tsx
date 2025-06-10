@@ -17,20 +17,16 @@ export const AllShops = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalElements, setTotalElements] = useState<number>(0);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const [filters, setFilters] = useState<ShopFilter>({
-        country: '',
-        city: '',
-        address: ''
-    });
-    const itemsPerPage: number = 10;
+    const [filters, setFilters] = useState<ShopFilter>({});
+    const itemsPerPage = 10;
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-            getShops({page: currentPage -1, size: itemsPerPage, filters})
+        getShops({ page: currentPage - 1, size: itemsPerPage, filters })
             .then((response) => {
-                    setShops(response.content);
-                    setTotalElements(response.totalElements);
-                    setTotalPages(response.totalPages);
+                setShops(response.content);
+                setTotalElements(response.totalElements);
+                setTotalPages(response.totalPages);
             })
             .catch((error) => {
                 setError(error.message);
@@ -43,13 +39,15 @@ export const AllShops = () => {
     }
 
     if (error) return <div>Error loading shops: {error}</div>;
-    
-    return <ShopList shops={shops} 
-    onFilterChange={handleFilterChange}
-    onPageChange={setCurrentPage}
-    currentPage={currentPage}
-    totalPages={totalPages}
-    filters={filters}   
+
+    return <ShopList 
+        shops={shops}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalElements={totalElements}
+        onFilterChange={handleFilterChange}
+        onPageChange={setCurrentPage}
+        filters={filters}
     />;
 }
 
@@ -83,6 +81,15 @@ export const ShopPost = () => {
     });
 
     return <CreateShop shopAddDto={formData} />;
+}
+
+export const AddProductToShop = () => {
+    const [formData] = useState<AddProductShopDto>({
+        price: 0,
+    });
+
+
+    return <ProductToShop addProductShopDto={formData} />;
 }
 
 export const ShopPut = () => {
@@ -121,17 +128,8 @@ export const PatchProductInShop = () => {
 
     return <UpdateProductInShop productInShopPatch={formData} />;
 }
-    
-    
+
 export const ShopDelete = () => {
     return <DeleteShop />;
 }
 
-export const AddProductToShop = () => {
-    const [formData] = useState<AddProductShopDto>({
-        price: 0,
-    });
-    
-
-    return <ProductToShop addProductShopDto={formData} />;
-}

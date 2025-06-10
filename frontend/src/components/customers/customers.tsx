@@ -42,7 +42,7 @@ export const CustomersGetAll = () => {
     const handleFilterChange = (newFilters: CustomerFilters) => {
         setFilters(newFilters);
         setCurrentPage(1); 
-    };
+    }
 
     if (loading) return <div>Loading customers...</div>;
     if (error) return <div>Error loading customers: {error}</div>;
