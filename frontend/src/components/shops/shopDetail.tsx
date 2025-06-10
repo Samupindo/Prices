@@ -7,6 +7,7 @@ interface ShopDetailProps {
 
 export const ShopDetail = ({ shop }: ShopDetailProps) => {
     const navigate = useNavigate();
+    const isOtherPage = [`/shops/${shop?.shopId}/addProduct`, `/shops/${shop?.shopId}/edit`, `/shops/${shop?.shopId}/delete`].some(path => location.pathname.includes(path));
 
     if (!shop) {
         return (
@@ -16,6 +17,7 @@ export const ShopDetail = ({ shop }: ShopDetailProps) => {
         );
     }
 
+    const showButtons = !isOtherPage;
     return (
         <div className="p-6 md:p-8 max-w-6xl mx-auto">
             <div className="flex flex-col sm:flex-row justify-center items-center mb-8 bg-gray-200 rounded-xl py-3">
@@ -47,7 +49,7 @@ export const ShopDetail = ({ shop }: ShopDetailProps) => {
                     </div>
                 </div>
             </div>
-
+            {showButtons && (
             <div className="mt-6 flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-4">
 
                 <div className="flex flex-col sm:flex-row w-full md:w-auto space-y-3 sm:space-y-0 sm:space-x-4">
@@ -66,8 +68,9 @@ export const ShopDetail = ({ shop }: ShopDetailProps) => {
                         className="w-full sm:w-auto bg-red-600 text-black px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         Delete Shop
                     </button>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };

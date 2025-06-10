@@ -1,19 +1,19 @@
 import { updateProductInShop } from "@/services/ShopsService";
-import type { ProductInShopPatchDto } from "@/types/Shops";
+import type { ProductInShopDto, ProductInShopPatchDto, ProductWithShopsDto } from "@/types/Shops";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Combobox } from "@/components/Combobox";
-import type { ProductDto } from "@/types/Products";
 import { getProducts } from "@/services/ProductsService";
 import { Button } from "../ui/button";
+import { ProductDetail } from "../products/ProductDetail";
 
 interface UpdateProductInShopProps {
     productInShopPatch: ProductInShopPatchDto;
 }
 
-const productOptions = (products: ProductDto[]) => {
+const productOptions = (products: ProductWithShopsDto[]) => {
     return products.map((product) => ({
-        value: product.name,
+        value: product.productId,
         label: product.name
     }));
 };
@@ -22,19 +22,22 @@ export const UpdateProductInShop = ({ productInShopPatch }: UpdateProductInShopP
     const { shopId } = useParams();
     const [error, setError] = useState<string | null>(null);
     const [price, setPrice] = useState<string>('');
-    const [products, setProducts] = useState<ProductDto[]>([]);
-    const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+    const [products, setProducts] = useState<ProductWithShopsDto[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         getProducts({ page: 0, size: 100 }).then(response => {
-            setProducts(response.content);
+            const productsInShop = response.content.filter(product => 
+                product.shop.some(shop => shop.shopId === Number(shopId))
+            );
+            setProducts(productsInShop);
         }).catch(error => {
             setError(error.message);
         });
-    }, []);
+    }, [shopId]);
 
-    const handleProductChange = (value: string | null) => {
+    const handleProductChange = (value: number | null) => {
         setSelectedProduct(value);
     };
 
@@ -46,13 +49,13 @@ export const UpdateProductInShop = ({ productInShopPatch }: UpdateProductInShopP
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (shopId && products.productId) {
-        updateProductInShop(shopId, productInShopPatch.productId, { price: Number(price) }).then(() => {
-            navigate(`/products/${productInShopPatch.productId}`);
-        }).catch(error => {
-            setError(error.message);
-        });
-    }
+        if (shopId && selectedProduct) {
+            updateProductInShop(shopId, selectedProduct.toString(), { price: Number(price) }).then(() => {
+                navigate(`/products/${selectedProduct}`);
+            }).catch(error => {
+                setError(error.message);
+            });
+        }
     };
 
     return (

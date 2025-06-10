@@ -34,7 +34,7 @@ function App() {
         <Route path="/shops/:shopId/edit" element={<ShopPut />} />
         <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
         <Route path="/shops/:shopId/addProduct" element={<AddProductToShop />} />
-        <Route path="/shops/:shopId/patchProduct" element={<PatchProductInShop />} />
+        <Route path="/shops/:shopId/editProduct" element={<PatchProductInShop />} />
 
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<ProductDetail />} />
