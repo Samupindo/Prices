@@ -6,18 +6,19 @@ import {  useNavigate } from "react-router-dom";
 export const ProductDetail = () => {    
     const [product, setProduct] = useState<ProductWithShopsDto | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {productId} = useParams();
+    const [isLoading, setIsLoading] = useState(false);
+    const {productId} = useParams<{ productId: string }>();
     const navigate = useNavigate();
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
+        if (isLoading || !productId) return;
+        
+        setIsLoading(true);
         try {
-            if (!productId) {
-                setError('Product ID is required');
-                return;
-            }
             const productIdNumber = parseInt(productId);
             if (isNaN(productIdNumber)) {
                 setError('Invalid product ID');
+                setIsLoading(false);
                 return;
             }
             setError(null);
@@ -26,11 +27,19 @@ export const ProductDetail = () => {
         } catch (error) {
             setError('Failed to fetch product');
             console.error('Error fetching product:', error);
+        } finally {
+            setIsLoading(false);
         }
     };
+
     useEffect(() => {
-        fetchProduct();
+        if (productId) {
+            fetchProduct();
+        }
     }, [productId]);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
     if (error) {
         return <div>Error: {error}</div>;
     }
