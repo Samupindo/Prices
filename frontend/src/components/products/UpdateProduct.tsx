@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateProduct, getProductById } from "../../services/ProductsService";
-import { ProductDetail } from "./ProductDetail";
 import { useParams } from "react-router-dom";
 
 export const UpdateProduct = () => {
@@ -12,7 +11,6 @@ export const UpdateProduct = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState<any>(null);
     const initialized = useRef(false)
-    const isUpdatePage = location.pathname.includes('/update-products');
 
     const fetchProduct = async () => {
         if (!productId) {

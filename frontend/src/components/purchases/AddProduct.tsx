@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { addProductToPurchase, getPurchaseById } from "../../services/PurchaseService";
-import { PurchaseDetail } from "./PurchaseDetail";
 
 export const AddProduct = () => {
     const { purchaseId } = useParams();

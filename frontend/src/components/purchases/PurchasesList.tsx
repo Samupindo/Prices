@@ -1,5 +1,5 @@
 import type { PurchaseDto } from "../../types/Purchase";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PaginationDefault } from "../PaginationDefault";
 
 interface PurchaseListProps {
