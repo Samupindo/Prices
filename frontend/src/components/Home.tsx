@@ -9,14 +9,14 @@ export const Home = () => {
                         Welcome to Micro Prices
                     </h1>
                     <p className="text-xl text-gray-600 mb-12">
-                        Manage your products and shops efficiently
+                        Manage products, shops, customers and purchases efficiently
                     </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                     <Link
                         to="/products"
-                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 transform flex flex-col items-center text-center"
                     >
                         <div className="bg-indigo-100 p-3 rounded-full mb-4">
                             <svg
@@ -43,7 +43,7 @@ export const Home = () => {
 
                     <Link
                         to="/shops"
-                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 transform flex flex-col items-center text-center"
                     >
                         <div className="bg-green-100 p-3 rounded-full mb-4">
                             <svg
@@ -70,7 +70,7 @@ export const Home = () => {
 
                     <Link
                         to="/customers"
-                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 transform flex flex-col items-center text-center"
                     >
                         <div className="bg-blue-100 p-3 rounded-full mb-4">
                             <svg
@@ -97,7 +97,7 @@ export const Home = () => {
 
                     <Link
                         to="/purchases"
-                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+                        className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl hover:scale-[1.02] transition-all duration-300 transform flex flex-col items-center text-center"
                     >
                         <div className="bg-purple-100 p-3 rounded-full mb-4">
                             <svg
