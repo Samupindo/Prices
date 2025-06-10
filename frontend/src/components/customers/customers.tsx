@@ -17,14 +17,10 @@ export const CustomersGetAll = () => {
     const itemsPerPage = 10;
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const initialized = useRef(false)
 
     useEffect(() => {
 
-        if (!initialized.current) {
-            initialized.current = true
-            fetchCustomers();
-        }
+        fetchCustomers();
 
     }, [currentPage, filters]);
 
@@ -70,21 +66,17 @@ export const CustomerById = () => {
     const [customers, setCustomer] = useState<CustomerDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const { customerId } = useParams();
-    const initialized = useRef(false)
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
-            if (customerId) {
-                getCustomerById(Number(customerId))
-                    .then((response) => {
-                        setCustomer(response);
-                    })
-                    .catch((error) => {
-                        setError(error.message);
-                    });
-            }
 
+        if (customerId) {
+            getCustomerById(Number(customerId))
+                .then((response) => {
+                    setCustomer(response);
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
         }
 
     }, [customerId]);
@@ -118,27 +110,24 @@ export const CustomerPut = () => {
         email: ""
     });
     const [error, setError] = useState<string | null>(null);
-    const initialized = useRef(false)
 
     useEffect(() => {
 
-        if (!initialized.current) {
-            initialized.current = true
 
-            if (customerId) {
-                getCustomerById(Number(customerId))
-                    .then((customer) => {
-                        setFormData({
-                            name: customer.name,
-                            email: customer.email,
-                            phone: customer.phone,
-                        });
-                    })
-                    .catch((error) => {
-                        setError(error.message);
+        if (customerId) {
+            getCustomerById(Number(customerId))
+                .then((customer) => {
+                    setFormData({
+                        name: customer.name,
+                        email: customer.email,
+                        phone: customer.phone,
                     });
-            }
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
         }
+
     }, [customerId]);
 
 

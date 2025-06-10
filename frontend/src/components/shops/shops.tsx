@@ -21,12 +21,10 @@ export const AllShops = () => {
     });
     const itemsPerPage: number = 10;
     const [error, setError] = useState<string | null>(null);
-    const initialized = useRef(false)
 
     useEffect(() => {
 
-        if (!initialized.current) {
-            initialized.current = true
+
 
             getShops({ page: currentPage - 1, size: itemsPerPage, filters })
                 .then((response) => {
@@ -37,7 +35,6 @@ export const AllShops = () => {
                 .catch((error) => {
                     setError(error.message);
                 });
-        }
     }, [currentPage, filters]);
 
     const handleFilterChange = (filter: ShopFilter) => {

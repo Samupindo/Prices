@@ -10,13 +10,9 @@ export const PurchaseDetail = () => {
     const navigate = useNavigate();
     const { purchaseId } = useParams();
     const isUpdatePage = [`/purchases/${purchaseId}/delete`, `/purchases/${purchaseId}/finish`].some(path => location.pathname.includes(path));
-    const initialized = useRef(false);
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
             fetchPurchase();
-        }
     }, [purchaseId]);
 
     const fetchPurchase = async () => {

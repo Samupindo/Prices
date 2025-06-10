@@ -9,7 +9,6 @@ export const ProductDetail = () => {
     const [isLoading, setIsLoading] = useState(false);
     const {productId} = useParams<{ productId: string }>();
     const navigate = useNavigate();
-    const initialized = useRef(false)
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
         if (isLoading || !productId) return;
@@ -34,12 +33,9 @@ export const ProductDetail = () => {
     };
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
             if (productId) {
                 fetchProduct();
             }
-        }
     }, [productId]);
     if (isLoading) {
         return <div>Loading...</div>;

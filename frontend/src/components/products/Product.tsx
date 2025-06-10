@@ -11,8 +11,7 @@ export const Products = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const [findId, setFindId] = useState<string | null>(null);
-    const initialized = useRef(false)
+
 
     const fetchProducts = async (filters?: {
         name?: string;
@@ -42,10 +41,7 @@ export const Products = () => {
     };
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
             fetchProducts();
-        }
     }, [currentPage]);
 
     if (error) return <div>Error loading products: {error}</div>;

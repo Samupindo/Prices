@@ -10,7 +10,6 @@ export const UpdateProduct = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [product, setProduct] = useState<any>(null);
-    const initialized = useRef(false)
 
     const fetchProduct = async () => {
         if (!productId) {
@@ -35,10 +34,7 @@ export const UpdateProduct = () => {
     };
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
             fetchProduct();
-        }
     }, [productId]);
 
     const handleSubmit = async (e: React.FormEvent) => {

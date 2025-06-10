@@ -11,7 +11,7 @@ export const Purchases = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const initialized = useRef(false)
+
 
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
@@ -39,10 +39,8 @@ export const Purchases = () => {
     };
 
     useEffect(() => {
-        if (!initialized.current) {
-            initialized.current = true
+
             handleApplyFilters();
-        }
     }, [currentPage]);
 
     if (error) return <div>Error loading purchases: {error}</div>;
