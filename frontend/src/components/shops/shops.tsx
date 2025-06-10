@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getShops, getShopById, type ShopFilter } from "../../services/ShopsService";
 import type { ShopDto, ShopAddDto, ShopPutDto, AddProductShopDto } from "../../types/Shops";
 import { ShopList } from "./ShopList";
@@ -7,8 +7,6 @@ import { useParams } from "react-router-dom";
 import { CreateShop } from "./CreateShop";
 import { UpdateShop } from "./UpdateShop";
 import { DeleteShop } from "./DeleteShop";
-import type { ProductDto, ProductNameDto } from "@/types/Products";
-import { getProductById } from "@/services/ProductsService";
 import { ProductToShop } from "./ProductToShop";
 
 export const AllShops = () => {
@@ -23,17 +21,23 @@ export const AllShops = () => {
     });
     const itemsPerPage: number = 10;
     const [error, setError] = useState<string | null>(null);
+    const initialized = useRef(false)
 
     useEffect(() => {
-            getShops({page: currentPage -1, size: itemsPerPage, filters})
-            .then((response) => {
+
+        if (!initialized.current) {
+            initialized.current = true
+
+            getShops({ page: currentPage - 1, size: itemsPerPage, filters })
+                .then((response) => {
                     setShops(response.content);
                     setTotalElements(response.totalElements);
                     setTotalPages(response.totalPages);
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
+                })
+                .catch((error) => {
+                    setError(error.message);
+                });
+        }
     }, [currentPage, filters]);
 
     const handleFilterChange = (filter: ShopFilter) => {
@@ -42,13 +46,13 @@ export const AllShops = () => {
     }
 
     if (error) return <div>Error loading shops: {error}</div>;
-    
-    return <ShopList shops={shops} 
-    onFilterChange={handleFilterChange}
-    onPageChange={setCurrentPage}
-    currentPage={currentPage}
-    totalPages={totalPages}
-    filters={filters}   
+
+    return <ShopList shops={shops}
+        onFilterChange={handleFilterChange}
+        onPageChange={setCurrentPage}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        filters={filters}
     />;
 }
 
@@ -56,16 +60,22 @@ export const ShopById = () => {
     const { shopId } = useParams();
     const [shopDto, setShopDto] = useState<ShopDto | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const initialized = useRef(false)
+
 
     useEffect(() => {
-        if (shopId) {
-            getShopById(shopId)
-                .then((response) => {
-                    setShopDto(response);
-                })
-                .catch((error) => {
-                    setError(error.message);
-                });
+
+        if (!initialized.current) {
+            initialized.current = true
+            if (shopId) {
+                getShopById(shopId)
+                    .then((response) => {
+                        setShopDto(response);
+                    })
+                    .catch((error) => {
+                        setError(error.message);
+                    });
+            }
         }
     }, [shopId]);
 
@@ -92,27 +102,31 @@ export const ShopPut = () => {
         address: ''
     });
     const [error, setError] = useState<string | null>(null);
+    const initialized = useRef(false)
 
     useEffect(() => {
-        if (shopId) {
-            getShopById(shopId)
-                .then((shop) => {
-                    setFormData({
-                        country: shop.country,
-                        city: shop.city,
-                        address: shop.address
+        if (!initialized.current) {
+            initialized.current = true
+            if (shopId) {
+                getShopById(shopId)
+                    .then((shop) => {
+                        setFormData({
+                            country: shop.country,
+                            city: shop.city,
+                            address: shop.address
+                        });
+                    })
+                    .catch((error) => {
+                        setError(error.message);
                     });
-                })
-                .catch((error) => {
-                    setError(error.message);
-                });
+            }
         }
     }, [shopId]);
     if (error) return <div>Error loading shop: {error}</div>;
 
     return <UpdateShop shopPutDto={formData} />;
 }
-    
+
 export const ShopDelete = () => {
     return <DeleteShop />;
 }
@@ -121,7 +135,7 @@ export const AddProductToShop = () => {
     const [formData] = useState<AddProductShopDto>({
         price: 0,
     });
-    
+
 
     return <ProductToShop addProductShopDto={formData} />;
 }

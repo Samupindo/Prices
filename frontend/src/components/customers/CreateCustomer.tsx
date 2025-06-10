@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { CreateCustomerDto } from "../../types/Customer";
-import { useNavigate } from "react-router-dom";
 
 
 interface CustomerPostProps {
@@ -13,7 +12,6 @@ const CreateCustomer = ({ onSubmit }: CustomerPostProps) => {
         phone: Number(""),
         email: ""
     });
-    const navigate = useNavigate();
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();

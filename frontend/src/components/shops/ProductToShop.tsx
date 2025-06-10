@@ -1,6 +1,4 @@
-import { getProductById } from "@/services/ProductsService";
 import { addProductToShop, getShopById } from "@/services/ShopsService";
-import type { ProductDto } from "@/types/Products";
 import type { ShopDto, AddProductShopDto } from "@/types/Shops";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

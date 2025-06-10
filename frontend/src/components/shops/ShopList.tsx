@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import type { ShopDto } from "../../types/Shops";
 import type { ShopFilter } from "@/services/ShopsService";
 import {
