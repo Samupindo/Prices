@@ -204,6 +204,6 @@ public class ShopServiceImpl implements ShopService {
       throw new InstanceNotFoundException();
     }
 
-    shopLocationRepository.deleteById(shopId);
+    productInShopRepository.delete(productInShopModel);
   }
 }

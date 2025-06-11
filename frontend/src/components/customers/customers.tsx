@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getCustomers, getCustomerById, createCustomer, type CustomerFilters } from "../../services/CustomerService";
 import type { CreateCustomerDto, CustomerDto, CustomerPutDto } from "../../types/Customer";
 import CustomerList from "./CustomerList";
@@ -43,8 +43,8 @@ export const CustomersGetAll = () => {
 
     const handleFilterChange = (newFilters: CustomerFilters) => {
         setFilters(newFilters);
-        setCurrentPage(1);
-    };
+        setCurrentPage(1); 
+    }
 
     if (loading) return <div>Loading customers...</div>;
     if (error) return <div>Error loading customers: {error}</div>;

@@ -1,42 +1,40 @@
 import { useNavigate } from "react-router-dom";
 import type { ShopDto } from "../../types/Shops";
 import type { ShopFilter } from "@/services/ShopsService";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import { useState } from "react";
+import { PaginationDefault } from "../PaginationDefault";
 
 interface ShopListProps {
     shops: ShopDto[];
-    onFilterChange: (filter: ShopFilter) => void;
     currentPage: number;
     totalPages: number;
-    filters: ShopFilter;
+    totalElements: number;
     onPageChange: (page: number) => void;
+    onFilterChange: (filter: ShopFilter) => void;
+    filters: ShopFilter;
 }
 
-export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filters, onPageChange }: ShopListProps) => {
+export const ShopList = ({ 
+    shops, 
+    currentPage,
+    totalPages, 
+    onPageChange,
+    onFilterChange, 
+    filters
+}: ShopListProps) => {
     const navigate = useNavigate();
     const [localFilters, setLocalFilters] = useState<ShopFilter>(filters);
     type ShopFilterKey = 'country' | 'city' | 'address';
 
-    const handleFilterChange = (filter: ShopFilter) => {
-        onFilterChange(filter);
-    }
-
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>, field: ShopFilterKey) => {
         const emptyFilter = { country: '', city: '', address: '' };
         const newFilter = { ...localFilters, [field]: event.target.value };
+
         setLocalFilters(newFilter);
-        handleFilterChange(newFilter);
+        onFilterChange(newFilter);
 
         if (event.target.value === '') {
-            handleFilterChange(emptyFilter);
+            onFilterChange(emptyFilter);
         }
     }
 
@@ -140,37 +138,16 @@ export const ShopList = ({ shops, onFilterChange, currentPage, totalPages, filte
                     </tbody>
                 </table>
             </div>
-            <div className="flex justify-center items-center bg-gray-100 p-2 px-4 rounded-xl mb-4 mt-2">
-
+            <div className="flex items-center gap-6 mt-10">
+                <PaginationDefault
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={(page) => {
+                        onPageChange(page);
+                    }}
+                />
             </div>
 
-            <Pagination>
-                <PaginationContent>
-                    <PaginationItem>
-                        <PaginationPrevious
-                            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
-                            className={`cursor-pointer ${currentPage === 1 ? 'pointer-events-none opacity-50' : ''}`}
-                        />
-                    </PaginationItem>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <PaginationItem key={page}>
-                            <PaginationLink
-                                onClick={() => onPageChange(page)}
-                                isActive={currentPage === page}
-                                className="cursor-pointer"
-                            >
-                                {page}
-                            </PaginationLink>
-                        </PaginationItem>
-                    ))}
-                    <PaginationItem>
-                        <PaginationNext
-                            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
-                            className={`cursor-pointer ${currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}`}
-                        />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
         </div>
     );
 };

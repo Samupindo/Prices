@@ -1,11 +1,23 @@
+import { getProductById, getProducts } from "@/services/ProductsService";
 import { addProductToShop, getShopById } from "@/services/ShopsService";
 import type { ShopDto, AddProductShopDto } from "@/types/Shops";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { Combobox } from "@/components/Combobox";
+import { ShopDetail } from "./ShopDetail";
+import type { ProductDto } from "@/types/Products";
+
 
 interface ProductToShopProps {
     addProductShopDto: AddProductShopDto;
 }
+
+const productOptions = (products: ProductDto[]) => {
+    return products.map((product) => ({
+        value: product.productId,
+        label: product.name
+    }));
+};
 
 export const ProductToShop = ({ addProductShopDto }: ProductToShopProps) => {
     const navigate = useNavigate();
@@ -14,6 +26,8 @@ export const ProductToShop = ({ addProductShopDto }: ProductToShopProps) => {
     const { shopId } = useParams();
     const [error, setError] = useState<string | null>(null);
     const [price, setPrice] = useState<string>('');
+    const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
+    const [products, setProducts] = useState<ProductDto[]>([]);
 
     useEffect(() => {
         if (shopId) {
@@ -25,7 +39,18 @@ export const ProductToShop = ({ addProductShopDto }: ProductToShopProps) => {
                     setError(error.message);
                 });
         }
+        getProducts({ page: 0, size: 1000 }).then(response => {
+            setProducts(response.content);
+        }).catch(error => {
+            setError(error.message);
+        });
     }, [shopId]);
+
+    const handleProductChange = (value: number | null) => {
+        setSelectedProduct(value);
+        setProductId(value || 0);
+    };
+
 
     const validateIds = async (shopId: string, productId: number) => {
         try {
@@ -72,34 +97,22 @@ export const ProductToShop = ({ addProductShopDto }: ProductToShopProps) => {
 
     return (
         <div>
-            <div className="grid grid-cols-1 bg-white text-center shadow-xl rounded-xl overflow-hidden border-gray-200 p-6 sm:p-10 md:p-12">
-                <div>
-                    <div className="space-y-1">
-                        <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Shop ID</p>
-                        <p className="text-lg sm:text-xl md:text-2xl text-gray-700 break-words">{shop.shopId}</p>
-                    </div>
-
-                    <div className="space-y-1 mt-5">
-                        <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Country</p>
-                        <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.country}</p>
-                    </div>
-
-                    <div className="space-y-1 mt-5">
-                        <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">City</p>
-                        <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.city}</p>
-                    </div>
-
-                    <div className="md:col-span-3 space-y-1 mt-5">
-                        <p className="text-sm sm:text-base font-semibold text-gray-500 uppercase tracking-wide">Address</p>
-                        <p className="text-lg sm:text-xl md:text-2xl text-gray-900">{shop.address}</p>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <form className="mt-2 flex gap-2" onSubmit={handleSubmit}>
-                    <input placeholder="Product ID" className="bg-white border border-gray-300 rounded-lg px-4 py-2" type="number" value={productId} onChange={(e) => setProductId(parseInt(e.target.value))} />
-                    <input placeholder="Price" className="bg-white border border-gray-300 rounded-lg px-4 py-2" type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
-                    <button className="bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Add Product</button>
+            <ShopDetail shop={shop} />
+            <div className="flex flex-row gap-4 mt-4">
+                <Combobox
+                    options={productOptions(products)}
+                    value={selectedProduct}
+                    onChange={handleProductChange}
+                    placeholder="Select a product..."
+                    searchPlaceholder="Search products..."
+                    emptyMessage="No product option found."
+                    className="w-[200px] h-[45px]"
+                />
+                <form className=" w-full max-w-sm items-center flex flex-row gap-2" onSubmit={(handleSubmit)}>
+                    <input type="number" placeholder="Price" value={price} onChange={(e) => setPrice(e.target.value)} className="border-2 border-gray-300 w-full p-2 rounded-md" />
+                    <button type="submit" >
+                        Submit
+                    </button>
                 </form>
             </div>
         </div>
