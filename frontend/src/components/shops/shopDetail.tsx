@@ -63,11 +63,6 @@ export const ShopDetail = ({ shop }: ShopDetailProps) => {
                         className="w-full sm:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Edit Shop
                     </button>
-                    <button
-                        onClick={() => navigate(`/shops/${shop.shopId}/delete`)}
-                        className="w-full sm:w-auto bg-red-600 text-black px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                        Delete Shop
-                    </button>
                     </div>
                 </div>
             )}

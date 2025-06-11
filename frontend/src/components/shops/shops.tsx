@@ -11,6 +11,7 @@ import type { ProductDto, ProductNameDto } from "@/types/Products";
 import { getProductById } from "@/services/ProductsService";
 import { ProductToShop } from "./ProductToShop";
 import { UpdateProductInShop } from "./UpdateProductInShop";
+import { DeleteProductFromShop } from "./DeleteProductFromShop";
 
 export const AllShops = () => {
     const [shops, setShops] = useState<ShopDto[]>([]);
@@ -133,3 +134,6 @@ export const ShopDelete = () => {
     return <DeleteShop />;
 }
 
+export const DeleteProductInShop = () => {
+    return <DeleteProductFromShop />;
+}

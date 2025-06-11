@@ -61,3 +61,8 @@ export const deleteShop = async (shopId: string) => {
     const response = await axiosInstance.delete(`/shops/${shopId}`)
     return response.data;
 }
+
+export const deleteProductFromShop = async (shopId: string, productId: string) => {
+    const response = await axiosInstance.delete(`/shops/${shopId}/products/${productId}`);
+    return response.data;
+}

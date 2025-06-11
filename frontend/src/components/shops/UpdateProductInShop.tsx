@@ -1,11 +1,9 @@
 import { updateProductInShop } from "@/services/ShopsService";
-import type { ProductInShopDto, ProductInShopPatchDto, ProductWithShopsDto } from "@/types/Shops";
+import type { ProductInShopPatchDto, ProductWithShopsDto } from "@/types/Shops";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Combobox } from "@/components/Combobox";
 import { getProducts } from "@/services/ProductsService";
-import { Button } from "../ui/button";
-import { ProductDetail } from "../products/ProductDetail";
 
 interface UpdateProductInShopProps {
     productInShopPatch: ProductInShopPatchDto;
@@ -76,10 +74,10 @@ export const UpdateProductInShop = ({ productInShopPatch }: UpdateProductInShopP
                     className="w-[200px] h-[45px]"
                 />
                 <form className=" w-full max-w-sm items-center flex flex-row gap-2" onSubmit={handleSubmit}>
-                    <input type="number" placeholder="Price" value={price} onChange={handlePriceChange} className="border-2 border-gray-300 w-full p-2 rounded-md" />
-                    <Button type="submit" variant="outline">
+                    <input type="decimal" step="any" placeholder="Price" value={price} onChange={handlePriceChange} className="border-2 border-gray-300 w-full p-2 rounded-md" />
+                    <button type="submit" className="border-2 border-gray-300 h-[45px]">
                         Submit
-                    </Button>
+                    </button>
                 </form>
             </div>
         </div>

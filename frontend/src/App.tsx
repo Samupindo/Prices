@@ -19,6 +19,7 @@ import { DeletePurchase } from './components/purchases/DeletePurchase'
 import { FinishPurchase } from './components/purchases/FinishPurchase'
 import { AddProduct } from './components/purchases/AddProduct'  
 import { DeleteProductFromPurchase } from './components/purchases/DeleteProductFromPurchase'
+import { DeleteProductFromShop } from './components/shops/DeleteProductFromShop'
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/shops/:shopId/delete" element={<ShopDelete />} />
         <Route path="/shops/:shopId/addProduct" element={<AddProductToShop />} />
         <Route path="/shops/:shopId/editProduct" element={<PatchProductInShop />} />
+        <Route path="/shops/:shopId/products/:productId/delete" element={<DeleteProductFromShop />} />
 
         <Route path="/products" element={<Products />} />
         <Route path="/products/:productId" element={<ProductDetail />} />

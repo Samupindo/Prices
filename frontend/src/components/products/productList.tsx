@@ -52,7 +52,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
                         <tr>
                             <th
                                 scope="col"
-                                className={`${cellPadding} text-left text-xs font-medium text-gray-500 uppercase tracking-wider`}
+                                className={`${cellPadding} text-center text-xs font-medium text-gray-500 uppercase tracking-wider`}
                             >
                                 Product
                             </th>

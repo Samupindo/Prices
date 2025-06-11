@@ -1,13 +1,26 @@
- import { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import type { ProductWithShopsDto } from "../../types/Products";
 import { getProductById } from "../../services/ProductsService";
 import { useParams } from "react-router-dom";
-import {  useNavigate } from "react-router-dom";
-export const ProductDetail = () => {    
+import { useNavigate } from "react-router-dom";
+import type { ShopDto } from "@/types/Shops";
+import { Combobox } from "../Combobox";
+import { getShops } from "@/services/ShopsService";
+
+const shopOptions = (shops: ShopDto[]) => {
+    return shops.map(shop => ({
+        value: shop.shopId,
+        label: shop.shopId.toString()
+    }));
+}
+
+export const ProductDetail = () => {
     const [product, setProduct] = useState<ProductWithShopsDto | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const {productId} = useParams();
+    const { productId } = useParams();
     const navigate = useNavigate();
+    const [shops, setShops] = useState<ShopDto[]>([]);
+    const [selectedShop, setSelectedShop] = useState<number | null>(null);
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
         try {
@@ -20,6 +33,7 @@ export const ProductDetail = () => {
                 setError('Invalid product ID');
                 return;
             }
+
             setError(null);
             const response = await getProductById(productIdNumber);
             setProduct(response);
@@ -28,8 +42,19 @@ export const ProductDetail = () => {
             console.error('Error fetching product:', error);
         }
     };
+    const fetchShops = async () => {
+        const response = await getShops({ page: 0, size: 100 }).then(response => {
+            setShops(response.content);
+        }).catch(error => {
+            setError('Failed to fetch shops');
+            console.error('Error fetching shops:', error);
+        });
+        return response;
+    };
+
     useEffect(() => {
         fetchProduct();
+        fetchShops();
     }, [productId]);
     if (error) {
         return <div>Error: {error}</div>;
@@ -37,7 +62,11 @@ export const ProductDetail = () => {
     if (!product) {
         return <div>Loading...</div>;
     }
-    // Mostrar el botón de editar solo si el producto existe y no estamos en una página de actualización/eliminación
+
+    const handleShopChange = (value: number | null) => {
+        setSelectedShop(value);
+    };
+
     const showEditButton = product !== null && !isUpdatePage;
     return (
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,8 +90,22 @@ export const ProductDetail = () => {
                                 <div className="mt-2">
                                     <ul className="list-disc list-inside">
                                         {product.shop.map((shop, index) => (
-                                            <li key={index} className="text-sm text-gray-500">
-                                                 Shop {shop.shopId}: ${shop.price}
+                                            <li key={index} className="text-sm text-gray-500 flex items-center justify-between mb-2">
+                                                <span>Shop {shop.shopId}: ${shop.price}</span>
+                                                <div className="flex flex-row gap-2">
+                                                    <button
+                                                        onClick={() => navigate(`/shops/${shop.shopId}/editProduct`)}
+                                                        className="text-green-600 text-sm"
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                        <button
+                                                            onClick={() => navigate(`/shops/${shop.shopId}/products/${product.productId}/delete`)}
+                                                        className="text-red-600 hover:text-red-800 text-sm"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             </li>
                                         ))}
                                     </ul>
@@ -73,13 +116,13 @@ export const ProductDetail = () => {
                 </div>
             </div>
             {showEditButton && (
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                <div className="mt-4 flex flex-row gap-8 justify-center items-center">
                     <button
                         type="button"
-                        className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 mr-11 mt-10"
+                        className="rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-black shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                         onClick={() => navigate(`/products/${productId}/edit`)}
                     >
-                        Editar
+                        Edit Product
                     </button>
                 </div>
             )}
