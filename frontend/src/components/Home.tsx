@@ -64,7 +64,7 @@ export const Home = () => {
                             Shops
                         </h2>
                         <p className="text-gray-600">
-                            Manage your retail locations
+                            Manage your shop information
                         </p>
                     </Link>
 
@@ -91,7 +91,7 @@ export const Home = () => {
                             Customers
                         </h2>
                         <p className="text-gray-600">
-                            Manage your customer information and preferences
+                            Manage your customer information
                         </p>
                     </Link>
 
