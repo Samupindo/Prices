@@ -109,7 +109,7 @@ export const UpdateProduct = () => {
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <div>
                                             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                                Nuevo Nombre
+                                                New Name
                                             </label>
                                             <div className="mt-1">
                                                 <input
@@ -130,14 +130,14 @@ export const UpdateProduct = () => {
                                                 disabled={isLoading}
                                                 className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${isLoading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}`}
                                             >
-                                                {isLoading ? 'Actualizando...' : 'Actualizar'}
+                                                {isLoading ? 'Updating...' : 'Update'}
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => navigate("/products")}
                                                 className="mt-3 inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0"
                                             >
-                                                Cancelar
+                                                Cancel
                                             </button>
                                         </div>
                                     </form>

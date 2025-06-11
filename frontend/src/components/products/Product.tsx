@@ -60,7 +60,7 @@ export const Products = () => {
                     onClick={() => navigate('/products/create')}
                     className="flex w-full md:w-auto bg-indigo-600 text-black px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                    Añadir producto
+                    Add product
                 </button>
             </div>
             <ProductsFilters onApplyFilters={fetchProducts} />

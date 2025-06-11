@@ -15,7 +15,7 @@ export const AddPurchase = () => {
         e.preventDefault();
         
         if (!customerId.trim()) {
-            setError('El ID del cliente es requerido');
+            setError('Customer ID is required');
             return;
         }
 
@@ -51,11 +51,11 @@ export const AddPurchase = () => {
     return (
         <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg border border-gray-200">
             <div>
-                <h1 className="text-xl font-semibold text-gray-900 mb-4">Crear Compra</h1>
+                <h1 className="text-xl font-semibold text-gray-900 mb-4">Add Purchase</h1>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="customerId" className="block text-sm font-medium text-gray-700">
-                            ID del Cliente
+                            Customer ID
                         </label>
                         <input
                             type="number"
@@ -71,7 +71,7 @@ export const AddPurchase = () => {
                         type="submit"
                         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full"
                     >
-                        Crear Compra
+                        Add Purchase
                     </button>
                 </form>
             </div>
