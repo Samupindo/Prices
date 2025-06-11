@@ -19,7 +19,6 @@
     <description>Gestión de productos en diferentes tiendas</description>
 
     <modules>
-
         <module>mic-prices-api-model</module>
         <module>mic-prices-api-rest</module>
         <module>mic-prices-boot</module>
