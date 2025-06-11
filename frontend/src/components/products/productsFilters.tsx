@@ -14,17 +14,23 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
     });
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        
+        let processedValue: number | undefined = undefined;
+        if (value) {
+            processedValue = parseFloat(value);
+        }
+
         setFilters(prev => ({
             ...prev,
-            [name]: value === '' ? undefined : value,
+            [name]: processedValue,
         }));
         
         // Aplicar los filtros inmediatamente después de cambiar el valor
         onApplyFilters({
             ...filters,
-            [name]: value === '' ? undefined : value,
-            priceMin: name === 'priceMin' ? (value ? parseFloat(value) : undefined) : filters.priceMin,
-            priceMax: name === 'priceMax' ? (value ? parseFloat(value) : undefined) : filters.priceMax
+            [name]: processedValue,
+            priceMin: name === 'priceMin' ? processedValue : filters.priceMin,
+            priceMax: name === 'priceMax' ? processedValue : filters.priceMax
         });
     };
     const handleResetFilters = () => {

@@ -17,14 +17,14 @@ public class ProductInShopSpecification {
 
   public static Specification<ProductModel> hasPriceMin(BigDecimal priceMin) {
     return (root, query, criteriaBuilder) -> {
-      Join<ProductModel, ProductInShopModel> join = root.join("prices", JoinType.LEFT);
+      Join<ProductModel, ProductInShopModel> join = root.join("prices", JoinType.INNER);
       return criteriaBuilder.greaterThanOrEqualTo(join.get("price"), priceMin);
     };
   }
 
   public static Specification<ProductModel> hasPriceMax(BigDecimal priceMax) {
     return (root, query, criteriaBuilder) -> {
-      Join<ProductModel, ProductInShopModel> join = root.join("prices", JoinType.LEFT);
+      Join<ProductModel, ProductInShopModel> join = root.join("prices", JoinType.INNER);
       return criteriaBuilder.lessThanOrEqualTo(join.get("price"), priceMax);
     };
   }
