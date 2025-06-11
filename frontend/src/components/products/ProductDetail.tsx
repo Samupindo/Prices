@@ -10,7 +10,7 @@ export const ProductDetail = () => {
     const [product, setProduct] = useState<ProductWithShopsDto | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const {productId} = useParams<{ productId: string }>();
+    const {productId} = useParams();
     const navigate = useNavigate();
     const [shops, setShops] = useState<ShopDto[]>([]);
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
