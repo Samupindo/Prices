@@ -9,7 +9,7 @@ Este proyecto fue desarrollado como parte del ciclo de Desarrollo de Aplicacione
 - Backend: Java, Spring Boot
 - Base de datos: PostgreSQL
 - Control de versiones: Git, GitHub
-- 
+  
 # 🛒 MIC-PRICES - Gestión de Productos y Tiendas
 
 Este proyecto proporciona una API REST para la gestión de productos,tiendas, clientes y tickets. Permite realizar operaciones CRUDestas, así como filtrado, paginación y modificaciones específicas.
