@@ -1,4 +1,4 @@
-import { getProductById, getProducts } from "@/services/ProductsService";
+import { getProducts } from "@/services/ProductsService";
 import { addProductToShop, getShopById } from "@/services/ShopsService";
 import type { ShopDto, AddProductShopDto } from "@/types/Shops";
 import { useEffect, useState } from "react";

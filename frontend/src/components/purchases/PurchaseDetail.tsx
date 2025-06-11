@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import type { PurchaseDto } from "../../types/Purchase";
 import { useNavigate } from "react-router-dom";
 import { getPurchaseById } from "../../services/PurchaseService";
