@@ -4,15 +4,7 @@ import { getProductById } from "../../services/ProductsService";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { ShopDto } from "@/types/Shops";
-import { Combobox } from "../Combobox";
 import { getShops } from "@/services/ShopsService";
-
-const shopOptions = (shops: ShopDto[]) => {
-    return shops.map(shop => ({
-        value: shop.shopId,
-        label: shop.shopId.toString()
-    }));
-}
 
 export const ProductDetail = () => {
     const [product, setProduct] = useState<ProductWithShopsDto | null>(null);
@@ -20,7 +12,6 @@ export const ProductDetail = () => {
     const { productId } = useParams();
     const navigate = useNavigate();
     const [shops, setShops] = useState<ShopDto[]>([]);
-    const [selectedShop, setSelectedShop] = useState<number | null>(null);
     const isUpdatePage = [`/products/${productId}/delete`, `/products/${productId}/edit`].some(path => location.pathname.includes(path));
     const fetchProduct = async () => {
         try {
@@ -62,10 +53,6 @@ export const ProductDetail = () => {
     if (!product) {
         return <div>Loading...</div>;
     }
-
-    const handleShopChange = (value: number | null) => {
-        setSelectedShop(value);
-    };
 
     const showEditButton = product !== null && !isUpdatePage;
     return (

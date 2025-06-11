@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ProductWithShopsDto } from "../../types/Products";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PaginationDefault } from "../PaginationDefault";
 
 interface ProductListProps {
@@ -14,7 +14,7 @@ export const ProductList = ({ products, totalPages, currentPage, onPageChange }:
     const cellPadding = "px-6 py-4";
     const navigate = useNavigate();
 
-    const [filters, setFilters] = useState<{
+    const [filters] = useState<{
         name?: string;
         priceMin?: number;
         priceMax?: number;

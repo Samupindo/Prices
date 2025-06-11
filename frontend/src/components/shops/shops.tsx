@@ -7,8 +7,6 @@ import { useParams } from "react-router-dom";
 import { CreateShop } from "./CreateShop";
 import { UpdateShop } from "./UpdateShop";
 import { DeleteShop } from "./DeleteShop";
-import type { ProductDto, ProductNameDto } from "@/types/Products";
-import { getProductById } from "@/services/ProductsService";
 import { ProductToShop } from "./ProductToShop";
 import { UpdateProductInShop } from "./UpdateProductInShop";
 import { DeleteProductFromShop } from "./DeleteProductFromShop";
