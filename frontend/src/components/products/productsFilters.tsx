@@ -15,10 +15,21 @@ export const ProductsFilters = ({ onApplyFilters }: ProductsFiltersProps) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         
-        let processedValue: number | undefined = undefined;
-        if (value) {
-            processedValue = parseFloat(value);
+        // Para el campo de nombre, mantener como string
+        if (name === 'name') {
+            setFilters(prev => ({
+                ...prev,
+                name: value
+            }));
+            onApplyFilters({
+                ...filters,
+                name: value
+            });
+            return;
         }
+        
+        // Para campos de precio, convertir a número
+        const processedValue = value ? parseFloat(value) : undefined;
 
         setFilters(prev => ({
             ...prev,
