@@ -14,12 +14,12 @@ interface ShopListProps {
     filters: ShopFilter;
 }
 
-export const ShopList = ({ 
-    shops, 
+export const ShopList = ({
+    shops,
     currentPage,
-    totalPages, 
+    totalPages,
     onPageChange,
-    onFilterChange, 
+    onFilterChange,
     filters
 }: ShopListProps) => {
     const navigate = useNavigate();
@@ -116,6 +116,15 @@ export const ShopList = ({
                                     {shop.address}
                                 </td>
                                 <td className="flex justify-center gap-1 px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                    <button
+                                        className="text-blue-500 hover:text-indigo-900 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 rounded-md"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(`/shops/${shop.shopId}/addProduct`);
+                                        }}
+                                    >
+                                        Add Product
+                                    </button>
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
