@@ -57,11 +57,11 @@ export const CreateProduct = () => {
                     </div>
                 )}
                 <div>
-                    <h1 className="text-xl font-semibold text-gray-900 mb-4">Crear Producto</h1>
+                    <h1 className="text-xl font-semibold text-gray-900 mb-4">Create Product</h1>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                Nombre del producto
+                                Product name
                             </label>
                             <input
                                 type="text"
@@ -77,7 +77,7 @@ export const CreateProduct = () => {
                             type="submit"
                             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-black bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full"
                         >
-                            Crear Producto
+                            Create Product
                         </button>
                     </form>
                 </div>
