@@ -27,14 +27,14 @@ export const PurchasesList = ({ purchases, totalPages, currentPage, onPageChange
                             <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-4">
                                 Shopping Status
                             </th>
-                            <th scope="col" className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-4">
+                            <th scope="col" className="text-center text-xs font-medium text-gray-500 uppercase tracking-wider px-6 py-4">
                                 Actions
                             </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                         {purchases.map((purchase) => (
-                            <tr key={purchase.purchaseId}>
+                            <tr key={purchase.purchaseId} className="bg-white cursor-pointer" onClick={() => navigate(`/purchases/${purchase.purchaseId}`)}>
                                 <td className="px-6 py-4">{purchase.customer.customerId}</td>
                                 <td className="px-6 py-4">{purchase.totalPrice.toFixed(2)}</td>
                                 <td className="px-6 py-4">{purchase.shopping ? "Shopping" : "Not Shopping"}</td>

@@ -84,7 +84,7 @@ export const ProductDetail = () => {
                                     <ul className="list-disc list-inside">
                                         {product.shop.map((shop, index) => (
                                             <li key={index} className="text-sm text-gray-500 flex items-center justify-between mb-2">
-                                                <span>Shop {shop.shopId}: ${shop.price}</span>
+                                                <span>Shop {shop.shopId}: {shop.price}€</span>
                                                 <div className="flex flex-row gap-2">
                                                     <button
                                                         onClick={() => navigate(`/shops/${shop.shopId}/editProduct`)}
