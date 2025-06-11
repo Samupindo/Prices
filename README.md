@@ -2,7 +2,7 @@
 
 # PFC – Proyecto de Fin de Ciclo
 
-Este proyecto fue desarrollado como parte del ciclo de Desarrollo de Aplicaciones Web. Consiste en una aplicación  en Java (Spring Boot) , orientada a la gestión de productos, tiendas  usuarios y compras.
+Este proyecto fue desarrollado como parte del ciclo de Desarrollo de Aplicaciones Web. Consiste en una aplicación  en Java (Spring Boot) , orientada a la gestión de productos, tiendas,  usuarios y compras.
 
 ## 🧠 Tecnologías utilizadas
 
